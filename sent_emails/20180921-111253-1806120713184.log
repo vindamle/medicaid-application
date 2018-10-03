@@ -1,0 +1,25 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: Password reset on 127.0.0.1:8001
+From: webmaster@localhost
+To: mpfeiffer@centershealthcare.org
+Date: Fri, 21 Sep 2018 15:12:53 -0000
+Message-ID: <153754277339.19348.17181131940298346777@CBO-00475.BCRHC>
+
+
+You're receiving this email because you requested a password reset for your user account at 127.0.0.1:8001.
+
+Please go to the following page and choose a new password:
+
+http://127.0.0.1:8001/application/reset/MQ/4zs-3d7f630fdad6718e6996/
+
+Your username, in case you've forgotten: mpfeiffer
+
+Thanks for using our site!
+
+The 127.0.0.1:8001 team
+
+
+
+-------------------------------------------------------------------------------
