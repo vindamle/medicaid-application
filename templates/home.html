@@ -39,6 +39,23 @@
   </ul>
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="alerts" role="tabpanel" aria-labelledby="alerts-tab">
+    <div class = 'container border border-dark' id = "search_function">
+      <form method="post">
+        {% csrf_token %}
+
+        <legend>Alert Filter</legend>
+        <label for="facility">Facility</label>
+        <select name = "Facility">
+          <option value="All ">All Facilities</option>
+          {%for facility in facilities%}
+            <option value="{{facility.facility_name}}">{{facility.facility_name}}</option>
+          {% endfor %}
+        </select>
+        <label for="day_range">Day Range</label>
+        <input type="number" name="days"value ="1" id = "month" min="1" max = "14" step = "1" required/>
+        <input type="submit" value = Lookup>
+      </form>
+    </div>
     <div class = "container-fluid">
       <div class="row">
         <div class="col-lg-6">
@@ -58,7 +75,7 @@
               {% for obj in list%}
                 <tr>
                     <td>{{obj.first_name}} {{obj.last_name}}</td>
-                    <td>New York</td>
+                    <td>{{obj.type}}</td>
                     <td>27</td>
                     <td>2011/01/25</td>
                     <td>$112,000</td>
@@ -83,6 +100,7 @@
                  </tr>
              </thead>
              <tbody>
+
              </tbody>
            </table>
          </div>
@@ -90,7 +108,33 @@
      </div>
 </div>
   <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+    <div class = "container-fluid">
+    <table id="mainTable" class="display" style="width:100%">
+      <thead>
+          <tr>
+              <th>Name</th>
+              <th>Office</th>
+              <th>Age</th>
+              <th>Start date</th>
+              <th>Salary</th>
+              <th>Actions</td>
 
+          </tr>
+      </thead>
+      <tbody>
+        {% for obj in list%}
+          <tr>
+              <td>{{obj.first_name}} {{obj.last_name}}</td>
+              <td>New York</td>
+              <td>27</td>
+              <td>2011/01/25</td>
+              <td>$112,000</td>
+              <td> </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
   </div>
   <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
 </div>
@@ -100,18 +144,40 @@
 
 <script>
 $(document).ready(function() {
-       Dtable1 =$('#example').DataTable({"columnDefs": [ {
+  var table = $('#mainTable').DataTable({
+    fixedHeader: true,
+    "lengthChange": false,
+    "pageLength":15,
+  });
+
+});
+
+
+
+$(document).ready(function() {
+
+       Dtable1 =$('#example').DataTable({
+
+
+
+         "scrollY":$('#example').closest('.container-fluid').height()+ "px",
+         "scrollCollapse": true,
+         "paging":         false,
+         "columnDefs": [ {
             "targets": -1,
             "data": null,
             "defaultContent": '<button class="getData"type="button">Track</button>  <button class = "ignore" type="button">Ignore</button> '
         } ]});
-       Dtable2 = $('#example2').DataTable({"columnDefs": [ {
+       Dtable2 = $('#example2').DataTable({
+         "scrollY":        "300px",
+         "scrollCollapse": true,
+         "paging":         false,
+         "columnDefs": [ {
             "targets": -1,
             "data": null,
             "defaultContent": '<button class="undo">Undo</button>'
         } ]});
        var counter = 0;
-
 
     $('#example').on( 'click', '.getData', function () {
         var data= Dtable1.row( $(this).parents('tr') ).data();
@@ -122,14 +188,8 @@ $(document).ready(function() {
             data[0],
             data[0],
             data[0],
-
-
-
-
         ] ).draw( false );
-
         counter++;
-
     } );
 
     $('#example').on( 'click', '.ignore', function () {
@@ -166,6 +226,7 @@ function closeNav() {
   document.getElementById("main").style.marginLeft = "0";
   document.body.style.backgroundColor = "white";
 }
+
 
 </script>
 
