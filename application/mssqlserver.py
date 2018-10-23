@@ -19,10 +19,8 @@ class ConnectSqlServer:
         self.driver = os.getenv("MSSQL_DRIVER")
         self.username = os.getenv("MSSQL_USERNAME")
         self.password = os.getenv("MSSQL_PASSWORD")
-    
-    '''
-        connect to sql server
-    '''
+
+    '''connect to sql server'''
     def connect_sql_server(self):
         try:
 

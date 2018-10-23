@@ -4,6 +4,8 @@ from django.shortcuts import render
 from .forms import ApplicationForm
 from application.models import Facility
 from application.alerts import Alerts
+
+
 class HomeView(View):
     form_class = ApplicationForm
     template_name = "home.html"
@@ -12,14 +14,14 @@ class HomeView(View):
 
 
     def get(self, request, *args, **kwargs):
+        '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
         return render(request,self.template_name, {"form":self.form_class, 'facilities':facilities})
 
     def post(self, request, *args, **kwargs):
-        facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-        print(request.POST.get('Facility'))
 
-        print(int(request.POST.get("days")))
+        '''if POST'''
+        facilities =Facility.objects.filter(downstate_upstate__isnull = False )
 
         al = Alerts()
         results = al.get_alerts(3, "N. Manor")

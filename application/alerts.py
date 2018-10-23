@@ -17,13 +17,12 @@ class Alerts:
             facility = None
 
         ''' Get Requested Data '''
-
         cursor = self.conn.cursor()
         try:
             results = cursor.execute("{CALL p_MEnrollmentTrackingResidentoByActivitydateFacility(?,?,?)}",None,dayRange, facility)
         except:
             print("Error :: Cannot Connect to Server")
-        # "Robert","Curles","2018-01-12",1,"Overland Park",None
+        
         return results
 
     def get_fields(self, result, facility):
