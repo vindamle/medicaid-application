@@ -28,7 +28,7 @@ class HomeView(View):
         self.list = list()
         for result in results:
             facility = result.Facility
-            print(result)
-            # self.list.append(al.get_fields(result, facility))
+
+            self.list.append(al.get_fields(result, facility))
 
         return render(request,self.template_name, {'list':self.list, "alert_length":len(self.list) , "form":self.form_class, 'facilities':facilities, "tracklist":self.tracklist})

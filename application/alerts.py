@@ -34,8 +34,8 @@ class Alerts:
             SSN = getattr(result, "SSN"),
             DOB = getattr(result, "DOB"),
             facility = facility,
-            payor = getattr(result, "payor"),
-            Is_Primary_Payor= getattr(result, "Is_Primary_Payor"),
+            payor = getattr(result, "PrimaryPayorName"),
+            secondary_Payor= getattr(result, "SecondaryPayorName"),
             ActivityDate= getattr(result, "ActivityDate"),
             Actual_Activity_Type_Flag= getattr(result, "Actual_Activity_Type_Flag"),
         )
