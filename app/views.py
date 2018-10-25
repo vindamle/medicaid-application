@@ -24,10 +24,11 @@ class HomeView(View):
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
 
         al = Alerts()
-        results = al.get_alerts(3, "N. Manor")
+        results = al.get_alerts(10, "All")
         self.list = list()
         for result in results:
             facility = result.Facility
-            self.list.append(al.get_fields(result, facility))
+            print(result)
+            # self.list.append(al.get_fields(result, facility))
 
         return render(request,self.template_name, {'list':self.list, "alert_length":len(self.list) , "form":self.form_class, 'facilities':facilities, "tracklist":self.tracklist})

@@ -19,10 +19,10 @@ class Alerts:
         ''' Get Requested Data '''
         cursor = self.conn.cursor()
         try:
-            results = cursor.execute("{CALL p_MEnrollmentTrackingResidentoByActivitydateFacility(?,?,?)}",None,dayRange, facility)
+            results = cursor.execute("{CALL p_MEnrollmentTrackingResidentByActivitydateFacility(?,?,?)}",None,dayRange, facility)
         except:
             print("Error :: Cannot Connect to Server")
-        
+
         return results
 
     def get_fields(self, result, facility):
@@ -34,7 +34,7 @@ class Alerts:
             SSN = getattr(result, "SSN"),
             DOB = getattr(result, "DOB"),
             facility = facility,
-            payor = getattr(result, "Payor"),
+            payor = getattr(result, "payor"),
             Is_Primary_Payor= getattr(result, "Is_Primary_Payor"),
             ActivityDate= getattr(result, "ActivityDate"),
             Actual_Activity_Type_Flag= getattr(result, "Actual_Activity_Type_Flag"),
