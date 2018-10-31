@@ -22,7 +22,7 @@ class Alerts:
         cursor = self.conn.cursor()
         try:
 
-            results = cursor.execute("{CALL p_MEnrollmentTrackingResidentByActivitydateFacility(?,?,?)}",None, 1, None)
+            results = cursor.execute("{CALL p_MEnrollmentTrackingResidentByActivitydateFacility(?,?,?)}",'2018-10-31', 1, None)
         except:
             print("Error :: Cannot Connect to Server")
 
@@ -34,9 +34,16 @@ class Alerts:
         return dict(
             patient_id = getattr(result,"Resident_Skey"),
             ssn = getattr(result, "SSN"),
-            fisrt_name = getattr(result, "FirstName").capitalize(),
+            first_name = getattr(result, "FirstName").capitalize(),
             last_name = getattr(result, "LastName").capitalize(),
+            dob = getattr(result, "DOB"),
+            facility_id = getattr(result, "Facility_Skey"),
+            facility = getattr(result, "Facility"),
+            primary_payor_id = getattr(result, "PrimaryPayorSkey"),
+            primary_payor_grp = getattr(result, "PrimaryPayor"),
             primary_payor = getattr(result, "PrimaryPayorName"),
+            secondary_payor_id = getattr(result, "Secondary_payor_skey"),
+            secondary_payor_grp = getattr(result, "SecondaryPayorName"),
             secondary_payor= getattr(result, "SecondaryPayorName"),
             activity_date= getattr(result, "ActivityDate"),
             activity_type = getattr(result, "Actual_Activity_Type_Flag"),
