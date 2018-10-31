@@ -27,13 +27,19 @@ class Facility(models.Model):
 class Alert(models.Model):
     patient_id  = models.AutoField(primary_key=True)
     ssn = models.CharField(max_length=255, null=True, blank=True)
-    fisrt_name = models.CharField(max_length=50, null=True, blank=True)
+    dob = models.DateTimeField(null=True, blank=True)
+    first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
+    facility_id = models.IntegerField(null = True, blank = True)
+    facility = models.CharField(max_length=50, null=True, blank=True)
+    primary_payor_id = models.IntegerField(null = True, blank = True)
+    primary_payor_grp = models.CharField(max_length=10, null=True, blank=True)
     primary_payor = models.CharField(max_length=50, null=True, blank=True)
+    secondary_payor_id =  models.IntegerField(null = True, blank = True)
+    secondary_payor_grp = models.CharField(max_length=10, null=True, blank=True)
     secondary_payor = models.CharField(max_length=50, null=True, blank=True)
     activity_date = models.DateTimeField(null=True, blank=True)
     activity_type = models.CharField(max_length=2, null=True, blank=True)
-
     tracking_status = models.BooleanField(null = True, blank = True)
     # there will be others
     def __str__(self):
