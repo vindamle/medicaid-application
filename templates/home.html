@@ -4,7 +4,144 @@
 
 {% block content %}
 
-<div id="mySidenav" class="sidenav">
+<h3>Activity</h3>
+  <h4>New Admissions:</h4>
+  <table class="newAlertsTable">
+    <thead>
+      <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Facility</th>
+      <th>Primary Payor</th>
+      <th>Secondary Payor</th>
+      <th>Admission Date</th>
+      <th>Track</th>
+      <th></th>
+    </tr>
+  </thead>
+    <tbody>
+      {% for obj in list%}
+                <tr>
+                    <td>{{obj.fisrt_name}}</td>
+                    <td>{{obj.last_name}}</td>
+                    <td>Acme (still need from msql)</td>
+                    <td>{{obj.primary_payor}}</td>
+                    <td>{{obj.secondary_payor}}</td>
+                    <td>{{obj.activity_date}}</td>
+                    <td class="trackBtnCell"><button class=" btn-tracked">&check;</button></td>
+        <td><button class="btn-ignore">Ignore</button></td>
+                </tr>
+              {% endfor %}
+    </tbody>
+  </table>
+
+
+  <h4>Payor Change:</h4>
+  <table class="newAlertsTable">
+    <thead>
+      <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Facility</th>
+      <th>Primary Payor</th>
+      <th>Secondary Payor</th>
+      <th>Date of Payor Change</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Anthony</td>
+      <td>Grecco</td>
+      <td>Acme</td>
+      <td>Acme</td>
+      <td>Acme</td>
+      <td>11/20/17</td>
+      <td class="trackBtnCell"><button class=" btn-track">Track</button></td>
+      <td><button class="btn-ignore">Ignore</button></td>
+    </tr>
+    <tr>
+      <td>May</td>
+      <td>Gladd</td>
+      <td>Acme</td>
+      <td>Acme</td>
+      <td>Medicaid</td>
+      <td>11/20/17</td>
+      <td class="trackBtnCell" class=""><button class=" btn-tracked">&check;</button></td>
+      <td><button class="btn-ignore">Ignore</button></td>
+    </tr>
+    <tr>
+      <td>Beatrice</td>
+      <td>Ford</td>
+      <td>Acme</td>
+      <td>Acme</td>
+      <td>Acme</td>
+      <td>11/20/17</td>
+      <td class="trackBtnCell"><button class=" btn-track">Track</button></td>
+      <td><button class="btn-ignore">Ignore</button></td>
+    </tr>
+  </tbody>
+  </table>
+
+
+  <h4>Discharged:</h4>
+  <table class="newAlertsTable">
+    <thead>
+      <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Facility</th>
+      <th>Primary Payor</th>
+      <th>Secondary Payor</th>
+      <th>Discharge Date</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Anthony</td>
+      <td>Grecco</td>
+      <td>Acme</td>
+      <td>Acme</td>
+      <td>Acme</td>
+      <td>11/20/17</td>
+      <td class="trackBtnCell"><button class=" btn-track">Track</button></td>
+      <td><button class="btn-ignore">Ignore</button></td>
+    </tr>
+    <tr>
+      <td>May</td>
+      <td>Gladd</td>
+      <td>Acme</td>
+      <td>Acme</td>
+      <td>Acme</td>
+      <td>11/20/17</td>
+      <td class="trackBtnCell"><button class=" btn-track">Track</button></td>
+      <td><button class="btn-ignore">Ignore</button></td>
+    </tr>
+    <tr>
+      <td>Beatrice</td>
+      <td>Ford</td>
+      <td>Acme</td>
+      <td>Acme</td>
+      <td>Acme</td>
+      <td>11/20/17</td>
+      <td class="trackBtnCell"><button class=" btn-track">Track</button></td>
+      <td><button class="btn-ignore">Ignore</button></td>
+    </tr>
+  </tbody>
+  </table>
+  <div class="centered">
+    <button class="btn btn-lg  btn-tracked">Track Selected</button>
+  </div>
+
+  <script type="text/javascript" src="js/activity.js"></script>
+
+
+{% endblock %}
+
+<!-- <div id="mySidenav" class="sidenav">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
   {% if user.is_authenticated %}
     <a href="#">Dashboard</a>
@@ -13,18 +150,18 @@
   {% else %}
     <a href="{% url 'login' %}">Login</a>
   {% endif %}
-</div>
+</div> -->
 
-<div class = "page-header">
+<!-- <div class = "page-header">
   {% if user.is_authenticated %}
     <span onclick="openNav()" id = "open_close">&#9776;</span>
   {% else %}
     <span onclick="openNav()" id = "open_close">&#9776;</span>
   {% endif %}
-</div>
+</div> -->
 
 <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
-<div id="main">
+<!-- <div id="main">
   {% if user.is_authenticated %}
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item">
@@ -139,10 +276,10 @@
   <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
 </div>
 </div>
-{%endif%}
+{%endif%} -->
 
 
-<script>
+<!-- <script>
 $(document).ready(function() {
   var table = $('#mainTable').DataTable({
     fixedHeader: true,
@@ -228,6 +365,6 @@ function closeNav() {
 }
 
 
-</script>
+</script> -->
 
-{% endblock %}
+

@@ -1,0 +1,295 @@
+body {
+	/*text-align: center;*/
+	/*background: #002f54;*/
+}
+
+nav {
+	width: 100vw;
+	height: 70px;
+	/*background: #FF9000;*/
+	/*padding: 10px;*/
+}
+
+nav li, nav li a {
+	color: #ee7000 !important;
+}
+nav ul {
+	list-style: none;
+	background: white;
+}
+@media(min-width: 990px) {
+	nav ul {
+		/*display: inline-flex;*/
+		position: absolute;
+		/*top: 20px;*/
+		right: 20px;
+	}
+}
+
+@media(min-width: 1400px) {
+	nav ul {
+	font-size: 22px;
+	}
+}
+
+nav ul li {
+	margin: auto 20px;
+}
+
+nav li.grayText {
+	color: lightgray !important;
+}
+
+@media(max-width: 989px) {
+	nav ul li {
+		text-align: center;
+		padding: 10px;
+	}
+	nav li.grayText {
+		display: none;
+	}
+}
+
+.downArrow {
+	font-size: 16px;
+}
+
+.logo {
+	/*margin: 10px;*/
+	position: relative;
+	margin-left: 10px;
+	display: inline-block;
+	left: 0;
+	width: 100px;
+}
+
+@media(min-width: 1400px) {
+	.logo {
+			top: -10px;
+	}
+}
+
+.title {
+	/*text-align: center;*/
+	text-transform: uppercase;
+	font-size: 28px;
+	color: #555;
+	display: inline-block;
+	padding: 10px;
+
+}
+
+@media(max-width: 1365px) {
+	.logo {
+		display: inline-block;
+		position: relative;
+	}
+	.title {
+		text-align: left;
+		font-size: 22px;
+		display: inline-block;
+	}
+}
+
+.newAlerts::after, .trackedAlerts::after {
+	color: white;
+	content: '3';
+	background: red;
+	padding-left: 6px;
+	margin-left: 3px;
+	margin-top: 2px;
+	border-radius: 50%;
+	width: 20px;
+	height: 20px;
+	font-size: 14px;
+	position: absolute;
+}
+
+.trackedAlerts::after {
+	content: '5';
+}
+
+h2, h3, h4 {
+	margin: 50px 0 20px 0;
+	text-align: center;
+}
+
+h3 {
+	font-size: 42px;
+	text-decoration: underline;
+}
+
+h4 {
+	color: darkblue;
+}
+
+/*_____________index page_____________*/
+
+table {
+	width: 70vw;
+	margin-left: 15vw;
+}
+
+@media(max-width: 1399px) {
+	table {
+		width: 96vw;
+		margin-left: 2vw;
+	}
+}
+
+tbody tr:first-of-type td:first-of-type {
+	border-radius: 10px 0 0 0;
+}
+
+tbody tr:first-of-type td:last-of-type {
+	border-radius: 0 10px 0 0;
+}
+
+tbody tr:last-of-type td:first-of-type {
+	border-radius: 0 0 0 10px;
+}
+
+tbody tr:last-of-type td:last-of-type {
+	border-radius:0 0 10px 0;
+}
+
+tbody tr:nth-of-type(even) {
+	background: #ddd;
+}
+
+tbody tr:nth-of-type(odd) {
+	background: #efefef;
+}
+
+ th, td {
+	padding: 5px;
+	text-align: center;
+	height: 50px;
+}
+
+@media(min-width: 1200px) {
+	th, td {
+		min-width: 125px;
+	}	
+}
+
+table a {
+	display: block;
+	width: 100%;
+}
+
+table button {
+	border-radius: 5px;
+	padding: 5px 10px;
+}
+
+.btn-track {
+	background: #ee7000;
+	color: white;
+}
+
+.btn-tracked {
+	background: green;
+	border: 1px solid #ccc;
+	color: white;
+}
+
+.btn-ignore {
+	background: darkblue;
+	color: white;
+}
+
+.centered {
+	width: 200px;
+	margin: 50px auto;
+}
+
+/*_____________show page_____________*/
+
+.residentInfoDiv {
+	margin: 20px;
+}
+
+.residentInfoDiv p {
+	font-size: 18px;
+}
+
+label {
+	font-weight: bold;
+}
+.editable {
+	/*border-bottom: 2px solid lightgray;*/
+}
+#editBtn {
+	background: darkblue;
+	color: white;
+}
+
+
+/*___________index.html___________*/
+
+.btn-remove {
+	background: #aa0000;
+	color: white;
+}
+
+.alertByButton::after {
+	color: white;
+	content: '!';
+	font-weight: bold;
+	background: red;
+	padding: 0 6px;
+	border-radius: 50%;
+	width: 20px;
+	height: 20px;
+	font-size: 12px;
+	position: absolute;
+}
+
+.alertByButton:hover::after {
+	color: maroon;
+	content: 'RFI Due within 10 days';
+	font-weight: initial;
+	background: white;
+	padding: 0 6px;
+	border-radius: 0;
+	width: auto;
+	height: 20px;
+	font-size: 14px;
+	position: absolute;
+}
+
+/*login page*/
+.loginDiv {
+	margin-top: 100px;
+		text-align: center;
+}
+@media(min-width: 480px) {
+	.loginDiv {
+		width: 40vw;
+		margin: 100px 30vw;
+	
+	}
+}
+
+.loginDiv h1 {
+	color: #004477;
+}
+
+.loginDiv input {
+	background: #eee;
+	padding: 7px;
+	/*border-radius: 5px;*/
+	position: relative;
+	top: -5px;
+	width: 250px;
+	border: none;
+	/*border-bottom: 2px solid steelblue;*/
+}
+
+/*______________pending_alerts.html______________*/
+
+.btn-alert {
+	background: #ee7000;
+	color: white;
+}
