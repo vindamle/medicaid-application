@@ -22,7 +22,7 @@ class Alerts:
         cursor = self.conn.cursor()
         try:
 
-            results = cursor.execute("{CALL p_MEnrollmentTrackingResidentByActivitydateFacility(?,?,?)}",'2018-10-31', 1, None)
+            results = cursor.execute("{CALL p_MEnrollmentTrackingResidentByActivitydateFacility(?,?,?)}",None, 1, None)
         except:
             print("Error :: Cannot Connect to Server")
 
