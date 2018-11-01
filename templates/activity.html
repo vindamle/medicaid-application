@@ -22,7 +22,7 @@
     <tbody>
       {% for obj in list%}
         {% if obj.activity_type == 'A' %}
-        <tr>
+        <tr id="{{obj.patient_id}}">
           <td>{{obj.first_name}}</td>
           <td>{{obj.last_name}}</td>
           <td>{{obj.facility}}</td>
@@ -33,7 +33,7 @@
           <td><button class="btn-ignore">Ignore</button></td>
         </tr>
         {% endif %}
-      {% endfor %}  
+      {% endfor %}
     </tbody>
   </table>
 
@@ -66,7 +66,7 @@
           <td><button class="btn-ignore">Ignore</button></td>
         </tr>
         {% endif %}
-      {% endfor %}  
+      {% endfor %}
     </tbody>
   </table>
 
@@ -88,7 +88,7 @@
   <tbody>
       {% for obj in list%}
         {% if obj.activity_type == 'D' %}
-        <tr>
+        <tr id="{{obj.patient_id}}">
           <td>{{obj.first_name}}</td>
           <td>{{obj.last_name}}</td>
           <td>{{obj.facility}}</td>
@@ -99,7 +99,7 @@
           <td><button class="btn-ignore">Ignore</button></td>
         </tr>
         {% endif %}
-      {% endfor %}  
+      {% endfor %}
     </tbody>
   </table>
   <div class="centered">
