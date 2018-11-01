@@ -29,3 +29,10 @@ class create(generic.CreateView):
             return HttpResponseRedirect('/success/')
 
         return render(request, self.template_name, {'form': form})
+
+def update_list(request):
+    if request.method == 'GET':
+        pass
+
+    else:
+        pass
