@@ -5,7 +5,7 @@ from django.views import generic
 from .forms import NameForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-
+from .models import Alert
 
 class signup(generic.CreateView):
     form_class = UserCreationForm
@@ -32,7 +32,16 @@ class create(generic.CreateView):
 
 def update_list(request):
     if request.method == 'GET':
-        pass
-
+        requested_patient_id = request.GET['patient_id']
+        track = request.GET['tracking']
+        requested_patient_id = int(requested_patient_id)
+        alert = Alert.objects.get(patient_id = requested_patient_id)
+        if track == "true":
+            alert.tracking_status = True
+            # alert.save()
+        elif track == "false":
+            alert.tracking_status = False
+            # alert.save()
+        return HttpResponse("200") # Sending an success response
     else:
-        pass
+        return HttpResponse("Request method is not a GET")
