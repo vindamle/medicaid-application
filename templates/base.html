@@ -1,7 +1,6 @@
 <!-- templates/base.html -->
 
 {% load static %}
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +11,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light">
-      <a href="index.html"><img src="img/centersLogo.png" class="logo navbar-brand"><h1 class="title">Medicaid Tracker</h1></a>
+      <a href="{% url 'home' %}"><img src='{% static "img/centersLogo.png" %}' class="logo navbar-brand"><h1 class="title">Medicaid Tracker</h1></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -50,7 +49,12 @@
 
     {% block content %}
 
-        {% endblock %}
+    {% endblock %}
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+     {% block scripts %}
+        
+    {% endblock %}
 
   </body>
 </html>

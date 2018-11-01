@@ -92,16 +92,17 @@ nav li.grayText {
 }
 
 .newAlerts::after, .trackedAlerts::after {
+	text-align: center;
 	color: white;
-	content: '3';
+	content: '12';
 	background: red;
-	padding-left: 6px;
+	/*padding: 0 3px;*/
 	margin-left: 3px;
 	margin-top: 2px;
 	border-radius: 50%;
 	width: 20px;
 	height: 20px;
-	font-size: 14px;
+	font-size: 13px;
 	position: absolute;
 }
 
@@ -188,7 +189,7 @@ table button {
 	color: white;
 }
 
-.btn-tracked {
+.btn-tracked, #trackSelectedBtn {
 	background: green;
 	border: 1px solid #ccc;
 	color: white;
