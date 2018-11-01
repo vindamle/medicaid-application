@@ -37,7 +37,7 @@ $('.btn-track').click(function(){
     $.ajax(
     {
         type:"GET",
-        url: "/ajax/track_or_ignore",
+        url: "/application/ajax/track_or_ignore",
         data:{
                  patient_id: row.id,
                  tracking: true

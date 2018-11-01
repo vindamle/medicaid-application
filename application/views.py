@@ -32,7 +32,7 @@ class create(generic.CreateView):
 
 def update_list(request):
     if request.method == 'GET':
-        pass
+        print(request.GET['patient_id'])
 
     else:
         pass
