@@ -13,9 +13,7 @@
       <th>Facility</th>
       <th>Primary Payor</th>
       <th>Secondary Payor</th>
-      <th>Admission Date</th>
-      <th>Track</th>
-      <th></th>
+      <th>Approval Date</th>
     </tr>
   </thead>
     <tbody>
@@ -28,7 +26,7 @@
                     <td>{{obj.secondary_payor}}</td>
                     <td>{{obj.activity_date}}</td>
                     <td><a href="{% url 'show' %}"><button class="btn-tracked">Show</button></a></td>
-                    <td><button class="btn-remove">Remove</button></td>
+                    <td><button class="btn-remove">Don't Track</button></td>
                 </tr>
               {% endfor %}
     </tbody>

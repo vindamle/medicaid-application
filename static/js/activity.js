@@ -11,7 +11,7 @@ $('.btn-track').click(function(){
         },
         success: function() 
         {
-            row.parentNode.removeChild;
+            $(row).remove();
         }
      })
 });
@@ -30,7 +30,7 @@ $('.btn-ignore').click(function(){
           },
         success: function() 
           {
-            row.parentNode.removeChild;
+            $(row).remove();
           }
      });
    };

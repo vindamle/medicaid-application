@@ -15,12 +15,10 @@
         <th>Primary Payor</th>
         <th>Secondary Payor</th>
         <th>Admission Date</th>
-        <th>Track</th>
-        <th></th>
       </tr>
     </thead>
     <tbody>
-      {% for obj in list%}
+      {% for obj in list %}
         {% if obj.activity_type == 'A' %}
         <tr id="{{obj.patient_id}}">
           <td>{{obj.first_name}}</td>
@@ -30,7 +28,7 @@
           <td>{{obj.secondary_payor}}</td>
           <td>{{obj.activity_date}}</td>
           <td class="trackBtnCell"><button class="btn-track">Track</button></td>
-          <td><button class="btn-ignore">Ignore</button></td>
+          <td><button class="btn-ignore">Don't Track</button></td>
         </tr>
         {% endif %}
       {% endfor %}
@@ -48,8 +46,6 @@
       <th>Primary Payor</th>
       <th>Secondary Payor</th>
       <th>Date of Payor Change</th>
-      <th></th>
-      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -63,7 +59,7 @@
           <td>{{obj.secondary_payor}}</td>
           <td>{{obj.activity_date}}</td>
           <td class="trackBtnCell"><button class="btn-track">Track</button></td>
-          <td><button class="btn-ignore">Ignore</button></td>
+          <td><button class="btn-ignore">Don't Track</button></td>
         </tr>
         {% endif %}
       {% endfor %}
@@ -81,8 +77,6 @@
       <th>Primary Payor</th>
       <th>Secondary Payor</th>
       <th>Discharge Date</th>
-      <th></th>
-      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -96,15 +90,15 @@
           <td>{{obj.secondary_payor}}</td>
           <td>{{obj.activity_date}}</td>
           <td class="trackBtnCell"><button class="btn-track">Track</button></td>
-          <td><button class="btn-ignore">Ignore</button></td>
+          <td><button class="btn-ignore">Don't Track</button></td>
         </tr>
         {% endif %}
       {% endfor %}
     </tbody>
   </table>
-  <div class="centered">
+  <!-- <div class="centered">
     <button class="btn btn-lg" id="trackSelectedBtn">Track Selected</button>
-  </div>
+  </div> -->
 
 {% endblock %}
 {% load static %}

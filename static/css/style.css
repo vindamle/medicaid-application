@@ -189,18 +189,19 @@ table button {
 }
 
 .btn-track {
-	background: #ee7000;
+	/*background: #ee7000;*/
+	background: #009900;
 	color: white;
 }
 
 .btn-tracked, #trackSelectedBtn {
-	background: green;
+	background: #009900;
 	border: 1px solid #ccc;
 	color: white;
 }
 
 .btn-ignore {
-	background: darkblue;
+	background: #aa0000;
 	color: white;
 }
 
