@@ -1,11 +1,45 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Activity{% endblock %}
 
 {% block content %}
 
-  <h3>Medicaid Pending</h3>
-  <table id="trackedResidentsTable">
+<h3>Activity</h3>
+  <h4>New Admissions:</h4>
+  <table class="newAlertsTable">
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Facility</th>
+        <th>Primary Payor</th>
+        <th>Secondary Payor</th>
+        <th>Admission Date</th>
+        <th>Track</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for obj in list%}
+        {% if obj.activity_type == 'A' %}
+        <tr>
+          <td>{{obj.first_name}}</td>
+          <td>{{obj.last_name}}</td>
+          <td>{{obj.facility}}</td>
+          <td>{{obj.primary_payor}}</td>
+          <td>{{obj.secondary_payor}}</td>
+          <td>{{obj.activity_date}}</td>
+          <td class="trackBtnCell"><button class="btn-track">Track</button></td>
+          <td><button class="btn-ignore">Ignore</button></td>
+        </tr>
+        {% endif %}
+      {% endfor %}  
+    </tbody>
+  </table>
+
+
+  <h4>Payor Change:</h4>
+  <table class="newAlertsTable">
     <thead>
       <tr>
       <th>First Name</th>
@@ -13,32 +47,71 @@
       <th>Facility</th>
       <th>Primary Payor</th>
       <th>Secondary Payor</th>
-      <th>Admission Date</th>
-      <th>Track</th>
+      <th>Date of Payor Change</th>
+      <th></th>
       <th></th>
     </tr>
   </thead>
-    <tbody>
+  <tbody>
       {% for obj in list%}
-                <tr>
-                    <td>{{obj.first_name}}</td>
-                    <td>{{obj.last_name}}</td>
-                    <td>{{obj.facility}}</td>
-                    <td>{{obj.primary_payor}}</td>
-                    <td>{{obj.secondary_payor}}</td>
-                    <td>{{obj.activity_date}}</td>
-                    <td><a href="{% url 'show' %}"><button class="btn-tracked alertByButton">Show</button></a></td>
-                    <td><button class="btn-remove">Remove</button></td>
-                </tr>
-              {% endfor %}
+        {% if obj.activity_type == 'P' %}
+        <tr>
+          <td>{{obj.first_name}}</td>
+          <td>{{obj.last_name}}</td>
+          <td>{{obj.facility}}</td>
+          <td>{{obj.primary_payor}}</td>
+          <td>{{obj.secondary_payor}}</td>
+          <td>{{obj.activity_date}}</td>
+          <td class="trackBtnCell"><button class="btn-track">Track</button></td>
+          <td><button class="btn-ignore">Ignore</button></td>
+        </tr>
+        {% endif %}
+      {% endfor %}  
     </tbody>
   </table>
+
+
+  <h4>Discharged:</h4>
+  <table class="newAlertsTable">
+    <thead>
+      <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Facility</th>
+      <th>Primary Payor</th>
+      <th>Secondary Payor</th>
+      <th>Discharge Date</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for obj in list%}
+        {% if obj.activity_type == 'D' %}
+        <tr>
+          <td>{{obj.first_name}}</td>
+          <td>{{obj.last_name}}</td>
+          <td>{{obj.facility}}</td>
+          <td>{{obj.primary_payor}}</td>
+          <td>{{obj.secondary_payor}}</td>
+          <td>{{obj.activity_date}}</td>
+          <td class="trackBtnCell"><button class="btn-track">Track</button></td>
+          <td><button class="btn-ignore">Ignore</button></td>
+        </tr>
+        {% endif %}
+      {% endfor %}  
+    </tbody>
+  </table>
+  <div class="centered">
+    <button class="btn btn-lg" id="trackSelectedBtn">Track Selected</button>
+  </div>
 
 {% endblock %}
 {% load static %}
 {% block scripts %}
-      <script src="{% static 'js/home.js' %}"></script>
+      <script src="{% static 'js/activity.js' %}"></script>
 {% endblock %}
+
 <!-- <div id="mySidenav" class="sidenav">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
   {% if user.is_authenticated %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Patient Show Page{% endblock %}
+
+{% block content %}
+
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+	  <strong>Alert:</strong> RFI due within 10 days.
+	  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	    <span aria-hidden="true">&times;</span>
+	  </button>
+	</div>
+
+	<div class="residentInfoDiv">
+		<p><label>Resident Name:</label> <span class="editable">Annie Setter</span></p>
+		<p><label>Admission Date:</label> <span class="editable">11/20/17</span></p>
+		<p><label>Pickup Date:</label> <span class="editable">11/20/17</span></p>
+		<p>(More info, places to upload documents, etc.)</p>
+		<button class="btn" id="editBtn">Edit</button>
+	</div>
+<!-- 
+•	Any admission that is Medicaid (or MLTC) should have a page created. The page should have:
+o	Name of resident (preferably generated from NCS)
+o	Admission date (preferably generated from NCS)
+o	Medicaid Pickup Date (i.e. the date from which Medicaid is needed to cover)
+o	Application type (New application, conversion, recertification – single, spousal, SSI)
+o	County in which the application is being filed (specific to most states which have a county system)
+o	Applicant resource information
+o	Income and NAMI information (preferably generated from NCS)
+
+Application History
+The program should include the following fields for data entry
+•	Date of application submission 
+o	Field to upload the Medicaid application (requirements will vary by state)
+o	Field to upload confirmation of receipt by the Medicaid office
+•	Date of RFI issued by the Medicaid Office
+o	Field to upload RFI
+•	Date of RFI deadline
+•	Items required for the RFI (have it become a checklist once typed in as we have in some other programs)
+•	Note section for correspondence with the Medicaid office
+If approved
+•	Date of Medicaid approval
+o	Field to upload Medicaid approval
+•	Date recertification is needed
+If denied
+•	Date of Medicaid Denial
+o	Field to upload Medicaid denial
+•	Date of fair hearing request
+o	Field to upload confirmation of fair hearing request
+•	Date of fair hearing
+o	Field to upload fair hearing notice
+•	Denial triggers the need for new application which should restart the process
+ -->
+
+{% endblock %}
+{% load static %}
+{% block scripts %}
+      <script src="{% static 'js/show.js' %}"></script>
+{% endblock %}

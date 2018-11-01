@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Pending Alerts{% endblock %}
+
+{% block content %}
+<h3>Pending Alerts</h3>
+	<table>
+		 <thead>
+      <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Facility</th>
+      <th>Primary Payor</th>
+      <th>Secondary Payor</th>
+      <th>Alert Date</th>
+    </tr>
+  </thead>
+    <tbody>
+      {% for obj in list%}
+        <tr>
+            <td>{{obj.first_name}}</td>
+            <td>{{obj.last_name}}</td>
+            <td>{{obj.facility}}</td>
+            <td>{{obj.primary_payor}}</td>
+            <td>{{obj.secondary_payor}}</td>
+            <td>{{obj.activity_date}}</td>
+						<td><a href="{% url 'show' %}"><button class="btn-alert">Show</button></a></td>  
+        </tr>
+      {% endfor %}
+    </tbody>
+	</table>
+	<script type="text/javascript" src="js/index.js"></script>
+
+{% endblock %}
