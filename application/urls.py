@@ -4,6 +4,6 @@ from . import views
 urlpatterns = [
     path('signup/', views.signup.as_view(), name='signup'),
     path('create/', views.create.as_view(), name = 'create'),
-    # path('activity/', views.create.as_view(), name = 'activity'),
+    path('ajax/track_or_ignore/' ,views.update_list , name = "update_list"),
 
 ]

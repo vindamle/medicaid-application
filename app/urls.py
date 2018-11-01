@@ -26,4 +26,5 @@ urlpatterns = [
     path('approvals/', ApprovalsView.as_view(), name = 'approvals'),
     path('application/', include('application.urls')),
     path('application/', include('django.contrib.auth.urls')),
+    
 ]
