@@ -55,7 +55,7 @@
   <tbody>
       {% for obj in list%}
         {% if obj.activity_type == 'P' %}
-        <tr>
+        <tr id="{{obj.patient_id}}">
           <td>{{obj.first_name}}</td>
           <td>{{obj.last_name}}</td>
           <td>{{obj.facility}}</td>

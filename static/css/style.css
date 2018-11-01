@@ -124,6 +124,10 @@ h4 {
 	color: darkblue;
 }
 
+.displayNone {
+	display: none;
+}
+
 /*_____________index page_____________*/
 
 table {
