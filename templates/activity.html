@@ -4,8 +4,8 @@
 
 {% block content %}
 
-<h3>Activity</h3>
-  <h4>New Admissions:</h4>
+  <h3>Activity</h3>
+  <h4>New Admissions (<span class="countSpan" id="newAdmissionsTableCount"></span>):</h4>
   <table class="newAlertsTable">
     <thead>
       <tr>
@@ -17,7 +17,7 @@
         <th>Admission Date</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="newAdmissionsTable">
       {% for obj in list %}
         {% if obj.activity_type == 'A' %}
         <tr id="{{obj.patient_id}}">
@@ -35,8 +35,7 @@
     </tbody>
   </table>
 
-
-  <h4>Payor Change:</h4>
+  <h4>Payor Changes (<span class="countSpan" id="payorChangesTableCount"></span>):</h4>
   <table class="newAlertsTable">
     <thead>
       <tr>
@@ -48,7 +47,7 @@
       <th>Date of Payor Change</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody  id="payorChangesTable">
       {% for obj in list%}
         {% if obj.activity_type == 'P' %}
         <tr id="{{obj.patient_id}}">
@@ -67,7 +66,7 @@
   </table>
 
 
-  <h4>Discharged:</h4>
+  <h4>Discharges (<span class="countSpan" id="dischargesTableCount"></span>):</h4>
   <table class="newAlertsTable">
     <thead>
       <tr>
@@ -79,7 +78,7 @@
       <th>Discharge Date</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody  id="dischargesTable">
       {% for obj in list%}
         {% if obj.activity_type == 'D' %}
         <tr id="{{obj.patient_id}}">

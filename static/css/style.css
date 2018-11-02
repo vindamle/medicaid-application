@@ -1,6 +1,11 @@
 body {
 	/*text-align: center;*/
 	/*background: #002f54;*/
+	padding-bottom: 100px;
+}
+
+html, body {
+	overflow-x: hidden;
 }
 
 nav {
@@ -91,12 +96,11 @@ nav li.grayText {
 	}
 }
 
-.newAlerts::after, .trackedAlerts::after {
+/*.newAlerts::after, .trackedAlerts::after {
 	text-align: center;
 	color: white;
 	content: '12';
 	background: red;
-	/*padding: 0 3px;*/
 	margin-left: 3px;
 	margin-top: 2px;
 	border-radius: 50%;
@@ -104,10 +108,24 @@ nav li.grayText {
 	height: 20px;
 	font-size: 13px;
 	position: absolute;
-}
-
+}*/
+/*
 .trackedAlerts::after {
 	content: '5';
+}*/
+
+#activityCount {
+	display: inline-block;
+	position: relative;
+	top: -10px;
+	font-size: 14px;
+	background: red;
+	color: white;
+	text-align: center;
+	/*padding: 0 2px;*/
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
 }
 
 h2, h3, h4 {
@@ -130,9 +148,10 @@ h4 {
 
 /*_____________index page_____________*/
 
-table {
-	width: 70vw;
-	margin-left: 15vw;
+table, thead, tbody {
+	display: block;
+	max-width: 1220px;
+	margin: auto;
 }
 
 @media(max-width: 1399px) {
@@ -140,6 +159,11 @@ table {
 		width: 96vw;
 		margin-left: 2vw;
 	}
+}
+
+tbody {
+	overflow-y: auto;
+	max-height: 500px;
 }
 
 tbody tr:first-of-type td:first-of-type {
@@ -174,7 +198,7 @@ tbody tr:nth-of-type(odd) {
 
 @media(min-width: 1200px) {
 	th, td {
-		min-width: 125px;
+		width: 150px;
 	}	
 }
 
@@ -298,4 +322,10 @@ label {
 .btn-alert {
 	background: #ee7000;
 	color: white;
+}
+
+/*_________________activity.html_________________*/
+
+.countSpan {
+	color: maroon;
 }
