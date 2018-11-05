@@ -25,7 +25,8 @@ class Facility(models.Model):
         verbose_name_plural = 'Facilities'
 
 class Alert(models.Model):
-    patient_id  = models.AutoField(primary_key=True)
+    patient_id  = models.BigAutoField(primary_key=True)
+    patient_number = models.IntegerField(null = True, blank = True)
     ssn = models.CharField(max_length=255, null=True, blank=True)
     dob = models.DateTimeField(null=True, blank=True)
     first_name = models.CharField(max_length=50, null=True, blank=True)
@@ -33,10 +34,10 @@ class Alert(models.Model):
     facility_id = models.IntegerField(null = True, blank = True)
     facility = models.CharField(max_length=50, null=True, blank=True)
     primary_payor_id = models.IntegerField(null = True, blank = True)
-    primary_payor_grp = models.CharField(max_length=10, null=True, blank=True)
+    primary_payor_grp = models.CharField(max_length=50, null=True, blank=True)
     primary_payor = models.CharField(max_length=50, null=True, blank=True)
     secondary_payor_id =  models.IntegerField(null = True, blank = True)
-    secondary_payor_grp = models.CharField(max_length=10, null=True, blank=True)
+    secondary_payor_grp = models.CharField(max_length=50, null=True, blank=True)
     secondary_payor = models.CharField(max_length=50, null=True, blank=True)
     activity_date = models.DateTimeField(null=True, blank=True)
     activity_type = models.CharField(max_length=2, null=True, blank=True)

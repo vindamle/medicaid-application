@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel='shortcut icon' type='image/x-icon' href="{% static 'img/favicon.ico' %}" >
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
@@ -19,7 +20,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link newAlerts" href="{% url 'activity' %}">Activity</a>
+            <a class="nav-link newAlerts" href="{% url 'activity' %}">Activity<p id="activityCount">{{list|length}}</p></a>
           </li>
           <li class="grayText">|</li>
           <li class="nav-item active">
@@ -41,8 +42,9 @@
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="#">Account</a>
               <a class="dropdown-item" href="#">Settings</a>
+              <a class="dropdown-item" href="#">Not Tracking</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="login.html">Log Out</a>
+              <a class="dropdown-item" href="registration/login.html">Log Out</a>
             </div>
           </li>
         </ul>
@@ -51,7 +53,6 @@
     {% block content %}
 
     {% endblock %}
-    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
      {% block scripts %}
         
