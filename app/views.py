@@ -113,13 +113,19 @@ class ShowView(View):
 
     def get(self, request, *args, **kwargs):
         '''if GET  '''
-        facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-        results = Alert.objects.filter(tracking_status = None)
+        number= int(request.GET["patient_id"])
+
+        results = Alert.objects.filter(patient_id = number)
+
         self.list = list()
 
         for result in results:
+
             self.list.append(result)
-        return render(request,self.template_name, {'list':self.list,"form":self.form_class, 'facilities':facilities})
+
+
+
+        return render(request,self.template_name, {'list':self.list,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
 
@@ -184,6 +190,7 @@ class NotTrackingView(View):
 
         for result in results:
             self.list.append(result)
+
         return render(request,self.template_name, {'list':self.list,"form":self.form_class, 'facilities':facilities})
 
     def post(self, request, *args, **kwargs):
