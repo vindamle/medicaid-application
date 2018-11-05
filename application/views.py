@@ -38,10 +38,10 @@ def update_list(request):
         alert = Alert.objects.get(patient_id = requested_patient_id)
         if track == "true":
             alert.tracking_status = True
-            # alert.save()
+            alert.save()
         elif track == "false":
             alert.tracking_status = False
-            # alert.save()
+            alert.save()
         return HttpResponse("200") # Sending an success response
     else:
         return HttpResponse("Request method is not a GET")

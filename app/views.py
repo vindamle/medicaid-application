@@ -16,7 +16,7 @@ class HomeView(View):
     def get(self, request, *args, **kwargs):
         '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-        results = Alert.objects.filter(tracking_status = None, facility_id= 1)
+        results = Alert.objects.filter(tracking_status = True)
         self.list = list()
 
         for result in results:
@@ -49,7 +49,7 @@ class ActivityView(View):
     def get(self, request, *args, **kwargs):
         '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-        results = Alert.objects.filter(tracking_status = None,facility_id= 1)
+        results = Alert.objects.filter(tracking_status = None)
         self.list = list()
 
         for result in results:
@@ -170,7 +170,7 @@ class ApprovalsView(View):
 
 class NotTrackingView(View):
     form_class = ApplicationForm
-    template_name = "approvals.html"
+    template_name = "not_tracking.html"
     list = []
     tracklist = []
 
