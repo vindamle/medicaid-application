@@ -115,6 +115,10 @@ nav li.grayText {
 	content: '5';
 }*/
 
+.currentPage {
+	color: purple !important;
+}
+
 #activityCount {
 	display: inline-block;
 	position: relative;
