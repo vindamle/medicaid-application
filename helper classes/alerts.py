@@ -32,7 +32,7 @@ class Alerts:
     def get_fields(self, result):
 
         return dict(
-            patient_id = getattr(result,"PatientId"),
+            patient_id = getattr(result,"PatientID"),
             ssn = getattr(result, "SSN"),
             first_name = getattr(result, "FirstName").capitalize(),
             last_name = getattr(result, "LastName").capitalize(),

@@ -170,7 +170,7 @@ class ApprovalsView(View):
 
 class NotTrackingView(View):
     form_class = ApplicationForm
-    template_name = "approvals.html"
+    template_name = "not_tracking.html"
     list = []
     tracklist = []
 

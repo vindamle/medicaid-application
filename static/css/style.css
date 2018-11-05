@@ -91,8 +91,9 @@ nav li.grayText {
 	}
 	.title {
 		text-align: left;
-		font-size: 22px;
+		font-size: 18px;
 		display: inline-block;
+		position: absolute;
 	}
 }
 
@@ -122,9 +123,9 @@ nav li.grayText {
 	background: red;
 	color: white;
 	text-align: center;
-	/*padding: 0 2px;*/
-	width: 22px;
-	height: 22px;
+	padding: 1px;
+	min-width: 22px;
+	/*height: 22px;*/
 	border-radius: 50%;
 }
 
@@ -193,12 +194,20 @@ tbody tr:nth-of-type(odd) {
  th, td {
 	padding: 5px;
 	text-align: center;
-	height: 50px;
+	font-size: 12px;
+	height: 10px;
+	width: 100px;
 }
 
-@media(min-width: 1200px) {
+th {
+	font-size: 10px;
+}
+
+@media(min-width: 768px) {
 	th, td {
 		width: 150px;
+		height: 50px;
+		font-size: initial;
 	}	
 }
 
@@ -270,12 +279,12 @@ label {
 	background: red;
 	padding: 0 6px;
 	border-radius: 50%;
-	width: 20px;
-	height: 20px;
 	font-size: 12px;
-	position: absolute;
+	position: relative;
+	top: -15px;
+	left: -10px;
 }
-
+/*
 .alertByButton:hover::after {
 	color: maroon;
 	content: 'RFI Due within 10 days';
@@ -288,7 +297,7 @@ label {
 	font-size: 14px;
 	position: absolute;
 }
-
+*/
 /*login page*/
 .loginDiv {
 	margin-top: 100px;
@@ -304,6 +313,7 @@ label {
 
 .loginDiv h1 {
 	color: #004477;
+	margin-bottom: 40px;
 }
 
 .loginDiv input {
