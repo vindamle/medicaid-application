@@ -4,11 +4,19 @@
 {% block title %}Create Application{% endblock %}
 
 {% block content %}
-    <h2>Medicaid Application Form</h2>
-    <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Create Application</button>
-      <button type="submit">Back</button>
-    </form>
+<div class="formDiv">
+  <h1>Medicaid Application Form</h1>
+  <form method="post">
+    {% csrf_token %}
+    <p><input type="text" name="username" placeholder="First name"></p>
+		<p><input type="text" name="password" placeholder="Last name"></p>
+		<p><input type="text" name="password" placeholder="NCS ID number"></p>
+		<p><input type="file" name="password" placeholder="Medicaid application"></p>
+		<p><input type="file" name="password" placeholder="Confirmation receipt"></p>
+		<p><input type="file" name="password" placeholder="RFI"></p>
+		<p><input type="text" name="password" placeholder="RFI deadline"></p>
+    <button type="submit" class="btn btn-success">Create Application</button>
+    <button type="submit" class="btn btn-primary">Back</button>
+  </form>
+</div>
 {% endblock %}

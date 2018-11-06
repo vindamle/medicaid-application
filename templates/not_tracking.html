@@ -5,32 +5,34 @@
 {% block content %}
 
 <h3>Not Tracking:</h3>
-	<table>
-		 <thead>
-      <tr>
+<table>
+  <thead>
+    <tr>
       <th>First Name</th>
       <th>Last Name</th>
       <th>Facility</th>
       <th>Primary Payor</th>
       <th>Secondary Payor</th>
       <th>Approval Date</th>
+      <th>Show</th>
+      <th>Don't Track</th>
     </tr>
   </thead>
-    <tbody>
-      {% for obj in list%}
-                <tr>
-                    <td>{{obj.first_name}}</td>
-                    <td>{{obj.last_name}}</td>
-                    <td>{{obj.facility}}</td>
-                    <td>{{obj.primary_payor}}</td>
-                    <td>{{obj.secondary_payor}}</td>
-                    <td>{{obj.activity_date}}</td>
-                    <td><a href="{% url 'show' %}"><button class="btn-tracked">Show</button></a></td>
-                    <td><button class="btn-remove">Don't Track</button></td>
-                </tr>
-              {% endfor %}
-    </tbody>
-	</table>
-	<script type="text/javascript" src="js/pending.js"></script>
+  <tbody>
+    {% for obj in list%}
+    <tr>
+      <td>{{obj.first_name}}</td>
+      <td>{{obj.last_name}}</td>
+      <td>{{obj.facility}}</td>
+      <td>{{obj.primary_payor}}</td>
+      <td>{{obj.secondary_payor}}</td>
+      <td>{{obj.activity_date}}</td>
+      <td><a href="/show?patient_id={{obj.patient_id}}" class="alertByButton"><button class="btn-tracked">Show</button></a></td>
+      <td><button class="btn-remove">Don't Track</button></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<script type="text/javascript" src="js/pending.js"></script>
 
 {% endblock %}

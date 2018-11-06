@@ -12,6 +12,7 @@ editBtn.addEventListener('click', (e) => {
 			editableItem.parentNode.insertBefore(input, editableItem);
 			editableItem.parentNode.removeChild(editableItem);
 			editBtn.textContent = 'Save';
+			editBtn.classList.toggle('saveBtn');
 		};
 	} else if (editBtn.textContent == 'Save') {
 			for (var i = 0; i < editableItems.length; i++) {
@@ -22,6 +23,7 @@ editBtn.addEventListener('click', (e) => {
 			editableItem.parentNode.insertBefore(span, editableItem);
 			editableItem.parentNode.removeChild(editableItem);
 			editBtn.textContent = 'Edit';
+			editBtn.classList.toggle('saveBtn');
 		};
 	};
 });

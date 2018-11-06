@@ -9,7 +9,8 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel='shortcut icon' type='image/x-icon' href="{% static 'img/favicon.ico' %}" >
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+  
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light">
@@ -20,11 +21,11 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link newAlerts" href="{% url 'activity' %}">Activity<p id="activityCount">{{list|length}}</p></a>
+            <a class="nav-link newAlerts" href="{% url 'activity' %}">Activity<!-- <p id="activityCount">{{list|length}}</p> --></a>
           </li>
           <li class="grayText">|</li>
           <li class="nav-item">
-            <a class="nav-link currentPage" href="{% url 'home' %}">Pending</a>
+            <a class="nav-link" href="{% url 'home' %}">Pending</a>
           </li>
           <li class="grayText">|</li>
           <li class="nav-item">
@@ -42,9 +43,9 @@
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="#">Account</a>
               <a class="dropdown-item" href="#">Settings</a>
-              <a class="dropdown-item" href="#">Not Tracking</a>
+              <a class="dropdown-item" href="{% url 'not_tracking' %}">Not Tracking</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="registration/login.html">Log Out</a>
+              <a class="dropdown-item" href="/application/login">Log Out</a>
             </div>
           </li>
         </ul>
@@ -53,6 +54,10 @@
     {% block content %}
 
     {% endblock %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="{% static 'js/base.js' %}"></script>
         {% load static %}

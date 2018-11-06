@@ -1,3 +1,10 @@
-document.addEventListener('click', () => {
-	console.log(window.location.pathname);
+$(document).ready(function () {
+  var url = window.location.pathname;
+  $('a[href="'+ url +'"]').addClass('currentPage');
+});
+
+$(document).ready( () => {
+    $('table').dataTable( {
+    "paging": false
+} );
 });
