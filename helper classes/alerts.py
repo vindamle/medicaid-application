@@ -2,7 +2,7 @@ from mssqlserver import ConnectSqlServer
 from db import Db
 import pyodbc
 from sqlalchemy.dialects.postgresql import insert
-
+from datetime import datetime
 class Alerts:
 
 
@@ -21,8 +21,8 @@ class Alerts:
 
         cursor = self.conn.cursor()
         try:
-
-            results = cursor.execute("{CALL p_MEnrollmentTrackingResidentByActivitydateFacility(?,?,?)}",'2018-10-31', 1, None)
+            # ('2018-10-31')
+            results = cursor.execute("{CALL p_MEnrollmentTrackingResidentByActivitydateFacility(?,?,?)}",(datetime.now()).strftime("%Y-%m-%d"), 1, None)
         except:
             print("Error :: Cannot Connect to Server")
 
@@ -58,7 +58,10 @@ class Alerts:
         for alert in alerts:
             obj = self.get_fields(alert)
 
+
             insert_stmt = insert(self.meta.tables['application_alert']).values(obj)
+
+
             stmt = insert_stmt.on_conflict_do_update(
                 constraint = 'application_alert_pkey',
                 set_ = obj
@@ -67,5 +70,5 @@ class Alerts:
 
 
 alert = Alerts()
-results = alert.get_alerts(10,None)
+results = alert.get_alerts(1,None)
 alert.import_fields(results)

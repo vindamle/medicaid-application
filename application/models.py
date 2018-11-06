@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 # Create your models here.
 
 class Employee(models.Model):
@@ -49,3 +50,41 @@ class Alert(models.Model):
     class Meta:
         verbose_name = 'Alerts'
         verbose_name_plural = 'Alerts'
+
+
+class TrackingData(models.Model):
+    patient = models.OneToOneField(
+        Alert,
+        on_delete = models.CASCADE,
+        primary_key=True
+    )
+    show_errors  = models.BooleanField(null = True, blank = True)
+    address = models.CharField(max_length = 100, null = True, blank = True)
+    city = models.CharField(max_length = 50, null = True, blank = True)
+    state = models.CharField(max_length = 50, null = True, blank = True)
+    zip = models.IntegerField(null = True, blank = True)
+    status = models.BooleanField(null = True, blank = True)
+    is_medicaid_pending = models.BooleanField(null = True, blank = True)
+    medicaid_pickup_date = models.DateTimeField(null = True, blank = True)
+
+    application_type = models.CharField(max_length = 5, null = True, blank = True)
+    date_of_medicaid_submission  = models.DateTimeField(null = True, blank = True)
+    medicaid_application = models.FileField(upload_to = 'applications/',null = True, blank = True)
+    medicaid_comfirmation = models.FileField(upload_to = 'applications/',null = True, blank = True)
+
+    date_of_rfi  = models.DateTimeField(null = True, blank = True)
+    rfi = models.FileField(upload_to = 'applications/',null = True, blank = True)
+    date_of_deadline  = models.DateTimeField(null = True, blank = True)
+
+    date_of_medicaid_approval  = models.DateTimeField(null = True, blank = True)
+    medicaid_approval = models.FileField(upload_to = 'applications/',null = True, blank = True)
+    date_of_medicaid_recertification  = models.DateTimeField(null = True, blank = True)
+
+
+    # there will be others
+    def __str__(self):
+        return self.patient_id
+
+    class Meta:
+        verbose_name = 'TrackingData'
+        verbose_name_plural = 'TrackingData'

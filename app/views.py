@@ -2,8 +2,8 @@ from django.http import HttpResponse
 from django.views import View
 from django.shortcuts import render
 from .forms import ApplicationForm
-from application.models import Facility,Alert
-from application.alerts import Alerts
+from application.models import Facility,Alert, TrackingData
+
 
 
 class HomeView(View):
@@ -49,12 +49,21 @@ class ActivityView(View):
     def get(self, request, *args, **kwargs):
         '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-        results = Alert.objects.filter(tracking_status = None)
-        self.list = list()
+        new_admission_results = Alert.objects.filter(tracking_status = None, activity_type = 'A')
+        payor_change_results = Alert.objects.filter(activity_type = 'P')
+        discharge_results = Alert.objects.filter(activity_type = 'D')
+        self.payor_change_list = []
+        self.new_admission_list = []
+        self.discharge_list = []
 
-        for result in results:
-            self.list.append(result)
-        return render(request,self.template_name, {'list':self.list,"form":self.form_class, 'facilities':facilities})
+        for result in payor_change_results:
+            self.payor_change_list.append(result)
+        for result in new_admission_results:
+            self.new_admission_list.append(result)
+        for result in discharge_results:
+            self.discharge_list.append(result)
+
+        return render(request,self.template_name, {'discharge':self.discharge_list,'list':self.new_admission_list,'payor_change':self.payor_change_list,"form":self.form_class, 'facilities':facilities})
 
     def post(self, request, *args, **kwargs):
 
@@ -123,7 +132,11 @@ class ShowView(View):
 
             self.list.append(result)
 
+        results = TrackingData.objects.filter(patient_id = number)
 
+        for result in results:
+
+            self.list.append(result)
 
         return render(request,self.template_name, {'list':self.list,"form":self.form_class})
 
