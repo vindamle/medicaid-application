@@ -1,7 +1,7 @@
-from mssqlserver import ConnectSqlServer
+from .mssqlserver import ConnectSqlServer
 import pyodbc
-from sqlalchemy.dialects.postgresql import insert
-from datetime import datetime
+
+
 class AdditionalInfo:
 
 
@@ -14,12 +14,18 @@ class AdditionalInfo:
 
         cursor = self.conn.cursor()
         try:
-            # ('2018-10-31')
-            results = cursor.execute("{CALL p_MEnrollmentTrackingResidentByPatientIdResidentSkeyFacilityId(?,?,?)}",(facility_Skey,patient_id,SSN))
+            results = cursor.execute("{CALL p_MEnrollmentTrackingResidentByPatientIdResidentSkeyFacilityId(?,?,?)}",facility_Skey,patient_id,SSN)
         except:
             print("Error :: Cannot Connect to Server")
+
+
 
         return results
 
 
-ai = AdditionalInfo()
+# ai = AdditionalInfo()
+# results = ai.get_Info(2383,1,"081264382")
+#
+#
+# for result in results:
+#     print(result)
