@@ -40,7 +40,6 @@
         </thead>
         <tbody>
           {% for obj in list %}
-          {% if obj.activity_type == 'A' %}
           <tr id="{{obj.patient_id}}">
             <td>{{obj.first_name}}</td>
             <td>{{obj.last_name}}</td>
@@ -51,7 +50,6 @@
             <td class="btnCell trackBtnCell"><button class="btn-track">Track</button></td>
             <td class="btnCell"><button class="btn-ignore">Don't Track</button></td>
           </tr>
-          {% endif %}
           {% endfor %}
         </tbody>
       </table>
@@ -71,8 +69,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for obj in list %}
-          {% if obj.activity_type == 'P' %}
+          {% for obj in payor_change %}
           <tr id="{{obj.patient_id}}">
             <td>{{obj.first_name}}</td>
             <td>{{obj.last_name}}</td>
@@ -83,7 +80,6 @@
             <td class="trackBtnCell"><button class="btn-track">Track</button></td>
             <td><button class="btn-ignore">Don't Track</button></td>
           </tr>
-          {% endif %}
           {% endfor %}
         </tbody>
       </table>
@@ -103,8 +99,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for obj in list%}
-          {% if obj.activity_type == 'D' %}
+          {% for obj in discharge %}
           <tr id="{{obj.patient_id}}">
             <td>{{obj.first_name}}</td>
             <td>{{obj.last_name}}</td>
@@ -115,7 +110,6 @@
             <td class="trackBtnCell"><button class="btn-track">Track</button></td>
             <td><button class="btn-ignore">Don't Track</button></td>
           </tr>
-          {% endif %}
           {% endfor %}
         </tbody>
       </table>
