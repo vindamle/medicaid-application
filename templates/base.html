@@ -4,92 +4,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Medicaid Tracker</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel='shortcut icon' type='image/x-icon' href="{% static 'img/favicon.ico' %}" >
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
-  
+  <title>Medicaid Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel='shortcut icon' type='image/x-icon' href="{% static 'img/favicon.ico' %}" >
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light">
-      <a href="{% url 'home' %}"><img src='{% static "img/centersLogo.png" %}' class="logo navbar-brand"><h1 class="title">Medicaid Tracker</h1></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link newAlerts" href="{% url 'activity' %}">Activity<!-- <p id="activityCount">{{list|length}}</p> --></a>
-          </li>
-          <li class="grayText">|</li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'home' %}">Pending</a>
-          </li>
-          <li class="grayText">|</li>
-          <li class="nav-item">
-            <a class="nav-link trackedAlerts" href="{% url 'pending_alerts' %}">Pending Alerts</a>
-          </li>
-          <li class="grayText">|</li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'approvals' %}">Approvals</a>
-          </li>
-          <li class="grayText">|</li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              David Klaver
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Account</a>
-              <a class="dropdown-item" href="#">Settings</a>
-              <a class="dropdown-item" href="{% url 'not_tracking' %}">Not Tracking</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/application/login">Log Out</a>
-            </div>
-          </li>
-        </ul>
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <a href="{% url 'home' %}">
+      <img src='{% static "img/centersLogo.png" %}' class="logo navbar-brand">
+      <h1 class="title">Medicaid Tracker</h1>
+    </a>   
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link newAlerts" href="{% url 'activity' %}">Activity<!-- <p id="activityCount">{{list|length}}</p> --></a>
+        </li>
+        <li class="grayText">|</li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'home' %}">Medicaid Pending</a>
+        </li>
+        <li class="grayText">|</li>
+        <li class="nav-item">
+          <a class="nav-link trackedAlerts" href="{% url 'pending_alerts' %}">Pending Alerts</a>
+        </li>
+        <li class="grayText">|</li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'approvals' %}">Approvals</a>
+        </li>
+        <li class="grayText">|</li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            David Klaver
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Account</a>
+            <a class="dropdown-item" href="#">Settings</a>
+            <a class="dropdown-item" href="{% url 'not_tracking' %}">Not Tracking</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/application/login">Log Out</a>
+          </div>
+        </li>
+      </ul>
     </nav>
 
     {% block content %}
 
     {% endblock %}
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    {% load static %}
     <script src="{% static 'js/base.js' %}"></script>
-        {% load static %}
-      {% block scripts %}
-            
-      {% endblock %}
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+    
+    {% block scripts %}
+
+    {% endblock %}
 
   </body>
-</html>
+  </html>
 
 <!-- <html>
-    <head>
-      <title>{% block title %}Medicaid Application{% endblock %}</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=1.0">
+<head>
+<title>{% block title %}Medicaid Application{% endblock %}</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=1.0">
 
-        <link rel="stylesheet" href="{% static 'css/site.css' %}">
+<link rel="stylesheet" href="{% static 'css/site.css' %}">
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
-
-
-    </head>
-  <body>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
 
 
+</head>
+<body>
 
-  </body>
+
+
+</body>
 </html>
- -->
+-->

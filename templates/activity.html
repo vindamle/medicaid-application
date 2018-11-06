@@ -3,103 +3,133 @@
 {% block title %}Activity{% endblock %}
 
 {% block content %}
-
+<div class="container" id="activityContainer">
   <h3>Activity</h3>
-  <h4>New Admissions (<span class="countSpan" id="newAdmissionsTableCount"></span>):</h4>
-  <table class="newAlertsTable">
-    <thead>
-      <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Facility</th>
-        <th>Primary Payor</th>
-        <th>Secondary Payor</th>
-        <th>Admission Date</th>
-        <th>Track</th>
-        <th>Don't Track</th>
-      </tr>
-    </thead>
-    <tbody id="newAdmissionsTable">
-      {% for obj in list %}
-        {% if obj.activity_type == 'A' %}
-        <tr id="{{obj.patient_id}}">
-          <td>{{obj.first_name}}</td>
-          <td>{{obj.last_name}}</td>
-          <td>{{obj.facility}}</td>
-          <td>{{obj.primary_payor}}</td>
-          <td>{{obj.secondary_payor}}</td>
-          <td>{{obj.activity_date}}</td>
-          <td class="trackBtnCell"><button class="btn-track">Track</button></td>
-          <td><button class="btn-ignore">Don't Track</button></td>
-        </tr>
-        {% endif %}
-      {% endfor %}
-    </tbody>
-  </table>
-  <h4>Payor Changes (<span class="countSpan" id="payorChangesTableCount"></span>):</h4>
-  <table class="newAlertsTable" id="table1">
-    <thead>
-      <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Facility</th>
-        <th>Primary Payor</th>
-        <th>Secondary Payor</th>
-        <th>Date of Payor Change</th>
-        <th>Track</th>
-        <th>Don't Track</th>
-      </tr>
-  </thead>
-  <tbody  id="payorChangesTable">
-      {% for obj in list %}
-        {% if obj.activity_type == 'P' %}
-        <tr id="{{obj.patient_id}}">
-          <td>{{obj.first_name}}</td>
-          <td>{{obj.last_name}}</td>
-          <td>{{obj.facility}}</td>
-          <td>{{obj.primary_payor}}</td>
-          <td>{{obj.secondary_payor}}</td>
-          <td>{{obj.activity_date}}</td>
-          <td class="trackBtnCell"><button class="btn-track">Track</button></td>
-          <td><button class="btn-ignore">Don't Track</button></td>
-        </tr>
-        {% endif %}
-      {% endfor %}
-    </tbody>
-  </table>
+  <ul class="nav nav-tabs nav-justified">
+    <li>
+      <a data-toggle="tab" href="#home" class="active show">
+        <h4>New Admissions (<span class="countSpan" id="newAdmissionsTableCount"></span>)</h4>
+      </a>
+    </li>
+    <li>
+      <a data-toggle="tab" href="#menu1">
+        <h4>Payor Changes (<span class="countSpan" id="payorChangesTableCount"></span>)</h4>
+      </a>
+    </li>
+      <li>
+        <a data-toggle="tab" href="#menu2">
+      <h4>Discharges (<span class="countSpan" id="dischargesTableCount"></span>)</h4>
+      </a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="home" class="tab-pane in active">
+      <table id="newAdmissionsTable">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Facility</th>
+            <th>Primary Payor</th>
+            <th>Secondary Payor</th>
+            <th>Admission Date</th>
+            <th class="invisible">Track</th>
+            <th class="invisible">Don't Track</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for obj in list %}
+          {% if obj.activity_type == 'A' %}
+          <tr id="{{obj.patient_id}}">
+            <td>{{obj.first_name}}</td>
+            <td>{{obj.last_name}}</td>
+            <td>{{obj.facility}}</td>
+            <td>{{obj.primary_payor}}</td>
+            <td>{{obj.secondary_payor}}</td>
+            <td>{{obj.activity_date}}</td>
+            <td class="btnCell trackBtnCell"><button class="btn-track">Track</button></td>
+            <td class="btnCell"><button class="btn-ignore">Don't Track</button></td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div id="menu1" class="tab-pane fade">
+      <table id="payorChangesTable">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Facility</th>
+            <th>Primary Payor</th>
+            <th>Secondary Payor</th>
+            <th>Date of Payor Change</th>
+            <th class="invisible">Track</th>
+            <th class="invisible">Don't Track</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for obj in list %}
+          {% if obj.activity_type == 'P' %}
+          <tr id="{{obj.patient_id}}">
+            <td>{{obj.first_name}}</td>
+            <td>{{obj.last_name}}</td>
+            <td>{{obj.facility}}</td>
+            <td>{{obj.primary_payor}}</td>
+            <td>{{obj.secondary_payor}}</td>
+            <td>{{obj.activity_date}}</td>
+            <td class="trackBtnCell"><button class="btn-track">Track</button></td>
+            <td><button class="btn-ignore">Don't Track</button></td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div id="menu2" class="tab-pane fade">
+      <table id="dischargesTable">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Facility</th>
+            <th>Primary Payor</th>
+            <th>Secondary Payor</th>
+            <th>Discharge Date</th>
+            <th class="invisible">Track</th>
+            <th class="invisible">Don't Track</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for obj in list%}
+          {% if obj.activity_type == 'D' %}
+          <tr id="{{obj.patient_id}}">
+            <td>{{obj.first_name}}</td>
+            <td>{{obj.last_name}}</td>
+            <td>{{obj.facility}}</td>
+            <td>{{obj.primary_payor}}</td>
+            <td>{{obj.secondary_payor}}</td>
+            <td>{{obj.activity_date}}</td>
+            <td class="trackBtnCell"><button class="btn-track">Track</button></td>
+            <td><button class="btn-ignore">Don't Track</button></td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
 
-  <h4>Discharges (<span class="countSpan" id="dischargesTableCount"></span>):</h4>
-  <table class="newAlertsTable">
-    <thead>
-      <tr>
-      <th>First Name</th>
-      <th>Last Name</th>
-      <th>Facility</th>
-      <th>Primary Payor</th>
-      <th>Secondary Payor</th>
-      <th>Discharge Date</th>
-      <th>Track</th>
-      <th>Don't Track</th>
-    </tr>
-  </thead>
-  <tbody  id="dischargesTable">
-      {% for obj in list%}
-        {% if obj.activity_type == 'D' %}
-        <tr id="{{obj.patient_id}}">
-          <td>{{obj.first_name}}</td>
-          <td>{{obj.last_name}}</td>
-          <td>{{obj.facility}}</td>
-          <td>{{obj.primary_payor}}</td>
-          <td>{{obj.secondary_payor}}</td>
-          <td>{{obj.activity_date}}</td>
-          <td class="trackBtnCell"><button class="btn-track">Track</button></td>
-          <td><button class="btn-ignore">Don't Track</button></td>
-        </tr>
-        {% endif %}
-      {% endfor %}
-    </tbody>
-  </table>
+
+
+
+
+
+
 
 <!-- 
 // $(document).ready(function() {
@@ -161,12 +191,12 @@
 //     } );
 // } );
 
- </script> -->
+</script> -->
 
 {% endblock %}
 
 {% load static %}
 {% block scripts %}
-      <script src="{% static 'js/activity.js' %}"></script>
+<script src="{% static 'js/activity.js' %}"></script>
 {% endblock %}
 

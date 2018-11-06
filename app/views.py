@@ -81,7 +81,7 @@ class PendingView(View):
     def get(self, request, *args, **kwargs):
         '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-        results = Alert.objects.filter(tracking_status = None)
+        results = Alert.objects.filter(tracking_status = True)
         self.list = list()
 
         for result in results:

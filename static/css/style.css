@@ -1,7 +1,7 @@
 body {
 	/*text-align: center;*/
 	/*background: #002f54;*/
-	padding-bottom: 100px;
+	/*padding-bottom: 100px;*/
 }
 
 html, body {
@@ -141,21 +141,17 @@ h2, h3, h4 {
 h3 {
 	font-size: 42px;
 	text-decoration: underline;
+	color: #000055;
 }
 
 h4 {
-	color: darkblue;
-}
-
-.displayNone {
-	display: none;
+	color: #000055;
 }
 
 table {
 	display: block;
-	/*width: auto !important;*/
 	max-width: 1220px;
-	margin: auto;
+	margin: 0 auto !important;
 	border-bottom: none !important;
 }
 
@@ -201,6 +197,9 @@ th {
 		height: 50px;
 		font-size: initial;
 	}	
+	th {
+		font-size: 14px;
+	}
 }
 
 table a {
@@ -235,6 +234,10 @@ table button {
 	margin: 50px auto;
 }
 
+.invisible {
+	visibility: hidden;
+}
+
 /*______________DataTables Styling______________*/
 
 .dataTables_wrapper {
@@ -242,10 +245,10 @@ table button {
 	margin: auto;
 }
 
-.dataTables_filter {
+/*.dataTables_filter {
 	position: absolute;
-	margin-top: -50px;
-}
+	margin-top: -40px;
+}*/
 
 /* width */
 ::-webkit-scrollbar {
@@ -255,18 +258,32 @@ table button {
 /* Track */
 ::-webkit-scrollbar-track {
     box-shadow: inset 0 0 5px grey; 
-    border-radius: 5px;
+    border-radius: 15px;
 }
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #9EC0E6; 
-    border-radius: 5px;
+    background: #abc; 
+    box-shadow: inset 2px 2px 5px #789; 
+    border-radius: 15px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: steelblue; 
+}
+
+/*____________Activity Page____________*/
+.nav-tabs h4 {
+	margin-top: 0;
+	font-size: 20px;
+	padding: 5px 10px 8px 10px;
+}
+.show h4 {
+	background: steelblue !important;
+	color: white !important;
+	border-radius: 50px;
+
 }
 
 /*_____________show page_____________*/
@@ -367,5 +384,5 @@ label {
 /*_________________activity.html_________________*/
 
 .countSpan {
-	color: maroon;
+	/*color: maroon;*/
 }

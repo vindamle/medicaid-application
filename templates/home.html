@@ -4,8 +4,8 @@
 
 {% block content %}
 
-<h3>Medicaid Pending</h3>
-<table id="trackedResidentsTable">
+<h3>Medicaid Pending (<span class="countSpan" id="medicaidPendingTableCount"></span>)</h3>
+<table id="medicaidPendingTable">
   <thead>
     <tr>
       <th>First Name</th>
@@ -14,8 +14,8 @@
       <th>Primary Payor</th>
       <th>Secondary Payor</th>
       <th>Admission Date</th>
-      <th>Show</th>
-      <th>Don't Track</th>
+      <th class="invisible">Show</th>
+      <th class="invisible">Don't Track</th>
     </tr>
   </thead>
   <tbody>

@@ -4,8 +4,8 @@
 
 {% block content %}
 
-<h3>Approvals</h3>
-<table id="trackedResidentsTable">
+<h3>Approvals (<span class="countSpan" id="approvalsTableCount"></span>):</h3>
+<table id="approvalsTable">
  <thead>
   <tr>
     <th>First Name</th>
@@ -14,6 +14,8 @@
     <th>Primary Payor</th>
     <th>Secondary Payor</th>
     <th>Approval Date</th>
+    <th class="invisible">Show</th>
+    <th class="invisible">Don't Track</th>
   </tr>
 </thead>
 <tbody>
@@ -32,6 +34,5 @@
 }
 </tbody>
 </table>
-<script type="text/javascript" src="js/pending.js"></script>
 
 {% endblock %}

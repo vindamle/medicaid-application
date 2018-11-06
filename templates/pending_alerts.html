@@ -3,8 +3,8 @@
 {% block title %}Pending Alerts{% endblock %}
 
 {% block content %}
-<h3>Pending Alerts</h3>
-	<table>
+<h3>Pending Alerts (<span class="countSpan" id="pendingAlertsTableCount"></span>):</h3>
+	<table id="pendingAlertsTable">
 		 <thead>
       <tr>
       <th>First Name</th>
@@ -13,7 +13,7 @@
       <th>Primary Payor</th>
       <th>Secondary Payor</th>
       <th>Alert Date</th>
-      <th>Show</th>
+      <th class="invisible">Show</th>
     </tr>
   </thead>
     <tbody>
