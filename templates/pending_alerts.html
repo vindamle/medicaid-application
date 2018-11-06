@@ -3,8 +3,8 @@
 {% block title %}Pending Alerts{% endblock %}
 
 {% block content %}
-<h3>Pending Alerts</h3>
-	<table>
+<h3>Pending Alerts (<span class="countSpan" id="pendingAlertsTableCount"></span>):</h3>
+	<table id="pendingAlertsTable">
 		 <thead>
       <tr>
       <th>First Name</th>
@@ -13,6 +13,7 @@
       <th>Primary Payor</th>
       <th>Secondary Payor</th>
       <th>Alert Date</th>
+      <th class="invisible">Show</th>
     </tr>
   </thead>
     <tbody>
@@ -24,11 +25,11 @@
             <td>{{obj.primary_payor}}</td>
             <td>{{obj.secondary_payor}}</td>
             <td>{{obj.activity_date}}</td>
-						<td><a href="{% url 'show' %}"><button class="btn-alert">Show</button></a></td>  
+						<td><a href="/show?patient_id={{obj.patient_id}}" class="alertByButton"><button class="btn-alert">Show</button></a></td>  
         </tr>
       {% endfor %}
     </tbody>
 	</table>
-	<script type="text/javascript" src="js/index.js"></script>
+	<!-- <script type="text/javascript" src="js/index.js"></script> -->
 
 {% endblock %}

@@ -1,7 +1,7 @@
 body {
 	/*text-align: center;*/
 	/*background: #002f54;*/
-	padding-bottom: 100px;
+	/*padding-bottom: 100px;*/
 }
 
 html, body {
@@ -115,6 +115,10 @@ nav li.grayText {
 	content: '5';
 }*/
 
+.currentPage {
+	color: #000055 !important;
+}
+
 #activityCount {
 	display: inline-block;
 	position: relative;
@@ -137,62 +141,45 @@ h2, h3, h4 {
 h3 {
 	font-size: 42px;
 	text-decoration: underline;
+	color: #000055;
 }
 
 h4 {
-	color: darkblue;
+	color: #000055;
 }
 
-.displayNone {
-	display: none;
-}
-
-/*_____________index page_____________*/
-
-table, thead, tbody {
+table {
 	display: block;
 	max-width: 1220px;
-	margin: auto;
+	margin: 0 auto !important;
+	border-bottom: none !important;
 }
 
 @media(max-width: 1399px) {
 	table {
 		width: 96vw;
 		margin-left: 2vw;
+		
 	}
 }
 
 tbody {
+	display: inline-block;
+	border-radius: 10px;
 	overflow-y: auto;
 	max-height: 500px;
 }
 
-tbody tr:first-of-type td:first-of-type {
-	border-radius: 10px 0 0 0;
-}
-
-tbody tr:first-of-type td:last-of-type {
-	border-radius: 0 10px 0 0;
-}
-
-tbody tr:last-of-type td:first-of-type {
-	border-radius: 0 0 0 10px;
-}
-
-tbody tr:last-of-type td:last-of-type {
-	border-radius:0 0 10px 0;
-}
-
 tbody tr:nth-of-type(even) {
-	background: #ddd;
+	background: #ddd !important;
 }
 
 tbody tr:nth-of-type(odd) {
-	background: #efefef;
+	background: #efefef !important;
 }
 
  th, td {
-	padding: 5px;
+	padding: 5px !important;
 	text-align: center;
 	font-size: 12px;
 	height: 10px;
@@ -201,6 +188,7 @@ tbody tr:nth-of-type(odd) {
 
 th {
 	font-size: 10px;
+	border-bottom: none !important;
 }
 
 @media(min-width: 768px) {
@@ -209,6 +197,9 @@ th {
 		height: 50px;
 		font-size: initial;
 	}	
+	th {
+		font-size: 14px;
+	}
 }
 
 table a {
@@ -241,6 +232,58 @@ table button {
 .centered {
 	width: 200px;
 	margin: 50px auto;
+}
+
+.invisible {
+	visibility: hidden;
+}
+
+/*______________DataTables Styling______________*/
+
+.dataTables_wrapper {
+	max-width: 1220px;
+	margin: auto;
+}
+
+/*.dataTables_filter {
+	position: absolute;
+	margin-top: -40px;
+}*/
+
+/* width */
+::-webkit-scrollbar {
+    width: 18px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 15px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #abc; 
+    box-shadow: inset 2px 2px 5px #789; 
+    border-radius: 15px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: steelblue; 
+}
+
+/*____________Activity Page____________*/
+.nav-tabs h4 {
+	margin-top: 0;
+	font-size: 20px;
+	padding: 5px 10px 8px 10px;
+}
+.show h4 {
+	background: steelblue !important;
+	color: white !important;
+	border-radius: 50px;
+
 }
 
 /*_____________show page_____________*/
@@ -298,33 +341,37 @@ label {
 	position: absolute;
 }
 */
-/*login page*/
-.loginDiv {
-	margin-top: 100px;
-		text-align: center;
+
+
+/*________________Form Pages________________*/
+.formDiv {
+	text-align: center;
+	margin: 100px auto;
 }
-@media(min-width: 480px) {
-	.loginDiv {
-		width: 40vw;
-		margin: 100px 30vw;
-	
-	}
+.formDiv form {
+	width: 480px;
+	margin: 50px auto;
+	/*text-align: right;*/
 }
 
-.loginDiv h1 {
+.formDiv h1 {
 	color: #004477;
 	margin-bottom: 40px;
 }
 
-.loginDiv input {
+.formDiv input {
 	background: #eee;
 	padding: 7px;
 	/*border-radius: 5px;*/
-	position: relative;
-	top: -5px;
+	/*position: relative;*/
+	/*top: -5px;*/
 	width: 250px;
 	border: none;
 	/*border-bottom: 2px solid steelblue;*/
+}
+
+.formDiv button {
+	text-align: center;
 }
 
 /*______________pending_alerts.html______________*/
@@ -337,5 +384,5 @@ label {
 /*_________________activity.html_________________*/
 
 .countSpan {
-	color: maroon;
+	/*color: maroon;*/
 }
