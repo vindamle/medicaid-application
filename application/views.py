@@ -6,6 +6,7 @@ from .forms import NameForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from .models import Alert, TrackingData
+from .additionalInfo import AdditionalInfo
 
 class signup(generic.CreateView):
     form_class = UserCreationForm
@@ -39,10 +40,12 @@ def update_list(request):
         if track == "true":
             alert.tracking_status = True
             alert.save()
-            print(alert.patient_number, alert.facility_id)
-            
-            r = TrackingData(patient = alert)
-            r.save();
+
+            patient_info = AdditionalInfo()
+            results = patient_info.get_Info(alert.patient_number, alert.facility_id, alert.ssn)
+            for result in results:
+                r = TrackingData(patient = alert, address = result.Address)
+                r.save();
         elif track == "false":
             alert.tracking_status = False
             alert.save()
