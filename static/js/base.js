@@ -1,3 +1,5 @@
+
+// Call Datatables with parameters
 $(document).ready( () => {
   $('table').dataTable({
 	  "paging": false,
@@ -10,6 +12,8 @@ $(document).ready(function () {
   $('a[href="'+ url +'"]').addClass('currentPage');
 });
 
+
+// show Table Count next to headings
 const showTableCount = (table) => {
   const countSpanId = table.parentNode.id + "Count";
   const countSpan = document.getElementById(countSpanId);
