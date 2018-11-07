@@ -1,5 +1,6 @@
 //Toggle fields in and out of editable state on show pages
 const editBtn = document.querySelector("#editBtn");
+console.log('hi');
 editBtn.addEventListener('click', (e) => {	
 	const editableItems = document.querySelectorAll('.editable');
 	if (editBtn.textContent == 'Edit') {
