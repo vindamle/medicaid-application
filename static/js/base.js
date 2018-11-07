@@ -14,7 +14,7 @@ $(document).ready(function () {
 
 
 // show Table Count next to headings
-const showTableCount = (table) => {
+const showTableCount = table => {
   const countSpanId = table.parentNode.id + "Count";
   const countSpan = document.getElementById(countSpanId);
   const count =table.children.length;
@@ -26,6 +26,20 @@ for (var i = 0; i < tables.length; i++) {
   showTableCount(tables[i]);
 };
 
+// for Activity Page, show total of all activity next to heading
+const totalActivityCountSpan = document.getElementById('totalActivityCount');
+const countSpans = document.querySelectorAll('.countSpan')
+
+const showTotalActivityCount = () => {
+  let total = 0;
+  for (var i = 0; i < countSpans.length; i++) {
+	  total += parseInt(countSpans[i].textContent);
+	};
+	totalActivityCountSpan.innerHTML = total;
+};
+if (totalActivityCountSpan) {
+	showTotalActivityCount();
+}
 // jQuery AJAX request to track or ignore residents, then remove resident's row from view upon success
 const trackOrIgnore = (row, trueOrFalse) => {
 	const ajaxCall = $.ajax(
@@ -41,6 +55,7 @@ const trackOrIgnore = (row, trueOrFalse) => {
 			const table = row.parentNode;
 			$(row).remove();
 			showTableCount(table);
+			showTotalActivityCount();
 		}
 	});
 	return(ajaxCall);
