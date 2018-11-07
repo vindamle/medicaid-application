@@ -12,17 +12,15 @@
 	</div>
 
 	<div class="residentInfoDiv">
-		{% for obj in list %}
-			<p><label>Resident Name:</label> <span class="editable">{{obj.first_name}} {{obj.last_name}}</span></p>
-			<p><label>Date of Birth:</label> <span class="editable">{{obj.dob}}</span></p>
-			<p><label>Facility:</label> <span class="editable">{{obj.facility}}</span></p>
-			<p><label>Primary Payor:</label> <span class="editable">{{obj.primary_payor}}</span></p>
-			<p><label>Secondary Payor:</label> <span class="editable">{{obj.secondary_payor}}</span></p>
+			<p><label>Resident Name:</label> <span class="editable">{{alert.first_name}} {{alert.last_name}}</span></p>
+			<p><label>Date of Birth:</label> <span class="editable">{{alert.dob}}</span></p>
+			<p><label>Facility:</label> <span class="editable">{{alert.facility}}</span></p>
+			<p><label>Primary Payor:</label> <span class="editable">{{alert.primary_payor}}</span></p>
+			<p><label>Secondary Payor:</label> <span class="editable">{{alert.secondary_payor}}</span></p>
 			<p><label>Admission Date:</label> <span class="editable">11/20/17</span></p>
 			<p><label>Medicaid Pickup Date:</label> <span class="editable">11/20/17</span></p>
 			<p>(More info, places to upload documents, etc.)</p>
 			<button class="btn" id="editBtn">Edit</button>
-		{% endfor %}
 	</div>
 <!--
 •	Any admission that is Medicaid (or MLTC) should have a page created. The page should have:
