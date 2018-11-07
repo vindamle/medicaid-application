@@ -64,7 +64,7 @@ class TrackingData(models.Model):
     state = models.CharField(max_length = 50, null = True, blank = True)
     zip = models.IntegerField(null = True, blank = True)
     status = models.BooleanField(null = True, blank = True)
-    is_medicaid_pending = models.BooleanField(null = True, blank = True)
+    is_medicaid_pending =  models.CharField(max_length = 50, null = True, blank = True)
     medicaid_pickup_date = models.DateTimeField(null = True, blank = True)
 
     application_type = models.CharField(max_length = 5, null = True, blank = True)

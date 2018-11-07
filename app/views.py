@@ -129,16 +129,18 @@ class ShowView(View):
         self.list = list()
 
         for result in results:
+            alert = result
 
-            self.list.append(result)
 
         results = TrackingData.objects.filter(patient_id = number)
 
         for result in results:
 
-            self.list.append(result)
+            tracking = result
 
-        return render(request,self.template_name, {'list':self.list,"form":self.form_class})
+
+
+        return render(request,self.template_name, {'alert':alert,'tracking':tracking,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
 
