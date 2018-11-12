@@ -12,7 +12,7 @@
 </div>
 
 <div class="container residentInfoDiv">
-	<button class="btn" id="editBtn">Edit</button>
+	 {% csrf_token %}
 	<h1 class="">{{alert.first_name}} {{alert.last_name}}</h1>
 	<section>
 		<h4>Personal Information:</h4>
@@ -24,6 +24,7 @@
 			<li><label>State</label> <span class="editable">{{tracking.state}}</span></li>
 			<li><label>Zip:</label> <span class="editable">{{tracking.zip}}</span></li>
 			<li><label>Facility:</label> <span class="editable">{{alert.facility}}</span></li>
+			<li class="invisible" id="patientId">{{alert.patient_id}}</li>
 			<br>
 			<br>
 			<!-- <li class="invisible"><label>Just for styling:</label> <span class="editable">just for styling</span></li> -->
@@ -47,7 +48,7 @@
 	<section>
 		<h4>Document Information:</h4>
 		<ul>
-			<li class="fileInputLi"><label>Upload Medicaid Application Here:</label> <input type="file" name="{{tracking.medicaid_application}}"></li>
+			<li class="fileInputLi"><label>Upload Medicaid Application Here:</label> <input type="file" name="{{tracking.medicaid_application}}" id="medicaidApplicationFile"></li>
 			<li class="fileInputLi"><label>Upload Medicaid Confirmation Here:</label> <input type="file" name="{{tracking.medicaid_comfirmation}}"></li>
 			<li class="fileInputLi"><label>Upload Medicaid RFI Here:</label> <input type="file" name="{{tracking.rfi}}"></li>
 			<li class="fileInputLi"><label>Upload Medicaid Application Here:</label> <input type="file" name="{{tracking.medicaid_approval}}"></li>
@@ -57,6 +58,7 @@
 			<!-- <li>(More info, places to upload documents, etc.)</li> -->
 		</ul>
 	</section>
+	<button class="btn" id="editBtn">Save Changes</button>
 </div>
 <!--
 •	Any admission that is Medicaid (or MLTC) should have a page created. The page should have:
