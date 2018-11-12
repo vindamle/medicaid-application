@@ -51,12 +51,20 @@ def update_list(request):
                     state = result.State,
                     zip = result.Zip,
                     is_medicaid_pending = result.IsMedicaidPending,
-                    show_errors = True
+                    show_errors = True,
+                    rfi_deadline_alert = False,
+                    recertification_alert = False,
                 )
 
         elif track == "false":
             alert.tracking_status = False
             alert.save()
         return HttpResponse("200") # Sending an success response
+    else:
+        return HttpResponse("Request method is not a GET")
+
+def file_upload(request):
+    if request.method == 'GET':
+        return HttpResponse("200")
     else:
         return HttpResponse("Request method is not a GET")

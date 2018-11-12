@@ -48,6 +48,11 @@ class Alerts:
             secondary_payor= getattr(result, "SecondaryPayorName"),
             activity_date= getattr(result, "ActivityDate"),
             activity_type = getattr(result, "Actual_Activity_Type_Flag"),
+            sex = getattr(result, 'Sex'),
+
+            first_name_num = getattr(result, "FirstName_Ascii"),
+            last_name_num = getattr(result, "LastName_Ascii"),
+
             tracking_status = None,
 
         )
