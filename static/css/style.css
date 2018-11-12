@@ -337,6 +337,8 @@ table button {
 }
 
 .residentInfoDiv ul {
+	padding-left: 10px;
+
 	-webkit-column-count: 3; /* Chrome, Safari, Opera */
     -moz-column-count: 3; /* Firefox */
     column-count: 3;
@@ -392,7 +394,7 @@ list-style: none;
 	color: white;
 	width: 150px;
 	left: 50px;
-	position: fixed;
+	position: absolute;
 }
 
 

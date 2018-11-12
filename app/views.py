@@ -50,8 +50,8 @@ class ActivityView(View):
         '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
         new_admission_results = Alert.objects.filter(tracking_status = None, activity_type = 'A')
-        payor_change_results = Alert.objects.filter(activity_type = 'P')
-        discharge_results = Alert.objects.filter(activity_type = 'D')
+        payor_change_results = Alert.objects.filter(tracking_status = None, activity_type = 'P')
+        discharge_results = Alert.objects.filter(tracking_status = None, activity_type = 'D')
         self.payor_change_list = []
         self.new_admission_list = []
         self.discharge_list = []

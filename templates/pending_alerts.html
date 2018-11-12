@@ -1,25 +1,41 @@
 {% extends 'base.html' %}
 
-{% block title %}Pending Alerts{% endblock %}
+{% block title %}Activity{% endblock %}
 
 {% block content %}
-<h3>Pending Alerts (<span class="countSpan" id="pendingAlertsTableCount"></span>):</h3>
-	<table id="pendingAlertsTable">
-		 <thead>
-      <tr>
-      <th>First Name</th>
-      <th>Last Name</th>
-      <th>Facility</th>
-      <th>Primary Payor</th>
-      <th>Secondary Payor</th>
-      <th>Alert Type</th>
-      <th>Alert Date</th>
-      <th class="invisible">Show</th>
-    </tr>
-  </thead>
-    <tbody>
-      {% for obj in list%}
-        <tr>
+<div class="container" id="activityContainer">
+  <h3>Pending Alerts (<span id="totalActivityCount"></span>)</h3>
+  <ul class="nav nav-tabs nav-justified">
+    <li>
+      <a data-toggle="tab" href="#home" class="active show">
+        <h4>RFI Due in 10 Days (<span class="countSpan" id="rfiDueTableCount"></span>)</h4>
+      </a>
+    </li>
+    <li>
+      <a data-toggle="tab" href="#menu1">
+        <h4>NCS Discrepancy (<span class="countSpan" id="ncsDiscrepancyTableCount"></span>)</h4>
+      </a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="home" class="tab-pane in active">
+      <table id="rfiDueTable">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Facility</th>
+            <th>Primary Payor</th>
+            <th>Secondary Payor</th>
+            <th>Alert Type</th>
+            <th>Alert Date</th>
+            <th class="invisible">Show</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for obj in list%}
+          <tr>
             <td>{{obj.first_name}}</td>
             <td>{{obj.last_name}}</td>
             <td>{{obj.facility}}</td>
@@ -27,11 +43,151 @@
             <td>{{obj.secondary_payor}}</td>
             <td>RFI Due in 10 Days</td>
             <td>{{obj.activity_date}}</td>
-						<td><a href="/show?patient_id={{obj.patient_id}}" class=""><button class="btn-alert">Show</button></a></td>  
-        </tr>
-      {% endfor %}
-    </tbody>
-	</table>
-	<!-- <script type="text/javascript" src="js/index.js"></script> -->
+            <td><a href="/show?patient_id={{obj.patient_id}}" class=""><button class="btn-alert">Show</button></a></td>  
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+    <div id="menu1" class="tab-pane fade">
+      <table id="ncsDiscrepancyTable">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Facility</th>
+            <th>Primary Payor</th>
+            <th>Secondary Payor</th>
+            <th>Alert Type</th>
+            <th>Alert Date</th>
+            <th class="invisible">Show</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for obj in list%}
+          <tr>
+            <td>{{obj.first_name}}</td>
+            <td>{{obj.last_name}}</td>
+            <td>{{obj.facility}}</td>
+            <td>{{obj.primary_payor}}</td>
+            <td>{{obj.secondary_payor}}</td>
+            <td>NCS Discrepancy</td>
+            <td>{{obj.activity_date}}</td>
+            <td><a href="/show?patient_id={{obj.patient_id}}" class=""><button class="btn-alert">Show</button></a></td>  
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+<!-- <div id="menu2" class="tab-pane fade">
+<table id="dischargesTable">
+<thead>
+<tr>
+<th>First Name</th>
+<th>Last Name</th>
+<th>Facility</th>
+<th>Primary Payor</th>
+<th>Secondary Payor</th>
+<th>Discharge Date</th>
+<th class="invisible">Track</th>
+<th class="invisible">Don't Track</th>
+</tr>
+</thead>
+<tbody>
+{% for obj in discharge %}
+<tr id="{{obj.patient_id}}">
+<td>{{obj.first_name}}</td>
+<td>{{obj.last_name}}</td>
+<td>{{obj.facility}}</td>
+<td>{{obj.primary_payor}}</td>
+<td>{{obj.secondary_payor}}</td>
+<td>{{obj.activity_date}}</td>
+<td class="trackBtnCell"><button class="btn-track">Track</button></td>
+<td><button class="btn-ignore">Don't Track</button></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div> -->
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+<!-- 
+// $(document).ready(function() {
+
+//        Dtable1 =$('#example').DataTable({
+
+
+
+//          "scrollY":$('#example').closest('.container-fluid').height()+ "px",
+//          "scrollCollapse": true,
+//          "paging":         false,
+//          "columnDefs": [ {
+//             "targets": -1,
+//             "data": null,
+//             "defaultContent": '<button class="getData"type="button">Track</button>  <button class = "ignore" type="button">Ignore</button> '
+//         } ]});
+//        Dtable2 = $('#example2').DataTable({
+//          "scrollY":        "300px",
+//          "scrollCollapse": true,
+//          "paging":         false,
+//          "columnDefs": [ {
+//             "targets": -1,
+//             "data": null,
+//             "defaultContent": '<button class="undo">Undo</button>'
+//         } ]});
+//        var counter = 0;
+
+//     $('#example').on( 'click', '.getData', function () {
+//         var data= Dtable1.row( $(this).parents('tr') ).data();
+//         Dtable1.row( $(this).parents('tr') ).remove().draw();
+//         Dtable2.row.add( [
+//             data[0],
+//             data[0],
+//             data[0],
+//             data[0],
+//             data[0],
+//         ] ).draw( false );
+//         counter++;
+//     } );
+
+//     $('#example').on( 'click', '.ignore', function () {
+//         Dtable1.row( $(this).parents('tr') ).remove().draw();
+
+//     } );
+
+//     $('#example2 tbody').on( 'click', '.undo', function () {
+//       var data= Dtable2.row( $(this).parents('tr') ).data();
+//       Dtable2.row( $(this).parents('tr') ).remove().draw();
+//       Dtable1.row.add( [
+//           data[0],
+//           data[0],
+//           data[0],
+//           data[0],
+//           data[0],
+//       ] ).draw( false );
+
+
+
+//     } );
+// } );
+
+</script> -->
 
 {% endblock %}
+
+{% load static %}
+{% block scripts %}
+<!-- <script src="{% static 'js/activity.js' %}"></script> -->
+{% endblock %}
+
