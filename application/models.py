@@ -43,6 +43,9 @@ class Alert(models.Model):
     activity_date = models.DateTimeField(null=True, blank=True)
     activity_type = models.CharField(max_length=2, null=True, blank=True)
     tracking_status = models.BooleanField(null = True, blank = True)
+    sex= models.CharField(max_length=2, null=True, blank=True)
+    first_name_num = models.IntegerField(null = True, blank = True)
+    last_name_num = models.IntegerField(null = True, blank = True)
     # there will be others
     def __str__(self):
         return self.patient_id
@@ -76,11 +79,13 @@ class TrackingData(models.Model):
     rfi = models.FileField(upload_to = 'applications/',null = True, blank = True)
     date_of_deadline  = models.DateTimeField(null = True, blank = True)
 
+    rfi_deadline_alert = models.BooleanField(null = True, blank = True)
+
     date_of_medicaid_approval  = models.DateTimeField(null = True, blank = True)
     medicaid_approval = models.FileField(upload_to = 'applications/',null = True, blank = True)
     date_of_medicaid_recertification  = models.DateTimeField(null = True, blank = True)
 
-
+    recertification_alert = models.BooleanField(null = True, blank = True)
     # there will be others
     def __str__(self):
         return self.patient_id

@@ -51,7 +51,9 @@ def update_list(request):
                     state = result.State,
                     zip = result.Zip,
                     is_medicaid_pending = result.IsMedicaidPending,
-                    show_errors = True
+                    show_errors = True,
+                    rfi_deadline_alert = False,
+                    recertification_alert = False,
                 )
 
         elif track == "false":
