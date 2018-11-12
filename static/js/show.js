@@ -37,10 +37,24 @@ editBtn.addEventListener('click', (e) => {
 	};
 });
 
-//close bootstrap alert
-// const alert = document.querySelector('.alert');
-// const closeBtn = alert.querySelector('.close');
-
-// closeBtn.addEventListener('click', () => {
-// 	alert.parentNode.removeChild(alert);
-// });
+// jQuery AJAX request to track or ignore residents, then remove resident's row from view upon success
+const trackOrIgnore = (row, trueOrFalse) => {
+	const ajaxCall = $.ajax(
+	{
+		type:"GET",
+		url: "/application/ajax/track_or_ignore",
+		data:{
+			patient_id: row.id,
+			tracking: trueOrFalse
+		},
+		success: function() 
+		{
+			const table = row.parentNode;
+			$(row).remove();
+			// $(row).fadeOut(30);
+			showTableCount(table);
+			showTotalActivityCount();
+		}
+	});
+	return(ajaxCall);
+}
