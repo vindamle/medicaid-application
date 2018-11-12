@@ -12,6 +12,7 @@
       <th>Facility</th>
       <th>Primary Payor</th>
       <th>Secondary Payor</th>
+      <th>Alert Type</th>
       <th>Alert Date</th>
       <th class="invisible">Show</th>
     </tr>
@@ -24,8 +25,9 @@
             <td>{{obj.facility}}</td>
             <td>{{obj.primary_payor}}</td>
             <td>{{obj.secondary_payor}}</td>
+            <td>RFI Due in 10 Days</td>
             <td>{{obj.activity_date}}</td>
-						<td><a href="/show?patient_id={{obj.patient_id}}" class="alertByButton"><button class="btn-alert">Show</button></a></td>  
+						<td><a href="/show?patient_id={{obj.patient_id}}" class=""><button class="btn-alert">Show</button></a></td>  
         </tr>
       {% endfor %}
     </tbody>

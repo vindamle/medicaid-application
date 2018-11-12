@@ -5,6 +5,7 @@ $(document).ready( () => {
 	  "paging": false,
 	  "info": false
 	});
+	$('.content').fadeIn();
 });
 
 $(document).ready(function () {
@@ -54,6 +55,7 @@ const trackOrIgnore = (row, trueOrFalse) => {
 		{
 			const table = row.parentNode;
 			$(row).remove();
+			// $(row).fadeOut(30);
 			showTableCount(table);
 			showTotalActivityCount();
 		}
@@ -69,7 +71,7 @@ $('.btn-track').click(function(){
 $('.btn-ignore').click(function(){
   button = this;
   // console.log(button);
-  if (confirm("Are you sure you want ignore this alert?")) {
+  if (confirm("Are you sure you want stop tracking this resident?")) {
     const row = this.parentNode.parentNode;
     trackOrIgnore(row, false);
    };

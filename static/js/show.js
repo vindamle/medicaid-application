@@ -1,6 +1,5 @@
 //Toggle fields in and out of editable state on show pages
 const editBtn = document.querySelector("#editBtn");
-console.log('hi');
 editBtn.addEventListener('click', (e) => {	
 	const editableItems = document.querySelectorAll('.editable');
 	if (editBtn.textContent == 'Edit') {
@@ -10,10 +9,15 @@ editBtn.addEventListener('click', (e) => {
 			input.type = 'text';
 			input.value = editableItem.textContent;
 			input.className = 'editable';
-			editableItem.parentNode.insertBefore(input, editableItem);
-			editableItem.parentNode.removeChild(editableItem);
+			const parent = editableItem.parentNode;
+			parent.insertBefore(input, editableItem);
+			parent.removeChild(editableItem);
+			parent.style.borderBottom="none";
+			const ul = parent.parentNode;
+			ul.style.textAlign = 'right';
 			editBtn.textContent = 'Save';
 			editBtn.classList.toggle('saveBtn');
+
 		};
 	} else if (editBtn.textContent == 'Save') {
 			for (var i = 0; i < editableItems.length; i++) {
@@ -21,8 +25,12 @@ editBtn.addEventListener('click', (e) => {
 			const span = document.createElement('span');
 			span.textContent = editableItem.value;
 			span.className = 'editable';
-			editableItem.parentNode.insertBefore(span, editableItem);
-			editableItem.parentNode.removeChild(editableItem);
+			const parent = editableItem.parentNode;
+			parent.insertBefore(span, editableItem);
+			parent.removeChild(editableItem);
+			parent.style.borderBottom="1px solid #ddd";
+			const ul = parent.parentNode;
+			ul.style.textAlign = 'left';
 			editBtn.textContent = 'Edit';
 			editBtn.classList.toggle('saveBtn');
 		};
