@@ -18,6 +18,9 @@ nav {
 nav li, nav li a {
 	color: #ee7000 !important;
 }
+nav li a:hover {
+	color: purple !important;
+}
 nav ul {
 	list-style: none;
 	background: white;
@@ -29,6 +32,10 @@ nav ul {
 		/*top: 20px;*/
 		right: 20px;
 	}
+}
+
+nav a:hover {
+	text-decoration: none;
 }
 
 @media(min-width: 1400px) {
@@ -70,7 +77,7 @@ nav li.grayText {
 
 @media(min-width: 1400px) {
 	.logo {
-			top: -10px;
+			/*top: -10px;*/
 	}
 }
 
@@ -79,7 +86,10 @@ nav li.grayText {
 	text-transform: uppercase;
 	font-size: 28px;
 	color: #555;
-	display: inline-block;
+	/*display: inline-block;*/
+	position: absolute;
+	top: 10px;
+	left: 130px;
 	padding: 10px;
 
 }
@@ -119,18 +129,8 @@ nav li.grayText {
 	color: #000055 !important;
 }
 
-#activityCount {
-	display: inline-block;
-	position: relative;
-	top: -10px;
-	font-size: 14px;
-	background: red;
-	color: white;
-	text-align: center;
-	padding: 1px;
-	min-width: 22px;
-	/*height: 22px;*/
-	border-radius: 50%;
+.content {
+	display: none;
 }
 
 h2, h3, h4 {
@@ -274,6 +274,20 @@ table button {
 }
 
 /*____________Activity Page____________*/
+#activityCount {
+	display: inline-block;
+	position: relative;
+	top: -10px;
+	font-size: 14px;
+	background: red;
+	color: white;
+	text-align: center;
+	padding: 1px;
+	min-width: 22px;
+	/*height: 22px;*/
+	border-radius: 50%;
+}
+
 .nav-tabs h4 {
 	margin-top: 0;
 	font-size: 20px;
@@ -290,21 +304,97 @@ table button {
 
 .residentInfoDiv {
 	margin: 20px;
+	max-width: 80vw;
+	margin-left: 10vw;
+}
+/*.residentInfoDiv .col-md-6 {
+	height: 200px;
+	margin: 50px auto;
+}*/
+.residentInfoDiv h1 {
+	text-align: center;
+	color: darkblue;
 }
 
-.residentInfoDiv p {
-	font-size: 18px;
+.residentInfoDiv h4 {
+	margin: 0 auto 30px auto;
+	/*text-align: left;*/
+	color: #ee7000;
+	/*text-decoration: underline;*/
 }
 
-label {
+.residentInfoDiv section {
+	margin-top: 30px;
+	/*height: 250px;*/
+	/*background: #def;*/
+	border: 2px solid #eee;
+	box-shadow: 5px 5px 5px #ccc;
+	/*border-radius: 25px;*/
+
+	padding: 25px;
+	font-size: calc(15px + (24 - 22)*(100vw - 600px)/(1200 - 600));
+	margin-bottom: 20px;
+}
+
+.residentInfoDiv ul {
+	padding-left: 10px;
+
+	-webkit-column-count: 3; /* Chrome, Safari, Opera */
+    -moz-column-count: 3; /* Firefox */
+    column-count: 3;
+list-style: none;
+}
+
+.residentInfoDiv li:not(:first-of-type) {
+	margin: 10px 0;
+}
+
+.residentInfoDiv li:not([class='fileInputLi']) {
+	border-bottom: 1px solid #ddd;
+
+}
+
+.residentInfoDiv label {
+	/*color: darkblue;*/
+	/*display: block;*/
+	/*font-weight: bold;*/
+	
+}
+
+.residentInfoDiv input {
+	/*border: none;
+	border-bottom: 1px solid #ddd;*/
+
+	background-color: #eee;
+	border-radius: 5px;
+	/*box-shadow: inset -2px -2px 5px #aaa,  inset 1px 1px 5px #aaa;*/
+	margin-bottom: 0;
+	vertical-align: baseline;
+}
+
+.residentInfoDiv span {
+	/*display: block;*/
+	color: darkblue;
+
+	margin-bottom: 3px;
 	font-weight: bold;
 }
+
+.residentInfoDiv input[type='file'] {
+	background-color: #eee;
+}
+
 .editable {
-	/*border-bottom: 2px solid lightgray;*/
+	/*border-bottom: 1px solid #aaa;*/
+	/*text-align: right;*/
+	padding-left: 5px;
 }
 #editBtn {
-	background: darkblue;
+	background: green;
 	color: white;
+	width: 150px;
+	left: 50px;
+	position: absolute;
 }
 
 

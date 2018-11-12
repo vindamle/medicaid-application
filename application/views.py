@@ -44,8 +44,16 @@ def update_list(request):
             patient_info = AdditionalInfo()
             results = patient_info.get_Info(alert.patient_number, alert.facility_id, alert.ssn)
             for result in results:
-                r = TrackingData(patient = alert, address = result.Address)
-                r.save();
+                TrackingData.objects.create(
+                    patient = alert,
+                    address = result.Address,
+                    city = result.City,
+                    state = result.State,
+                    zip = result.Zip,
+                    is_medicaid_pending = result.IsMedicaidPending,
+                    show_errors = True
+                )
+
         elif track == "false":
             alert.tracking_status = False
             alert.save()

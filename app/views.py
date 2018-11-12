@@ -50,8 +50,8 @@ class ActivityView(View):
         '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
         new_admission_results = Alert.objects.filter(tracking_status = None, activity_type = 'A')
-        payor_change_results = Alert.objects.filter(activity_type = 'P')
-        discharge_results = Alert.objects.filter(activity_type = 'D')
+        payor_change_results = Alert.objects.filter(tracking_status = None, activity_type = 'P')
+        discharge_results = Alert.objects.filter(tracking_status = None, activity_type = 'D')
         self.payor_change_list = []
         self.new_admission_list = []
         self.discharge_list = []
@@ -129,16 +129,18 @@ class ShowView(View):
         self.list = list()
 
         for result in results:
+            alert = result
 
-            self.list.append(result)
 
         results = TrackingData.objects.filter(patient_id = number)
 
         for result in results:
 
-            self.list.append(result)
+            tracking = result
 
-        return render(request,self.template_name, {'list':self.list,"form":self.form_class})
+
+
+        return render(request,self.template_name, {'alert':alert,'tracking':tracking,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
 
