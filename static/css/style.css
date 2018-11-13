@@ -337,11 +337,7 @@ table button {
 
 .residentInfoDiv ul {
 	padding-left: 10px;
-
-	-webkit-column-count: 3; /* Chrome, Safari, Opera */
-    -moz-column-count: 3; /* Firefox */
-    column-count: 3;
-list-style: none;
+	list-style: none;
 }
 
 .residentInfoDiv li:not(:first-of-type) {
@@ -363,7 +359,6 @@ list-style: none;
 .residentInfoDiv input {
 	/*border: none;
 	border-bottom: 1px solid #ddd;*/
-
 	/*background-color: #eee;*/
 	border-radius: 5px;
 	/*box-shadow: inset -2px -2px 5px #aaa,  inset 1px 1px 5px #aaa;*/
@@ -378,9 +373,18 @@ list-style: none;
 	margin-bottom: 3px;
 	font-weight: bold;
 }
+.residentInfoDiv input[type='text'] {
+	width: 250px
+}
+
+.residentInfoDiv input[type='date'] {
+	width: 175px;
+}
 
 .residentInfoDiv input[type='file'] {
 	/*background-color: #eee;*/
+	width: 250px;
+	margin-bottom: 30px;
 }
 
 .editable {
@@ -388,6 +392,11 @@ list-style: none;
 	/*text-align: right;*/
 	padding-left: 5px;
 }
+
+.fileInputLi label {
+	display: block;
+}
+
 #editBtn {
 	background: green;
 	color: white;
