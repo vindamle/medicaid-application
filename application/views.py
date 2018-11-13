@@ -62,3 +62,9 @@ def update_list(request):
         return HttpResponse("200") # Sending an success response
     else:
         return HttpResponse("Request method is not a GET")
+
+def file_upload(request):
+    if request.method == 'GET':
+        return HttpResponse("200")
+    else:
+        return HttpResponse("Request method is not a GET")

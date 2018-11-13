@@ -365,7 +365,7 @@ list-style: none;
 	/*border: none;
 	border-bottom: 1px solid #ddd;*/
 
-	background-color: #eee;
+	/*background-color: #eee;*/
 	border-radius: 5px;
 	/*box-shadow: inset -2px -2px 5px #aaa,  inset 1px 1px 5px #aaa;*/
 	margin-bottom: 0;
@@ -381,7 +381,7 @@ list-style: none;
 }
 
 .residentInfoDiv input[type='file'] {
-	background-color: #eee;
+	/*background-color: #eee;*/
 }
 
 .editable {
