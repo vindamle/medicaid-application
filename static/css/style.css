@@ -327,12 +327,11 @@ table button {
 	margin-top: 30px;
 	/*height: 250px;*/
 	/*background: #def;*/
-	border: 2px solid #eee;
-	box-shadow: 5px 5px 5px #ccc;
+	/*border: 2px solid #eee;*/
+	/*box-shadow: 5px 5px 5px #ccc;*/
 	/*border-radius: 25px;*/
-
-	padding: 25px;
-	font-size: calc(15px + (24 - 22)*(100vw - 600px)/(1200 - 600));
+	/*padding: 15px 25px;*/
+	font-size: calc(14px + (24 - 22)*(100vw - 600px)/(1200 - 600));
 	margin-bottom: 20px;
 }
 

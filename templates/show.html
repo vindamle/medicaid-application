@@ -12,7 +12,8 @@
 </div>
 
 <div class="container residentInfoDiv">
-	 {% csrf_token %}
+	<!--  {% csrf_token %} -->
+	<button class="btn" id="editBtn">Edit</button>
 	<h1 class="">{{alert.first_name}} {{alert.last_name}}</h1>
 	<section>
 		<h4>Personal Information:</h4>
@@ -48,17 +49,36 @@
 	<section>
 		<h4>Document Information:</h4>
 		<ul>
-			<li class="fileInputLi"><label>Upload Medicaid Application Here:</label> <input type="file" name="{{tracking.medicaid_application}}" id="medicaidApplicationFile"></li>
-			<li class="fileInputLi"><label>Upload Medicaid Confirmation Here:</label> <input type="file" name="{{tracking.medicaid_comfirmation}}"></li>
-			<li class="fileInputLi"><label>Upload Medicaid RFI Here:</label> <input type="file" name="{{tracking.rfi}}"></li>
-			<li class="fileInputLi"><label>Upload Medicaid Application Here:</label> <input type="file" name="{{tracking.medicaid_approval}}"></li>
+			<form class="fileInputLi" id="medicaid_application">
+	 {% csrf_token %}
+				<label>Upload Medicaid Application Here:</label> 
+				<input type="file" name="{{tracking.medicaid_application}}">
+				<button type="submit" method="post" class="uploadBtn btn btn-success">Upload</button>
+			</form>
+			<form class="fileInputLi" id="medicaid_comfirmation">
+	 {% csrf_token %}
+				<label>Upload Medicaid Confirmation Here:</label> 
+				<input type="file" name="{{tracking.medicaid_comfirmation}}">
+				<button type="submit" method="post" class="uploadBtn btn btn-success">Upload</button>
+			</form>
+			<form class="fileInputLi" id="rfi">
+	 {% csrf_token %}
+				<label>Upload Medicaid RFI Here:</label> 
+				<input type="file" name="{{tracking.rfi}}">
+				<button type="submit" method="post" class="uploadBtn btn btn-success">Upload</button>
+			</form>
+			<form class="fileInputLi" id="medicaid_approval">
+	 {% csrf_token %}
+				<label>Upload Medicaid Approval Here:</label> 
+				<input type="file" name="{{tracking.medicaid_approval}}">
+				<button type="submit" method="post" class="uploadBtn btn btn-success">Upload</button>
+			</form>
 			<li><label>Date of RFI:</label> <span class="editable">{{tracking.date_of_rfi}}</span></li>
 			<li><label>Date of Deadline:</label> <span class="editable">{{tracking.date_of_deadline}}</span></li>
 
 			<!-- <li>(More info, places to upload documents, etc.)</li> -->
 		</ul>
 	</section>
-	<button class="btn" id="editBtn">Save Changes</button>
 </div>
 <!--
 •	Any admission that is Medicaid (or MLTC) should have a page created. The page should have:
