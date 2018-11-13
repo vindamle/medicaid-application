@@ -1,37 +1,37 @@
 //file upload button functionality
-const patientId = document.querySelector("#patientId").innerHTML;
-const uploadFile = (fileType, file) => {
-	const ajaxCall = $.ajax(
-	{
-		type:"GET",
-		url: "/application/ajax/file_uploader",
-		contentType: false,
-		processData: false,
-		data:{
-			patient_id: patientId,
-			fileType: fileType,
-			file: file
-		},
-		success: function(response) 
-		{
-			console.log(response);
-			alert(`File uploaded! (Response: ${response})`);
-		}
-	});
-	return(ajaxCall);
-};
+// const patientId = document.querySelector("#patientId").innerHTML;
+// const uploadFile = (fileType, file) => {
+// 	const ajaxCall = $.ajax(
+// 	{
+// 		type:"GET",
+// 		url: "/application/ajax/file_uploader",
+// 		contentType: false,
+// 		processData: false,
+// 		data:{
+// 			patient_id: patientId,
+// 			fileType: fileType,
+// 			file: file
+// 		},
+// 		success: function(response) 
+// 		{
+// 			console.log(response);
+// 			alert(`File uploaded! (Response: ${response})`);
+// 		}
+// 	});
+// 	return(ajaxCall);
+// };
 
-$('.uploadBtn').click((e) => {
-	li = e.target.parentNode;
-	const fileType = li.id;
-	const file = li.querySelector('input').files[0];
-	console.log(file);
-	if (file) {
-		uploadFile(fileType, file);
-	} else {
-		alert("Please select a file to upload.")
-	};	
-});
+// $('.uploadBtn').click((e) => {
+// 	li = e.target.parentNode;
+// 	const fileType = li.id;
+// 	const file = li.querySelector('input').files[0];
+// 	console.log(file);
+// 	if (file) {
+// 		uploadFile(fileType, file);
+// 	} else {
+// 		alert("Please select a file to upload.")
+// 	};	
+// });
 
 
 // $('.editable').dblclick((e) => {
@@ -55,15 +55,21 @@ editBtn.addEventListener('click', (e) => {
 			for (var i = 0; i < editableItems.length; i++) {
 			const	editableItem = editableItems[i]
 			const input = document.createElement('input');
-			input.type = 'text';
-			input.value = editableItem.textContent;
 			input.className = 'editable';
+			if (editableItem.classList.contains('date')) {
+				input.type = 'date';
+				input.classList.add('date');
+			} else {
+				input.type = 'text';
+			};
+			input.value = editableItem.textContent;
+			
 			const parent = editableItem.parentNode;
 			parent.insertBefore(input, editableItem);
 			parent.removeChild(editableItem);
 			parent.style.borderBottom="none";
 			const ul = parent.parentNode;
-			ul.style.textAlign = 'right';
+			// ul.style.textAlign = 'right';
 			editBtn.textContent = 'Save';
 			editBtn.classList.toggle('saveBtn');
 		};
@@ -73,6 +79,9 @@ editBtn.addEventListener('click', (e) => {
 			const span = document.createElement('span');
 			span.textContent = editableItem.value;
 			span.className = 'editable';
+			if (editableItem.classList.contains('date')) {
+				span.classList.add('date');
+			};
 			const parent = editableItem.parentNode;
 			parent.insertBefore(span, editableItem);
 			parent.removeChild(editableItem);

@@ -11,75 +11,118 @@
 	</button>
 </div>
 
-<div class="container residentInfoDiv">
-	<!--  {% csrf_token %} -->
+<div class="container-fluid residentInfoDiv">
 	<button class="btn" id="editBtn">Edit</button>
 	<h1 class="">{{alert.first_name}} {{alert.last_name}}</h1>
 	<section>
 		<h4>Personal Information:</h4>
 		<ul>
-			<li><label>Resident Name:</label> <span class="editable">{{alert.first_name}} {{alert.last_name}}</span></li>
-			<li><label>Date of Birth:</label> <span class="editable">{{alert.dob}}</span></li>
-			<li><label>Address:</label> <span class="editable">{{tracking.address}}</span></li>
-			<li><label>City:</label> <span class="editable">{{tracking.city}}</span></li>
-			<li><label>State</label> <span class="editable">{{tracking.state}}</span></li>
-			<li><label>Zip:</label> <span class="editable">{{tracking.zip}}</span></li>
-			<li><label>Facility:</label> <span class="editable">{{alert.facility}}</span></li>
-			<li class="invisible" id="patientId">{{alert.patient_id}}</li>
-			<br>
-			<br>
-			<!-- <li class="invisible"><label>Just for styling:</label> <span class="editable">just for styling</span></li> -->
-			<!-- <li class="invisible"><label>Just for styling:</label> <span class="editable">just for styling</span></li> -->
+			<div class="row">
+				<div class="col-lg-4">
+					<li><label>Resident Name:</label> <span class="editable">{{alert.first_name}} {{alert.last_name}}</span></li>
+					<li><label>Date of Birth:</label> <span class="editable date">{{alert.dob}}</span></li>
+					<li><label>Address:</label> <span class="editable">{{tracking.address}}</span></li>
+				</div>
+				<div class="col-lg-4">
+					<li><label>City:</label> <span class="editable">{{tracking.city}}</span></li>
+					<li><label>State</label> <span class="editable">{{tracking.state}}</span></li>
+					<li><label>Zip:</label> <span class="editable">{{tracking.zip}}</span></li>
+				</div>
+				<div class="col-lg-4">
+					<li><label>Facility:</label> <span class="editable">{{alert.facility}}</span></li>
+					<li class="invisible" id="patientId">{{alert.patient_id}}</li>
+				</div>
+			</div>
 		</ul>
 	</section>
 	<section>
 		<h4>Insurance Information:</h4>
 		<ul>
-			<li><label>Primary Payor:</label> <span class="editable">{{alert.primary_payor}}</span></li>
-			<li><label>Secondary Payor:</label> <span class="editable">{{alert.secondary_payor}}</span></li>
-			<li><label>Status: </label> <span class="editable">{{tracking.status}}</span></li>
-			<li><label>Is Medicaid Pending?</label> <span class="editable">{{tracking.is_medicaid_pending}}</span></li>
-			<li><label>Medicaid Pickup Date:</label> <span class="editable">{{tracking.medicaid_pickup_date}}</span></li>
-			<li><label>Application Type:</label> <span class="editable">{{tracking.application_type}}</span></li>
-			<li><label>Date of Medicaid Submission:</label> <span class="editable">{{tracking.date_of_medicaid_submission}}</span></li>
-			<li><label>Date of Medicaid Approval:</label> <span class="editable">{{tracking.date_of_medicaid_approval}}</span></li>
-			<li><label>Date of Medicaid Recertification:</label> <span class="editable">{{tracking.date_of_medicaid_recertification}}</span></li>
+			<div class="row">
+				<div class="col-lg-4">
+					<li><label>Primary Payor:</label> <span class="editable">{{alert.primary_payor}}</span></li>
+					<li><label>Secondary Payor:</label> <span class="editable">{{alert.secondary_payor}}</span></li>
+					<li><label>Status: </label> <span class="editable">{{tracking.status}}</span></li>
+				</div>
+				<div class="col-lg-4">
+					<li><label>Is Medicaid Pending?</label> <span class="editable">{{tracking.is_medicaid_pending}}</span></li>
+					<li><label>Medicaid Pickup Date:</label> <span class="editable">{{tracking.medicaid_pickup_date}}</span></li>
+					<li><label>Application Type:</label> <span class="editable">{{tracking.application_type}}</span></li>
+				</div>
+				<div class="col-lg-4">
+					<li>
+						<label>Date of Medicaid Submission:</label>
+						<span class="editable date">{{tracking.date_of_medicaid_submission}}</span>
+					</li>
+					<li>
+						<label>Date of Medicaid Approval:</label>
+						 <span class="editable date">{{tracking.date_of_medicaid_approval}}</span>
+					</li>
+					<li>
+						<label>Date of Medicaid Recertification:</label>
+						<span class="editable date">{{tracking.date_of_medicaid_recertification}}</span>
+					</li>
+				</div>
+			</div>
 		</ul>
 	</section>
 	<section>
 		<h4>Document Information:</h4>
 		<ul>
-			<form class="fileInputLi" enctype="multipart/form-data" id="medicaid_application" method= "post">
-	 			{% csrf_token %}
-				<label>Upload Medicaid Application Here:</label>
-				<input type="file" name=files">
-				<button type="submit" class="uploadBtn btn btn-success">Upload</button>
-			</form>
-			<form class="fileInputLi" id="medicaid_comfirmation">
-	 {% csrf_token %}
-				<label>Upload Medicaid Confirmation Here:</label>
-				<input type="file" name="{{tracking.medicaid_comfirmation}}">
-				<button type="submit" method="post" class="uploadBtn btn btn-success">Upload</button>
-			</form>
-			<form class="fileInputLi" id="rfi">
-	 {% csrf_token %}
-				<label>Upload Medicaid RFI Here:</label>
-				<input type="file" name="{{tracking.rfi}}">
-				<button type="submit" method="post" class="uploadBtn btn btn-success">Upload</button>
-			</form>
-			<form class="fileInputLi" id="medicaid_approval">
-	 {% csrf_token %}
-				<label>Upload Medicaid Approval Here:</label>
-				<input type="file" name="{{tracking.medicaid_approval}}">
-				<button type="submit" method="post" class="uploadBtn btn btn-success">Upload</button>
-			</form>
-			<li><label>Date of RFI:</label> <span class="editable">{{tracking.date_of_rfi}}</span></li>
-			<li><label>Date of Deadline:</label> <span class="editable">{{tracking.date_of_deadline}}</span></li>
+			<div class="row">
+				<div class="col-lg-4">
+					<form class="fileInputLi" id="medicaid_application" method="post">
+		  			{% csrf_token %}
+						<label>Upload Medicaid Application Here:</label>
+						<input type="file" name="medicaid_application" value="{{tracking.medicaid_application}}" multiple>
+						<input type="hidden" name="patient_id" value="{{alert.patient_id}}">
+						<input type="hidden" name="file_type" value="medicaid_application">
+						<button type="submit" class="uploadBtn btn btn-success">Upload</button>
+					</form>
+					<form class="fileInputLi" id="medicaid_comfirmation" method="post">
+			 			{% csrf_token %}
+						<label>Upload Medicaid Confirmation Here:</label>
+						<input type="file" name="medicaid_confirmation" value="{{tracking.medicaid_comfirmation}}" multiple>
+						<input type="hidden" name="patient_id" value="{{alert.patient_id}}">
+						<input type="hidden" name="file_type" value="medicaid_confirmation">
+						<button type="submit" class="uploadBtn btn btn-success">Upload</button>
+					</form>
+				</div>
+				<div class="col-lg-4">
+					<form class="fileInputLi" id="rfi" method="post">
+			 			{% csrf_token %}
+						<label>Upload Medicaid RFI Here:</label>
+						<input type="file" name="rfi" value="{{tracking.rfi}}" multiple>
+						<input type="hidden" name="patient_id" value="{{alert.patient_id}}">
+						<input type="hidden" name="file_type" value="rfi">
 
-			<!-- <li>(More info, places to upload documents, etc.)</li> -->
+
+						<button type="submit" class="uploadBtn btn btn-success">Upload</button>
+					</form>
+					<form class="fileInputLi" id="medicaid_approval" method="post">
+			 			{% csrf_token %}
+						<label>Upload Medicaid Approval Here:</label>
+						<input type="file" name="medicaid_approval" value="{{tracking.medicaid_approval}}" multiple>
+						<input type="hidden" name="patient_id" value="{{alert.patient_id}}">
+						<input type="hidden" name="file_type" value="medicaid_approval">
+						<button type="submit" class="uploadBtn btn btn-success">Upload</button>
+					</form>
+				</div>
+				<div class="col-lg-4">
+					<li><label>Date of RFI:</label> <span class="editable date">{{tracking.date_of_rfi}}</span></li>
+					<li><label>Date of Deadline:</label> <span class="editable date">{{tracking.date_of_deadline}}</span></li>
+					<!-- <li>(More info, places to upload documents, etc.)</li> -->
+				</div>
+			</div>
 		</ul>
 	</section>
 </div>
+{% endblock %}
+{% load static %}
+{% block scripts %}
+<script src="{% static 'js/show.js' %}"></script>
+{% endblock %}
+
 <!--
 •	Any admission that is Medicaid (or MLTC) should have a page created. The page should have:
 o	Name of resident (preferably generated from NCS)
@@ -113,9 +156,3 @@ o	Field to upload confirmation of fair hearing request
 o	Field to upload fair hearing notice
 •	Denial triggers the need for new application which should restart the process
 -->
-
-{% endblock %}
-{% load static %}
-{% block scripts %}
-<script src="{% static 'js/show.js' %}"></script>
-{% endblock %}
