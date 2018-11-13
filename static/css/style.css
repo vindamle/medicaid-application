@@ -317,7 +317,7 @@ table button {
 }
 
 .residentInfoDiv h4 {
-	margin: 0 auto 30px auto;
+	margin: 0 auto 20px auto;
 	/*text-align: left;*/
 	color: #ee7000;
 	/*text-decoration: underline;*/
@@ -327,10 +327,10 @@ table button {
 	margin-top: 30px;
 	/*height: 250px;*/
 	/*background: #def;*/
-	/*border: 2px solid #eee;*/
-	/*box-shadow: 5px 5px 5px #ccc;*/
+	border: 2px solid #eee;
+	box-shadow: 5px 5px 5px #ccc;
 	/*border-radius: 25px;*/
-	/*padding: 15px 25px;*/
+	padding: 15px 25px 0 25px;
 	font-size: calc(14px + (24 - 22)*(100vw - 600px)/(1200 - 600));
 	margin-bottom: 20px;
 }
@@ -401,10 +401,15 @@ table button {
 	background: green;
 	color: white;
 	width: 150px;
-	left: 50px;
+	top: 100px;
+	right: 50px;
 	position: absolute;
 }
 
+.alert {
+	display: inline-block;
+	/*position: fixed;*/
+}
 
 /*___________index.html___________*/
 
