@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.views import View
 from django.shortcuts import render
-from .forms import ApplicationForm
+from .forms import ApplicationForm, UploadFileForm
 from application.models import Facility,Alert, TrackingData
 
 
@@ -113,7 +113,7 @@ class PendingView(View):
 
 
 class ShowView(View):
-    form_class = ApplicationForm
+    form_class = UploadFileForm
     template_name = "show.html"
     list = []
     tracklist = []
@@ -122,6 +122,7 @@ class ShowView(View):
 
     def get(self, request, *args, **kwargs):
         '''if GET  '''
+
         number= int(request.GET["patient_id"])
 
         results = Alert.objects.filter(patient_id = number)
@@ -145,7 +146,7 @@ class ShowView(View):
     def post(self, request, *args, **kwargs):
 
         '''if POST'''
-        facilities =Facility.objects.filter(downstate_upstate__isnull = False )
+        print(request.FILES.getlist('files'))
 
 
         self.list = list()

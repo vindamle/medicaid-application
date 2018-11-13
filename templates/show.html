@@ -17,7 +17,7 @@
 	<h1 class="">{{alert.first_name}} {{alert.last_name}}</h1>
 	<section>
 		<h4>Personal Information:</h4>
-		<ul>			
+		<ul>
 			<li><label>Resident Name:</label> <span class="editable">{{alert.first_name}} {{alert.last_name}}</span></li>
 			<li><label>Date of Birth:</label> <span class="editable">{{alert.dob}}</span></li>
 			<li><label>Address:</label> <span class="editable">{{tracking.address}}</span></li>
@@ -49,27 +49,27 @@
 	<section>
 		<h4>Document Information:</h4>
 		<ul>
-			<form class="fileInputLi" id="medicaid_application">
-	 {% csrf_token %}
-				<label>Upload Medicaid Application Here:</label> 
-				<input type="file" name="{{tracking.medicaid_application}}">
-				<button type="submit" method="post" class="uploadBtn btn btn-success">Upload</button>
+			<form class="fileInputLi" enctype="multipart/form-data" id="medicaid_application" method= "post">
+	 			{% csrf_token %}
+				<label>Upload Medicaid Application Here:</label>
+				<input type="file" name=files">
+				<button type="submit" class="uploadBtn btn btn-success">Upload</button>
 			</form>
 			<form class="fileInputLi" id="medicaid_comfirmation">
 	 {% csrf_token %}
-				<label>Upload Medicaid Confirmation Here:</label> 
+				<label>Upload Medicaid Confirmation Here:</label>
 				<input type="file" name="{{tracking.medicaid_comfirmation}}">
 				<button type="submit" method="post" class="uploadBtn btn btn-success">Upload</button>
 			</form>
 			<form class="fileInputLi" id="rfi">
 	 {% csrf_token %}
-				<label>Upload Medicaid RFI Here:</label> 
+				<label>Upload Medicaid RFI Here:</label>
 				<input type="file" name="{{tracking.rfi}}">
 				<button type="submit" method="post" class="uploadBtn btn btn-success">Upload</button>
 			</form>
 			<form class="fileInputLi" id="medicaid_approval">
 	 {% csrf_token %}
-				<label>Upload Medicaid Approval Here:</label> 
+				<label>Upload Medicaid Approval Here:</label>
 				<input type="file" name="{{tracking.medicaid_approval}}">
 				<button type="submit" method="post" class="uploadBtn btn btn-success">Upload</button>
 			</form>
