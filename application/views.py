@@ -65,6 +65,8 @@ def update_list(request):
 
 def file_upload(request):
     if request.method == 'GET':
+        print(request.POST['medicaidApplicationFile'])
+
         return HttpResponse("200")
     else:
         return HttpResponse("Request method is not a GET")
