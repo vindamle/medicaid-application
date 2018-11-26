@@ -3,7 +3,7 @@ from django.views import View
 from django.shortcuts import render
 from .forms import ApplicationForm, UploadFileForm
 from application.models import Facility,Alert, TrackingData
-
+import pandas as pd
 
 
 class HomeView(View):
@@ -146,16 +146,24 @@ class ShowView(View):
     def post(self, request, *args, **kwargs):
 
         '''if POST'''
-        print(request.FILES.getlist('files'))
+        file = request.FILES.getlist('files')[0]
+        type = request.POST.get('file_type')
+        patient_id = request.POST.get('patient_id')
 
 
-        self.list = list()
-        for result in results:
-            facility = result.Facility
-
-            self.list.append(al.get_fields(result, facility))
-
-        return render(request,self.template_name, {'list':self.list, "alert_length":len(self.list) , "form":self.form_class, 'facilities':facilities, "tracklist":self.tracklist})
+        tracking = TrackingData.objects.get(patient_id = patient_id)
+        field = getattr(tracking, type)
+        # TODO  
+        field.save(str(patient_id),file)
+        tracking.save()
+        return HttpResponse("200")
+        # self.list = list()
+        # for result in results:
+        #     facility = result.Facility
+        #
+        #     self.list.append(al.get_fields(result, facility))
+        #
+        # return render(request,self.template_name, {'list':self.list, "alert_length":len(self.list) , "form":self.form_class, 'facilities':facilities, "tracklist":self.tracklist})
 
 
 class ApprovalsView(View):

@@ -71,10 +71,10 @@
 		<ul>
 			<div class="row">
 				<div class="col-lg-4">
-					<form class="fileInputLi" id="medicaid_application" method="post">
+					<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
 		  			{% csrf_token %}
 						<label>Upload Medicaid Application Here:</label>
-						<input type="file" name="medicaid_application" value="{{tracking.medicaid_application}}" multiple>
+						<input type="file"  class = "form-control-file" name="files" multiple="multiple" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required/>
 						<input type="hidden" name="patient_id" value="{{alert.patient_id}}">
 						<input type="hidden" name="file_type" value="medicaid_application">
 						<button type="submit" class="uploadBtn btn btn-success">Upload</button>

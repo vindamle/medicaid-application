@@ -19,4 +19,4 @@ class ApplicationForm(forms.Form):
 
 class UploadFileForm(forms.Form):
     title = forms.CharField(max_length=50)
-    files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}))
+    files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
