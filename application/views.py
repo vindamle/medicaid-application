@@ -37,6 +37,7 @@ def update_list(request):
         track = request.GET['tracking']
         requested_patient_id = int(requested_patient_id)
         alert = Alert.objects.get(patient_id = requested_patient_id)
+
         if track == "true":
             alert.tracking_status = True
             alert.save()
@@ -46,14 +47,7 @@ def update_list(request):
             for result in results:
                 TrackingData.objects.create(
                     patient = alert,
-                    address = result.Address,
-                    city = result.City,
-                    state = result.State,
-                    zip = result.Zip,
                     is_medicaid_pending = result.IsMedicaidPending,
-                    show_errors = True,
-                    rfi_deadline_alert = False,
-                    recertification_alert = False,
                 )
 
         elif track == "false":
