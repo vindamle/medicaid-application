@@ -69,7 +69,7 @@ editBtn.addEventListener('click', (e) => {
 			parent.removeChild(editableItem);
 			parent.style.borderBottom="none";
 			const ul = parent.parentNode;
-			// ul.style.textAlign = 'right';
+			ul.style.textAlign = 'right';
 			editBtn.textContent = 'Save';
 			editBtn.classList.toggle('saveBtn');
 		};
@@ -93,3 +93,50 @@ editBtn.addEventListener('click', (e) => {
 		};
 	};
 });
+
+//code below, if implemented, would allow for fields to be edited individually by double-clicking them
+
+// document.addEventListener('dblclick', (e)=>{
+// 	if (e.target.classList.contains('editable')) {
+// 		const editableItem = e.target;
+// 		const input = document.createElement('input');
+// 		input.className = 'editable';
+// 		if (editableItem.classList.contains('date')) {
+// 			input.type = 'date';
+// 			input.classList.add('date');
+// 		} else {
+// 			input.type = 'text';
+// 		};
+// 		input.value = editableItem.textContent;
+// 		const parent = editableItem.parentNode;
+// 		parent.insertBefore(input, editableItem);
+// 		parent.removeChild(editableItem);
+// 		parent.style.borderBottom="none";
+
+// 		input.addEventListener('keyup',function(e){
+// 	    if (e.keyCode === 13) {
+// 		    const span = document.createElement('span');
+// 				span.textContent = input.value;
+// 				span.className = 'editable';
+// 				if (input.classList.contains('date')) {
+// 					span.classList.add('date');
+// 				};
+// 				const parent = input.parentNode;
+// 				parent.insertBefore(span, input);
+// 				parent.removeChild(input);
+// 				parent.style.borderBottom="1px solid #ddd";
+// 		  };
+// 		});
+// 	};
+// });
+
+$('#approveBtn').click((e) => {
+	btn = e.target;
+	if(btn.innerHTML == 'Approve') {
+		e.target.innerHTML = 'Approved &check;';
+		$('#approvedSection').css('display', 'block');
+	} else {
+		e.target.innerHTML = 'Approve';
+		$('#approvedSection').css('display', 'none');
+	}
+})

@@ -13,7 +13,9 @@
         <th>Facility</th>
         <th>Primary Payor</th>
         <th>Secondary Payor</th>
-        <th>Approval Date</th>
+        <th>Approval Date Range</th>
+        <th>Fair Hearing Required?</th>
+        <th>Verified</th>
         <th class="invisible">Show</th>
         <th class="invisible">Don't Track</th>
       </tr>
@@ -26,14 +28,20 @@
         <td>{{obj.facility}}</td>
         <td>{{obj.primary_payor}}</td>
         <td>{{obj.secondary_payor}}</td>
-        <td>{{obj.activity_date}}</td>
-        <td><a href="/show?patient_id={{obj.patient_id}}" class="alertByButton"><button class="btn-tracked">Show</button></a></td>
-        <td><button class="btn-remove">Don't Track</button></td>
+        <td>{{obj.approval_start_date}} - {{obj.approval_end_date}}</td>
+        <td>?</td>
+        <td class="verifyBtnTd"><button class="verifyBtn">Not Verified</button></td>
+        <td><a href="/show?patient_id={{obj.patient_id}}" class=""><button class="btn-tracked">Show</button></a></td>
+        <td><button class="btn-ignore">Don't Track</button></td>
       </tr>
       {% endfor %}
-    }
     </tbody>
   </table>
 <!-- </div> -->
 
+{% endblock %}
+{% load static %}
+{% block scripts %}
+  <!-- <script src="{% static 'js/base.js' %}"></script> -->
+  <script src="{% static 'js/approvals.js' %}"></script>
 {% endblock %}

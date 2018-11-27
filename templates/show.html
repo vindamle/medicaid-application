@@ -3,38 +3,42 @@
 {% block title %}Patient Show Page{% endblock %}
 
 {% block content %}
-
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-	<strong>Alert:</strong> RFI due within 10 days.
-	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-		<span aria-hidden="true">&times;</span>
-	</button>
-</div>
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-	<strong>Alert:</strong> RFI due within 10 days.
-	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-		<span aria-hidden="true">&times;</span>
-	</button>
+<div class="alertDiv">
+	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		<strong>Alert:</strong> RFI due within 10 days
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		<strong>Alert:</strong> NCS Discrepancy
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
 </div>
 
 <div class="container-fluid residentInfoDiv">
 	<h1 class="">{{alert.first_name}} {{alert.last_name}}</h1>
 	<button class="btn" id="editBtn">Edit</button>
+	
 	<section>
 		<h4>Personal Information:</h4>
 		<ul>
 			<div class="row">
 				<div class="col-lg-4">			
 					<li><label>Resident Name:</label> <span class="editable">{{alert.first_name}} {{alert.last_name}}</span></li>
-					<li><label>Date of Birth:</label> <span class="editable date">{{alert.dob}}</span></li>
+					<li><label>Date of Birth:</label> <span class="editable date">{{alert.dob|date:"M d, Y"}}</span></li>
 					<li><label>Address:</label> <span class="editable">{{tracking.address}}</span></li>
 				</div>
 				<div class="col-lg-4">			
 					<li><label>City:</label> <span class="editable">{{tracking.city}}</span></li>
-					<li><label>State</label> <span class="editable">{{tracking.state}}</span></li>
+					<li><label>State:</label> <span class="editable">{{tracking.state}}</span></li>
 					<li><label>Zip:</label> <span class="editable">{{tracking.zip}}</span></li>
 				</div>
 				<div class="col-lg-4">			
+					<li><label>County:</label> <span class="editable">Unknown</span></li>
+					<li><label>Marital Status:</label> <span class="editable">Unknown</span></li>
 					<li><label>Facility:</label> <span class="editable">{{alert.facility}}</span></li>
 					<li class="invisible" id="patientId">{{alert.patient_id}}</li>
 				</div>
@@ -48,19 +52,57 @@
 				<div class="col-lg-4">
 					<li><label>Primary Payor:</label> <span class="editable">{{alert.primary_payor}}</span></li>
 					<li><label>Secondary Payor:</label> <span class="editable">{{alert.secondary_payor}}</span></li>
-					<li><label>Status: </label> <span class="editable">{{tracking.status}}</span></li>
 				</div>
 				<div class="col-lg-4">
-					<li><label>Is Medicaid Pending?</label> <span class="editable">{{tracking.is_medicaid_pending}}</span></li>
+					<li><label>Copays:</label> <span class="editable">{{tracking.copays}}</span></li>
+					<li><label>Copays Start Date:</label> <span class="editable">{{tracking.medicaid_pickup_date}}</span></li>
+					<li><label>Secondary Insurance Copay Percentage:</label> <span class="editable"></span></li>
+				</div>
+				<div class="col-lg-4">
+					<li><label>Last Medicare Date:</label> <span class="editable">{{tracking.medicaid_pickup_date}}</span></li>
+					<li><label>Cut From Medicare/Insurance Date:</label> <span class="editable">{{tracking.medicaid_pickup_date}}</span></li>
+				</div>
+			</div>
+		</ul>
+	</section>
+	<section>
+		<h4>Medicaid Application Information:</h4>
+		<ul>
+			<div class="row">
+				<div class="col-lg-4">
+					<li><label>Status: </label> <span class="editable">Pending</span></li>
+					<!-- <li><label>Is Medicaid Pending?</label> <span class="editable">{{tracking.is_medicaid_pending}}</span></li> -->
 					<li><label>Medicaid Pickup Date:</label> <span class="editable">{{tracking.medicaid_pickup_date}}</span></li>
-					<li><label>Application Type:</label> <span class="editable">{{tracking.application_type}}</span></li>
-				</div>
-				<div class="col-lg-4">
 					<li>
 						<label>Date of Medicaid Submission:</label> 
 						<span class="editable date">{{tracking.date_of_medicaid_submission}}</span>
 					</li>
+					<li><label>Application State:</label> <span class="editable">Unknown</span></li>
+					<li><label>Application County:</label> <span class="editable">Unknown</span></li>
+					
+				</div>
+				<div class="col-lg-4">
+					
+					<li><label>Application Type:</label> <span class="editable">{{tracking.application_type}}</span></li>
+					<li><label>Spousal/Single:</label> <span class="editable">{{tracking.spousal}}</span></li>
 					<li>
+						<label>Estimated NAMI/Income Contribution Amount:</label> 
+						<span class="editable">Unknown</span>
+					</li>
+					<li><label>Short-term/Long-Term Care:</label> <span class="editable">{{tracking.ltc}}</span></li>
+					<li><label>Spousal Refusal:</label> <span class="editable">Unknown</span></li>
+					
+				</div>
+				<div class="col-lg-4">
+					<li>
+						<label>Date of appointment with applicant (if required):</label> 
+						<span class="editable date">{{tracking.date_of_medicaid_recertification}}</span>
+					</li>
+					<li><label>DSS Contact Address:</label> <span class="editable">Unknown</span></li>
+					<li><label>DSS Contact Phone:</label> <span class="editable">Unknown</span></li>
+					<li><label>DSS Contact Email:</label> <span class="editable">Unknown</span></li>
+					<li><label>DSS Contact Fax:</label> <span class="editable">Unknown</span></li>
+					<!-- <li>
 						<label>Date of Medicaid Approval:</label>
 						 <span class="editable date">{{tracking.date_of_medicaid_approval}}</span>
 					</li>
@@ -68,10 +110,20 @@
 						<label>Date of Medicaid Recertification:</label> 
 						<span class="editable date">{{tracking.date_of_medicaid_recertification}}</span>
 					</li>
+					<li>
+						<label>NAMI/Income Contribution Amount:</label> 
+						<span class="editable">Unknown</span>
+					</li> -->
 				</div>
 			</div>
+			<!-- <div class="row">
+				<div class="col-lg-4">
+					
+				</div>
+			</div> -->
 		</ul>
 	</section>
+
 	<section>
 		<h4>Document Information:</h4>
 		<ul>
@@ -84,7 +136,7 @@
 						,image/png,application/pdf" multiple>
 						<input type="hidden" name="patient_id" value="{{alert.patient_id}}">
 						<input type="hidden" name="file_type" value="medicaid_application">
-						<button type="submit" class="uploadBtn btn btn-success">Upload</button>
+						<button type="submit" class="uploadBtn">Upload</button>
 					</form>
 					<form class="fileInputLi" id="medicaid_comfirmation" method="post" enctype="multipart/form-data">
 			 			{% csrf_token %}
@@ -93,7 +145,7 @@
 						,image/png,application/pdf" multiple>
 						<input type="hidden" name="patient_id" value="{{alert.patient_id}}">
 						<input type="hidden" name="file_type" value="medicaid_confirmation">
-						<button type="submit" class="uploadBtn btn btn-success">Upload</button>
+						<button type="submit" class="uploadBtn">Upload</button>
 					</form>
 				</div>
 				<div class="col-lg-4">
@@ -106,7 +158,7 @@
 						<input type="hidden" name="file_type" value="rfi">
 						
 
-						<button type="submit" class="uploadBtn btn btn-success">Upload</button>
+						<button type="submit" class="uploadBtn">Upload</button>
 					</form>
 					<form class="fileInputLi" id="medicaid_approval" method="post" enctype="multipart/form-data">
 			 			{% csrf_token %}
@@ -115,13 +167,70 @@
 						,image/png,application/pdf" multiple>
 						<input type="hidden" name="patient_id" value="{{alert.patient_id}}">
 						<input type="hidden" name="file_type" value="medicaid_approval">
-						<button type="submit" class="uploadBtn btn btn-success">Upload</button>
+						<button type="submit" class="uploadBtn">Upload</button>
 					</form>
 				</div>
 				<div class="col-lg-4">
 					<li><label>Date of RFI:</label> <span class="editable date">{{tracking.date_of_rfi}}</span></li>
 					<li><label>Date of Deadline:</label> <span class="editable date">{{tracking.date_of_deadline}}</span></li>
 					<!-- <li>(More info, places to upload documents, etc.)</li> -->
+				</div>
+			</div>
+		</ul>
+	</section>
+	<!-- <div class="approveBtnDiv"> -->
+		<button class="btn btn-success centered" id="approveBtn">Approve</button>
+	<!-- </div> -->
+	<section id="approvedSection">
+		<h4>Approval Information:</h4>
+		<ul>
+			<div class="row">
+				<div class="col-lg-4">
+					<li>
+						<label>Approval Notice Date:</label>
+						 <span class="editable date">{{tracking.date_of_medicaid_approval}}</span>
+					</li>
+					<li>
+						<label>Approval Start Date:</label>
+						 <span class="editable date">{{tracking.date_of_medicaid_approval}}</span>
+					</li>
+					<li>
+						<label>Approval End Date:</label>
+						 <span class="editable date">{{tracking.date_of_medicaid_approval}}</span>
+					</li>
+					
+					<!-- <li><label>Status: </label> <span class="editable">Pending</span></li> -->
+					<!-- <li><label>Is Medicaid Pending?</label> <span class="editable">{{tracking.is_medicaid_pending}}</span></li> -->
+					<!-- <li><label>Medicaid Pickup Date:</label> <span class="editable">{{tracking.medicaid_pickup_date}}</span></li> -->
+					<!-- <li> -->
+						<!-- <label>Date of appointment with applicant (if required):</label>  -->
+						<!-- <span class="editable date">{{tracking.date_of_medicaid_recertification}}</span> -->
+					<!-- </li> -->
+				</div>
+				<div class="col-lg-4">
+					<li>
+						<label>NAMI/Income Contribution Amount:</label> 
+						<span class="editable">Unknown</span>
+					</li>
+					<li>
+						<label>Fair Hearing Required?</label> 
+						<span class="editable">Unknown</span>
+					</li>
+					<li>
+						<label>Date of Medicaid Recertification:</label> 
+						<span class="editable date">{{tracking.date_of_medicaid_recertification}}</span>
+					</li>
+					<!-- <li>
+						<label>Date of Medicaid Submission:</label> 
+						<span class="editable date">{{tracking.date_of_medicaid_submission}}</span>
+					</li>
+					<li><label>Application Type:</label> <span class="editable">{{tracking.application_type}}</span></li>
+					<li><label>Spousal/Single?</label> <span class="editable">{{tracking.spousal}}</span></li>
+					<li><label>Short-term/Long-Term Care?</label> <span class="editable">{{tracking.ltc}}</span></li>
+					<li><label>Spousal Refusal?</label> <span class="editable">Unknown</span></li> -->
+				</div>
+				<div class="col-lg-4">
+					
 				</div>
 			</div>
 		</ul>

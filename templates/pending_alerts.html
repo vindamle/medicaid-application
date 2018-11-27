@@ -4,23 +4,28 @@
 
 {% block content %}
 <div class="container" id="activityContainer">
-  <h3>Pending Alerts (<span id="totalActivityCount"></span>)</h3>
+  <h3>Pending Alerts  (<span class="countSpan" id="allPendingAlertsTableCount"></span>)</h3>
   <ul class="nav nav-tabs nav-justified">
     <li>
       <a data-toggle="tab" href="#home" class="active show">
-        <h4>RFI Due in 10 Days (<span class="countSpan" id="rfiDueTableCount"></span>)</h4>
+        <h4>All</h4>
       </a>
     </li>
     <li>
       <a data-toggle="tab" href="#menu1">
+        <h4>RFI Due in 10 Days (<span class="countSpan" id="rfiDueTableCount"></span>)</h4>
+      </a>
+    </li>
+    <li>
+      <a data-toggle="tab" href="#menu2">
         <h4>NCS Discrepancy (<span class="countSpan" id="ncsDiscrepancyTableCount"></span>)</h4>
       </a>
     </li>
-  </ul>
+    </ul>
 
   <div class="tab-content">
     <div id="home" class="tab-pane in active">
-      <table id="rfiDueTable">
+      <table id="allPendingAlertsTable">
         <thead>
           <tr>
             <th>First Name</th>
@@ -30,6 +35,7 @@
             <th>Secondary Payor</th>
             <th>Alert Type</th>
             <th>Alert Date</th>
+            <th>County</th>
             <th class="invisible">Show</th>
           </tr>
         </thead>
@@ -43,6 +49,7 @@
             <td>{{obj.secondary_payor}}</td>
             <td>RFI Due in 10 Days</td>
             <td>{{obj.activity_date}}</td>
+            <td>{{obj.county}}</td>
             <td><a href="/show?patient_id={{obj.patient_id}}" class=""><button class="btn-alert">Show</button></a></td>  
           </tr>
           {% endfor %}
@@ -51,6 +58,39 @@
       </table>
     </div>
     <div id="menu1" class="tab-pane fade">
+      <table id="rfiDueTable">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Facility</th>
+            <th>Primary Payor</th>
+            <th>Secondary Payor</th>
+            <th>Alert Type</th>
+            <th>Alert Date</th>
+            <th>County</th>
+            <th class="invisible">Show</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for obj in list%}
+          <tr>
+            <td>{{obj.first_name}}</td>
+            <td>{{obj.last_name}}</td>
+            <td>{{obj.facility}}</td>
+            <td>{{obj.primary_payor}}</td>
+            <td>{{obj.secondary_payor}}</td>
+            <td>RFI Due in 10 Days</td>
+            <td>{{obj.activity_date}}</td>
+            <td>{{obj.county}}</td>
+            <td><a href="/show?patient_id={{obj.patient_id}}" class=""><button class="btn-alert">Show</button></a></td>  
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+    <div id="menu2" class="tab-pane fade">
       <table id="ncsDiscrepancyTable">
         <thead>
           <tr>
@@ -61,6 +101,7 @@
             <th>Secondary Payor</th>
             <th>Alert Type</th>
             <th>Alert Date</th>
+            <th>County</th>
             <th class="invisible">Show</th>
           </tr>
         </thead>
@@ -74,6 +115,7 @@
             <td>{{obj.secondary_payor}}</td>
             <td>NCS Discrepancy</td>
             <td>{{obj.activity_date}}</td>
+            <td>{{obj.county}}</td>
             <td><a href="/show?patient_id={{obj.patient_id}}" class=""><button class="btn-alert">Show</button></a></td>  
           </tr>
           {% endfor %}

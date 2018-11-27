@@ -10,7 +10,7 @@ html, body {
 
 nav {
 	width: 100vw;
-	height: 70px;
+	/*height: 70px;*/
 	/*background: #FF9000;*/
 	/*padding: 10px;*/
 }
@@ -25,6 +25,7 @@ nav ul {
 	list-style: none;
 	background: white;
 }
+
 @media(min-width: 990px) {
 	nav ul {
 		/*display: inline-flex;*/
@@ -62,6 +63,13 @@ nav li.grayText {
 	}
 }
 
+/*.navbar {
+	position: absolute;
+	width: 100vw;
+	left: 0;
+	z-index: 1000;
+}
+*/
 .downArrow {
 	font-size: 16px;
 }
@@ -229,11 +237,6 @@ table button {
 	color: white;
 }
 
-.centered {
-	width: 200px;
-	margin: 50px auto;
-}
-
 .invisible {
 	visibility: hidden;
 }
@@ -301,12 +304,15 @@ table button {
 }
 
 /*_____________show page_____________*/
-
-.residentInfoDiv {
-	margin: 20px;
-	max-width: 80vw;
-	margin-left: 10vw;
+@media (min-width: 768px) {
+	.residentInfoDiv {
+		margin: 20px;
+		width: 80vw;
+		margin-left: 10vw;
+	}
 }
+
+/*@media(min-width: )*/
 /*.residentInfoDiv .col-md-6 {
 	height: 200px;
 	margin: 50px auto;
@@ -353,7 +359,13 @@ table button {
 	/*color: darkblue;*/
 	/*display: block;*/
 	/*font-weight: bold;*/
-	
+}
+
+.residentInfoDiv span {
+	/*display: block;*/
+	color: darkblue;
+	margin-bottom: 3px;
+	font-weight: bold;
 }
 
 .residentInfoDiv input {
@@ -366,15 +378,8 @@ table button {
 	vertical-align: baseline;
 }
 
-.residentInfoDiv span {
-	/*display: block;*/
-	color: darkblue;
-
-	margin-bottom: 3px;
-	font-weight: bold;
-}
 .residentInfoDiv input[type='text'] {
-	width: 250px
+	width: 250px;
 }
 
 .residentInfoDiv input[type='date'] {
@@ -384,7 +389,7 @@ table button {
 .residentInfoDiv input[type='file'] {
 	/*background-color: #eee;*/
 	width: 250px;
-	margin-bottom: 30px;
+	margin-bottom: 5px;
 }
 
 .editable {
@@ -393,22 +398,63 @@ table button {
 	padding-left: 5px;
 }
 
+.fileInputLi {
+		margin-bottom: 30px;
+}
+
 .fileInputLi label {
 	display: block;
 }
 
-#editBtn {
-	background: green;
+.uploadBtn {
+	background-color: green;
 	color: white;
-	width: 150px;
-	top: 100px;
-	right: 50px;
-	position: absolute;
+	padding: 5px;
+	border-radius: 5px;
 }
 
+#editBtn {
+	background: steelblue;
+	color: white;
+	width: 100px;
+	top: 100px;
+	right: 250px;
+}
+
+.alertDiv {
+	/*display: inline-block;*/
+}
 .alert {
-	display: inline-block;
+	/*display: inline-block;*/
 	/*position: fixed;*/
+}
+
+@media(min-width: 768px) {
+	.alertDiv, #editBtn {
+		position: absolute;
+	}
+	.alert {
+		width: 150px;
+	}
+}
+
+.approveBtnDiv {
+	width: 100%;
+	/*text-align: center;*/
+}
+
+#approveBtn {
+	position: absolute;
+	margin: 20px;
+}
+@media(max-width: 479px) {
+	#approveBtn {
+		position: relative;
+	}
+}
+
+#approvedSection {
+	display: none;
 }
 
 /*___________index.html___________*/
@@ -416,6 +462,7 @@ table button {
 .btn-remove {
 	background: #aa0000;
 	color: white;
+	width: 110px;
 }
 
 .alertByButton::after {
@@ -488,4 +535,17 @@ table button {
 
 .countSpan {
 	/*color: maroon;*/
+}
+
+/*_________________approvals.html_________________*/
+
+.verifyBtn {
+	background-color: #ee7700;
+	width: 110px;
+	margin-left: 10%;
+	color: white;
+}
+
+.verified {
+	background-color: green;
 }
