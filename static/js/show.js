@@ -94,7 +94,7 @@ editBtn.addEventListener('click', (e) => {
 	};
 });
 
-//code below, if implemented, would allow for fields to be edited individually by double-clicking them
+// If implemented, the code below would allow for fields to be edited individually by double-clicking them
 
 // document.addEventListener('dblclick', (e)=>{
 // 	if (e.target.classList.contains('editable')) {

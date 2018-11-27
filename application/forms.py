@@ -8,3 +8,10 @@ class NameForm(forms.Form):
     confirmation_reciept = forms.FileField()
     RFI = forms.FileField()
     RFI_deadline = forms.DateField(initial=datetime.date.today)
+
+
+
+
+class UploadFileForm(forms.Form):
+    title = forms.CharField(max_length=50)
+    file = forms.FileField()

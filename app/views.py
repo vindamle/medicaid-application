@@ -1,9 +1,9 @@
 from django.http import HttpResponse
 from django.views import View
 from django.shortcuts import render
-from .forms import ApplicationForm
+from .forms import ApplicationForm, UploadFileForm
 from application.models import Facility,Alert, TrackingData
-
+import pandas as pd
 
 
 class HomeView(View):
@@ -113,7 +113,7 @@ class PendingView(View):
 
 
 class ShowView(View):
-    form_class = ApplicationForm
+    form_class = UploadFileForm
     template_name = "show.html"
     list = []
     tracklist = []
@@ -122,6 +122,7 @@ class ShowView(View):
 
     def get(self, request, *args, **kwargs):
         '''if GET  '''
+
         number= int(request.GET["patient_id"])
 
         results = Alert.objects.filter(patient_id = number)
@@ -145,16 +146,24 @@ class ShowView(View):
     def post(self, request, *args, **kwargs):
 
         '''if POST'''
-        facilities =Facility.objects.filter(downstate_upstate__isnull = False )
+        file = request.FILES.getlist('files')[0]
+        type = request.POST.get('file_type')
+        patient_id = request.POST.get('patient_id')
 
 
-        self.list = list()
-        for result in results:
-            facility = result.Facility
-
-            self.list.append(al.get_fields(result, facility))
-
-        return render(request,self.template_name, {'list':self.list, "alert_length":len(self.list) , "form":self.form_class, 'facilities':facilities, "tracklist":self.tracklist})
+        tracking = TrackingData.objects.get(patient_id = patient_id)
+        field = getattr(tracking, type)
+        # TODO  
+        field.save(str(patient_id),file)
+        tracking.save()
+        return HttpResponse("200")
+        # self.list = list()
+        # for result in results:
+        #     facility = result.Facility
+        #
+        #     self.list.append(al.get_fields(result, facility))
+        #
+        # return render(request,self.template_name, {'list':self.list, "alert_length":len(self.list) , "form":self.form_class, 'facilities':facilities, "tracklist":self.tracklist})
 
 
 class ApprovalsView(View):

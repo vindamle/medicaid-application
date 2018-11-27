@@ -3,10 +3,10 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-class Employee(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    department = models.CharField(max_length=100)
-
+# class Employee(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     department = models.CharField(max_length=100)
+#
 
 class Facility(models.Model):
     facility_id = models.AutoField(primary_key=True)
@@ -26,6 +26,7 @@ class Facility(models.Model):
         verbose_name_plural = 'Facilities'
 
 class Alert(models.Model):
+
     patient_id  = models.BigAutoField(primary_key=True)
     patient_number = models.IntegerField(null = True, blank = True)
     ssn = models.CharField(max_length=255, null=True, blank=True)
@@ -46,6 +47,15 @@ class Alert(models.Model):
     sex= models.CharField(max_length=2, null=True, blank=True)
     first_name_num = models.IntegerField(null = True, blank = True)
     last_name_num = models.IntegerField(null = True, blank = True)
+
+    address = models.CharField(max_length = 100, null = True, blank = True)
+    city = models.CharField(max_length = 50, null = True, blank = True)
+    state = models.CharField(max_length = 50, null = True, blank = True)
+    county = models.CharField(max_length = 50, null = True, blank = True)
+    zip = models.IntegerField(null = True, blank = True)
+    marital_status = models.CharField(max_length = 50, null = True, blank = True)
+
+
     # there will be others
     def __str__(self):
         return self.patient_id
@@ -56,21 +66,20 @@ class Alert(models.Model):
 
 
 class TrackingData(models.Model):
-    patient = models.OneToOneField(
+    tracking_id = models.AutoField(primary_key = True)
+    patient = models.ForeignKey(
         Alert,
         on_delete = models.CASCADE,
-        primary_key=True
     )
-    show_errors  = models.BooleanField(null = True, blank = True)
-    address = models.CharField(max_length = 100, null = True, blank = True)
-    city = models.CharField(max_length = 50, null = True, blank = True)
-    state = models.CharField(max_length = 50, null = True, blank = True)
-    zip = models.IntegerField(null = True, blank = True)
+
+    LTC = models.BooleanField(null = True, blank = True)
+    spousal = models.BooleanField(null = True, blank = True)
+    application_type = models.CharField(max_length = 50, null = True, blank = True)
+
+
     status = models.BooleanField(null = True, blank = True)
     is_medicaid_pending =  models.CharField(max_length = 50, null = True, blank = True)
-    medicaid_pickup_date = models.DateTimeField(null = True, blank = True)
 
-    application_type = models.CharField(max_length = 5, null = True, blank = True)
     date_of_medicaid_submission  = models.DateTimeField(null = True, blank = True)
     medicaid_application = models.FileField(upload_to = 'applications/',null = True, blank = True)
     medicaid_comfirmation = models.FileField(upload_to = 'applications/',null = True, blank = True)
@@ -85,10 +94,35 @@ class TrackingData(models.Model):
     medicaid_approval = models.FileField(upload_to = 'applications/',null = True, blank = True)
     date_of_medicaid_recertification  = models.DateTimeField(null = True, blank = True)
 
+    medicaid_pickup_date = models.DateTimeField(null = True, blank = True)
+    approval_start_date = models.DateTimeField(null = True, blank = True)
+    approval_end_date = models.DateTimeField(null = True, blank = True)
+    approval_notice_date = models.DateTimeField(null = True, blank = True)
+    estimated_nami = models.DecimalField(max_digits=10,decimal_places=2,null = True, blank = True)
+    copay  = models.DecimalField(max_digits=10,decimal_places=2,null = True, blank = True)
+    secondary_pays_copay  = models.DecimalField(max_digits=10,decimal_places=2,null = True, blank = True)
+    application_state = models.CharField(max_length = 50, null = True, blank = True)
+    application_county = models.CharField(max_length = 50, null = True, blank = True)
+    approval_verified  = models.BooleanField(null = True, blank = True)
+    fair_hearing_required  = models.BooleanField(null = True, blank = True)
+    fair_hearing_notice_date = models.DateTimeField(null = True, blank = True)
+    spousal_refusal  = models.BooleanField(null = True, blank = True)
+    appointment_required  = models.BooleanField(null = True, blank = True)
+    appointment_date = models.DateTimeField(null = True, blank = True)
+    dss_contact_address  = models.CharField(max_length = 100, null = True, blank = True)
+    dss_contact_phone  = models.CharField(max_length = 100, null = True, blank = True)
+    dss_contact_email = models.EmailField(max_length = 100, null = True, blank = True)
+    dss_contact_fax  = models.CharField(max_length = 100, null = True, blank = True)
+    notes_file = models.FileField(upload_to = 'applications/',null = True, blank = True)
     recertification_alert = models.BooleanField(null = True, blank = True)
-    # there will be others
-    def __str__(self):
-        return self.patient_id
+
+
+
+
+    #
+    # # there will be others
+    # def __str__(self):
+        # return self.patient_id
 
     class Meta:
         verbose_name = 'TrackingData'

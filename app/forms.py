@@ -13,3 +13,10 @@ class ApplicationForm(forms.Form):
     RFI = forms.FileField()
     RFI_issue_date = forms.DateField(initial=datetime.date.today)
     RFI_deadline = forms.DateField()
+
+
+
+
+class UploadFileForm(forms.Form):
+    title = forms.CharField(max_length=50)
+    files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
