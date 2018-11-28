@@ -3,7 +3,7 @@
 {% block title %}Approvals{% endblock %}
 
 {% block content %}
-<!-- <div class="content"> -->
+<div class="tableContainer">
   <h3>Approvals (<span class="countSpan" id="approvalsTableCount"></span>):</h3>
   <table id="approvalsTable">
     <thead>
@@ -30,14 +30,20 @@
         <td>{{obj.secondary_payor}}</td>
         <td>{{obj.approval_start_date}} - {{obj.approval_end_date}}</td>
         <td>?</td>
-        <td class="verifyBtnTd"><button class="verifyBtn">Not Verified</button></td>
+        <td class="verifyBtnTd">
+          {% if obj.approval_verified == False %}
+            <button class="verifyBtn">Not Verified</button>
+          {% else %}
+            <button class="verifyBtn verified">Verified &check;</button>
+          {% endif %}
+        </td>
         <td><a href="/show?patient_id={{obj.patient_id}}" class=""><button class="btn-tracked">Show</button></a></td>
         <td><button class="btn-ignore">Don't Track</button></td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
-<!-- </div> -->
+</div>
 
 {% endblock %}
 {% load static %}

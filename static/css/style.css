@@ -155,12 +155,13 @@ h3 {
 h4 {
 	color: #000055;
 }
-
 table {
-	display: block;
-	max-width: 1220px;
-	margin: 0 auto !important;
 	border-bottom: none !important;
+}
+ th {
+	display: inline-block;
+	margin: 0 auto !important;
+	
 }
 
 @media(max-width: 1399px) {
@@ -191,7 +192,7 @@ tbody tr:nth-of-type(odd) {
 	text-align: center;
 	font-size: 12px;
 	height: 10px;
-	width: 100px;
+	min-width: 100px !important;
 }
 
 th {
@@ -201,12 +202,15 @@ th {
 
 @media(min-width: 768px) {
 	th, td {
-		width: 150px;
-		height: 50px;
+		min-width: 150px !important;
 		font-size: initial;
 	}	
 	th {
 		font-size: 14px;
+		height: 25px;
+	}
+	td {
+		height: 50px;
 	}
 }
 
@@ -238,20 +242,25 @@ table button {
 }
 
 .invisible {
+	/*position: absolute;*/
 	visibility: hidden;
 }
 
 /*______________DataTables Styling______________*/
-
+.nav-tabs {
+	justify-content: center;
+}
 .dataTables_wrapper {
-	max-width: 1220px;
-	margin: auto;
+/*	max-width: 1220px;
+	margin-left: calc(50vw - 610px)*/
 }
 
-/*.dataTables_filter {
-	position: absolute;
-	margin-top: -40px;
-}*/
+.dataTables_filter {
+	/*position: absolute;
+	margin-top: -40px;*/
+	float: initial !important;
+	text-align: center !important;
+}
 
 /* width */
 ::-webkit-scrollbar {
@@ -277,6 +286,10 @@ table button {
 }
 
 /*____________Activity Page____________*/
+.tableContainer {
+	display: block;
+	text-align: center;
+}
 #activityCount {
 	display: inline-block;
 	position: relative;
@@ -363,9 +376,12 @@ table button {
 
 .residentInfoDiv span {
 	/*display: block;*/
-	color: darkblue;
 	margin-bottom: 3px;
 	font-weight: bold;
+}
+
+.residentInfoDiv span.editable {
+	color: darkblue;
 }
 
 .residentInfoDiv input {
@@ -411,6 +427,10 @@ table button {
 	color: white;
 	padding: 5px;
 	border-radius: 5px;
+}
+
+.absolute {
+	position: absolute;
 }
 
 #editBtn {

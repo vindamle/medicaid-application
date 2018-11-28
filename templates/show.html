@@ -27,23 +27,21 @@
 		<ul>
 			<div class="row">
 				<div class="col-lg-4">
-					<li><label>Resident Name:</label> <span class="editable">{{alert.first_name}} {{alert.last_name}}</span></li>
-					<li><label>Date of Birth:</label> <span class="editable date">{{alert.dob|date:"M d, Y"}}</span></li>
-					<li><label>Address:</label> <span class="editable">{{tracking.address}}</span></li>
+					<li><label>Resident Name:</label> <span class="">{{alert.first_name}} {{alert.last_name}}</span></li>
+					<li><label>Date of Birth:</label> <span class="">{{alert.dob|date:"F d, Y"}}</span></li>
+					<li><label>Address:</label> <span class="editable">{{alert.address}}</span></li>
 				</div>
 				<div class="col-lg-4">
-					<li><label>City:</label> <span class="editable">{{tracking.city}}</span></li>
-					<li><label>State:</label> <span class="editable">{{tracking.state}}</span></li>
-					<li><label>Zip:</label> <span class="editable">{{tracking.zip}}</span></li>
+					<li><label>City:</label> <span class="editable">{{alert.city}}</span></li>
+					<li><label>State:</label> <span class="editable">{{alert.state}}</span></li>
+					<li><label>Zip:</label> <span class="editable">{{alert.zip}}</span></li>
 				</div>
 
 				<div class="col-lg-4">			
-					<li><label>County:</label> <span class="editable">Unknown</span></li>
-					<li><label>Marital Status:</label> <span class="editable">Unknown</span></li>
-
-				<div class="col-lg-4">
-					<li><label>Facility:</label> <span class="editable">{{alert.facility}}</span></li>
-					<li class="invisible" id="patientId">{{alert.patient_id}}</li>
+					<li><label>County:</label> <span class="editable">{{alert.county}}</span></li>
+					<li><label>Marital Status:</label> <span class="editable">{{alert.marital_status}}</span></li>
+					<li><label>Facility:</label> <span class="">{{alert.facility}}</span></li>
+					<li class="invisible absolute" id="patientId">{{alert.patient_id}}</li>
 				</div>
 			</div>
 		</ul>
@@ -92,7 +90,18 @@
 						<label>Estimated NAMI/Income Contribution Amount:</label> 
 						<span class="editable">Unknown</span>
 					</li>
-					<li><label>Short-term/Long-Term Care:</label> <span class="editable">{{tracking.ltc}}</span></li>
+					<li>
+						<label>Short-term/Long-Term Care:</label> 
+						<span class="editable">
+							{% if tracking.LTC %}
+	   						Long-Term Care
+	  					{% elif tracking.LTC == False %}
+	   						Short-Term Care
+	   					{% else %}
+	   						Unknown
+							{% endif %}
+						</span>
+					</li>
 					<li><label>Spousal Refusal:</label> <span class="editable">Unknown</span></li>
 					
 				</div>
@@ -134,28 +143,20 @@
 				<div class="col-lg-4">
 					<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
 		  			{% csrf_token %}
-<<<<<<< HEAD
+
 						<label>Upload Medicaid Application Here:</label> 
 						<input type="file" name="medicaid_application" value="{{tracking.medicaid_application}}" accept="image/jpeg
 						,image/png,application/pdf" multiple>
-=======
-						<label>Upload Medicaid Application Here:</label>
-						<input type="file"  class = "form-control-file" name="files" multiple="multiple" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required/>
->>>>>>> a857fb8d372af282b38ddc9f446d2fb7853092a7
 						<input type="hidden" name="patient_id" value="{{alert.patient_id}}">
 						<input type="hidden" name="file_type" value="medicaid_application">
 						<button type="submit" class="uploadBtn">Upload</button>
 					</form>
 					<form class="fileInputLi" id="medicaid_comfirmation" method="post" enctype="multipart/form-data">
 			 			{% csrf_token %}
-<<<<<<< HEAD
+
 						<label>Upload Medicaid Confirmation Here:</label> 
 						<input type="file" name="medicaid_confirmation" value="{{tracking.medicaid_comfirmation}}" accept="image/jpeg
 						,image/png,application/pdf" multiple>
-=======
-						<label>Upload Medicaid Confirmation Here:</label>
-						<input type="file" name="medicaid_confirmation" value="{{tracking.medicaid_comfirmation}}" multiple>
->>>>>>> a857fb8d372af282b38ddc9f446d2fb7853092a7
 						<input type="hidden" name="patient_id" value="{{alert.patient_id}}">
 						<input type="hidden" name="file_type" value="medicaid_confirmation">
 						<button type="submit" class="uploadBtn">Upload</button>
@@ -164,14 +165,9 @@
 				<div class="col-lg-4">
 					<form class="fileInputLi" id="rfi" method="post" enctype="multipart/form-data">
 			 			{% csrf_token %}
-<<<<<<< HEAD
 						<label>Upload Medicaid RFI Here:</label> 
 						<input type="file" name="rfi" value="{{tracking.rfi}}" accept="image/jpeg
 						,image/png,application/pdf" multiple>
-=======
-						<label>Upload Medicaid RFI Here:</label>
-						<input type="file" name="rfi" value="{{tracking.rfi}}" multiple>
->>>>>>> a857fb8d372af282b38ddc9f446d2fb7853092a7
 						<input type="hidden" name="patient_id" value="{{alert.patient_id}}">
 						<input type="hidden" name="file_type" value="rfi">
 
@@ -180,14 +176,10 @@
 					</form>
 					<form class="fileInputLi" id="medicaid_approval" method="post" enctype="multipart/form-data">
 			 			{% csrf_token %}
-<<<<<<< HEAD
+
 						<label>Upload Medicaid Approval Here:</label> 
 						<input type="file" name="medicaid_approval" value="{{tracking.medicaid_approval}}" accept="image/jpeg
 						,image/png,application/pdf" multiple>
-=======
-						<label>Upload Medicaid Approval Here:</label>
-						<input type="file" name="medicaid_approval" value="{{tracking.medicaid_approval}}" multiple>
->>>>>>> a857fb8d372af282b38ddc9f446d2fb7853092a7
 						<input type="hidden" name="patient_id" value="{{alert.patient_id}}">
 						<input type="hidden" name="file_type" value="medicaid_approval">
 						<button type="submit" class="uploadBtn">Upload</button>

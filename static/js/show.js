@@ -1,4 +1,5 @@
 //file upload button functionality
+//
 // const patientId = document.querySelector("#patientId").innerHTML;
 // const uploadFile = (fileType, file) => {
 // 	const ajaxCall = $.ajax(
@@ -20,7 +21,6 @@
 // 	});
 // 	return(ajaxCall);
 // };
-
 // $('.uploadBtn').click((e) => {
 // 	li = e.target.parentNode;
 // 	const fileType = li.id;
@@ -33,102 +33,106 @@
 // 	};	
 // });
 
-
-// $('.editable').dblclick((e) => {
-// 	const	editableItem = e.target;
-// 	const input = document.createElement('input');
-// 	input.type = 'text';
-// 	input.value = editableItem.textContent;
-// 	input.className = 'editable';
-// 	const parent = editableItem.parentNode;
-// 	parent.insertBefore(input, editableItem);
-// 	parent.removeChild(editableItem);
-// 	parent.style.borderBottom="none";
-// });
-
-
 // Toggle fields in and out of editable state on show pages
-const editBtn = document.querySelector("#editBtn");
-editBtn.addEventListener('click', (e) => {	
-	const editableItems = document.querySelectorAll('.editable');
-	if (editBtn.textContent == 'Edit') {
-			for (var i = 0; i < editableItems.length; i++) {
-			const	editableItem = editableItems[i]
-			const input = document.createElement('input');
-			input.className = 'editable';
-			if (editableItem.classList.contains('date')) {
-				input.type = 'date';
-				input.classList.add('date');
-			} else {
-				input.type = 'text';
-			};
-			input.value = editableItem.textContent;
+
+// const editBtn = document.querySelector("#editBtn");
+// editBtn.addEventListener('click', (e) => {	
+// 	const editableItems = document.querySelectorAll('.editable');
+// 	if (editBtn.textContent == 'Edit') {
+// 			for (var i = 0; i < editableItems.length; i++) {
+// 			const	editableItem = editableItems[i]
+// 			const input = document.createElement('input');
+// 			input.className = 'editable';
+// 			if (editableItem.classList.contains('date')) {
+// 				input.type = 'date';
+// 				input.classList.add('date');
+// 			} else {
+// 				input.type = 'text';
+// 			};
+// 			input.value = editableItem.textContent;
 			
-			const parent = editableItem.parentNode;
-			parent.insertBefore(input, editableItem);
-			parent.removeChild(editableItem);
-			parent.style.borderBottom="none";
-			const ul = parent.parentNode;
-			ul.style.textAlign = 'right';
-			editBtn.textContent = 'Save';
-			editBtn.classList.toggle('saveBtn');
+// 			const parent = editableItem.parentNode;
+// 			parent.insertBefore(input, editableItem);
+// 			parent.removeChild(editableItem);
+// 			parent.style.borderBottom="none";
+// 			const ul = parent.parentNode;
+// 			ul.style.textAlign = 'right';
+// 			editBtn.textContent = 'Save';
+// 			editBtn.classList.toggle('saveBtn');
+// 		};
+// 	} else if (editBtn.textContent == 'Save') {
+// 			for (var i = 0; i < editableItems.length; i++) {
+// 			const editableItem = editableItems[i]
+// 			const span = document.createElement('span');
+// 			span.textContent = editableItem.value;
+// 			span.className = 'editable';
+// 			if (editableItem.classList.contains('date')) {
+// 				span.classList.add('date');
+// 			};
+// 			const parent = editableItem.parentNode;
+// 			parent.insertBefore(span, editableItem);
+// 			parent.removeChild(editableItem);
+// 			parent.style.borderBottom="1px solid #ddd";
+// 			const ul = parent.parentNode;
+// 			ul.style.textAlign = 'left';
+// 			editBtn.textContent = 'Edit';
+// 			editBtn.classList.toggle('saveBtn');
+// 		};
+// 	};
+// });
+const replaceInputWithSpan = input => {
+	const span = document.createElement('span');
+	span.textContent = input.value;
+	span.className = 'editable';
+	if (input.classList.contains('date')) {
+		span.classList.add('date');
+	};
+	const parent = input.parentNode;
+	parent.insertBefore(span, input);
+	parent.removeChild(input);
+	parent.style.borderBottom="1px solid #ddd";
+}
+
+const replaceSpanWithInput = span => {
+		const input = document.createElement('input');
+		input.className = 'editable';
+		if (span.classList.contains('date')) {
+			input.type = 'date';
+			input.classList.add('date');
+		} else {
+			input.type = 'text';
 		};
-	} else if (editBtn.textContent == 'Save') {
-			for (var i = 0; i < editableItems.length; i++) {
-			const editableItem = editableItems[i]
-			const span = document.createElement('span');
-			span.textContent = editableItem.value;
-			span.className = 'editable';
-			if (editableItem.classList.contains('date')) {
-				span.classList.add('date');
-			};
-			const parent = editableItem.parentNode;
-			parent.insertBefore(span, editableItem);
-			parent.removeChild(editableItem);
-			parent.style.borderBottom="1px solid #ddd";
-			const ul = parent.parentNode;
-			ul.style.textAlign = 'left';
-			editBtn.textContent = 'Edit';
-			editBtn.classList.toggle('saveBtn');
-		};
+		input.value = span.textContent;
+		const parent = span.parentNode;
+		parent.insertBefore(input, span);
+		parent.removeChild(span);
+		parent.style.borderBottom="none";
+
+		//Pressing 'Enter' leaves editing mode
+		input.addEventListener('keyup',function(e){
+	    if (e.keyCode === 13) {
+		    replaceInputWithSpan(input);
+		  };
+		});
+}
+
+// If implemented, the code below would allow for fields to be individually toggled in and out of editing mode by double-clicking them
+
+document.addEventListener('dblclick', (e)=>{
+	if (e.target.tagName == "SPAN" && e.target.classList.contains('editable')) {
+		// leave editing mode of other inputs
+		const activeInputs = document.querySelectorAll('INPUT.editable');
+		for (var i = 0; i < activeInputs.length; i++) {
+			const input = activeInputs[i];
+			replaceInputWithSpan(input);
+		}
+		const span = e.target;
+		replaceSpanWithInput(span);
 	};
 });
 
-// If implemented, the code below would allow for fields to be edited individually by double-clicking them
 
-// document.addEventListener('dblclick', (e)=>{
-// 	if (e.target.classList.contains('editable')) {
-// 		const editableItem = e.target;
-// 		const input = document.createElement('input');
-// 		input.className = 'editable';
-// 		if (editableItem.classList.contains('date')) {
-// 			input.type = 'date';
-// 			input.classList.add('date');
-// 		} else {
-// 			input.type = 'text';
-// 		};
-// 		input.value = editableItem.textContent;
-// 		const parent = editableItem.parentNode;
-// 		parent.insertBefore(input, editableItem);
-// 		parent.removeChild(editableItem);
-// 		parent.style.borderBottom="none";
-
-// 		input.addEventListener('keyup',function(e){
-// 	    if (e.keyCode === 13) {
-// 		    const span = document.createElement('span');
-// 				span.textContent = input.value;
-// 				span.className = 'editable';
-// 				if (input.classList.contains('date')) {
-// 					span.classList.add('date');
-// 				};
-// 				const parent = input.parentNode;
-// 				parent.insertBefore(span, input);
-// 				parent.removeChild(input);
-// 				parent.style.borderBottom="1px solid #ddd";
-// 		  };
-// 		});
-// 	};
-// });
+// Approve Button toggles display of Approval Information Section
 
 $('#approveBtn').click((e) => {
 	btn = e.target;
