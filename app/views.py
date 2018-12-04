@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.shortcuts import render
 from .forms import ApplicationForm, UploadFileForm
-from application.models import Facility,Patient, ApplicationTracking, Alert
+from application.models import Facility,Resident, ApplicationTracking, Alert
 import pandas as pd
 
 
@@ -16,7 +16,7 @@ class HomeView(View):
     def get(self, request, *args, **kwargs):
         '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-        results = Patient.objects.filter(tracking_status = True)
+        results = Resident.objects.filter(tracking_status = True)
         self.list = list()
 
         for result in results:
@@ -49,9 +49,9 @@ class ActivityView(View):
     def get(self, request, *args, **kwargs):
         '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-        new_admission_results = Patient.objects.filter(tracking_status = None, activity_type = 'A')
-        payor_change_results = Patient.objects.filter(tracking_status = None, activity_type = 'P')
-        discharge_results = Patient.objects.filter(tracking_status = None, activity_type = 'D')
+        new_admission_results = Resident.objects.filter(tracking_status = None, activity_type = 'A')
+        payor_change_results = Resident.objects.filter(tracking_status = None, activity_type = 'P')
+        discharge_results = Resident.objects.filter(tracking_status = None, activity_type = 'D')
         self.payor_change_list = []
         self.new_admission_list = []
         self.discharge_list = []
@@ -127,7 +127,7 @@ class ShowView(View):
 
         number= int(request.GET["patient_id"])
 
-        results = Patient.objects.filter(patient_id = number)
+        results = Resident.objects.filter(patient_id = number)
 
         self.list = list()
 
@@ -179,7 +179,7 @@ class ApprovalsView(View):
     def get(self, request, *args, **kwargs):
         '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-        results = Patient.objects.filter(tracking_status = True)
+        results = Resident.objects.filter(tracking_status = True)
         self.list = list()
 
         for result in results:
@@ -211,7 +211,7 @@ class NotTrackingView(View):
     def get(self, request, *args, **kwargs):
         '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-        results = Patient.objects.filter(tracking_status = False)
+        results = Resident.objects.filter(tracking_status = False)
         self.list = list()
 
         for result in results:

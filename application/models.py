@@ -25,7 +25,7 @@ class Facility(models.Model):
         verbose_name = 'Facilities'
         verbose_name_plural = 'Facilities'
 
-class Patient(models.Model):
+class Resident(models.Model):
 
     patient_id  = models.BigAutoField(primary_key=True)
     patient_number = models.IntegerField(null = True, blank = True)
@@ -61,14 +61,14 @@ class Patient(models.Model):
         return self.patient_id
 
     class Meta:
-        verbose_name = 'Patients'
-        verbose_name_plural = 'Patients'
+        verbose_name = 'Residents'
+        verbose_name_plural = 'Residents'
 
 
 class ApplicationTracking(models.Model):
     tracking_id = models.AutoField(primary_key = True)
     patient = models.ForeignKey(
-        Patient,
+        Resident,
         on_delete = models.CASCADE,
     )
     LTC = models.BooleanField(null = True, blank = True)
@@ -124,7 +124,7 @@ class ApplicationTracking(models.Model):
 class Alert(models.Model):
     alert_id = models.AutoField(primary_key = True)
     patient = models.ForeignKey(
-        Patient,
+        Resident,
         on_delete = models.CASCADE,
     )
     application = models.ForeignKey(
@@ -135,5 +135,3 @@ class Alert(models.Model):
     alert_priority = models.IntegerField(null=False,blank=False)
     alert_status =models.BooleanField(default = False)
     alert_message =models.CharField(max_length = 100,  null = False, blank=False)
-
-    

@@ -5,7 +5,7 @@ from django.views import generic
 from .forms import NameForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .models import Patient, ApplicationTracking, Alert
+from .models import Resident, ApplicationTracking, Alert
 from .additionalInfo import AdditionalInfo
 
 class signup(generic.CreateView):
@@ -36,7 +36,7 @@ def update_list(request):
         requested_patient_id = request.GET['patient_id']
         track = request.GET['tracking']
         requested_patient_id = int(requested_patient_id)
-        alert = Patient.objects.get(patient_id = requested_patient_id)
+        alert = Resident.objects.get(patient_id = requested_patient_id)
 
         if track == "true":
             alert.tracking_status = True
