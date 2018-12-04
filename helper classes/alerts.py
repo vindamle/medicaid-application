@@ -62,11 +62,11 @@ class Alerts:
             obj = self.get_fields(alert)
 
 
-            insert_stmt = insert(self.meta.tables['application_patient']).values(obj)
+            insert_stmt = insert(self.meta.tables['application_resident']).values(obj)
 
 
             stmt = insert_stmt.on_conflict_do_update(
-                constraint = 'application_alert_pkey',
+                constraint = 'application_resident_pkey',
                 set_ = obj
             )
             self.con.execute(stmt)

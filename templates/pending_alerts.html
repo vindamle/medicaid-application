@@ -42,13 +42,13 @@
         <tbody>
           {% for obj in list%}
           <tr>
-            <td>{{obj.first_name}}</td>
-            <td>{{obj.last_name}}</td>
-            <td>{{obj.facility}}</td>
+            <td>{{obj.patient.first_name}}</td>
+            <td>{{obj.patient.last_name}}</td>
+            <td>{{obj.patient.facility}}</td>
             <td>{{obj.primary_payor}}</td>
             <td>{{obj.secondary_payor}}</td>
-            <td>RFI Due in 10 Days</td>
-            <td>{{obj.activity_date}}</td>
+            <td>{{obj.alert_message}}</td>
+            <td>{{obj.alert_priority}}</td>
             <td>{{obj.county}}</td>
             <td><a href="/show?patient_id={{obj.patient_id}}" class=""><button class="btn-alert">Show</button></a></td>
           </tr>

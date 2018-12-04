@@ -46,7 +46,7 @@ def update_list(request):
                 patient =alert,
                 application = None,
                 alert_priority = 1,
-                alert_message = "Tracking Alert: Not Started."
+                alert_message = "Application Not Started"
             )
             alert.save()
 
