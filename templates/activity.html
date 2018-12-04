@@ -40,7 +40,7 @@
         </thead>
         <tbody>
           {% for obj in list %}
-          <tr id="{{obj.patient_id}}">
+          <tr id="{{obj.resident_id}}">
             <td>{{obj.first_name}}</td>
             <td>{{obj.last_name}}</td>
             <td>{{obj.facility}}</td>
@@ -70,7 +70,7 @@
         </thead>
         <tbody>
           {% for obj in payor_change %}
-          <tr id="{{obj.patient_id}}">
+          <tr id="{{obj.resident_id}}">
             <td>{{obj.first_name}}</td>
             <td>{{obj.last_name}}</td>
             <td>{{obj.facility}}</td>
@@ -100,7 +100,7 @@
         </thead>
         <tbody>
           {% for obj in discharge %}
-          <tr id="{{obj.patient_id}}">
+          <tr id="{{obj.resident_id}}">
             <td>{{obj.first_name}}</td>
             <td>{{obj.last_name}}</td>
             <td>{{obj.facility}}</td>

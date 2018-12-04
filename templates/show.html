@@ -41,7 +41,7 @@
 					<li class="editableLi"><label>County:</label> <span class="editable" id="county">{{alert.county}}</span></li>
 					<li class="editableLi"><label>Marital Status:</label> <span class="editable" id="marital_status">{{alert.marital_status}}</span></li>
 					<li><label>Facility:</label> <span class="">{{alert.facility}}</span></li>
-					<li class="invisible absolute" id="patientId">{{alert.patient_id}}</li>
+					<li class="invisible absolute" id="residentId">{{alert.resident_id}}</li>
 				</div>
 			</div>
 		</ul>
@@ -147,7 +147,7 @@
 						<label>Upload Medicaid Application Here:</label>
 						<input type="file" name="medicaid_application" value="{{tracking.medicaid_application}}" accept="image/jpeg
 						,image/png,application/pdf" multiple>
-						<input type="hidden" name="patient_id" value="{{alert.patient_id}}">
+						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
 						<input type="hidden" name="file_type" value="medicaid_application">
 						<button type="submit" class="uploadBtn">Upload</button>
 					</form>
@@ -157,7 +157,7 @@
 						<label>Upload Medicaid Confirmation Here:</label>
 						<input type="file" name="medicaid_confirmation" value="{{tracking.medicaid_comfirmation}}" accept="image/jpeg
 						,image/png,application/pdf" multiple>
-						<input type="hidden" name="patient_id" value="{{alert.patient_id}}">
+						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
 						<input type="hidden" name="file_type" value="medicaid_confirmation">
 						<button type="submit" class="uploadBtn">Upload</button>
 					</form>
@@ -168,7 +168,7 @@
 						<label>Upload Medicaid RFI Here:</label>
 						<input type="file" name="rfi" value="{{tracking.rfi}}" accept="image/jpeg
 						,image/png,application/pdf" multiple>
-						<input type="hidden" name="patient_id" value="{{alert.patient_id}}">
+						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
 						<input type="hidden" name="file_type" value="rfi">
 
 
@@ -180,7 +180,7 @@
 						<label>Upload Medicaid Approval Here:</label>
 						<input type="file" name="medicaid_approval" value="{{tracking.medicaid_approval}}" accept="image/jpeg
 						,image/png,application/pdf" multiple>
-						<input type="hidden" name="patient_id" value="{{alert.patient_id}}">
+						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
 						<input type="hidden" name="file_type" value="medicaid_approval">
 						<button type="submit" class="uploadBtn">Upload</button>
 					</form>

@@ -32,8 +32,8 @@ class Alerts:
     def get_fields(self, result):
 
         return dict(
-            patient_id = getattr(result, "Facility_Skey")*(10**7) + getattr(result,"PatientID"),
-            patient_number = getattr(result,"PatientID"),
+            resident_id = getattr(result, "Facility_Skey")*(10**7) + getattr(result,"PatientID"),
+            resident_number = getattr(result,"PatientID"),
             ssn = getattr(result, "SSN"),
             first_name = getattr(result, "FirstName").capitalize(),
             last_name = getattr(result, "LastName").capitalize(),

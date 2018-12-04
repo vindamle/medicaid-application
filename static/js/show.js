@@ -119,7 +119,7 @@ $('#approveBtn').click((e) => {
 
 // File upload button functionality (NOTE: possibly irrelevant - it may not be possible to ajax file uploads)
 //
-// const patientId = document.querySelector("#patientId").innerHTML;
+// const residentId = document.querySelector("#residentId").innerHTML;
 // const uploadFile = (fileType, file) => {
 // 	const ajaxCall = $.ajax(
 // 	{
@@ -128,7 +128,7 @@ $('#approveBtn').click((e) => {
 // 		contentType: false,
 // 		processData: false,
 // 		data:{
-// 			patient_id: patientId,
+// 			resident_id: residentId,
 // 			fileType: fileType,
 // 			file: file
 // 		},

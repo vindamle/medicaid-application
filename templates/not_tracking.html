@@ -20,14 +20,14 @@
     </thead>
     <tbody>
       {% for obj in list%}
-      <tr id="{{obj.patient_id}}">
+      <tr id="{{obj.resident_id}}">
         <td>{{obj.first_name}}</td>
         <td>{{obj.last_name}}</td>
         <td>{{obj.facility}}</td>
         <td>{{obj.primary_payor}}</td>
         <td>{{obj.secondary_payor}}</td>
         <td>{{obj.activity_date}}</td>
-        <!-- <td><a href="/show?patient_id={{obj.patient_id}}" class="alertByButton"><button class="btn-danger">Show</button></a></td> -->
+        <!-- <td><a href="/show?resident_id={{obj.resident_id}}" class="alertByButton"><button class="btn-danger">Show</button></a></td> -->
         <td><button class="btn-track">Start Tracking</button></td>
       </tr>
       {% endfor %}

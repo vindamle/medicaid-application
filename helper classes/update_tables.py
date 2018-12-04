@@ -21,5 +21,5 @@ database_url = 'postgresql://{user}:{password}@localhost:5432/{database_name}'.f
 )
 
 engine = create_engine(database_url, echo=False)
-query = 'SELECT * FROM application_patient'
+query = 'SELECT * FROM application_resident'
 pd.read_sql()
