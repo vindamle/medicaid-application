@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.shortcuts import render
 from .forms import ApplicationForm, UploadFileForm
-from application.models import Facility,Alert, TrackingData
+from application.models import Facility,Resident, ApplicationTracking, Alert
 import pandas as pd
 
 
@@ -16,7 +16,7 @@ class HomeView(View):
     def get(self, request, *args, **kwargs):
         '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-        results = Alert.objects.filter(tracking_status = True)
+        results = Resident.objects.filter(tracking_status = True)
         self.list = list()
 
         for result in results:
@@ -49,9 +49,9 @@ class ActivityView(View):
     def get(self, request, *args, **kwargs):
         '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-        new_admission_results = Alert.objects.filter(tracking_status = None, activity_type = 'A')
-        payor_change_results = Alert.objects.filter(tracking_status = None, activity_type = 'P')
-        discharge_results = Alert.objects.filter(tracking_status = None, activity_type = 'D')
+        new_admission_results = Resident.objects.filter(tracking_status = None, activity_type = 'A')
+        payor_change_results = Resident.objects.filter(tracking_status = None, activity_type = 'P')
+        discharge_results = Resident.objects.filter(tracking_status = None, activity_type = 'D')
         self.payor_change_list = []
         self.new_admission_list = []
         self.discharge_list = []
@@ -89,13 +89,15 @@ class PendingView(View):
 
     def get(self, request, *args, **kwargs):
         '''if GET  '''
-        facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-        results = Alert.objects.filter(tracking_status = True)
+
+        alerts = Alert.objects.filter(alert_status = False)
         self.list = list()
 
-        for result in results:
-            self.list.append(result)
-        return render(request,self.template_name, {'list':self.list,"form":self.form_class, 'facilities':facilities})
+        for alert in alerts:
+            print(alert.patient.patient_id)
+            self.list.append(alert)
+        print(self.list)
+        return render(request,self.template_name, {'list':self.list,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
 
@@ -125,7 +127,7 @@ class ShowView(View):
 
         number= int(request.GET["patient_id"])
 
-        results = Alert.objects.filter(patient_id = number)
+        results = Resident.objects.filter(patient_id = number)
 
         self.list = list()
 
@@ -133,11 +135,11 @@ class ShowView(View):
             alert = result
 
 
-        results = TrackingData.objects.filter(patient_id = number)
+        # results = ApplicationTracking.objects.filter(patient_id = number)
 
         for result in results:
 
-            tracking = result
+            tracking = None
 
 
 
@@ -151,9 +153,9 @@ class ShowView(View):
         patient_id = request.POST.get('patient_id')
 
 
-        tracking = TrackingData.objects.get(patient_id = patient_id)
+        tracking = ApplicationTracking.objects.get(patient_id = patient_id)
         field = getattr(tracking, type)
-        # TODO  
+        # TODO
         field.save(str(patient_id),file)
         tracking.save()
         return HttpResponse("200")
@@ -177,7 +179,7 @@ class ApprovalsView(View):
     def get(self, request, *args, **kwargs):
         '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-        results = Alert.objects.filter(tracking_status = True)
+        results = Resident.objects.filter(tracking_status = True)
         self.list = list()
 
         for result in results:
@@ -209,7 +211,7 @@ class NotTrackingView(View):
     def get(self, request, *args, **kwargs):
         '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-        results = Alert.objects.filter(tracking_status = False)
+        results = Resident.objects.filter(tracking_status = False)
         self.list = list()
 
         for result in results:

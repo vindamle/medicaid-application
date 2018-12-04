@@ -50,8 +50,6 @@ class Alerts:
             activity_type = getattr(result, "Actual_Activity_Type_Flag"),
             sex = getattr(result, 'Sex'),
 
-            first_name_num = getattr(result, "FirstName_Ascii"),
-            last_name_num = getattr(result, "LastName_Ascii"),
 
             tracking_status = None,
 
@@ -64,7 +62,7 @@ class Alerts:
             obj = self.get_fields(alert)
 
 
-            insert_stmt = insert(self.meta.tables['application_alert']).values(obj)
+            insert_stmt = insert(self.meta.tables['application_patient']).values(obj)
 
 
             stmt = insert_stmt.on_conflict_do_update(
