@@ -5,7 +5,7 @@ from django.views import generic
 from .forms import NameForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .models import Alert, TrackingData
+from .models import Patient, ApplicationTracking, Alert
 from .additionalInfo import AdditionalInfo
 
 class signup(generic.CreateView):
@@ -36,19 +36,29 @@ def update_list(request):
         requested_patient_id = request.GET['patient_id']
         track = request.GET['tracking']
         requested_patient_id = int(requested_patient_id)
-        alert = Alert.objects.get(patient_id = requested_patient_id)
+        alert = Patient.objects.get(patient_id = requested_patient_id)
 
         if track == "true":
             alert.tracking_status = True
+
+
+            Alert.objects.create(
+                patient =alert,
+                application = None,
+                alert_priority = 1,
+                alert_message = "Tracking Alert: Not Started."
+            )
             alert.save()
 
-            patient_info = AdditionalInfo()
-            results = patient_info.get_Info(alert.patient_number, alert.facility_id, alert.ssn)
-            for result in results:
-                TrackingData.objects.create(
-                    patient = alert,
-                    is_medicaid_pending = result.IsMedicaidPending,
-                )
+
+            # patient_info = AdditionalInfo()
+            # results = patient_info.get_Info(alert.patient_number, alert.facility_id, alert.ssn)
+            # for result in results:
+            #     ApplicationTracking.objects.create(
+            #         patient = alert,
+            #         is_medicaid_pending = result.IsMedicaidPending,
+            #         approval_verified = False,
+            #     )
 
         elif track == "false":
             alert.tracking_status = False
@@ -57,9 +67,18 @@ def update_list(request):
     else:
         return HttpResponse("Request method is not a GET")
 
-def file_upload(request):
+def approval_verified(request):
     if request.method == 'GET':
-        print(request.POST['medicaidApplicationFile'])
+        patient_id =int(request.GET['patient_id'])
+
+        application = ApplicationTracking.objects.get(patient = patient_id)
+        print(application)
+        if request.GET['approval_verified'] == "True":
+            application.approval_verified = True
+            application.save()
+        else:
+            application.approval_verified = False
+            application.save()
 
         return HttpResponse("200")
     else:

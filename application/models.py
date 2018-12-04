@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -25,7 +25,7 @@ class Facility(models.Model):
         verbose_name = 'Facilities'
         verbose_name_plural = 'Facilities'
 
-class Alert(models.Model):
+class Patient(models.Model):
 
     patient_id  = models.BigAutoField(primary_key=True)
     patient_number = models.IntegerField(null = True, blank = True)
@@ -45,8 +45,8 @@ class Alert(models.Model):
     activity_type = models.CharField(max_length=2, null=True, blank=True)
     tracking_status = models.BooleanField(null = True, blank = True)
     sex= models.CharField(max_length=2, null=True, blank=True)
-    first_name_num = models.IntegerField(null = True, blank = True)
-    last_name_num = models.IntegerField(null = True, blank = True)
+    # first_name_num = models.IntegerField(null = True, blank = True)
+    # last_name_num = models.IntegerField(null = True, blank = True)
 
     address = models.CharField(max_length = 100, null = True, blank = True)
     city = models.CharField(max_length = 50, null = True, blank = True)
@@ -61,17 +61,16 @@ class Alert(models.Model):
         return self.patient_id
 
     class Meta:
-        verbose_name = 'Alerts'
-        verbose_name_plural = 'Alerts'
+        verbose_name = 'Patients'
+        verbose_name_plural = 'Patients'
 
 
-class TrackingData(models.Model):
+class ApplicationTracking(models.Model):
     tracking_id = models.AutoField(primary_key = True)
     patient = models.ForeignKey(
-        Alert,
+        Patient,
         on_delete = models.CASCADE,
     )
-
     LTC = models.BooleanField(null = True, blank = True)
     spousal = models.BooleanField(null = True, blank = True)
     application_type = models.CharField(max_length = 50, null = True, blank = True)
@@ -117,13 +116,24 @@ class TrackingData(models.Model):
     recertification_alert = models.BooleanField(null = True, blank = True)
 
 
-
-
-    #
-    # # there will be others
-    # def __str__(self):
-        # return self.patient_id
-
     class Meta:
-        verbose_name = 'TrackingData'
-        verbose_name_plural = 'TrackingData'
+        verbose_name = 'ApplicationTracking'
+        verbose_name_plural = 'ApplicationTracking'
+
+
+class Alert(models.Model):
+    alert_id = models.AutoField(primary_key = True)
+    patient = models.ForeignKey(
+        Patient,
+        on_delete = models.CASCADE,
+    )
+    application = models.ForeignKey(
+        ApplicationTracking,
+        on_delete = models.CASCADE,
+        null = True,
+    )
+    alert_priority = models.IntegerField(null=False,blank=False)
+    alert_status =models.BooleanField(default = False)
+    alert_message =models.CharField(max_length = 100,  null = False, blank=False)
+
+    

@@ -1,20 +1,25 @@
-from db import Db
+
+import pandas as pd
+from sqlalchemy import *
+
+from dotenv import load_dotenv
+from os.path import join, dirname, os
 from datetime import datetime
 
-db = Db()
-connection = db.connect_postgres()
 
-conn = connection[0]
-meta = connection[1]
+dotenv_path = join(dirname(__file__), '../.env')
+load_dotenv(dotenv_path)
 
+user = os.getenv("POSTGRES_USERNAME")
+password = os.getenv("POSTGRES_PASSWORD")
+database_name = os.getenv("POSTGRES_DATABASE")
 
-table = meta.tables['application_trackingdata']
+database_url = 'postgresql://{user}:{password}@localhost:5432/{database_name}'.format(
+    user=user,
+    password=password,
+    database_name=database_name,
+)
 
-
-querySTR = table.select().where(datetime.now().strftime("%Y-%m-%d")-table.c.date_of_medicaid_approval.strftime("%Y-%m-%d")>0)
-
-print(datetime.now().strftime("%Y-%m-%d"))
-# update_statement = meta.tables['application_trackingdata'].update().where(meta.tables['application_trackingdata'].c.date_of_deadline - datetime.date() <10).values(rfi_deadline_alert = True)
-results = conn.execute(querySTR)
-for result in results:
-    print(result)
+engine = create_engine(database_url, echo=False)
+query = 'SELECT * FROM application_patient'
+pd.read_sql()
