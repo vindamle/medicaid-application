@@ -9,7 +9,7 @@ const verifyOrUnverify = (row, trueOrFalse) => {
 		},
 		success: function() 
 		{
-			console.log("aprroval set to " + trueOrFalse)
+			console.log("approval set to " + trueOrFalse)
 		}
 	});
 	return(ajaxCall);

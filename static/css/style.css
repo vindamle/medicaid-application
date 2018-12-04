@@ -139,6 +139,8 @@ nav li.grayText {
 
 .content {
 	display: none;
+	width: 95vw;
+	margin-left: 2.5vw;
 }
 
 h2, h3, h4 {
@@ -159,7 +161,7 @@ table {
 	border-bottom: none !important;
 }
  th {
-	display: inline-block;
+	/*display: inline-block;*/
 	margin: 0 auto !important;
 	
 }
@@ -173,7 +175,7 @@ table {
 }
 
 tbody {
-	display: inline-block;
+	/*display: inline-block;*/
 	border-radius: 10px;
 	overflow-y: auto;
 	max-height: 500px;
@@ -188,11 +190,11 @@ tbody tr:nth-of-type(odd) {
 }
 
  th, td {
-	padding: 5px !important;
+	padding: 5px 10px !important;
 	text-align: center;
 	font-size: 12px;
 	height: 10px;
-	min-width: 100px !important;
+	/*min-width: 100px !important;*/
 }
 
 th {
@@ -202,11 +204,11 @@ th {
 
 @media(min-width: 768px) {
 	th, td {
-		min-width: 150px !important;
+		/*min-width: 150px !important;*/
 		font-size: initial;
 	}	
 	th {
-		font-size: 14px;
+		/*font-size: 14px;*/
 		height: 25px;
 	}
 	td {
@@ -239,11 +241,16 @@ table button {
 .btn-ignore {
 	background: #aa0000;
 	color: white;
+  min-width: 110px;
 }
 
 .invisible {
 	/*position: absolute;*/
 	visibility: hidden;
+}
+
+.centered {
+	text-align: center;
 }
 
 /*______________DataTables Styling______________*/
@@ -319,9 +326,9 @@ table button {
 /*_____________show page_____________*/
 @media (min-width: 768px) {
 	.residentInfoDiv {
-		margin: 20px;
-		width: 80vw;
-		margin-left: 10vw;
+		margin: 20px auto;
+		/*width: 80vw;*/
+		/*margin-left: 10vw;*/
 	}
 }
 
@@ -350,8 +357,14 @@ table button {
 	box-shadow: 5px 5px 5px #ccc;
 	/*border-radius: 25px;*/
 	padding: 15px 25px 0 25px;
-	font-size: calc(14px + (24 - 22)*(100vw - 600px)/(1200 - 600));
+	/*font-size: 16px;*/
 	margin-bottom: 20px;
+}
+
+@media(min-width: 768px) {
+	.residentInfoDiv {
+		font-size: 18px;
+	}
 }
 
 .residentInfoDiv ul {
@@ -439,6 +452,7 @@ table button {
 	width: 100px;
 	top: 100px;
 	right: 250px;
+	display: none;
 }
 
 .alertDiv {
@@ -485,7 +499,7 @@ table button {
 	width: 110px;
 }
 
-.alertByButton::after {
+/*.alertByButton::after {
 	color: white;
 	content: '!';
 	font-weight: bold;
@@ -496,7 +510,7 @@ table button {
 	position: relative;
 	top: -15px;
 	left: -10px;
-}
+}*/
 /*
 .alertByButton:hover::after {
 	color: maroon;
