@@ -27,8 +27,8 @@ class Facility(models.Model):
 
 class Resident(models.Model):
 
-    patient_id  = models.BigAutoField(primary_key=True)
-    patient_number = models.IntegerField(null = True, blank = True)
+    resident_id  = models.BigAutoField(primary_key=True)
+    resident_number = models.IntegerField(null = True, blank = True)
     ssn = models.CharField(max_length=255, null=True, blank=True)
     dob = models.DateTimeField(null=True, blank=True)
     first_name = models.CharField(max_length=50, null=True, blank=True)
@@ -58,7 +58,7 @@ class Resident(models.Model):
 
     # there will be others
     def __str__(self):
-        return self.patient_id
+        return self.resident_id
 
     class Meta:
         verbose_name = 'Residents'
@@ -67,7 +67,7 @@ class Resident(models.Model):
 
 class ApplicationTracking(models.Model):
     tracking_id = models.AutoField(primary_key = True)
-    patient = models.ForeignKey(
+    resident = models.ForeignKey(
         Resident,
         on_delete = models.CASCADE,
     )
@@ -123,7 +123,7 @@ class ApplicationTracking(models.Model):
 
 class Alert(models.Model):
     alert_id = models.AutoField(primary_key = True)
-    patient = models.ForeignKey(
+    resident = models.ForeignKey(
         Resident,
         on_delete = models.CASCADE,
     )

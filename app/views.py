@@ -94,7 +94,7 @@ class PendingView(View):
         self.list = list()
 
         for alert in alerts:
-            print(alert.patient.patient_id)
+            print(alert.resident.resident_id)
             self.list.append(alert)
         print(self.list)
         return render(request,self.template_name, {'list':self.list,"form":self.form_class})
@@ -125,9 +125,9 @@ class ShowView(View):
     def get(self, request, *args, **kwargs):
         '''if GET  '''
 
-        number= int(request.GET["patient_id"])
+        number= int(request.GET["resident_id"])
 
-        results = Resident.objects.filter(patient_id = number)
+        results = Resident.objects.filter(resident_id = number)
 
         self.list = list()
 
@@ -135,7 +135,7 @@ class ShowView(View):
             alert = result
 
 
-        # results = ApplicationTracking.objects.filter(patient_id = number)
+        # results = ApplicationTracking.objects.filter(resident_id = number)
 
         for result in results:
 
@@ -150,13 +150,13 @@ class ShowView(View):
         '''if POST'''
         file = request.FILES.getlist('files')[0]
         type = request.POST.get('file_type')
-        patient_id = request.POST.get('patient_id')
+        resident_id = request.POST.get('resident_id')
 
 
-        tracking = ApplicationTracking.objects.get(patient_id = patient_id)
+        tracking = ApplicationTracking.objects.get(resident_id = resident_id)
         field = getattr(tracking, type)
         # TODO
-        field.save(str(patient_id),file)
+        field.save(str(resident_id),file)
         tracking.save()
         return HttpResponse("200")
         # self.list = list()

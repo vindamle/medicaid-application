@@ -33,17 +33,17 @@ class create(generic.CreateView):
 
 def update_list(request):
     if request.method == 'GET':
-        requested_patient_id = request.GET['patient_id']
+        requested_resident_id = request.GET['resident_id']
         track = request.GET['tracking']
-        requested_patient_id = int(requested_patient_id)
-        alert = Resident.objects.get(patient_id = requested_patient_id)
+        requested_resident_id = int(requested_resident_id)
+        alert = Resident.objects.get(resident_id = requested_resident_id)
 
         if track == "true":
             alert.tracking_status = True
 
 
             Alert.objects.create(
-                patient =alert,
+                resident =alert,
                 application = None,
                 alert_priority = 1,
                 alert_message = "Tracking Alert: Not Started."
@@ -51,11 +51,11 @@ def update_list(request):
             alert.save()
 
 
-            # patient_info = AdditionalInfo()
-            # results = patient_info.get_Info(alert.patient_number, alert.facility_id, alert.ssn)
+            # resident_info = AdditionalInfo()
+            # results = resident_info.get_Info(alert.resident_number, alert.facility_id, alert.ssn)
             # for result in results:
             #     ApplicationTracking.objects.create(
-            #         patient = alert,
+            #         resident = alert,
             #         is_medicaid_pending = result.IsMedicaidPending,
             #         approval_verified = False,
             #     )
@@ -69,9 +69,9 @@ def update_list(request):
 
 def approval_verified(request):
     if request.method == 'GET':
-        patient_id =int(request.GET['patient_id'])
+        resident_id =int(request.GET['resident_id'])
 
-        application = ApplicationTracking.objects.get(patient = patient_id)
+        application = ApplicationTracking.objects.get(resident = resident_id)
         print(application)
         if request.GET['approval_verified'] == "True":
             application.approval_verified = True

@@ -4,7 +4,7 @@ const verifyOrUnverify = (row, trueOrFalse) => {
 		type:"GET",
 		url: "/application/ajax/approval_verified",
 		data:{
-			patient_id: row.id,
+			resident_id: row.id,
 			approval_verified: trueOrFalse
 		},
 		success: function() 

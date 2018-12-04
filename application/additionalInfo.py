@@ -10,11 +10,11 @@ class AdditionalInfo:
         sqlServer = ConnectSqlServer()
         self.conn = sqlServer.connect_sql_server()
 
-    def get_Info(self, patient_id, facility_Skey, SSN):
+    def get_Info(self, resident_id, facility_Skey, SSN):
 
         cursor = self.conn.cursor()
         try:
-            results = cursor.execute("{CALL p_MEnrollmentTrackingResidentByPatientIdResidentSkeyFacilityId(?,?,?)}",facility_Skey,patient_id,SSN)
+            results = cursor.execute("{CALL p_MEnrollmentTrackingResidentByPatientIdResidentSkeyFacilityId(?,?,?)}",facility_Skey,resident_id,SSN)
         except:
             print("Error :: Cannot Connect to Server")
 

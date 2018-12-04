@@ -32,8 +32,8 @@ class Alerts:
     def get_fields(self, result):
 
         return dict(
-            patient_id = getattr(result, "Facility_Skey")*(10**7) + getattr(result,"PatientID"),
-            patient_number = getattr(result,"PatientID"),
+            resident_id = getattr(result, "Facility_Skey")*(10**7) + getattr(result,"PatientID"),
+            resident_number = getattr(result,"PatientID"),
             ssn = getattr(result, "SSN"),
             first_name = getattr(result, "FirstName").capitalize(),
             last_name = getattr(result, "LastName").capitalize(),
@@ -62,11 +62,11 @@ class Alerts:
             obj = self.get_fields(alert)
 
 
-            insert_stmt = insert(self.meta.tables['application_patient']).values(obj)
+            insert_stmt = insert(self.meta.tables['application_resident']).values(obj)
 
 
             stmt = insert_stmt.on_conflict_do_update(
-                constraint = 'application_alert_pkey',
+                constraint = 'application_resident_pkey',
                 set_ = obj
             )
             self.con.execute(stmt)

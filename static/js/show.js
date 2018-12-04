@@ -1,6 +1,6 @@
 //file upload button functionality
 //
-// const patientId = document.querySelector("#patientId").innerHTML;
+// const residentId = document.querySelector("#residentId").innerHTML;
 // const uploadFile = (fileType, file) => {
 // 	const ajaxCall = $.ajax(
 // 	{
@@ -9,7 +9,7 @@
 // 		contentType: false,
 // 		processData: false,
 // 		data:{
-// 			patient_id: patientId,
+// 			resident_id: residentId,
 // 			fileType: fileType,
 // 			file: file
 // 		},
