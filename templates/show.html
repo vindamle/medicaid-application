@@ -55,13 +55,13 @@
 					<li class="editableLi"><label>Secondary Payor:</label> <span class="editable" id="secondary_payor">{{alert.secondary_payor}}</span></li>
 				</div>
 				<div class="col-lg-4">
-					<li class="editableLi"><label>Copays:</label> <span class="editable" id="copays">{{tracking.copays}}</span></li>
+					<li class="editableLi"><label>Copays:</label> <span class="editable" id="copays">{{application.copays}}</span></li>
 					<li class="editableLi"><label>Copays Start Date:</label> <span class="editable" id=""></span></li>
 					<li class="editableLi"><label>Secondary Insurance Copay Percentage:</label> <span class="editable" id=""></span></li>
 				</div>
 				<div class="col-lg-4">
-					<li class="editableLi"><label>Last Medicare Date:</label> <span class="editable date">{{tracking.medicaid_pickup_date}}</span></li>
-					<li class="editableLi"><label>Cut From Medicare/Insurance Date:</label> <span class="editable date">{{tracking.medicaid_pickup_date}}</span></li>
+					<li class="editableLi"><label>Last Medicare Date:</label> <span class="editable date">{{application.medicaid_pickup_date}}</span></li>
+					<li class="editableLi"><label>Cut From Medicare/Insurance Date:</label> <span class="editable date">{{application.medicaid_pickup_date}}</span></li>
 				</div>
 			</div>
 		</ul>
@@ -72,19 +72,19 @@
 			<div class="row">
 				<div class="col-lg-4">
 					<li class="editableLi"><label>Status: </label> <span class="editable" id="status">Pending</span></li>
-					<li class="editableLi"><label>Is Medicaid Pending?</label> <span class="editable">{{tracking.is_medicaid_pending}}</span></li>
-					<li class="editableLi"><label>Medicaid Pickup Date:</label> <span class="editable date" id="medicaid_pickup_date" data-alert_id=5>{{tracking.medicaid_pickup_date}}</span></li>
+					<li class="editableLi"><label>Is Medicaid Pending?</label> <span class="editable">{{application.is_medicaid_pending}}</span></li>
+					<li class="editableLi"><label>Medicaid Pickup Date:</label> <span class="editable date" id="medicaid_pickup_date" data-alert_id=5>{{application.medicaid_pickup_date}}</span></li>
 					<li>
 						<label>Date of Medicaid Submission:</label>
-						<span class="editable date" id="date_of_medicaid_submission">{{tracking.date_of_medicaid_submission}}</span>
+						<span class="editable date" id="date_of_medicaid_submission">{{application.date_of_medicaid_submission}}</span>
 					</li>
-					<li class="editableLi"><label>Application County:</label> <span class="editable" id="application_county">{{tracking.application_county}}</span></li>
-					<li class="editableLi"><label>Application State:</label> <span class="editable" id="application_state">{{tracking.application_state}}</span></li>
+					<li class="editableLi"><label>Application County:</label> <span class="editable" id="application_county">{{application.application_county}}</span></li>
+					<li class="editableLi"><label>Application State:</label> <span class="editable" id="application_state">{{application.application_state}}</span></li>
 					
 				</div>
 				<div class="col-lg-4">
-					<li class="editableLi"><label>Application Type:</label> <span class="editable" id="application_type">{{tracking.application_type}}</span></li>
-					<li class="editableLi"><label>Spousal/Single:</label> <span class="editable" id="spousal">{{tracking.spousal}}</span></li>
+					<li class="editableLi"><label>Application Type:</label> <span class="editable" id="application_type">{{application.application_type}}</span></li>
+					<li class="editableLi"><label>Spousal/Single:</label> <span class="editable" id="spousal">{{application.spousal}}</span></li>
 					<li class="editableLi">
 						<label>Estimated NAMI/Income Contribution Amount:</label> 
 			 			<span class="editable">Unknown</span>
@@ -92,35 +92,35 @@
 					<li class="editableLi">
 						<label>Short-term/Long-Term Care:</label> 
 			 			<span class="editable" id="LTC">
-							{% if tracking.LTC %}
+							{% if application.LTC %}
 	   						Long-Term Care
-	  					{% elif tracking.LTC == False %}
+	  					{% elif application.LTC == False %}
 	   						Short-Term Care
 	   					{% else %}
 	   						Unknown
 							{% endif %}
 						</span>
 					</li>
-					<li class="editableLi"><label>Spousal Refusal:</label> <span class="editable" id="spousal_refusal">{{tracking.spousal_refusal}}</span></li>
+					<li class="editableLi"><label>Spousal Refusal:</label> <span class="editable" id="spousal_refusal">{{application.spousal_refusal}}</span></li>
 					
 				</div>
 				<div class="col-lg-4">
 					<li>
 						<label>Date of appointment with applicant (if required):</label> 
-						<span class="editable date" id="appointment_date">{{tracking.appointment_date}}</span>
+						<span class="editable date" id="appointment_date">{{application.appointment_date}}</span>
 					</li>
-					<li class="editableLi"><label>DSS Contact Address:</label> <span class="editable" id="dss_contact_address">{{tracking.dss_contact_address}}</span></li>
-					<li class="editableLi"><label>DSS Contact Phone:</label> <span class="editable" id="dss_contact_phone">{{tracking.dss_contact_phone}}</span></li>
-					<li class="editableLi"><label>DSS Contact Email:</label> <span class="editable" id="dss_contact_email">{{tracking.dss_contact_email}}</span></li>
-					<li class="editableLi"><label>DSS Contact Fax:</label> <span class="editable" id="dss_contact_fax">{{tracking.dss_contact_fax}}</span></li>
+					<li class="editableLi"><label>DSS Contact Address:</label> <span class="editable" id="dss_contact_address">{{application.dss_contact_address}}</span></li>
+					<li class="editableLi"><label>DSS Contact Phone:</label> <span class="editable" id="dss_contact_phone">{{application.dss_contact_phone}}</span></li>
+					<li class="editableLi"><label>DSS Contact Email:</label> <span class="editable" id="dss_contact_email">{{application.dss_contact_email}}</span></li>
+					<li class="editableLi"><label>DSS Contact Fax:</label> <span class="editable" id="dss_contact_fax">{{application.dss_contact_fax}}</span></li>
 					
 					<!-- <li>
 						<label>Date of Medicaid Approval:</label>
-						 <span class="editable date">{{tracking.date_of_medicaid_approval}}</span>
+						 <span class="editable date">{{application.date_of_medicaid_approval}}</span>
 					</li>
 					<li>
 						<label>Date of Medicaid Recertification:</label>
-						<span class="editable date">{{tracking.date_of_medicaid_recertification}}</span>
+						<span class="editable date">{{application.date_of_medicaid_recertification}}</span>
 					</li>
 					<li>
 						<label>NAMI/Income Contribution Amount:</label> 
@@ -145,7 +145,7 @@
 		  			{% csrf_token %}
 
 						<label>Upload Medicaid Application Here:</label>
-						<input type="file" name="medicaid_application" value="{{tracking.medicaid_application}}" accept="image/jpeg
+						<input type="file" name="medicaid_application" value="{{application.medicaid_application}}" accept="image/jpeg
 						,image/png,application/pdf" multiple>
 						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
 						<input type="hidden" name="file_type" value="medicaid_application">
@@ -155,7 +155,7 @@
 			 			{% csrf_token %}
 
 						<label>Upload Medicaid Confirmation Here:</label>
-						<input type="file" name="medicaid_confirmation" value="{{tracking.medicaid_comfirmation}}" accept="image/jpeg
+						<input type="file" name="medicaid_confirmation" value="{{application.medicaid_comfirmation}}" accept="image/jpeg
 						,image/png,application/pdf" multiple>
 						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
 						<input type="hidden" name="file_type" value="medicaid_confirmation">
@@ -166,7 +166,7 @@
 					<form class="fileInputLi" id="rfi" method="post" enctype="multipart/form-data">
 			 			{% csrf_token %}
 						<label>Upload Medicaid RFI Here:</label>
-						<input type="file" name="rfi" value="{{tracking.rfi}}" accept="image/jpeg
+						<input type="file" name="rfi" value="{{application.rfi}}" accept="image/jpeg
 						,image/png,application/pdf" multiple>
 						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
 						<input type="hidden" name="file_type" value="rfi">
@@ -178,7 +178,7 @@
 			 			{% csrf_token %}
 
 						<label>Upload Medicaid Approval Here:</label>
-						<input type="file" name="medicaid_approval" value="{{tracking.medicaid_approval}}" accept="image/jpeg
+						<input type="file" name="medicaid_approval" value="{{application.medicaid_approval}}" accept="image/jpeg
 						,image/png,application/pdf" multiple>
 						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
 						<input type="hidden" name="file_type" value="medicaid_approval">
@@ -186,8 +186,8 @@
 					</form>
 				</div>
 				<div class="col-lg-4">
-					<li><label>Date of RFI:</label> <span class="editable date">{{tracking.date_of_rfi}}</span></li>
-					<li><label>Date of Deadline:</label> <span class="editable date">{{tracking.date_of_deadline}}</span></li>
+					<li><label>Date of RFI:</label> <span class="editable date">{{application.date_of_rfi}}</span></li>
+					<li><label>Date of Deadline:</label> <span class="editable date">{{application.date_of_deadline}}</span></li>
 					<!-- <li>(More info, places to upload documents, etc.)</li> -->
 				</div>
 			</div>
@@ -203,23 +203,23 @@
 				<div class="col-lg-4">
 					<li class="editableLi">
 						<label>Approval Notice Date:</label>
-						 <span class="editable date" id="approval_notice_date">{{tracking.approval_notice_date}}</span>
+						 <span class="editable date" id="approval_notice_date">{{application.approval_notice_date}}</span>
 					</li>
 					<li class="editableLi">
 						<label>Approval Start Date:</label>
-						 <span class="editable date" id="approval_start_date">{{tracking.approval_start_date}}</span>
+						 <span class="editable date" id="approval_start_date">{{application.approval_start_date}}</span>
 					</li>
 					<li class="editableLi">
 						<label>Approval End Date:</label>
-						 <span class="editable date" id="approval_end_date">{{tracking.approval_end_date}}</span>
+						 <span class="editable date" id="approval_end_date">{{application.approval_end_date}}</span>
 					</li>
 					
 					<!-- <li class="editableLi"><label>Status: </label> <span class="editable">Pending</span></li> -->
-					<!-- <li class="editableLi"><label>Is Medicaid Pending?</label> <span class="editable">{{tracking.is_medicaid_pending}}</span></li> -->
-					<!-- <li class="editableLi"><label>Medicaid Pickup Date:</label> <span class="editable">{{tracking.medicaid_pickup_date}}</span></li> -->
+					<!-- <li class="editableLi"><label>Is Medicaid Pending?</label> <span class="editable">{{application.is_medicaid_pending}}</span></li> -->
+					<!-- <li class="editableLi"><label>Medicaid Pickup Date:</label> <span class="editable">{{application.medicaid_pickup_date}}</span></li> -->
 					<!-- <li> -->
 						<!-- <label>Date of appointment with applicant (if required):</label>  -->
-						<!-- <span class="editable date">{{tracking.date_of_medicaid_recertification}}</span> -->
+						<!-- <span class="editable date">{{application.date_of_medicaid_recertification}}</span> -->
 					<!-- </li> -->
 				</div>
 				<div class="col-lg-4">
@@ -229,19 +229,19 @@
 					</li>
 					<li class="editableLi">
 						<label>Fair Hearing Required?</label> 
-			 			<span class="editable" id="fair_hearing_required">{{tracking.fair_hearing_required}}</span>
+			 			<span class="editable" id="fair_hearing_required">{{application.fair_hearing_required}}</span>
 					</li>
 					<li class="editableLi">
 						<label>Date of Medicaid Recertification:</label> 
-						<span class="editable date">{{tracking.date_of_medicaid_recertification}}</span>
+						<span class="editable date">{{application.date_of_medicaid_recertification}}</span>
 					</li>
 					<!-- <li>
 						<label>Date of Medicaid Submission:</label>
-						<span class="editable date">{{tracking.date_of_medicaid_submission}}</span>
+						<span class="editable date">{{application.date_of_medicaid_submission}}</span>
 					</li>
-					<li class="editableLi"><label>Application Type:</label> <span class="editable">{{tracking.application_type}}</span></li>
-					<li class="editableLi"><label>Spousal/Single?</label> <span class="editable">{{tracking.spousal}}</span></li>
-					<li class="editableLi"><label>Short-term/Long-Term Care?</label> <span class="editable">{{tracking.ltc}}</span></li>
+					<li class="editableLi"><label>Application Type:</label> <span class="editable">{{application.application_type}}</span></li>
+					<li class="editableLi"><label>Spousal/Single?</label> <span class="editable">{{application.spousal}}</span></li>
+					<li class="editableLi"><label>Short-term/Long-Term Care?</label> <span class="editable">{{application.ltc}}</span></li>
 					<li class="editableLi"><label>Spousal Refusal?</label> <span class="editable">Unknown</span></li> -->
 				</div>
 				<div class="col-lg-4">

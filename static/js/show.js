@@ -10,7 +10,7 @@ const updateResident = (field, newValue) => {
 	const ajaxCall = $.ajax(
 	{
 		type:"GET",
-		url: "/application/ajax/updateResident",
+		url: "/application/ajax/update_resident",
 		data:{
 			resident_id: residentId,
 			field: field,
@@ -28,7 +28,7 @@ const updateAlert = (alertId, newValue) => {
 	const ajaxCall = $.ajax(
 	{
 		type:"GET",
-		url: "/application/ajax/updateAlert",
+		url: "/application/ajax/update_alert",
 		data:{
 			alert_id: alertId,
 			new_value: newValue
