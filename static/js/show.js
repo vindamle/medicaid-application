@@ -1,13 +1,37 @@
-const updateField = (field, newValue) => {
-	const patientId = document.querySelector("#patientId").innerHTML;
+const el = document.getElementById('medicaid_pickup_date') 
+document.addEventListener('click', (e)=>{
+	x = el.getAttribute("data-alert_id");
+	console.log(x);
+});
+
+
+const updateResident = (field, newValue) => {
+	const residentId = document.querySelector("#residentId").innerHTML;
 	const ajaxCall = $.ajax(
 	{
 		type:"GET",
-		url: "/application/ajax/updateField",
+		url: "/application/ajax/updateResident",
 		data:{
-			patient_id: patientId,
+			resident_id: residentId,
 			field: field,
-			newValue: newValue
+			new_value: newValue
+		},
+		success: function() 
+		{
+			console.log("Value of " + field + " set to " + newValue)
+		}
+	});
+	return(ajaxCall);
+}
+
+const updateAlert = (alertId, newValue) => {
+	const ajaxCall = $.ajax(
+	{
+		type:"GET",
+		url: "/application/ajax/updateAlert",
+		data:{
+			alert_id: alertId,
+			new_value: newValue
 		},
 		success: function() 
 		{
@@ -36,7 +60,7 @@ const replaceElement = (oldElement, newElementType) => {
 		//Pressing 'Enter' in an input leaves editing mode
 		newElement.addEventListener('keyup',function(e){
 	    if (e.keyCode === 13) {
-	    	updateField(newElement.id, newElement.value)
+	    	updateResident(newElement.id, newElement.value)
 		    replaceElement(newElement, 'span');
 		  };
 		});
@@ -55,7 +79,7 @@ document.addEventListener('dblclick', (e)=>{
 		const activeInputs = document.querySelectorAll('INPUT.editable');
 		for (var i = 0; i < activeInputs.length; i++) {
 			const input = activeInputs[i];
-			updateField(input.id, input.value);
+			updateResident(input.id, input.value);
 			replaceElement(input, 'span');
 		};
 
@@ -68,7 +92,6 @@ document.addEventListener('dblclick', (e)=>{
 		replaceElement(span, 'input');
 	};
 });
-
 
 // Approve Button toggles display of Approval Information Section
 
@@ -111,7 +134,7 @@ $('#approveBtn').click((e) => {
 
 // 		input.addEventListener('keyup',function(e){
 // 	    if (e.keyCode === 13) {
-// 	    	updateField(input.id, input.value)
+// 	    	updateResident(input.id, input.value)
 // 		    replaceInputWithSpan(input);
 // 		  };
 // 		});

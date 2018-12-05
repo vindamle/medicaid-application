@@ -415,6 +415,11 @@ table button {
 	width: 175px;
 }
 
+input[type=date]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    display: none;
+}
+
 .residentInfoDiv input[type='file'] {
 	/*background-color: #eee;*/
 	width: 250px;

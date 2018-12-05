@@ -60,8 +60,8 @@
 					<li class="editableLi"><label>Secondary Insurance Copay Percentage:</label> <span class="editable" id=""></span></li>
 				</div>
 				<div class="col-lg-4">
-					<li class="editableLi"><label>Last Medicare Date:</label> <span class="editable">{{tracking.medicaid_pickup_date}}</span></li>
-					<li class="editableLi"><label>Cut From Medicare/Insurance Date:</label> <span class="editable">{{tracking.medicaid_pickup_date}}</span></li>
+					<li class="editableLi"><label>Last Medicare Date:</label> <span class="editable date">{{tracking.medicaid_pickup_date}}</span></li>
+					<li class="editableLi"><label>Cut From Medicare/Insurance Date:</label> <span class="editable date">{{tracking.medicaid_pickup_date}}</span></li>
 				</div>
 			</div>
 		</ul>
@@ -73,7 +73,7 @@
 				<div class="col-lg-4">
 					<li class="editableLi"><label>Status: </label> <span class="editable" id="status">Pending</span></li>
 					<li class="editableLi"><label>Is Medicaid Pending?</label> <span class="editable">{{tracking.is_medicaid_pending}}</span></li>
-					<li class="editableLi"><label>Medicaid Pickup Date:</label> <span class="editable" id="medicaid_pickup_date">{{tracking.medicaid_pickup_date}}</span></li>
+					<li class="editableLi"><label>Medicaid Pickup Date:</label> <span class="editable date" id="medicaid_pickup_date" data-alert_id=5>{{tracking.medicaid_pickup_date}}</span></li>
 					<li>
 						<label>Date of Medicaid Submission:</label>
 						<span class="editable date" id="date_of_medicaid_submission">{{tracking.date_of_medicaid_submission}}</span>
@@ -201,15 +201,15 @@
 		<ul>
 			<div class="row">
 				<div class="col-lg-4">
-					<li>
+					<li class="editableLi">
 						<label>Approval Notice Date:</label>
 						 <span class="editable date" id="approval_notice_date">{{tracking.approval_notice_date}}</span>
 					</li>
-					<li>
+					<li class="editableLi">
 						<label>Approval Start Date:</label>
 						 <span class="editable date" id="approval_start_date">{{tracking.approval_start_date}}</span>
 					</li>
-					<li>
+					<li class="editableLi">
 						<label>Approval End Date:</label>
 						 <span class="editable date" id="approval_end_date">{{tracking.approval_end_date}}</span>
 					</li>
