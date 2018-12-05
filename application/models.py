@@ -120,18 +120,28 @@ class ApplicationTracking(models.Model):
         verbose_name = 'ApplicationTracking'
         verbose_name_plural = 'ApplicationTracking'
 
+class AlertType(models.Model):
+
+    alert_type_id = models.AutoField(primary_key = True)
+    alert_name = models.CharField(max_length = 20,  null = False, blank=False)
 
 class Alert(models.Model):
     alert_id = models.AutoField(primary_key = True)
     resident = models.ForeignKey(
         Resident,
         on_delete = models.CASCADE,
+        null = True,
     )
     application = models.ForeignKey(
         ApplicationTracking,
         on_delete = models.CASCADE,
         null = True,
     )
+    alert_type = models.ForeignKey(
+        AlertType,
+        on_delete = models.CASCADE,
+    )
+
     alert_priority = models.IntegerField(null=False,blank=False)
     alert_status =models.BooleanField(default = False)
     alert_message =models.CharField(max_length = 100,  null = False, blank=False)

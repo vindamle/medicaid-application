@@ -20,6 +20,13 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='AlertType',
+            fields=[
+                ('alert_type_id', models.AutoField(primary_key=True, serialize=False)),
+                ('alert_name', models.CharField(max_length=20)),
+            ],
+        ),
+        migrations.CreateModel(
             name='ApplicationTracking',
             fields=[
                 ('tracking_id', models.AutoField(primary_key=True, serialize=False)),
@@ -122,12 +129,17 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='alert',
+            name='alert_type',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='application.AlertType'),
+        ),
+        migrations.AddField(
+            model_name='alert',
             name='application',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='application.ApplicationTracking'),
         ),
         migrations.AddField(
             model_name='alert',
             name='resident',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='application.Resident'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='application.Resident'),
         ),
     ]

@@ -5,13 +5,8 @@ from django.views import generic
 from .forms import NameForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .models import Resident, ApplicationTracking, Alert
+from .models import Resident, ApplicationTracking, Alert, AlertType
 from .additionalInfo import AdditionalInfo
-
-class signup(generic.CreateView):
-    form_class = UserCreationForm
-    success_url = reverse_lazy('login')
-    template_name = 'signup.html'
 
 
 class create(generic.CreateView):
@@ -31,39 +26,35 @@ class create(generic.CreateView):
 
         return render(request, self.template_name, {'form': form})
 
+
+
 def update_list(request):
     if request.method == 'GET':
         requested_resident_id = request.GET['resident_id']
         track = request.GET['tracking']
         requested_resident_id = int(requested_resident_id)
         alert = Resident.objects.get(resident_id = requested_resident_id)
-
+        alert_type = AlertType.objects.get(alert_type_id = 1)
         if track == "true":
             alert.tracking_status = True
-
-
+            application = ApplicationTracking(resident = alert)
+            application.save()
             Alert.objects.create(
                 resident =alert,
-                application = None,
+                application = application,
                 alert_priority = 1,
-                alert_message = "Application Not Started"
+                alert_message = "Application Not Started",
+                alert_type = alert_type,
             )
             alert.save()
 
 
             # resident_info = AdditionalInfo()
-            # results = resident_info.get_Info(alert.resident_number, alert.facility_id, alert.ssn)
-            # for result in results:
-            #     ApplicationTracking.objects.create(
-            #         resident = alert,
-            #         is_medicaid_pending = result.IsMedicaidPending,
-            #         approval_verified = False,
-            #     )
-
         elif track == "false":
             alert.tracking_status = False
             alert.save()
-        return HttpResponse("200") # Sending an success response
+        # Sending an success response
+        return HttpResponse("200")
     else:
         return HttpResponse("Request method is not a GET")
 
@@ -79,7 +70,20 @@ def approval_verified(request):
         else:
             application.approval_verified = False
             application.save()
-
+        # Sending an success response
         return HttpResponse("200")
     else:
         return HttpResponse("Request method is not a GET")
+
+
+def update_resident(request):
+    # Sending an success response
+    return HttpResponse("200")
+
+def update_application(request):
+    # Sending an success response
+    return HttpResponse("200")
+
+def update_alert(request):
+    # Sending an success response
+    return HttpResponse("200")
