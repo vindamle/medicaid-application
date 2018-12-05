@@ -135,15 +135,13 @@ class ShowView(View):
             alert = result
 
 
-        # results = ApplicationTracking.objects.filter(resident_id = number)
+        results = ApplicationTracking.objects.filter(resident_id = number)
+        application = []
 
         for result in results:
+            application.append(result)
 
-            tracking = None
-
-
-
-        return render(request,self.template_name, {'alert':alert,'tracking':tracking,"form":self.form_class})
+        return render(request,self.template_name, {'alert':alert,'application':application,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
 

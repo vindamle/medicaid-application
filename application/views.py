@@ -8,11 +8,6 @@ from django.shortcuts import render
 from .models import Resident, ApplicationTracking, Alert, AlertType
 from .additionalInfo import AdditionalInfo
 
-class signup(generic.CreateView):
-    form_class = UserCreationForm
-    success_url = reverse_lazy('login')
-    template_name = 'signup.html'
-
 
 class create(generic.CreateView):
     form_class = NameForm
@@ -31,6 +26,8 @@ class create(generic.CreateView):
 
         return render(request, self.template_name, {'form': form})
 
+
+
 def update_list(request):
     if request.method == 'GET':
         requested_resident_id = request.GET['resident_id']
@@ -40,11 +37,11 @@ def update_list(request):
         alert_type = AlertType.objects.get(alert_type_id = 1)
         if track == "true":
             alert.tracking_status = True
-
-
+            application = ApplicationTracking(resident = alert)
+            application.save()
             Alert.objects.create(
                 resident =alert,
-                application = None,
+                application = application,
                 alert_priority = 1,
                 alert_message = "Application Not Started",
                 alert_type = alert_type,
@@ -53,12 +50,11 @@ def update_list(request):
 
 
             # resident_info = AdditionalInfo()
-
-
         elif track == "false":
             alert.tracking_status = False
             alert.save()
-        return HttpResponse("200") # Sending an success response
+        # Sending an success response
+        return HttpResponse("200")
     else:
         return HttpResponse("Request method is not a GET")
 
@@ -74,17 +70,20 @@ def approval_verified(request):
         else:
             application.approval_verified = False
             application.save()
-
+        # Sending an success response
         return HttpResponse("200")
     else:
         return HttpResponse("Request method is not a GET")
 
 
 def update_resident(request):
+    # Sending an success response
     return HttpResponse("200")
 
 def update_application(request):
+    # Sending an success response
     return HttpResponse("200")
 
-def update_alerts(request):
+def update_alert(request):
+    # Sending an success response
     return HttpResponse("200")
