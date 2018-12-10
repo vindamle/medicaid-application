@@ -1,4 +1,168 @@
-//file upload button functionality
+// REFACTOR THESE TWO FUNCTIONS:
+const select_fields = document.querySelectorAll('select');
+for (var i = 0; i < select_fields.length; i++) {
+	const select_field = select_fields[i];
+	select_field.addEventListener('change', () => {
+		const table = select_field.getAttribute('data-table');
+			const dataObject = {
+				resident_id: document.querySelector("#residentId").innerHTML,
+				column: select_field.getAttribute('name'),
+				new_value: select_field.value
+			};
+			const successMessage = `Value of ${dataObject.column} in the ${table} table set to ${dataObject.new_value}`;
+			updateDB(table, dataObject, successMessage);
+	});
+};
+
+const radio_forms = document.querySelectorAll('.radio_form');
+for (var i = 0; i < radio_forms.length; i++) {
+	const radio_form = radio_forms[i];
+	radio_form.addEventListener('click',(e)=> {
+		if (e.target.value) {
+			const table = radio_form.getAttribute('data-table');
+			const dataObject = {
+				resident_id: document.querySelector("#residentId").innerHTML,
+				column: e.target.getAttribute('name'),
+				new_value: e.target.value
+			};
+			const successMessage = `Value of ${dataObject.column} in the ${table} table set to ${dataObject.new_value}`;
+			updateDB(table, dataObject, successMessage);
+		};
+	});
+};
+
+const updateDB = (table, dataObject, successMessage) => {
+	const ajaxCall = $.ajax(
+	{
+		type:"GET",
+		url: `/application/ajax/update_${table}`,
+		data: dataObject,
+		success: function() 
+		{
+			console.log(successMessage)
+		}
+	});
+	return(ajaxCall);
+}
+
+const sendInputInfoToDB = input => {
+	const table = input.getAttribute('data-table');
+	let dataObject = {
+		resident_id: document.querySelector("#residentId").innerHTML,
+		column: input.id,
+		new_value: input.value
+	};
+	let successMessage = `Value of ${dataObject.column} in the ${table} table set to ${dataObject.new_value}`;
+	updateDB(table, dataObject, successMessage);
+	const alertId = input.getAttribute('data-alert_id');
+	if (alertId != "") {
+		 dataObject = {
+		 	alert_id: alertId,
+			addressed: true
+		 };
+		 successMessage = `Value of 'addressed' for alert with id ${dataObject.alert_id} in the alert table set to ${dataObject.addressed}`;
+		 updateDB("alert", dataObject, successMessage);
+	}
+}
+
+const replaceElement = (oldElement, newElementType) => {
+	const newElement = document.createElement(newElementType);
+	newElement.id = oldElement.id;
+	newElement.classList = oldElement.classList;
+	newElement.setAttribute("data-table", oldElement.getAttribute("data-table"));
+	newElement.setAttribute("data-alert_id", oldElement.getAttribute("data-alert_id"));
+	const parent = oldElement.parentNode;
+	if (newElementType == 'input') {
+		newElement.value = oldElement.textContent;
+		if (newElement.classList.contains('date')) {
+			newElement.type = 'date';
+		} else {
+			newElement.type = 'text';
+		};
+		parent.style.borderBottom="none";
+		//Pressing 'Enter' in an input leaves editing mode
+		newElement.addEventListener('keyup',function(e){
+	    if (e.keyCode === 13) {
+				sendInputInfoToDB(newElement);
+  			replaceElement(newElement, 'span');
+		  };
+		});
+	} else if (newElementType == 'span') {
+		newElement.textContent = oldElement.value;
+		parent.style.borderBottom="1px solid #ddd";
+	};
+	$(oldElement).replaceWith(newElement);
+};
+
+// Allow fields to be individually toggled in and out of editing mode by double-clicking them
+document.addEventListener('dblclick', (e)=>{
+	if (e.target.classList.contains('editableLi') || e.target.parentNode.classList.contains('editableLi')) {
+		// leave editing mode of any other inputs and updates them
+		const activeInputs = document.querySelectorAll('INPUT.editable');
+		for (var i = 0; i < activeInputs.length; i++) {
+			const input = activeInputs[i];
+			sendInputInfoToDB(input);
+  		replaceElement(input, 'span');
+		};
+		let span = e.target;
+ 		if (span.tagName == 'LABEL') {
+			span = e.target.nextElementSibling;
+		} else if (span.tagName == 'LI') {
+			span = e.target.getElementsByTagName('SPAN')[0];
+		};
+		replaceElement(span, 'input');
+	};
+});
+
+// Approve Button toggles display of Approval Information Section
+$('#approveBtn').click((e) => {
+	btn = e.target;
+	if(btn.innerHTML == 'Approve') {
+		e.target.innerHTML = 'Approved &check;';
+		$('#approvedSection').css('display', 'block');
+	} else {
+		e.target.innerHTML = 'Approve';
+		$('#approvedSection').css('display', 'none');
+	}
+})
+
+// const updateDB = (table, column, newValue) => {
+// 	const residentId = document.querySelector("#residentId").innerHTML;
+// 	const ajaxCall = $.ajax(
+// 	{
+// 		type:"GET",
+// 		url: `/application/ajax/update_${table}`,
+// 		data:{
+// 			resident_id: residentId,
+// 			column: column,
+// 			new_value: newValue
+// 		},
+// 		success: function() 
+// 		{
+// 			console.log(`Value of ${column} in the ${table} table set to ${newValue}`)
+// 		}
+// 	});
+// 	return(ajaxCall);
+// }
+
+// const updateAlert = (alertId, newValue) => {
+// 	const ajaxCall = $.ajax(
+// 	{
+// 		type:"GET",
+// 		url: `/application/ajax/update_alert`,
+// 		data:{
+// 			alert_id: alertId,
+// 			addressed: newValue
+// 		},
+// 		success: function() 
+// 		{
+// 			console.log(`Value of 'addressed' for alert with id ${alertId} in the alert table set to ${newValue}`)
+// 		}
+// 	});
+// 	return(ajaxCall);
+// }
+
+// File upload button functionality (NOTE: possibly irrelevant - it may not be possible to ajax file uploads)
 //
 // const residentId = document.querySelector("#residentId").innerHTML;
 // const uploadFile = (fileType, file) => {
@@ -33,7 +197,7 @@
 // 	};	
 // });
 
-// Toggle fields in and out of editable state on show pages
+// Toggle fields in and out of editable state on show pages with Edit Button
 
 // const editBtn = document.querySelector("#editBtn");
 // editBtn.addEventListener('click', (e) => {	
@@ -80,67 +244,3 @@
 // 		};
 // 	};
 // });
-const replaceInputWithSpan = input => {
-	const span = document.createElement('span');
-	span.textContent = input.value;
-	span.className = 'editable';
-	if (input.classList.contains('date')) {
-		span.classList.add('date');
-	};
-	const parent = input.parentNode;
-	parent.insertBefore(span, input);
-	parent.removeChild(input);
-	parent.style.borderBottom="1px solid #ddd";
-}
-
-const replaceSpanWithInput = span => {
-		const input = document.createElement('input');
-		input.className = 'editable';
-		if (span.classList.contains('date')) {
-			input.type = 'date';
-			input.classList.add('date');
-		} else {
-			input.type = 'text';
-		};
-		input.value = span.textContent;
-		const parent = span.parentNode;
-		parent.insertBefore(input, span);
-		parent.removeChild(span);
-		parent.style.borderBottom="none";
-
-		//Pressing 'Enter' leaves editing mode
-		input.addEventListener('keyup',function(e){
-	    if (e.keyCode === 13) {
-		    replaceInputWithSpan(input);
-		  };
-		});
-}
-
-// If implemented, the code below would allow for fields to be individually toggled in and out of editing mode by double-clicking them
-
-document.addEventListener('dblclick', (e)=>{
-	if (e.target.tagName == "SPAN" && e.target.classList.contains('editable')) {
-		// leave editing mode of other inputs
-		const activeInputs = document.querySelectorAll('INPUT.editable');
-		for (var i = 0; i < activeInputs.length; i++) {
-			const input = activeInputs[i];
-			replaceInputWithSpan(input);
-		}
-		const span = e.target;
-		replaceSpanWithInput(span);
-	};
-});
-
-
-// Approve Button toggles display of Approval Information Section
-
-$('#approveBtn').click((e) => {
-	btn = e.target;
-	if(btn.innerHTML == 'Approve') {
-		e.target.innerHTML = 'Approved &check;';
-		$('#approvedSection').css('display', 'block');
-	} else {
-		e.target.innerHTML = 'Approve';
-		$('#approvedSection').css('display', 'none');
-	}
-})
