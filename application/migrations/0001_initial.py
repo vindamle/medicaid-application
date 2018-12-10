@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
                 ('is_medicaid_pending', models.CharField(blank=True, max_length=50, null=True)),
                 ('date_of_medicaid_submission', models.DateTimeField(blank=True, null=True)),
                 ('medicaid_application', models.FileField(blank=True, null=True, upload_to='applications/')),
-                ('medicaid_comfirmation', models.FileField(blank=True, null=True, upload_to='applications/')),
+                ('medicaid_confirmation', models.FileField(blank=True, null=True, upload_to='applications/')),
                 ('date_of_rfi', models.DateTimeField(blank=True, null=True)),
                 ('rfi', models.FileField(blank=True, null=True, upload_to='applications/')),
                 ('date_of_deadline', models.DateTimeField(blank=True, null=True)),
