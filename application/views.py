@@ -5,7 +5,7 @@ from django.views import generic
 from .forms import NameForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .models import Resident, ApplicationTracking, Alert, AlertType
+from .models import Resident, ApplicationTracking, Alert, AlertType,Phase
 from .additionalInfo import AdditionalInfo
 
 
@@ -35,17 +35,13 @@ def update_list(request):
         requested_resident_id = int(requested_resident_id)
         alert = Resident.objects.get(resident_id = requested_resident_id)
         alert_type = AlertType.objects.get(alert_type_id = 1)
+
         if track == "true":
             alert.tracking_status = True
+            alert.phase = Phase.objects.get(phase_id = 1)
             application = ApplicationTracking(resident = alert)
             application.save()
-            Alert.objects.create(
-                resident =alert,
-                application = application,
-                alert_priority = 1,
-                alert_message = "Application Not Started",
-                alert_type = alert_type,
-            )
+
             alert.save()
 
 
@@ -64,7 +60,7 @@ def approval_verified(request):
 
         application = ApplicationTracking.objects.get(resident = resident_id)
         print(application)
-        if request.GET['approval_verified'] == "True":
+        if request.GET['approval_verified'] == "true":
             application.approval_verified = True
             application.save()
         else:

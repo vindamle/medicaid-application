@@ -89,13 +89,14 @@ class PendingView(View):
 
     def get(self, request, *args, **kwargs):
         '''if GET  '''
+        residents = Resident.objects.filter(tracking_status = True)
+        for resident in residents:
+            alerts = Alert.objects.filter(resident = resident , alert_status = False)
+            self.list = list()
 
-        alerts = Alert.objects.filter(alert_status = False)
-        self.list = list()
-
-        for alert in alerts:
-            print(alert.resident.resident_id)
-            self.list.append(alert)
+            for alert in alerts:
+                print(alert.resident.resident_id)
+                self.list.append(alert)
         print(self.list)
         return render(request,self.template_name, {'list':self.list,"form":self.form_class})
 
@@ -143,7 +144,7 @@ class ShowView(View):
         for result in results:
             print(result.copay)
             application = result
-    
+
         return render(request,self.template_name, {'alert':alert,'application':application,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
