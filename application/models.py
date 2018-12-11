@@ -71,8 +71,9 @@ class ApplicationTracking(models.Model):
         Resident,
         on_delete = models.CASCADE,
     )
-    LTC = models.BooleanField(null = True, blank = True)
-    spousal = models.BooleanField(null = True, blank = True)
+    LTC = models.BooleanField(max_length = 50,null = True, blank = True)
+
+    spousal = models.CharField (max_length = 50,null = True, blank = True)
     application_type = models.CharField(max_length = 50, null = True, blank = True)
 
 
@@ -86,8 +87,6 @@ class ApplicationTracking(models.Model):
     date_of_rfi  = models.DateTimeField(null = True, blank = True)
     rfi = models.FileField(upload_to = 'applications/',null = True, blank = True)
     date_of_deadline  = models.DateTimeField(null = True, blank = True)
-
-    rfi_deadline_alert = models.BooleanField(null = True, blank = True)
 
     date_of_medicaid_approval  = models.DateTimeField(null = True, blank = True)
     medicaid_approval = models.FileField(upload_to = 'applications/',null = True, blank = True)
@@ -106,14 +105,14 @@ class ApplicationTracking(models.Model):
     fair_hearing_required  = models.BooleanField(null = True, blank = True)
     fair_hearing_notice_date = models.DateTimeField(null = True, blank = True)
     spousal_refusal  = models.BooleanField(null = True, blank = True)
-    appointment_required  = models.BooleanField(null = True, blank = True)
+
     appointment_date = models.DateTimeField(null = True, blank = True)
     dss_contact_address  = models.CharField(max_length = 100, null = True, blank = True)
     dss_contact_phone  = models.CharField(max_length = 100, null = True, blank = True)
     dss_contact_email = models.EmailField(max_length = 100, null = True, blank = True)
     dss_contact_fax  = models.CharField(max_length = 100, null = True, blank = True)
     notes_file = models.FileField(upload_to = 'applications/',null = True, blank = True)
-    recertification_alert = models.BooleanField(null = True, blank = True)
+
 
 
     class Meta:

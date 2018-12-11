@@ -29,13 +29,13 @@
 			<div class="row">
 				<div class="col-lg-4">
 					<li>
-						<label>Resident Name:</label> 
+						<label>Resident Name:</label>
 						<span class="">{{alert.first_name}} {{alert.last_name}}</span>
 					</li>
-					<!-- 
+					<!--
 					EXPERIMENTING WITH RADIO BUTTONS AND SELECT DROPDOWNS:
 					<li>
-						<label>Short-Term / Long-Term Care: </label> 
+						<label>Short-Term / Long-Term Care: </label>
 						<select name="LTC" id="LTC_select" data-table="application">
 							<option value="short_term">Short-Term</option>
 							<option value="long_term">Long-Term</option>
@@ -56,39 +56,39 @@
   					</form>
 					</li> -->
 					<li>
-						<label>Date of Birth:</label> 
+						<label>Date of Birth:</label>
 						<span class="">{{alert.dob|date:"F d, Y"}}</span>
 					</li>
 					<li class="editableLi">
-						<label>Address:</label> 
+						<label>Address:</label>
 						<span class="editable" id="address" data-table="resident" data-alert_id="">{{alert.address}}</span>
 					</li>
 				</div>
 				<div class="col-lg-4">
 					<li class="editableLi">
-						<label>City:</label> 
+						<label>City:</label>
 						<span class="editable" id="city" data-table="resident" data-alert_id="">{{alert.city}}</span>
 					</li>
 					<li class="editableLi">
-						<label>State:</label> 
+						<label>State:</label>
 						<span class="editable" id="state" data-table="resident" data-alert_id="">{{alert.state}}</span>
 					</li>
 					<li class="editableLi">
-						<label>Zip:</label> 
+						<label>Zip:</label>
 						<span class="editable" id="zip" data-table="resident" data-alert_id="">{{alert.zip}}</span>
 					</li>
 				</div>
-				<div class="col-lg-4">			
+				<div class="col-lg-4">
 					<li class="editableLi">
-						<label>County:</label> 
+						<label>County:</label>
 						<span class="editable" id="county" data-table="resident" data-alert_id="">{{alert.county}}</span>
 					</li>
 					<li class="editableLi">
-						<label>Marital Status:</label> 
+						<label>Marital Status:</label>
 						<span class="editable" id="marital_status" data-table="resident" data-alert_id="">{{alert.marital_status}}</span>
 					</li>
 					<li>
-						<label>Facility:</label> 
+						<label>Facility:</label>
 						<span class="">{{alert.facility}}</span>
 					</li>
 					<li class="invisible absolute" id="residentId">{{alert.resident_id}}</li>
@@ -102,41 +102,42 @@
 			<div class="row">
 				<div class="col-lg-4">
 					<li class="editableLi">
-						<label>Primary Payor:</label> 
+						<label>Primary Payor:</label>
 						<span class="editable" id="primary_payor" data-table="resident" data-alert_id="">{{alert.primary_payor}}</span>
 					</li>
 					<li class="editableLi">
-						<label>Secondary Payor:</label> 
+						<label>Secondary Payor:</label>
 						<span class="editable" id="secondary_payor" data-table="resident" data-alert_id="">{{alert.secondary_payor}}</span>
 					</li>
 				</div>
 				<div class="col-lg-4">
 					<li class="editableLi">
-						<label>Copays:</label> 
+						<label>Copays:</label>
 						<span class="editable" id="copays" data-table="application" data-alert_id="">{{application.copays}}</span>
 					</li>
 					<li class="editableLi">
-						<label>Copays Start Date:</label> 
+						<label>Copays Start Date:</label>
 						<span class="editable" id=""></span>
 					</li>
 					<li class="editableLi">
-						<label>Secondary Insurance Copay Percentage:</label> 
+						<label>Secondary Insurance Copay Percentage:</label>
 						<span class="editable" id="secondary_pays_copay" data-table="application" data-alert_id="">{{application.secondary_pays_copay}}</span>
 					</li>
 				</div>
 				<div class="col-lg-4">
 					<li class="editableLi">
-						<label>Last Medicare Date:</label> 
+						<label>Last Medicare Date:</label>
 						<span class="editable date">{{application.medicaid_pickup_date}}</span>
 					</li>
 					<li class="editableLi">
-						<label>Cut From Medicare/Insurance Date:</label> 
+						<label>Cut From Medicare/Insurance Date:</label>
 						<span class="editable date">{{application.medicaid_pickup_date}}</span>
 					</li>
 				</div>
 			</div>
 		</ul>
 	</section>
+
 	<section>
 		<h4>Medicaid Application Information:</h4>
 		<ul>
@@ -147,11 +148,11 @@
 						<span class="editable" id="status" data-table="application" data-alert_id=""></span>
 					</li>
 					<li class="editableLi">
-						<label>Is Medicaid Pending?</label> 
+						<label>Is Medicaid Pending?</label>
 						<span class="editable" id="is_medicaid_pending" data-table="application" data-alert_id="">{{application.is_medicaid_pending}}</span>
 					</li>
 					<li class="editableLi">
-						<label>Medicaid Pickup Date:</label> 
+						<label>Medicaid Pickup Date:</label>
 						<span class="editable date" id="medicaid_pickup_date" data-table="application" data-alert_id=5>	{{application.medicaid_pickup_date}}</span>
 					</li>
 					<li>
@@ -159,13 +160,13 @@
 						<span class="editable date" id="date_of_medicaid_submission" data-table="application" data-alert_id="">{{application.date_of_medicaid_submission}}</span>
 					</li>
 					<li class="editableLi">
-						<label>Application County:</label> 
+						<label>Application County:</label>
 						<span class="editable" id="application_county" data-table="application" data-alert_id="">{{application.application_county}}</span>
 					</li>
 					<li class="editableLi">
-						<label>Application State:</label> 
+						<label>Application State:</label>
 						<span class="editable" id="application_state" data-table="application" data-alert_id="">{{application.application_state}}</span>
-					</li>				
+					</li>
 				</div>
 				<div class="col-lg-4">
 					<li class="">
@@ -180,7 +181,7 @@
 						<!-- <span class="editable" id="application_type" data-table="application" data-alert_id="">{{application.application_type}}</span> -->
 					</li>
 					<li>
-						<label>Spousal/Single:</label> 
+						<label>Spousal/Single:</label>
 						<select name="spousal" id="spousal_select" data-table="application">
 							<option value="">Please select one:</option>
 							<option value="single">Single</option>
@@ -192,49 +193,49 @@
 						<label>Estimated NAMI/Income Contribution Amount:</label>
 					</li>
 					<li class="editableLi">
-						<label>Short-term/Long-Term Care:</label> 
+						<label>Short-term/Long-Term Care:</label>
 			 			<span class="editable" id="LTC" data-table="application" data-alert_id="">
 							{% if application.LTC %}
 	   						Long-Term Care
 	  					{% elif application.LTC == False %}
 	   						Short-Term Care
 	   					{% else %}
-	   						 
+
 							{% endif %}
 						</span>
 					</li>
 					<li class="editableLi">
-						<label>Spousal Refusal:</label> 
+						<label>Spousal Refusal:</label>
 						<span class="editable" id="spousal_refusal" data-table="application" data-alert_id="">{{application.spousal_refusal}}</span>
 					</li>
 							<li>
-						<label>Date of RFI:</label> 
+						<label>Date of RFI:</label>
 						<span class="editable date" id="date_of_rfi" data-table="application" data-alert_id="">{{application.date_of_rfi}}</span>
 					</li>
 				</div>
 				<div class="col-lg-4">
 					<li>
-						<label>Date of Deadline:</label> 
+						<label>Date of Deadline:</label>
 						<span class="editable date" id="date_of_deadline" data-table="application" data-alert_id="">{{application.date_of_deadline}}</span>
 					</li>
 					<li>
-						<label>Date of appointment with applicant (if required):</label> 
+						<label>Date of appointment with applicant (if required):</label>
 						<span class="editable date" id="appointment_date" data-table="application" data-alert_id="">{{application.appointment_date}}</span>
 					</li>
 					<li class="editableLi">
-						<label>DSS Contact Address:</label> 
+						<label>DSS Contact Address:</label>
 						<span class="editable" id="dss_contact_address" data-table="application" data-alert_id="">{{application.dss_contact_address}}</span>
 					</li>
 					<li class="editableLi">
-						<label>DSS Contact Phone:</label> 
+						<label>DSS Contact Phone:</label>
 						<span class="editable" id="dss_contact_phone" data-table="application" data-alert_id="">{{application.dss_contact_phone}}</span>
 					</li>
 					<li class="editableLi">
-						<label>DSS Contact Email:</label> 
+						<label>DSS Contact Email:</label>
 						<span class="editable" id="dss_contact_email" data-table="application" data-alert_id="">{{application.dss_contact_email}}</span>
 					</li>
 					<li class="editableLi">
-						<label>DSS Contact Fax:</label> 
+						<label>DSS Contact Fax:</label>
 						<span class="editable" id="dss_contact_fax" data-table="application" data-alert_id="">{{application.dss_contact_fax}}</span>
 					</li>
 				</div>
@@ -287,7 +288,7 @@
 					</form>
 				</div>
 				<!-- <div class="col-lg-4"> -->
-					
+
 				<!-- </div> -->
 			</div>
 		</ul>
@@ -319,11 +320,11 @@
 			 			<span class="editable"></span>
 					</li>
 					<li class="editableLi">
-						<label>Fair Hearing Required?</label> 
+						<label>Fair Hearing Required?</label>
 			 			<span class="editable" id="fair_hearing_required">{{application.fair_hearing_required}}</span>
 					</li>
 					<li class="editableLi">
-						<label>Date of Medicaid Recertification:</label> 
+						<label>Date of Medicaid Recertification:</label>
 						<span class="editable date">{{application.date_of_medicaid_recertification}}</span>
 					</li>
 				</div>
