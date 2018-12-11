@@ -25,6 +25,11 @@ class Facility(models.Model):
         verbose_name = 'Facilities'
         verbose_name_plural = 'Facilities'
 
+
+class Phase(models.Model):
+    phase_id = models.AutoField(primary_key = True)
+    phase_name = models.CharField(max_length = 50)
+
 class Resident(models.Model):
 
     resident_id  = models.BigAutoField(primary_key=True)
@@ -55,7 +60,11 @@ class Resident(models.Model):
     zip = models.IntegerField(null = True, blank = True)
     marital_status = models.CharField(max_length = 50, null = True, blank = True)
 
-
+    phase = models.ForeignKey(
+        Phase,
+        on_delete = models.CASCADE,
+        null = True,
+    )
     # there will be others
     def __str__(self):
         return self.resident_id
@@ -71,9 +80,9 @@ class ApplicationTracking(models.Model):
         Resident,
         on_delete = models.CASCADE,
     )
-    LTC = models.BooleanField(max_length = 50,null = True, blank = True)
+    LTC = models.CharField(max_length = 50,null = True, blank = True)
 
-    spousal = models.CharField (max_length = 50,null = True, blank = True)
+    spousal = models.CharField(max_length = 50,null = True, blank = True)
     application_type = models.CharField(max_length = 50, null = True, blank = True)
 
 
@@ -82,7 +91,7 @@ class ApplicationTracking(models.Model):
 
     date_of_medicaid_submission  = models.DateTimeField(null = True, blank = True)
     medicaid_application = models.FileField(upload_to = 'applications/',null = True, blank = True)
-    medicaid_comfirmation = models.FileField(upload_to = 'applications/',null = True, blank = True)
+    medicaid_confirmation = models.FileField(upload_to = 'applications/',null = True, blank = True)
 
     date_of_rfi  = models.DateTimeField(null = True, blank = True)
     rfi = models.FileField(upload_to = 'applications/',null = True, blank = True)
@@ -104,7 +113,7 @@ class ApplicationTracking(models.Model):
     approval_verified  = models.BooleanField(null = True, blank = True)
     fair_hearing_required  = models.BooleanField(null = True, blank = True)
     fair_hearing_notice_date = models.DateTimeField(null = True, blank = True)
-    spousal_refusal  = models.BooleanField(null = True, blank = True)
+    spousal_refusal= models.CharField(max_length = 50,null = True, blank = True)
 
     appointment_date = models.DateTimeField(null = True, blank = True)
     dss_contact_address  = models.CharField(max_length = 100, null = True, blank = True)
