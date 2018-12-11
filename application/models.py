@@ -82,7 +82,7 @@ class ApplicationTracking(models.Model):
 
     date_of_medicaid_submission  = models.DateTimeField(null = True, blank = True)
     medicaid_application = models.FileField(upload_to = 'applications/',null = True, blank = True)
-    medicaid_comfirmation = models.FileField(upload_to = 'applications/',null = True, blank = True)
+    medicaid_confirmation = models.FileField(upload_to = 'applications/',null = True, blank = True)
 
     date_of_rfi  = models.DateTimeField(null = True, blank = True)
     rfi = models.FileField(upload_to = 'applications/',null = True, blank = True)

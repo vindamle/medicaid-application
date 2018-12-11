@@ -1,17 +1,22 @@
+// Give select fields default value (if there is one) from database:
 const selectFields = document.querySelectorAll('SELECT');
-for (var i = 0; i < selectFields.length; i++) {
+for (let i = 0; i < selectFields.length; i++) {
 	const selectField = selectFields[i];
-	// Give select fields default value (if there is one) from database:
 	const selectFieldParent = selectField.parentNode;
 	const DBinfo = selectFieldParent.querySelector('.DBinfo').innerHTML;
-	const options = selectField.children;
-	for (var i = 0; i < options.length; i++) {
-		option = options[i];
+	const options = selectField.querySelectorAll('OPTION');
+	for (let x = 0; x < options.length; x++) {
+		const option = options[x];
 		if (option.value == DBinfo) {
 			option.setAttribute("selected", "selected");
 		};
 	};
-//send AJAX call from select fields on option change:
+};
+
+//send AJAX call from select and radio button fields:
+// REFACTOR THESE TWO FUNCTIONS:
+for (let i = 0; i < selectFields.length; i++) {
+	const selectField = selectFields[i];
 	selectField.addEventListener('change', () => {
 		const table = selectField.getAttribute('data-table');
 			const dataObject = {
@@ -24,9 +29,8 @@ for (var i = 0; i < selectFields.length; i++) {
 	});
 };
 
-//send AJAX call from radio button fields:
 const radio_forms = document.querySelectorAll('.radio_form');
-for (var i = 0; i < radio_forms.length; i++) {
+for (let i = 0; i < radio_forms.length; i++) {
 	const radio_form = radio_forms[i];
 	radio_form.addEventListener('click',(e)=> {
 		if (e.target.value) {
@@ -92,7 +96,7 @@ const replaceElement = (oldElement, newElementType) => {
 		};
 		parent.style.borderBottom="none";
 		//Pressing 'Enter' in an input leaves editing mode
-		newElement.addEventListener('keypress',function(e){
+		newElement.addEventListener('keyup',function(e){
 	    if (e.keyCode === 13) {
 				sendInputInfoToDB(newElement);
   			replaceElement(newElement, 'span');
@@ -110,7 +114,7 @@ document.addEventListener('dblclick', (e)=>{
 	if (e.target.classList.contains('editableLi') || e.target.parentNode.classList.contains('editableLi')) {
 		// leave editing mode of any other inputs and updates them
 		const activeInputs = document.querySelectorAll('INPUT.editable');
-		for (var i = 0; i < activeInputs.length; i++) {
+		for (let i = 0; i < activeInputs.length; i++) {
 			const input = activeInputs[i];
 			sendInputInfoToDB(input);
   		replaceElement(input, 'span');
@@ -214,7 +218,7 @@ $('#approveBtn').click((e) => {
 // editBtn.addEventListener('click', (e) => {	
 // 	const editableItems = document.querySelectorAll('.editable');
 // 	if (editBtn.textContent == 'Edit') {
-// 			for (var i = 0; i < editableItems.length; i++) {
+// 			for (let i = 0; i < editableItems.length; i++) {
 // 			const	editableItem = editableItems[i]
 // 			const input = document.createElement('input');
 // 			input.className = 'editable';
@@ -236,7 +240,7 @@ $('#approveBtn').click((e) => {
 // 			editBtn.classList.toggle('saveBtn');
 // 		};
 // 	} else if (editBtn.textContent == 'Save') {
-// 			for (var i = 0; i < editableItems.length; i++) {
+// 			for (let i = 0; i < editableItems.length; i++) {
 // 			const editableItem = editableItems[i]
 // 			const span = document.createElement('span');
 // 			span.textContent = editableItem.value;

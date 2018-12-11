@@ -139,8 +139,9 @@ class ShowView(View):
         results = ApplicationTracking.objects.filter(resident = resident)
 
 
-
+        
         for result in results:
+            print(result.copay)
             application = result
     
         return render(request,self.template_name, {'alert':alert,'application':application,"form":self.form_class})
