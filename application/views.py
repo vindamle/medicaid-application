@@ -77,11 +77,29 @@ def approval_verified(request):
 
 
 def update_resident(request):
-    # Sending an success response
+    resident_id =int(request.GET['resident_id'])
+    column =request.GET['column']
+    new_value =request.GET['new_value']
+    resident = Resident.objects.get(resident_id = resident_id)
+    field = setattr(resident, column,new_value)
+    resident.save()
+
     return HttpResponse("200")
 
 def update_application(request):
-    # Sending an success response
+
+    resident_id =int(request.GET['resident_id'])
+    column =request.GET['column']
+    new_value =request.GET['new_value']
+
+    resident = Resident.objects.get(resident_id = resident_id)
+    application = ApplicationTracking.objects.get(resident = resident)
+
+    field = setattr(application, column,new_value)
+
+    application.save()
+
+
     return HttpResponse("200")
 
 def update_alert(request):

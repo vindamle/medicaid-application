@@ -125,22 +125,24 @@ class ShowView(View):
     def get(self, request, *args, **kwargs):
         '''if GET  '''
 
-        number= int(request.GET["resident_id"])
+        resident_id= int(request.GET["resident_id"])
 
-        results = Resident.objects.filter(resident_id = number)
+        results = Resident.objects.filter(resident_id = resident_id)
 
         self.list = list()
 
         for result in results:
             alert = result
 
+        resident = Resident.objects.get(resident_id = resident_id)
 
-        results = ApplicationTracking.objects.filter(resident_id = number)
-        application = []
+        results = ApplicationTracking.objects.filter(resident = resident)
+
+
 
         for result in results:
-            application.append(result)
-
+            application = result
+    
         return render(request,self.template_name, {'alert':alert,'application':application,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
