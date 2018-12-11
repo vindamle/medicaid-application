@@ -439,6 +439,17 @@ input[type=date]::-webkit-inner-spin-button {
 	margin-bottom: 5px;
 }
 
+.residentInfoDiv select {
+	padding: 2px;
+	border: none;
+	color: darkblue;
+	font-weight: bold;
+}
+
+.residentInfoDiv select:focus {
+	outline: none;
+}
+
 .editable {
 	/*border-bottom: 1px solid #aaa;*/
 	/*text-align: right;*/

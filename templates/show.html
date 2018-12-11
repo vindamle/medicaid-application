@@ -144,7 +144,7 @@
 				<div class="col-lg-4">
 					<li class="editableLi">
 						<label>Status: </label> 
-						<span class="editable" id="status" data-table="application" data-alert_id="">Pending</span>
+						<span class="editable" id="status" data-table="application" data-alert_id=""></span>
 					</li>
 					<li class="editableLi">
 						<label>Is Medicaid Pending?</label> 
@@ -168,21 +168,25 @@
 					</li>				
 				</div>
 				<div class="col-lg-4">
-					<li class="editableLi">
+					<li class="">
 						<label>Application Type:</label> 
-						<span class="editable" id="application_type" data-table="application" data-alert_id="">{{application.application_type}}</span>
+						<select name="application_type" id="application_type_select" data-table="application">
+							<option value="">Please select one:</option>
+							<option value="new application">New Application</option>
+							<option value="conversion">Conversion</option>
+							<option value="payor change">Payor Change</option>
+						</select>
+						<span class="invisible DBinfo" id="DBspousal">{{application.application_type}}</span>
+						<!-- <span class="editable" id="application_type" data-table="application" data-alert_id="">{{application.application_type}}</span> -->
 					</li>
-					<!-- <li class="editableLi">
-						<label></label> 
-						<span class="editable" id="spousal" data-table="application" data-alert_id="">{{application.spousal}}</span>
-					</li> -->
 					<li>
 						<label>Spousal/Single:</label> 
 						<select name="spousal" id="spousal_select" data-table="application">
-							<option value="">Please Select One</option>
-							<option value="single" id="single">Single</option>
-							<option value="spousal" id="spousal">Spousal</option>
+							<option value="">Please select one:</option>
+							<option value="single">Single</option>
+							<option value="spousal">Spousal</option>
 						</select>
+						<span class="invisible DBinfo" id="DBspousal">{{application.spousal}}</span>
 					</li>
 					<li class="editableLi">
 						<label>Estimated NAMI/Income Contribution Amount:</label>
@@ -312,7 +316,7 @@
 				<div class="col-lg-4">
 					<li class="editableLi">
 						<label>NAMI/Income Contribution Amount:</label> 
-			 			<span class="editable">Unknown</span>
+			 			<span class="editable"></span>
 					</li>
 					<li class="editableLi">
 						<label>Fair Hearing Required?</label> 
@@ -333,13 +337,23 @@
 {% endblock %}
 {% load static %}
 {% block scripts %}
-<script src="{% static 'js/show.js' %}"></script>
-	{% if application.spousal != null %}
-		<script type="text/javascript">
-			const option = document.getElementById("{{application.spousal}}");
-			option.setAttribute("selected", "selected");
-		</script>
-	{% endif %}
+
+	<script src="{% static 'js/show.js' %}"></script>
+
+	<script type="text/javascript">
+		
+		// {% if application.spousal != null %}
+		// 		const option = document.getElementById("{{application.spousal}}");
+		// 		option.setAttribute("selected", "selected");
+		// {% endif %}
+		// {% for item in application %}
+		// 	console.log("{{item}}")
+		// 	{% if item != null %}
+		// 		const option = document.getElementById("{{item}}");
+		// 		option.setAttribute("selected", "selected");
+		// 	{% endif %}
+		// {% endfor %}
+	</script>
 {% endblock %}
 
 <!--

@@ -1,19 +1,30 @@
-// REFACTOR THESE TWO FUNCTIONS:
-const select_fields = document.querySelectorAll('select');
-for (var i = 0; i < select_fields.length; i++) {
-	const select_field = select_fields[i];
-	select_field.addEventListener('change', () => {
-		const table = select_field.getAttribute('data-table');
+const selectFields = document.querySelectorAll('SELECT');
+for (var i = 0; i < selectFields.length; i++) {
+	const selectField = selectFields[i];
+	// Give select fields default value (if there is one) from database:
+	const selectFieldParent = selectField.parentNode;
+	const DBinfo = selectFieldParent.querySelector('.DBinfo').innerHTML;
+	const options = selectField.children;
+	for (var i = 0; i < options.length; i++) {
+		option = options[i];
+		if (option.value == DBinfo) {
+			option.setAttribute("selected", "selected");
+		};
+	};
+//send AJAX call from select fields on option change:
+	selectField.addEventListener('change', () => {
+		const table = selectField.getAttribute('data-table');
 			const dataObject = {
 				resident_id: document.querySelector("#residentId").innerHTML,
-				column: select_field.getAttribute('name'),
-				new_value: select_field.value
+				column: selectField.getAttribute('name'),
+				new_value: selectField.value
 			};
 			const successMessage = `Value of ${dataObject.column} in the ${table} table set to ${dataObject.new_value}`;
 			updateDB(table, dataObject, successMessage);
 	});
 };
 
+//send AJAX call from radio button fields:
 const radio_forms = document.querySelectorAll('.radio_form');
 for (var i = 0; i < radio_forms.length; i++) {
 	const radio_form = radio_forms[i];
@@ -81,7 +92,7 @@ const replaceElement = (oldElement, newElementType) => {
 		};
 		parent.style.borderBottom="none";
 		//Pressing 'Enter' in an input leaves editing mode
-		newElement.addEventListener('keyup',function(e){
+		newElement.addEventListener('keypress',function(e){
 	    if (e.keyCode === 13) {
 				sendInputInfoToDB(newElement);
   			replaceElement(newElement, 'span');
