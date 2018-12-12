@@ -101,3 +101,7 @@ def update_application(request):
 def update_alert(request):
     # Sending an success response
     return HttpResponse("200")
+
+def phase_change(request):
+    # Sending an success response
+    return HttpResponse("200")

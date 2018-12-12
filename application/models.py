@@ -121,7 +121,7 @@ class ApplicationTracking(models.Model):
     dss_contact_email = models.EmailField(max_length = 100, null = True, blank = True)
     dss_contact_fax  = models.CharField(max_length = 100, null = True, blank = True)
     notes_file = models.FileField(upload_to = 'applications/',null = True, blank = True)
-
+    
 
 
     class Meta:
