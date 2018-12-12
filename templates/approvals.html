@@ -28,7 +28,7 @@
         <td>{{obj.facility}}</td>
         <td>{{obj.primary_payor}}</td>
         <td>{{obj.secondary_payor}}</td>
-        <td>{{obj.approval_start_date}} - {{obj.approval_end_date}}</td>
+        <td>{{obj.approval_start_date|date:"F d, Y"}} - {{obj.approval_end_date|date:"F d, Y"}}</td>
         <td>?</td>
         <td class="verifyBtnTd">
           {% if obj.approval_verified == False %}

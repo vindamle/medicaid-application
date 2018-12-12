@@ -1,4 +1,26 @@
-// Give select fields default value (if there is one) from database:
+const meetingCheckbox = document.querySelector('.meetingCheckbox');
+$(document).ready(()=>{
+	if(meetingCheckbox.checked) {
+	$('.step2').css('display', 'inline-block');
+}
+})
+meetingCheckbox.addEventListener('change', () => {
+	if(meetingCheckbox.checked) {
+		const dataObject = {
+			resident_id: document.querySelector("#residentId").innerHTML,
+			column: "met_with_applicant",
+			new_value: true
+		}
+		const table = "application";
+		const successMessage = `Value of ${dataObject.column} in the ${table} table set to ${dataObject.new_value}`;
+		updateDB(table, dataObject, successMessage);
+		$('.step2').css('display', 'inline-block');
+	} else {
+		$('.step2').css('display', 'none');
+	}
+})
+
+// Make select fields default to value (if there is one) in database:
 const selectFields = document.querySelectorAll('SELECT');
 for (let i = 0; i < selectFields.length; i++) {
 	const selectField = selectFields[i];
@@ -121,9 +143,9 @@ document.addEventListener('dblclick', (e)=>{
 		};
 		let span = e.target;
  		if (span.tagName == 'LABEL') {
-			span = e.target.nextElementSibling;
+			span = e.target.parentNode.querySelector('SPAN')
 		} else if (span.tagName == 'LI') {
-			span = e.target.getElementsByTagName('SPAN')[0];
+			span = e.target.querySelector('SPAN');
 		};
 		replaceElement(span, 'input');
 	};

@@ -13,7 +13,6 @@ $(document).ready(function () {
   $('a[href="'+ url +'"]').addClass('currentPage');
 });
 
-
 // show Table Count next to headings
 const showTableCount = table => {
   const countSpanId = table.parentNode.id + "Count";

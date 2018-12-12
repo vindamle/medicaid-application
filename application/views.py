@@ -34,14 +34,13 @@ def update_list(request):
         track = request.GET['tracking']
         requested_resident_id = int(requested_resident_id)
         alert = Resident.objects.get(resident_id = requested_resident_id)
-        alert_type = AlertType.objects.get(alert_type_id = 1)
+        
 
         if track == "true":
             alert.tracking_status = True
             alert.phase = Phase.objects.get(phase_id = 1)
             application = ApplicationTracking(resident = alert)
             application.save()
-
             alert.save()
 
 

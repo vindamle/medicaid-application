@@ -112,12 +112,12 @@
 				</div>
 				<div class="col-lg-4">
 					<li class="editableLi">
-						<label>Copays:</label>
-						<span class="editable" id="copays" data-table="application" data-alert_id="">{{application.copays}}</span>
+						<label>Copay:</label>
+						<span class="editable" id="copay" data-table="application" data-alert_id="">{{application.copay}}</span>
 					</li>
 					<li class="editableLi">
-						<label>Copays Start Date:</label>
-						<span class="editable" id=""></span>
+						<label>Copay Start Date:</label>
+						<span class="editable" id="copay_start_date" data-table="application" data-alert_id="">{{application.copay_start_date}}</span>
 					</li>
 					<li class="editableLi">
 						<label>Secondary Insurance Copay Percentage:</label>
@@ -143,33 +143,41 @@
 		<ul>
 			<div class="row">
 				<div class="col-lg-4">
-					<li class="editableLi">
-						<label>Status: </label> 
-						<span class="editable" id="status" data-table="application" data-alert_id=""></span>
+					<li class="editableLi step1">
+						<label>Applicant Meeting Date:</label>
+						<span class="editable date" id="appointment_date" data-table="application" data-alert_id="">{{application.appointment_date|date:"F d, Y"}}</span>
 					</li>
-					<li class="editableLi">
-						<label>Is Medicaid Pending?</label>
-						<span class="editable" id="is_medicaid_pending" data-table="application" data-alert_id="">{{application.is_medicaid_pending}}</span>
+					<li class="step1">
+						<label class=""><input type="checkbox" class="meetingCheckbox" {% if application.met_with_applicant %}checked="checked"{% endif %}>Met with Applicant</label>
+						<!-- <select name="spousal" id="spousal_select" data-table="application">
+							<option value="no">No</option>
+							<option value="yes">Yes</option>
+						</select> -->
+						<span class="invisible DBinfo" id="DBspousal">{{application.spousal}}</span>
 					</li>
-					<li class="editableLi">
+					<li class="editableLi step2">
 						<label>Medicaid Pickup Date:</label>
 						<span class="editable date" id="medicaid_pickup_date" data-table="application" data-alert_id=5>	{{application.medicaid_pickup_date}}</span>
 					</li>
-					<li>
+					<li class="editableLi step3">
+						<label>Is Medicaid Pending?</label>
+						<span class="editable" id="is_medicaid_pending" data-table="application" data-alert_id="">{{application.is_medicaid_pending}}</span>
+					</li>
+					<li class="editableLi step3">
 						<label>Date of Medicaid Submission:</label>
 						<span class="editable date" id="date_of_medicaid_submission" data-table="application" data-alert_id="">{{application.date_of_medicaid_submission}}</span>
 					</li>
-					<li class="editableLi">
+					<li class="editableLi step3">
 						<label>Application County:</label>
 						<span class="editable" id="application_county" data-table="application" data-alert_id="">{{application.application_county}}</span>
 					</li>
-					<li class="editableLi">
+					<li class="editableLi step3">
 						<label>Application State:</label>
 						<span class="editable" id="application_state" data-table="application" data-alert_id="">{{application.application_state}}</span>
 					</li>
 				</div>
 				<div class="col-lg-4">
-					<li class="">
+					<li class="step3">
 						<label>Application Type:</label> 
 						<select name="application_type" id="application_type_select" data-table="application">
 							<option value="">Please select one:</option>
@@ -180,7 +188,7 @@
 						<span class="invisible DBinfo" id="DBapplication_type">{{application.application_type}}</span>
 						<!-- <span class="editable" id="application_type" data-table="application" data-alert_id="">{{application.application_type}}</span> -->
 					</li>
-					<li>
+					<li class="step3">
 						<label>Spousal/Single:</label>
 						<select name="spousal" id="spousal_select" data-table="application">
 							<option value="">Please select one:</option>
@@ -189,10 +197,12 @@
 						</select>
 						<span class="invisible DBinfo" id="DBspousal">{{application.spousal}}</span>
 					</li>
-					<li class="editableLi">
+					<li class="editableLi step3">
 						<label>Estimated NAMI/Income Contribution Amount:</label>
+						<span class="editable" id="estimated_nami" data-table="application" data-alert_id="">{{application.estimated_nami}}</span>
+
 					</li>
-					<li class="editableLi">
+					<li class="editableLi step3">
 						<label>Short-term/Long-Term Care:</label>
 			 			<span class="editable" id="LTC" data-table="application" data-alert_id="">
 							{% if application.LTC %}
@@ -204,37 +214,34 @@
 							{% endif %}
 						</span>
 					</li>
-					<li class="editableLi">
+					<li class="editableLi step3">
 						<label>Spousal Refusal:</label>
 						<span class="editable" id="spousal_refusal" data-table="application" data-alert_id="">{{application.spousal_refusal}}</span>
 					</li>
-							<li>
+					<li class="editableLi step3">
 						<label>Date of RFI:</label>
-						<span class="editable date" id="date_of_rfi" data-table="application" data-alert_id="">{{application.date_of_rfi}}</span>
+						<span class="editable date" id="date_of_rfi" data-table="application" data-alert_id="">{{application.date_of_rfi|date:"F d, Y"}}</span>
 					</li>
 				</div>
 				<div class="col-lg-4">
-					<li>
+					<li class="editableLi step3">
 						<label>Date of Deadline:</label>
-						<span class="editable date" id="date_of_deadline" data-table="application" data-alert_id="">{{application.date_of_deadline}}</span>
+						<span class="editable date" id="date_of_deadline" data-table="application" data-alert_id="">{{application.date_of_deadline|date:"F d, Y"}}</span>
 					</li>
-					<li>
-						<label>Date of appointment with applicant (if required):</label>
-						<span class="editable date" id="appointment_date" data-table="application" data-alert_id="">{{application.appointment_date}}</span>
-					</li>
-					<li class="editableLi">
+					
+					<li class="editableLi step3">
 						<label>DSS Contact Address:</label>
 						<span class="editable" id="dss_contact_address" data-table="application" data-alert_id="">{{application.dss_contact_address}}</span>
 					</li>
-					<li class="editableLi">
+					<li class="editableLi step3">
 						<label>DSS Contact Phone:</label>
 						<span class="editable" id="dss_contact_phone" data-table="application" data-alert_id="">{{application.dss_contact_phone}}</span>
 					</li>
-					<li class="editableLi">
+					<li class="editableLi step3">
 						<label>DSS Contact Email:</label>
 						<span class="editable" id="dss_contact_email" data-table="application" data-alert_id="">{{application.dss_contact_email}}</span>
 					</li>
-					<li class="editableLi">
+					<li class="editableLi step3">
 						<label>DSS Contact Fax:</label>
 						<span class="editable" id="dss_contact_fax" data-table="application" data-alert_id="">{{application.dss_contact_fax}}</span>
 					</li>
@@ -243,7 +250,7 @@
 		</ul>
 	</section>
 
-	<section>
+	<section class="step3">
 		<h4>Document Upload:</h4>
 		<ul>
 			<div class="row">
@@ -294,7 +301,7 @@
 		</ul>
 	</section>
 	<!-- <div class="approveBtnDiv"> -->
-		<button class="btn btn-success centered" id="approveBtn">Approve</button>
+		<button class="btn btn-success centered step3" id="approveBtn">Approve</button>
 	<!-- </div> -->
 	<section id="approvedSection">
 		<h4>Approval Information:</h4>

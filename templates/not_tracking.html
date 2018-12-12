@@ -26,7 +26,7 @@
         <td>{{obj.facility}}</td>
         <td>{{obj.primary_payor}}</td>
         <td>{{obj.secondary_payor}}</td>
-        <td>{{obj.activity_date}}</td>
+        <td>{{obj.activity_date|date:"F d, Y"}}</td>
         <!-- <td><a href="/show?resident_id={{obj.resident_id}}" class="alertByButton"><button class="btn-danger">Show</button></a></td> -->
         <td><button class="btn-track">Start Tracking</button></td>
       </tr>
