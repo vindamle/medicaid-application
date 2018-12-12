@@ -100,3 +100,14 @@ def update_application(request):
 def update_alert(request):
     # Sending an success response
     return HttpResponse("200")
+
+def phase_change(request):
+    # Sending an success response
+    resident_id =int(request.GET['resident_id'])
+    resident = Resident.objects.get(resident_id = resident_id)
+    phase_id = resident.phase.phase_id+=1
+    phase = Phase.objects.get(phase_id = phase_id)
+    resident.phase = phase
+    resident.save()
+
+    return HttpResponse("200")
