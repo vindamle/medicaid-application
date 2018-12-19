@@ -104,8 +104,8 @@ def update_alert(request):
 def phase_change(request):
     # Sending an success response
     resident_id =int(request.GET['resident_id'])
+    phase_id =int(request.GET['phase_id'])
     resident = Resident.objects.get(resident_id = resident_id)
-    phase_id = resident.phase.phase_id+=1
     phase = Phase.objects.get(phase_id = phase_id)
     resident.phase = phase
     resident.save()

@@ -1,18 +1,10 @@
-body {
-	/*text-align: center;*/
-	/*background: #def;*/
-	/*padding-bottom: 100px;*/
-}
-
 html, body {
 	overflow-x: hidden;
 }
 
 nav {
 	width: 100vw;
-	/*height: 70px;*/
-	/*background: #FF9000;*/
-	/*padding: 10px;*/
+
 }
 
 nav li, nav li a {
@@ -28,9 +20,7 @@ nav ul {
 
 @media(min-width: 990px) {
 	nav ul {
-		/*display: inline-flex;*/
 		position: absolute;
-		/*top: 20px;*/
 		right: 20px;
 	}
 }
@@ -63,19 +53,11 @@ nav li.grayText {
 	}
 }
 
-/*.navbar {
-	position: absolute;
-	width: 100vw;
-	left: 0;
-	z-index: 1000;
-}
-*/
 .downArrow {
 	font-size: 16px;
 }
 
 .logo {
-	/*margin: 10px;*/
 	position: relative;
 	margin-left: 10px;
 	display: inline-block;
@@ -83,18 +65,10 @@ nav li.grayText {
 	width: 100px;
 }
 
-@media(min-width: 1400px) {
-	.logo {
-			/*top: -10px;*/
-	}
-}
-
 .title {
-	/*text-align: center;*/
 	text-transform: uppercase;
 	font-size: 28px;
 	color: #555;
-	/*display: inline-block;*/
 	position: absolute;
 	top: 10px;
 	left: 130px;
@@ -146,7 +120,7 @@ nav li.grayText {
 @media(max-width: 1199px) {
 	.content {
 		width: 95vw;
-		margin: 0 2.5vw 20px 2.5vw;
+		margin: 0 2.5vw 20px 0;
 	}
 }
 
@@ -157,7 +131,6 @@ h2, h3, h4 {
 
 h3 {
 	font-size: 42px;
-	/*text-decoration: underline;*/
 	color: #000055;
 }
 
@@ -166,6 +139,7 @@ h4 {
 }
 table {
 	border-bottom: none !important;
+	margin: auto;
 }
  th {
 	/*display: inline-block;*/
@@ -197,7 +171,7 @@ tbody tr:nth-of-type(odd) {
 }
 
  th, td {
-	padding: 5px 10px !important;
+	
 	text-align: center;
 	font-size: 12px;
 	height: 10px;
@@ -209,9 +183,10 @@ th {
 	border-bottom: none !important;
 }
 
-@media(min-width: 768px) {
+@media(min-width: 998px) {
 	th, td {
 		/*min-width: 150px !important;*/
+		padding: 10px 20px !important;
 		font-size: initial;
 	}	
 	th {
@@ -248,11 +223,19 @@ table button {
 .btn-ignore {
 	background: #aa0000;
 	color: white;
-  min-width: 110px;
+	min-width: 90px;
+	padding: 2px 0;
+}
+
+@media(min-width: 768px) {
+	.btn-ignore {
+		min-width: 110px;
+		padding: 6px;
+	}
 }
 
 .invisible {
-	/*position: absolute;*/
+	position: absolute;
 	visibility: hidden;
 }
 
@@ -264,24 +247,20 @@ table button {
 .nav-tabs {
 	justify-content: center;
 }
-.dataTables_wrapper {
-/*	max-width: 1220px;
-	margin-left: calc(50vw - 610px)*/
-}
 
 .dataTables_filter {
-	/*position: absolute;
-	margin-top: -40px;*/
 	margin: 20px auto;
-	/*float: initial !important;*/
-	/*text-align: center !important;*/
 }
 
 .dataTables_filter input {
+	margin-left: 5px;
 	width: 250px;
 	border-radius: 5px;
 	padding: 2px 10px;
 }
+
+/*Scrollbar styling:*/
+
 /* width */
 ::-webkit-scrollbar {
     width: 18px;
@@ -304,6 +283,7 @@ table button {
 ::-webkit-scrollbar-thumb:hover {
     background: steelblue; 
 }
+
 
 /*____________Activity Page____________*/
 .tableContainer {
@@ -345,33 +325,61 @@ table button {
 	}
 }
 
-/*@media(min-width: )*/
-/*.residentInfoDiv .col-md-6 {
-	height: 200px;
-	margin: 50px auto;
-}*/
 .residentInfoDiv h1 {
 	text-align: center;
-	color: darkblue;
+	color: steelblue;
+}
+
+.residentInfoDiv h5 {
+	color: white;
+	text-align: center;
+	background-color: rgba(180,0,0,.8);
+	width: 350px;
+	margin: auto;
+	padding: 5px;
+	border-radius: 25px;
 }
 
 .residentInfoDiv h4 {
-	margin: 0 auto 20px auto;
-	/*text-align: left;*/
-	color: #ee7000;
+	margin: -8px 0 20px -6px;
+	width: 380px;
+	/*display: inline-block;*/
+	padding: 15px 30px;
+	text-align: center;
+	/*color: #ee7700;*/
+	color: white;
+	background-color: #237;
+	/*background-color: darkblue;*/
 	/*text-decoration: underline;*/
+	border-radius: 25px 0 25px 0;
+	font-size: 20px;
+	box-shadow: 1px 5px 10px #224;
 }
 
 .residentInfoDiv section {
+	border-radius: 25px 0 25px 0;
 	margin-top: 30px;
 	/*height: 250px;*/
 	/*background: white;*/
 	border: 2px solid #eee;
-	box-shadow: 5px 5px 5px #ccc;
+	box-shadow: 0 5px 5px #ccc;
 	/*border-radius: 25px;*/
-	padding: 15px 25px 0 25px;
+	/*padding: 15px 25px 0 25px;*/
+	padding: 0;
 	/*font-size: 16px;*/
 	margin-bottom: 20px;
+}
+
+
+@media(max-width: 998px) {
+	.residentInfoDiv section {
+		border-radius: 35px;
+	}
+	.residentInfoDiv h4 {
+		width: 100%;
+		margin: 0 auto 20px auto;
+		border-radius: 35px 35px 0 0;
+	}
 }
 
 @media(min-width: 768px) {
@@ -381,27 +389,25 @@ table button {
 }
 
 .residentInfoDiv .row {
-	margin-top: 10px;
+	/*margin-top: 10px;*/
 }
 
 .residentInfoDiv ul {
-	padding-left: 10px;
+	/*padding-left: 10px;*/
+	padding: 0;
 	list-style: none;
 }
 
-.residentInfoDiv li:not(:first-of-type) {
-	margin: 10px 0;
+.residentInfoDiv .col-lg-4:not(:first-of-type) {
+	margin-top: 10px;
 }
 
-.residentInfoDiv li:not([class='fileInputLi']) {
-	border-bottom: 1px solid #ddd;
-
+.residentInfoDiv li {
+	margin: 10px 0 10px 20px;
 }
 
 .residentInfoDiv label {
-	/*color: darkblue;*/
-	/*display: block;*/
-	/*font-weight: bold;*/
+
 }
 
 .residentInfoDiv span {
@@ -414,9 +420,11 @@ table button {
 	color: darkblue;
 }
 
-.residentInfoDiv input {
-	/*border: none;
-	border-bottom: 1px solid #ddd;*/
+.residentInfoDiv input:not([type='file']) {
+	color: darkblue;
+	font-weight: bold;
+	border: none;
+	border-bottom: 1px solid #cdf;
 	/*background-color: #eee;*/
 	border-radius: 5px;
 	/*box-shadow: inset -2px -2px 5px #aaa,  inset 1px 1px 5px #aaa;*/
@@ -424,12 +432,17 @@ table button {
 	vertical-align: baseline;
 }
 
+.residentInfoDiv input:focus {
+	outline: none;
+	background-color: #eee;
+}
+
 .residentInfoDiv input[type='text'] {
-	width: 250px;
+	width: 220px;
 }
 
 .residentInfoDiv input[type='date'] {
-	width: 175px;
+	width: 160px;
 }
 
 input[type=date]::-webkit-inner-spin-button {
@@ -444,6 +457,7 @@ input[type=date]::-webkit-inner-spin-button {
 }
 
 .residentInfoDiv select {
+	text-align: center;
 	padding: 2px;
 	border: none;
 	color: darkblue;
@@ -512,6 +526,8 @@ input[type=date]::-webkit-inner-spin-button {
 
 #approveBtn {
 	position: absolute;
+	z-index: 100;
+	right: 10vw;
 	margin: 20px;
 }
 @media(max-width: 479px) {

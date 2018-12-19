@@ -31,10 +31,10 @@
         <td>{{obj.approval_start_date|date:"F d, Y"}} - {{obj.approval_end_date|date:"F d, Y"}}</td>
         <td>?</td>
         <td class="verifyBtnTd">
-          {% if obj.approval_verified == False %}
-            <button class="verifyBtn">Not Verified</button>
-          {% else %}
+          {% if obj.approval_verified == True %}
             <button class="verifyBtn verified">Verified &check;</button>
+          {% else %}
+            <button class="verifyBtn">Not Verified</button>
           {% endif %}
         </td>
         <td><a href="/show?resident_id={{obj.resident_id}}" class=""><button class="btn-tracked">Show</button></a></td>

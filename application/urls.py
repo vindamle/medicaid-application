@@ -9,6 +9,6 @@ urlpatterns = [
     path('ajax/update_resident/', views.update_resident, name = 'update_resident'),
     path('ajax/update_application/', views.update_application, name = 'update_application'),
     path('ajax/update_alert/', views.update_alert, name = 'update_alert'),
-    path('ajax/phase_change/', views.update_alert, name = 'phase_change')
+    path('ajax/phase_change/', views.phase_change, name = 'phase_change')
 
 ]

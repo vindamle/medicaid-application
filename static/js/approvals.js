@@ -20,10 +20,10 @@ $('.verifyBtn').click((e) => {
 	const row = btn.parentNode.parentNode;
 	$(btn).toggleClass('verified');
 	if (btn.innerHTML == "Not Verified") {
-		verifyOrUnverify(row, true)
+		verifyOrUnverify(row, "true")
 		btn.innerHTML = "Verified &check;";
 	} else {
-		verifyOrUnverify(row, false)
+		verifyOrUnverify(row, "false")
 		btn.innerHTML = "Not Verified";
 	}
 })
