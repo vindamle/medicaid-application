@@ -23,14 +23,14 @@
 	<h5>Status: {{alert.phase.phase_name}}</h5>
 	<!-- <p class="centered">Click any field to edit.</p> -->
 	<!-- <button class="btn" id="editBtn">Edit</button> -->
-	<section >
+	<!-- <section >
 		<h4>Demo of JS-Populated Personal Information:</h4>
 		<ul id="demo"></ul>
-	</section>
+	</section> -->
 	<section>
 		<ul>
 			<div class="row">
-				<div class="col-lg-4">
+				<div class="col-lg-4 applicationColumn">
 					<h4>Personal Information:</h4>
 					<li>
 						<label>Resident Name:</label>
@@ -54,7 +54,7 @@
 						<span class="">{{alert.facility}}</span>
 					</li>
 				</div>
-				<div class="col-lg-4">
+				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
 						<label>Address:</label>
 						<input class="editable" id="address" data-table="resident" data-alert_id="" type="text" value="{{alert.address}}">
@@ -67,15 +67,19 @@
 						<label>State:</label>
 						<input class="editable" id="state" data-table="resident" data-alert_id="" type="text" value="{{alert.state}}">
 					</li>
-				</div>
-				<div class="col-lg-4">
 					<li class="editableLi">
 						<label>Zip:</label>
 						<input class="editable" id="zip" data-table="resident" data-alert_id="" type="text" value="{{alert.zip}}">
 					</li>
+				</div>
+				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
 						<label>County:</label>
 						<input class="editable" id="county" data-table="resident" data-alert_id="" type="text" value="{{alert.county}}">
+					</li>
+					<li class="editableLi">
+						<label>Phone:</label>
+						<input class="editable" id="phone" data-table="resident" data-alert_id="" type="text" value="{{alert.phone}}">
 					</li>
 					<li class="editableLi">
 						<label>Marital Status:</label>
@@ -90,7 +94,7 @@
 	<section>
 		<ul>
 			<div class="row">
-				<div class="col-lg-4">
+				<div class="col-lg-4 applicationColumn">
 					<h4>Insurance Information:</h4>
 					<li class="editableLi">
 						<label>Primary Payor:</label>
@@ -101,7 +105,7 @@
 						<input class="editable" id="secondary_payor" data-table="resident" data-alert_id="" type="text" value="{{alert.secondary_payor}}">
 					</li>
 				</div>
-				<div class="col-lg-4">
+				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
 						<label>Copay:</label>
 						<input class="editable" id="copay" data-table="application" data-alert_id="" type="text" value="{{application.copay}}">
@@ -115,7 +119,7 @@
 						<input class="editable" id="secondary_pays_copay" data-table="application" data-alert_id="" type="text" value="{{application.secondary_pays_copay}}">
 					</li>
 				</div>
-				<div class="col-lg-4">
+				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
 						<label>Last Medicare Date:</label>
 						<input class="editable date" type="date" value="{{application.medicaid_pickup_date|date:'Y-m-d'}}">
@@ -129,10 +133,10 @@
 		</ul>
 	</section>
 	
-	<section>
+	<section id="applicationInfoSection">
 		<ul>
 			<div class="row">
-				<div class="col-lg-4">
+				<div class="col-lg-4 applicationColumn">
 					<h4>Medicaid Application Information:</h4>
 					<!-- <li class="editableLi step3">
 						<label>Is Medicaid Pending?</label>
@@ -177,7 +181,7 @@
 						<span class="invisible DBinfo" id="DBspousal_refusal">{{application.spousal_refusal}}</span>
 					</li>
 				</div>
-				<div class="col-lg-4">
+				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi step1">
 						<label>Applicant Meeting Date:</label>
 						<input class="editable date" id="appointment_date" data-table="application" data-alert_id="" type="date" value="{{application.appointment_date|date:'Y-m-d'}}">
@@ -201,7 +205,7 @@
 						<input class="editable" id="estimated_nami" data-table="application" data-alert_id="" type="text" value="{{application.estimated_nami}}">
 					</li>
 				</div>
-				<div class="col-lg-4">
+				<div class="col-lg-4 applicationColumn">
 					<li class="step1">
 						<label class=""><input type="checkbox" class="meetingCheckbox" {% if alert.phase.phase_id > 1 %} checked="checked"{% endif %}>Met with Applicant</label>
 					</li>
@@ -225,10 +229,7 @@
 						<label>DSS Contact Fax:</label>
 						<input class="editable" id="dss_contact_fax" data-table="application" data-alert_id="" type="text" value="{{application.dss_contact_fax}}">
 					</li>
-					<!-- <li class="editableLi step3">
-						<label>Date of Medicaid Submission:</label>
-						<input class="editable date" id="date_of_medicaid_submission" data-table="application" data-alert_id="" type="date" value="{{application.date_of_medicaid_submission|date:'Y-m-d'}}">
-					</li>
+					<!-- 
 					<li class="editableLi step3">
 						<label>Date of RFI:</label>
 						<input class="editable date" id="date_of_rfi" data-table="application" data-alert_id="" type="date" value="{{application.date_of_rfi|date:'Y-m-d'}}">
@@ -236,13 +237,55 @@
 				</div>
 			</div>
 		</ul>
+		<hr class="submission1 step3">
+		<h6 class="step3" id="submission1Heading">Submission #1</h6>
+		<ul class="submission1">
+			<div class="row">
+				<div class="col-lg-3">
+					<li class="step3 submission1">
+						<label class=""><input type="checkbox" class="submittedCheckbox" id="submittedCheckbox1" {% if alert.phase.phase_id > 3 %} checked="checked"{% endif %}>Medicaid Application Submitted</label>
+					</li>
+				</div>
+				<div class="col-lg-3">
+					<li class="editableLi step4 submission1">
+						<label>Submission Date:</label>
+						<input class="editable date" id="date_of_medicaid_submission" data-table="application" data-alert_id="" type="date" value="{{application.date_of_medicaid_submission|date:'Y-m-d'}}">
+					</li>
+				</div>
+				<div class="col-lg-3">
+					<li class="step4 submission1">
+						<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
+			  			{% csrf_token %}
+							<label>Upload Application Here:</label>
+							<input type="file" name="medicaid_application" value="{{application.medicaid_application}}" accept="image/jpeg
+							,image/png,application/pdf" multiple>
+							<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
+							<input type="hidden" name="file_type" value="medicaid_application">
+							<button type="submit" class="uploadBtn">Upload</button>
+						</form>
+					</li>
+				</div>
+				<div class="col-lg-3">
+					<li class="editableLi step4 submission1">
+						<label>Response:</label>
+						<select name="application1_response" id="response1_select" data-table="application">
+							<option value="not_recieved">Not recieved</option>
+							<option value="rfi">RFI</option>
+							<option value="approved">Approved</option>
+							<option value="denied">Denied</option>
+						</select>
+						<span class="invisible DBinfo" id="DBapplication1_response">{{application.application1_response}}</span>
+					</li>
+				</div>
+			</div>
+		</ul>
 	</section>
 
-	<section class="step3">
+<!-- 	<section class="step3">
 		<h4>Document Upload:</h4>
 		<ul>
 			<div class="row">
-				<div class="col-lg-4">
+				<div class="col-lg-4 applicationColumn">
 					<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
 		  			{% csrf_token %}
 						<label>Upload Medicaid Application Here:</label>
@@ -262,7 +305,7 @@
 						<button type="submit" class="uploadBtn">Upload</button>
 					</form>
 				</div>
-				<div class="col-lg-4">
+				<div class="col-lg-4 applicationColumn">
 					<form class="fileInputLi" id="rfi" method="post" enctype="multipart/form-data">
 			 			{% csrf_token %}
 						<label>Upload Medicaid RFI Here:</label>
@@ -282,24 +325,35 @@
 						<button type="submit" class="uploadBtn">Upload</button>
 					</form>
 				</div>
-				<!-- <div class="col-lg-4"> -->
-
-				<!-- </div> -->
 			</div>
 		</ul>
-	</section>
+	</section> -->
 	<!-- <div class="approveBtnDiv"> -->
-		<button class="btn btn-success centered step3" id="approveBtn">Approve</button>
+		<!-- <button class="btn btn-success centered step3" id="approveBtn">Approve</button> -->
 	<!-- </div> -->
-	<section class="step4" id="approvedSection">
+	<section class="" id="approvedSection">
 		<ul>
 			<div class="row">
-				<div class="col-lg-4">
+				<div class="col-lg-4 applicationColumn">
 					<h4>Approval Information:</h4>
 					<li class="editableLi">
 						<label>Approval Notice Date:</label>
 						 <input class="editable date" id="approval_notice_date" data-table="application" data-alert_id="" type="date" value="{{application.approval_notice_date|date:'Y-m-d'}}">
 					</li>
+					<li class="step4 submission1">
+						<form class="fileInputLi" id="approval" method="post" enctype="multipart/form-data">
+			  			{% csrf_token %}
+							<label>Upload Approval Here:</label>
+							<input type="file" name="approval" value="{{application.approval}}" accept="image/jpeg
+							,image/png,application/pdf" multiple>
+							<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
+							<input type="hidden" name="file_type" value="approval">
+							<button type="submit" class="uploadBtn">Upload</button>
+						</form>
+					</li>
+					
+				</div>
+				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
 						<label>Approval Start Date:</label>
 						 <input class="editable date" id="approval_start_date" data-table="application" data-alert_id="" type="date" value="{{application.approval_start_date|date:'Y-m-d'}}">
@@ -308,24 +362,31 @@
 						<label>Approval End Date:</label>
 						 <input class="editable date" id="approval_end_date" data-table="application" data-alert_id="" type="date" value="{{application.approval_end_date|date:'Y-m-d'}}">
 					</li>
-				</div>
-				<div class="col-lg-4">
 					<li class="editableLi">
 						<label>NAMI/Income Contribution Amount:</label> 
 			 			<input class="editable" type="text" value="{{application.county}}">
 					</li>
+					
+				</div>
+				<div class="col-lg-4">
 					<li class="editableLi">
 						<label>Fair Hearing Required?</label>
-			 			<input class="editable" id="fair_hearing_required" type="text" value="{{application.fair_hearing_required}}">
+						<select name="fair_hearing_required" id="fair_hearing_required_select" data-table="application">
+							<option value="">Please select one:</option>
+							<option value="yes">Yes</option>
+							<option value="no">No</option>
+						</select>
+						<span class="invisible DBinfo" id="DBspousal_refusal">{{application.spousal_refusal}}</span>
 					</li>
 					<li class="editableLi">
 						<label>Date of Medicaid Recertification:</label>
 						<input class="editable date" type="date" value="{{application.date_of_medicaid_recertification|date:'Y-m-d'}}">
 					</li>
 				</div>
-				<div class="col-lg-4">
 
-				</div>
+				<!-- <div class="col-lg-4 applicationColumn">
+
+				</div> -->
 			</div>
 		</ul>
 	</section>
@@ -333,9 +394,266 @@
 {% endblock %}
 {% load static %}
 {% block scripts %}
-
-
+	<script src="{% static 'js/show.js' %}"></script>
+	
 	<script type="text/javascript">
+		// Submission behavior, including generating new HTML based on Medicaid response:
+	const applicationInfoSection = document.querySelector('#applicationInfoSection');
+	
+
+		let submission = 1;
+		const submittedCheckbox1 = document.querySelector('#submittedCheckbox1');
+		$(document).ready(()=>{
+			if(submittedCheckbox1.checked) {
+				$('.step4').css('display', 'block');
+				submission += 1;
+			}
+		})
+
+		submittedCheckbox1.addEventListener('change', (e) => {
+			if(submittedCheckbox1.checked) {
+				submission += 1;
+					$('.step4').fadeIn();
+					phaseChange(4);
+			} else {
+				submission -= 1;
+				$('.step4').css('display', 'none');
+				phaseChange(3);
+			}
+		})
+
+		const newSubmissionRowHTML = `
+		<hr class="submission${submission + 1}">
+		<ul class="submission${submission + 1}">
+			<div class="row">
+			<div class="col-lg-3">
+					<li class="submission${submission + 1}">
+						<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
+			  			{% csrf_token %}
+							<label>Upload RFI Here:</label>
+							<input type="file" name="medicaid_application" value="{{application.medicaid_application}}" accept="image/jpeg
+							,image/png,application/pdf" multiple>
+							<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
+							<input type="hidden" name="file_type" value="medicaid_application">
+							<button type="submit" class="uploadBtn">Upload</button>
+						</form>
+					</li>
+				</div>
+				<div class="col-lg-3">
+					<li class="editableLi submission${submission + 1}">
+						<label>RFI Due Date:</label>
+						<input class="editable date" id="date_of_rfi" data-table="application" data-alert_id="" type="date" value="{{application.date_of_rfi|date:'Y-m-d'}}">
+					</li>
+				</div>
+				<div class="col-lg-3">
+					<li class="step3 submission${submission + 1}">
+						<label><input type="checkbox" class="documentationSubmittedCheckbox" id="documentationSubmittedCheckbox${submission + 1}" {% if alert.phase.phase_id > 4 %} checked="checked"{% endif %}>Documentation Submitted</label>
+					</li>
+					<li class="editableLi step4 submission${submission + 1}">
+						<label>Submission Date:</label>
+						<input class="editable date" id="date_of_medicaid_submission" data-table="application" data-alert_id="" type="date" value="{{application.date_of_medicaid_submission|date:'Y-m-d'}}">
+					</li>
+				</div>
+				
+				<div class="col-lg-3">
+					<li class="editableLi step4 submission${submission + 1}">
+						<label>Response:</label>
+						<select name="response_select" id="response${submission + 1}_select" data-table="application">
+							<option value="not_recieved">Not recieved</option>
+							<option value="rfi">RFI</option>
+							<option value="approved">Approved</option>
+							<option value="denied">Denied</option>
+						</select>
+						<span class="invisible DBinfo" id="DBspousal_refusal">{{application.spousal_refusal}}</span>
+					</li>
+				</div>
+			</div>
+		</ul>
+		`
+// const documentation = [
+// "U.S. Birth Certificate",
+// "Naturalization papers or alien registration card",
+// "Social Security Card",
+// "Marriage/Divorce/Death Certificates",
+// "Veterans discharge paperwork",
+// "Medicare Card",
+// "Other Health Insurance cards",
+// "Proof of health insurance premiums",
+// "If employed current pay stubs for past 8 weeks",
+// "Social Security Amount Received Monthly:   Award letter",
+// "Workers’ Compensation:   Award letter or Check stub ",
+// "Veterans’ Benefits: award letter or letter from Veterans Affair",
+// "Military Pay:  Award letter or pay stub",
+// "Income from Rent or Room/Board:   Letter from roomer, boarder, tenant, copy of lease",
+// "Private Pensions/Annuities:  Letter from company or pay stub",
+// "Power of Attorney or statement assigning representative",
+// "Property Deed",
+// "All bank account statement for past 5 years",
+// "Verification of any sold or closed stock accounts past 5 years",
+// "Verification of any transferred property past 5 years",
+// "Life insurance policies:  Cash and Face Values",
+// "Copy of all Trust Funds",
+// "Information on pending lawsuits",
+// "Proof of Irrevocable burial accounts",
+// "Burial Plots",
+// "Unpaid medical bills",
+// "Proof from Doctor at Nursing Home if short-term or long-term care"
+// ]
+
+
+// const third = documentation.length/3
+// const columnsArray = [
+// 	documentation.slice(0,third),
+// 	documentation.slice(third,(third*2)),
+// 	documentation.slice((third*2),documentation.length + 1)
+// ]
+
+// // function dividArray(myArray){
+//     // let index = 0;
+//     const arrayLength = documentation.length;
+//     let tempArray = [];
+//     for (let index = 0; index < arrayLength; index += 3) {
+//         const myChunk = documentation.slice(index, index+3);
+//         // Do something if you want with the group
+//         tempArray.push(myChunk);
+//     }
+// console.log(tempArray)
+
+
+
+
+
+// let rfiHTML = `
+// <div class="container-fluid">
+// 	<div class="row">
+// `
+
+// for (var i = 0; i < columnsArray.length; i++) {
+// 	rfiHTML += "<div class='col-lg-4'>"
+// 	const columnArray = columnsArray[i]
+// 	let documentationChecklist = ""
+// 	for (let i = 0; i < columnArray.length; i++) {
+// 		doc = columnArray[i]
+// 		const words = doc.split(' ')
+// 		const docNoSpaces = words.join('_')
+// 		documentationChecklist += `
+// 		<input type="checkbox" value="${doc}" class="documentationCheckBox" id="${docNoSpaces}_checkbox"><label for="${docNoSpaces}_checkbox" class="documentationLabel">${doc}</label>
+// 		<br>
+// 		`
+// 	}
+// 	rfiHTML += documentationChecklist;
+// 	rfiHTML += "</div>"
+// }
+
+// rfiHTML += `
+// </div>
+// </div>
+// `
+// let containsRow = false
+// const addEventListenersToDocumentationCheckboxes = () => {
+// 	document.addEventListener('change', (e) => {
+// 		if (e.target.classList.contains('documentationCheckBox') && e.target.checked){
+// 			if (!containsRow) {
+// 				applicationInfoSection.innerHTML += "<h6>Documentation Upload</h6>"
+// 				let containerDiv = document.createElement('DIV');
+// 				containerDiv.classList.add('container-fluid')
+// 				containerDiv.id = "documentUploadFormsDiv"		
+// 				let rowDiv = document.createElement('DIV');
+// 				rowDiv.classList.add('row')
+// 				rowDiv.id = "documentUploadFormsRow"		
+// 				containerDiv.appendChild(rowDiv)
+// 				applicationInfoSection.appendChild(containerDiv)
+// 				containsRow = true;
+// 			}
+// 			const checkbox = e.target;
+// 			let rowDiv = document.querySelector('#documentUploadFormsRow')
+// 			rowDiv.innerHTML += `
+// 	 			<div class="col-lg-4">
+// 	 				<form class="fileInputLi" id="${checkbox.id.slice(0, -9)}" method="post" enctype="multipart/form-data">
+// 	 	  			{% csrf_token %}
+// 	 					<label>Upload ${checkbox.value} Here:</label>
+// 	 					<input type="file" name="${checkbox.id.slice(0, -9)}" value="{{application.medicaid_application}}" accept="image/jpeg
+// 	 					,image/png,application/pdf" multiple>
+// 	 					<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
+// 	 					<input type="hidden" name="file_type" value="${checkbox.id.slice(0, -9)}">
+// 	 					<button type="submit" class="uploadBtn">Upload</button>
+// 	 				</form>
+// 	 			</div>
+// 	 		`
+// 		};
+			
+// 	});
+	// const documentationCheckBoxes = document.querySelectorAll('.documentationCheckBox');
+	// for (var i = 0; i < documentationCheckBoxes.length; i++) {
+	// 	const checkbox = documentationCheckBoxes[i];
+	// 	console.log(checkbox)
+	// 	checkbox.addEventListener('change', () => {
+	// 		applicationInfoSection.innerHTML += `
+	// 			<div class="col-lg-3">
+	// 				<form class="fileInputLi" id="${checkbox.id.slice(0, -9)}" method="post" enctype="multipart/form-data">
+	// 	  			{% csrf_token %}
+	// 					<label>Upload ${checkbox.value} Here:</label>
+	// 					<input type="file" name="${checkbox.id.slice(0, -9)}" value="{{application.medicaid_application}}" accept="image/jpeg
+	// 					,image/png,application/pdf" multiple>
+	// 					<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
+	// 					<input type="hidden" name="file_type" value="${checkbox.id.slice(0, -9)}">
+	// 					<button type="submit" class="uploadBtn">Upload</button>
+	// 				</form>
+	// 			</div>
+	// 		`
+	// 	});
+	// };
+// }
+// console.log(documentationChecklist);
+
+
+		const addEventListeners = selectID => {
+			let response_select = document.querySelector(selectID);
+			response_select.addEventListener('change', (e) => {
+				sendSelectInfoToDB(response_select)
+				const options = response_select.querySelectorAll('OPTION');
+					for (let x = 0; x < options.length; x++) {
+						const option = options[x];
+						if (option.value == e.target.value) {
+							option.setAttribute("selected", "selected");
+						};
+					};
+		
+				//generate new html depending on selected option:
+
+				if (e.target.value == 'rfi') {
+					applicationInfoSection.innerHTML += newSubmissionRowHTML;
+					// addEventListenersToDocumentationCheckboxes();
+					let newID = `#response${submission}_select`
+					addEventListeners(newID);
+					const submittedCheckbox2 = document.querySelector('#documentationSubmittedCheckbox2');
+					$(document).ready(()=>{
+						if(submittedCheckbox2.checked) {
+							$('.step4').css('display', 'block');
+						}
+					});
+
+					submittedCheckbox2.addEventListener('change', (e) => {
+						if(submittedCheckbox2.checked) {
+							submission += 1;
+								$('.step4').fadeIn();
+						} else {
+							submission -= 1;
+							// $('.step4').css('display', 'none');
+						};
+					});
+				}	else if (e.target.value == 'denied') {
+					console.log("YUP!");
+				} else if (e.target.value == 'approved'){
+					$('#approvedSection').css('display', 'block');
+				};
+			});
+		};
+
+		addEventListeners('#response1_select')
+</script>
+
+	<!-- <script type="text/javascript">
 
 		const personalInfoObjects = [];
 
@@ -376,9 +694,8 @@
 			</li>
 			`
 		}
-	</script>
+	</script> -->
 
-	<script src="{% static 'js/show.js' %}"></script>
 
 {% endblock %}
 

@@ -10,11 +10,9 @@
       <tr>
         <th>First Name</th>
         <th>Last Name</th>
-        <th>Facility</th>
-        <th>Primary Payor</th>
-        <th>Secondary Payor</th>
+        <!-- <th>Facility</th> -->
         <th>Approval Date Range</th>
-        <th>Fair Hearing Required?</th>
+        <!-- <th>Fair Hearing Required?</th> -->
         <th>Verified</th>
         <th class="invisible">Show</th>
         <th class="invisible">Don't Track</th>
@@ -25,11 +23,9 @@
       <tr id="{{obj.resident_id}}">
         <td>{{obj.first_name}}</td>
         <td>{{obj.last_name}}</td>
-        <td>{{obj.facility}}</td>
-        <td>{{obj.primary_payor}}</td>
-        <td>{{obj.secondary_payor}}</td>
+        <!-- <td>{{obj.facility}}</td> -->
         <td>{{obj.approval_start_date|date:"F d, Y"}} - {{obj.approval_end_date|date:"F d, Y"}}</td>
-        <td>?</td>
+        <!-- <td>?</td> -->
         <td class="verifyBtnTd">
           {% if obj.approval_verified == True %}
             <button class="verifyBtn verified">Verified &check;</button>

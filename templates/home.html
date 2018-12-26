@@ -5,36 +5,34 @@
 {% block content %}
 <div class="tableContainer">
   <h3>Medicaid Pending (<span class="countSpan" id="medicaidPendingTableCount"></span>)</h3>
+    <!-- <div class="tbodyContainer"> -->
   <table id="medicaidPendingTable">
     <thead>
       <tr>
         <th>First Name</th>
         <th>Last Name</th>
-        <th>Facility</th>
-        <th>Primary Payor</th>
-        <th>Secondary Payor</th>
-        <th>Admission Date</th>
+        <!-- <th>Facility</th> -->
+        <th>Pickup Date</th>
         <th>Status</th>
         <th class="invisible">Show</th>
         <th class="invisible">Don't Track</th>
       </tr>
     </thead>
-    <tbody>
-      {% for obj in list%}
-      <tr id="{{obj.resident_id}}">
-        <td>{{obj.first_name}}</td>
-        <td>{{obj.last_name}}</td>
-        <td>{{obj.facility}}</td>
-        <td>{{obj.primary_payor}}</td>
-        <td>{{obj.secondary_payor}}</td>
-        <td>{{obj.activity_date|date:"F d, Y"}}</td>
-        <td>{{obj.phase.phase_name}}</td>
-        <td><a href="/show?resident_id={{obj.resident_id}}" class="alertByButton"><button class="btn-tracked">Show</button></a></td>
-        <td><button class="btn-ignore">Don't Track</button></td>
-      </tr>
-      {% endfor %}
-    </tbody>
+      <tbody>
+        {% for obj in list%}
+        <tr id="{{obj.resident_id}}">
+          <td>{{obj.first_name}}</td>
+          <td>{{obj.last_name}}</td>
+          <!-- <td>{{obj.facility}}</td> -->
+          <td>{{obj.medicaid_pickup_date|date:"F d, Y"}}</td>
+          <td>{{obj.phase.phase_name}}</td>
+          <td><a href="/show?resident_id={{obj.resident_id}}" class="alertByButton"><button class="btn-tracked">Show</button></a></td>
+          <td><button class="btn-ignore">Don't Track</button></td>
+        </tr>
+        {% endfor %}
+      </tbody>
   </table>
+    <!-- </div> -->
 </div>
 
 {% endblock %}

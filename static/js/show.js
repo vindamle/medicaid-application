@@ -15,47 +15,9 @@ const phaseChange = new_phase_id => {
 		}
 	});
 	$('#phase').innerHTML = new_phase_id;
-	console.log($('#phase'));
+	// console.log($('#phase'));
 	return(ajaxCall);
 }
-
-const meetingCheckbox = document.querySelector('.meetingCheckbox');
-$(document).ready(()=>{
-	if(meetingCheckbox.checked) {
-	$('.step2').css('display', 'block');
-}
-})
-
-meetingCheckbox.addEventListener('change', (e) => {
-	if(meetingCheckbox.checked) {
-		if(!$('#appointment_date').val()){
-			alert("Please enter a meeting date")
-			meetingCheckbox.checked = false;
-			return;
-		} 
-			$('.step2').fadeIn();
-			phaseChange(2);
-	} else {
-		$('.step2').css('display', 'none');
-		$('.step3').css('display', 'none');
-		phaseChange(1);
-	}
-})
-
-// Make select fields default to value in database (if there is one):
-const selectFields = document.querySelectorAll('SELECT');
-for (let i = 0; i < selectFields.length; i++) {
-	const selectField = selectFields[i];
-	const selectFieldParent = selectField.parentNode;
-	const DBinfo = selectFieldParent.querySelector('.DBinfo').innerHTML;
-	const options = selectField.querySelectorAll('OPTION');
-	for (let x = 0; x < options.length; x++) {
-		const option = options[x];
-		if (option.value == DBinfo) {
-			option.setAttribute("selected", "selected");
-		};
-	};
-};
 
 const updateDB = (table, dataObject, successMessage) => {
 	const ajaxCall = $.ajax(
@@ -89,8 +51,72 @@ const sendInputInfoToDB = input => {
 		 };
 		 successMessage = `Value of 'addressed' for alert with id ${dataObject.alert_id} in the alert table set to ${dataObject.addressed}`;
 		 updateDB("alert", dataObject, successMessage);
+	};
+};
+
+const sendSelectInfoToDB = selectField => {
+	const table = selectField.getAttribute('data-table');
+	const dataObject = {
+		resident_id: document.querySelector("#residentId").innerHTML,
+		column: selectField.getAttribute('name'),
+		new_value: selectField.value
+	};
+	const successMessage = `Value of ${dataObject.column} in the ${table} table set to ${dataObject.new_value}`;
+	updateDB(table, dataObject, successMessage);
+};
+
+const addSelectEventListener = selectField => {
+	selectField.addEventListener('change', () => {
+		sendSelectInfoToDB(selectField);
+	});
+};
+
+
+const meetingCheckbox = document.querySelector('.meetingCheckbox');
+$(document).ready(()=>{
+	if(meetingCheckbox.checked) {
+		$('.step2').css('display', 'block');
 	}
-}
+})
+
+meetingCheckbox.addEventListener('change', (e) => {
+	if(meetingCheckbox.checked) {
+		if(!$('#appointment_date').val()){
+			alert("Please enter a meeting date")
+			meetingCheckbox.checked = false;
+			return;
+		} 
+			$('.step2').fadeIn();
+			phaseChange(2);
+	} else {
+		$('.step2').css('display', 'none');
+		$('.step3').css('display', 'none');
+		phaseChange(1);
+	}
+})
+
+// Make select fields default to value in database (if there is one):
+const selectFields = document.querySelectorAll('SELECT');
+for (let i = 0; i < selectFields.length; i++) {
+	const selectField = selectFields[i];
+	const selectFieldParent = selectField.parentNode;
+	const DBinfo = selectFieldParent.querySelector('.DBinfo').innerHTML;
+	const options = selectField.querySelectorAll('OPTION');
+	for (let x = 0; x < options.length; x++) {
+		const option = options[x];
+		if (option.value == DBinfo) {
+			option.setAttribute("selected", "selected");
+		};
+	};
+};
+
+// Add eventListeners for select fields to send their info to DB via AJAX: 
+for (let i = 0; i < selectFields.length; i++) {
+	const selectField = selectFields[i];
+	if (selectField.id != 'response1_select') {
+		addSelectEventListener(selectField);
+	};
+};
 
 // Add eventListeners for inputs to focus them and send their info to DB via AJAX: 
 const editableInputs = document.querySelectorAll('INPUT.editable');
@@ -117,30 +143,18 @@ for (var i = 0; i < editableInputs.length; i++) {
 	});
 };
 
-// Add eventListeners for select fields to send their info to DB via AJAX: 
 
-for (let i = 0; i < selectFields.length; i++) {
-	const selectField = selectFields[i];
-	selectField.addEventListener('change', () => {
-		const table = selectField.getAttribute('data-table');
-			const dataObject = {
-				resident_id: document.querySelector("#residentId").innerHTML,
-				column: selectField.getAttribute('name'),
-				new_value: selectField.value
-			};
-			const successMessage = `Value of ${dataObject.column} in the ${table} table set to ${dataObject.new_value}`;
-			updateDB(table, dataObject, successMessage);
-	});
-};
 
 // Approve Button toggles display of Approval Information Section
-const approveBtn = document.querySelector('#approveBtn');
-approveBtn.addEventListener('click', () => {
-	if(approveBtn.innerHTML == 'Approve') {
-		approveBtn.innerHTML = 'Approved &check;';
-		$('#approvedSection').css('display', 'block');
-	} else {
-		approveBtn.innerHTML = 'Approve';
-		$('#approvedSection').css('display', 'none');
-	}
-})
+// const approveBtn = document.querySelector('#approveBtn');
+// approveBtn.addEventListener('click', () => {
+// 	if(approveBtn.innerHTML == 'Approve') {
+// 		approveBtn.innerHTML = 'Approved &check;';
+// 		$('#approvedSection').css('display', 'block');
+// 	} else {
+// 		approveBtn.innerHTML = 'Approve';
+// 		$('#approvedSection').css('display', 'none');
+// 	}
+// })
+
+

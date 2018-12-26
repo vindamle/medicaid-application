@@ -4,6 +4,9 @@ html, body {
 
 nav {
 	width: 100vw;
+	position: fixed !important;
+	z-index: 10000;
+	background: white;
 
 }
 
@@ -114,10 +117,10 @@ nav li.grayText {
 .content {
 	display: none;
 	width: 80vw;
-	margin: 0 10vw 100px 10vw;
+	margin: 120px 10vw;
 }
 
-@media(max-width: 1199px) {
+@media(max-width: 1399px) {
 	.content {
 		width: 95vw;
 		margin: 0 2.5vw 20px 0;
@@ -140,6 +143,7 @@ h4 {
 table {
 	border-bottom: none !important;
 	margin: auto;
+	/*margin-right: 0;*/
 }
  th {
 	/*display: inline-block;*/
@@ -289,6 +293,11 @@ table button {
 .tableContainer {
 	display: block;
 	text-align: center;
+	
+}
+.tbodyContainer {
+	max-height: 500px;
+	overflow-y: auto;
 }
 #activityCount {
 	display: inline-block;
@@ -356,6 +365,22 @@ table button {
 	box-shadow: 1px 5px 10px #224;
 }
 
+.residentInfoDiv h6 {
+	/*margin: -8px 0 20px -6px;*/
+	/*width: 380px;*/
+	/*display: inline-block;*/
+	padding: 15px 30px;
+	text-align: center;
+	color: #ee7700;
+	/*color: white;*/
+	/*background-color: #237;*/
+	/*background-color: darkblue;*/
+	/*text-decoration: underline;*/
+	/*border-radius: 25px 0 25px 0;*/
+	font-size: 20px;
+	/*box-shadow: 1px 5px 10px #224;*/
+}
+
 .residentInfoDiv section {
 	border-radius: 25px 0 25px 0;
 	margin-top: 30px;
@@ -398,7 +423,7 @@ table button {
 	list-style: none;
 }
 
-.residentInfoDiv .col-lg-4:not(:first-of-type) {
+.residentInfoDiv .applicationColumn:not(:first-of-type) {
 	margin-top: 10px;
 }
 
@@ -519,6 +544,15 @@ input[type=date]::-webkit-inner-spin-button {
 	}
 }
 
+.documentationCheckBox{
+	position: absolute;
+	margin-left: -15px;
+	margin-top: 8px;
+}
+.documentationLabel {
+	font-size: 16px;
+}
+
 .approveBtnDiv {
 	width: 100%;
 	/*text-align: center;*/
@@ -609,7 +643,7 @@ input[type=date]::-webkit-inner-spin-button {
 }
 
 /* Hide fields irrelevant to current step in process: */
-.step2, .step3 {
+.step2, .step3, .step4 {
 	display: none;
 }
 
