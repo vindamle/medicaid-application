@@ -4,9 +4,10 @@ html, body {
 
 nav {
 	width: 100vw;
-	position: fixed !important;
+	position: absolute !important;
 	z-index: 10000;
-	background: white;
+	font-size: 20px;
+	/*background: white;*/
 
 }
 
@@ -19,12 +20,14 @@ nav li a:hover {
 nav ul {
 	list-style: none;
 	background: white;
+	padding: 5px;
+	border-radius: 25px;
 }
 
 @media(min-width: 990px) {
 	nav ul {
 		position: absolute;
-		right: 20px;
+		right: 80px;
 	}
 }
 
@@ -65,7 +68,7 @@ nav li.grayText {
 	margin-left: 10px;
 	display: inline-block;
 	left: 0;
-	width: 100px;
+	width: 200px;
 }
 
 .title {
@@ -83,6 +86,7 @@ nav li.grayText {
 	.logo {
 		display: inline-block;
 		position: relative;
+		width: 50px;
 	}
 	.title {
 		text-align: left;
@@ -123,7 +127,7 @@ nav li.grayText {
 @media(max-width: 1399px) {
 	.content {
 		width: 95vw;
-		margin: 0 2.5vw 20px 0;
+		margin: 100px 2.5vw 20px 0;
 	}
 }
 
@@ -153,8 +157,8 @@ table {
 
 @media(max-width: 1399px) {
 	table {
-		width: 96vw;
-		margin-left: 2vw;
+		width: 90vw;
+		margin-left: 4vw;
 		
 	}
 }
