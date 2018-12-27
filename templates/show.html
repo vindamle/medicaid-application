@@ -19,8 +19,8 @@
 </div> -->
 
 <div class="container-fluid residentInfoDiv">
-	<h1 class="">{{alert.first_name}} {{alert.last_name}}</h1>
-	<h5>Status: {{alert.phase.phase_name}}</h5>
+	<h1 class="">{{resident.first_name}} {{resident.last_name}}</h1>
+	<h5>Status: {{resident.phase.phase_name}}</h5>
 	<!-- <p class="centered">Click any field to edit.</p> -->
 	<!-- <button class="btn" id="editBtn">Edit</button> -->
 	<!-- <section >
@@ -34,59 +34,59 @@
 					<h4>Personal Information:</h4>
 					<li>
 						<label>Resident Name:</label>
-						<span class="">{{alert.first_name}} {{alert.last_name}}</span>
+						<span class="">{{resident.first_name}} {{resident.last_name}}</span>
 					</li>
 					<!--
 					EXPERIMENTING WITH RADIO BUTTONS:
 					<li>
 						<label>Spousal Refusal: </label><br>
-						<form class="radio_form"  data-table="application">
+						<form class="radio_form"  data-table="application" data-application_id="{{application.tracking_id}}">
 							<input type="radio" name="LTC" value=true> Yes<br>
   						<input type="radio" name="LTC" value=false> No<br>
   					</form>
 					</li> -->
 					<li>
 						<label>Date of Birth:</label>
-						<span class="">{{alert.dob|date:"M d, Y"}}</span>
+						<span class="">{{resident.dob|date:"M d, Y"}}</span>
 					</li>
 					<li>
 						<label>Facility:</label>
-						<span class="">{{alert.facility}}</span>
+						<span class="">{{resident.facility}}</span>
 					</li>
 				</div>
 				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
 						<label>Address:</label>
-						<input class="editable" id="address" data-table="resident" data-alert_id="" type="text" value="{{alert.address}}">
+						<input class="editable" id="address" data-table="resident" data-alert_id="" type="text" value="{{resident.address}}">
 					</li>
 					<li class="editableLi">
 						<label>City:</label>
-						<input class="editable" id="city" data-table="resident" data-alert_id="" type="text" value="{{alert.city}}">
+						<input class="editable" id="city" data-table="resident" data-alert_id="" type="text" value="{{resident.city}}">
 					</li>
 					<li class="editableLi">
 						<label>State:</label>
-						<input class="editable" id="state" data-table="resident" data-alert_id="" type="text" value="{{alert.state}}">
+						<input class="editable" id="state" data-table="resident" data-alert_id="" type="text" value="{{resident.state}}">
 					</li>
 					<li class="editableLi">
 						<label>Zip:</label>
-						<input class="editable" id="zip" data-table="resident" data-alert_id="" type="text" value="{{alert.zip}}">
+						<input class="editable" id="zip" data-table="resident" data-alert_id="" type="text" value="{{resident.zip}}">
 					</li>
 				</div>
 				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
 						<label>County:</label>
-						<input class="editable" id="county" data-table="resident" data-alert_id="" type="text" value="{{alert.county}}">
+						<input class="editable" id="county" data-table="resident" data-alert_id="" type="text" value="{{resident.county}}">
 					</li>
 					<li class="editableLi">
 						<label>Phone:</label>
-						<input class="editable" id="phone" data-table="resident" data-alert_id="" type="text" value="{{alert.phone}}">
+						<input class="editable" id="phone" data-table="resident" data-alert_id="" type="text" value="{{resident.phone}}">
 					</li>
 					<li class="editableLi">
 						<label>Marital Status:</label>
-						<input class="editable" id="marital_status" data-table="resident" data-alert_id="" type="text" value="{{alert.marital_status}}">
+						<input class="editable" id="marital_status" data-table="resident" data-alert_id="" type="text" value="{{resident.marital_status}}">
 					</li>
-					<li class="invisible absolute" id="residentId" type="text">{{alert.resident_id}}</li>
-					<li class="invisible absolute" id="phase">{{alert.phase.phase_id}}</li>
+					<li class="invisible absolute" id="residentId" type="text">{{resident.resident_id}}</li>
+					<li class="invisible absolute" id="phase">{{resident.phase.phase_id}}</li>
 				</div>
 			</div>
 		</ul>
@@ -98,65 +98,61 @@
 					<h4>Insurance Information:</h4>
 					<li class="editableLi">
 						<label>Primary Payor:</label>
-						<input class="editable" id="primary_payor" data-table="resident" data-alert_id="" type="text" value="{{alert.primary_payor}}">
+						<input class="editable" id="primary_payor" data-table="resident" data-alert_id="" type="text" value="{{resident.primary_payor}}">
 					</li>
 					<li class="editableLi">
 						<label>Secondary Payor:</label>
-						<input class="editable" id="secondary_payor" data-table="resident" data-alert_id="" type="text" value="{{alert.secondary_payor}}">
+						<input class="editable" id="secondary_payor" data-table="resident" data-alert_id="" type="text" value="{{resident.secondary_payor}}">
 					</li>
 				</div>
 
 				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
 						<label>Copay:</label>
-						<input class="editable" id="copay" data-table="application" data-alert_id="" type="text" value="{{application.0.copay}}">
+						<input class="editable" id="copay" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="text" value="{{applications.0.copay}}">
 					</li>
 					<li class="editableLi">
 						<label>Copay Start Date:</label>
-						<input class="editable date" id="copay_start_date" data-table="application" data-alert_id="" type="date" value="{{application.0.copay_start_date|date:'Y-m-d'}}">
+						<input class="editable date" id="copay_start_date" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{applications.0.copay_start_date|date:'Y-m-d'}}">
 					</li>
 					<li class="editableLi">
 						<label>Secondary Insurance Copay Percentage:</label>
-						<input class="editable" id="secondary_pays_copay" data-table="application" data-alert_id="" type="text" value="{{application.0.secondary_pays_copay}}">
+						<input class="editable" id="secondary_pays_copay" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="text" value="{{applications.0.secondary_pays_copay}}">
 					</li>
 				</div>
 				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
 						<label>Last Medicare Date:</label>
-						<input class="editable date" type="date" value="{{application.medicaid_pickup_date|date:'Y-m-d'}}">
+						<input class="editable date" type="date" value="{{applications.0.medicaid_pickup_date|date:'Y-m-d'}}">
 					</li>
 					<li class="editableLi">
 						<label>Cut From Medicare/Insurance Date:</label>
-						<input class="editable date" type="date" value="{{application.medicaid_pickup_date|date:'Y-m-d'}}">
+						<input class="editable date" type="date" value="{{applications.0.medicaid_pickup_date|date:'Y-m-d'}}">
 					</li>
 				</div>
 			</div>
 		</ul>
 	</section>
-
+{% for application in applications %}
 	<section id="applicationInfoSection">
 		<ul>
 			<div class="row">
 				<div class="col-lg-4 applicationColumn">
 					<h4>Medicaid Application Information:</h4>
-					<!-- <li class="editableLi step3">
-						<label>Is Medicaid Pending?</label>
-						<input class="editable" id="is_medicaid_pending" data-table="application" data-alert_id="" type="text" value="{{application.is_medicaid_pending}}">
-					</li> -->
 					<li class="step3">
 						<label>Application Type:</label>
-						<select name="application_type" id="application_type_select" data-table="application">
+						<select name="application_type" id="application_type" data-table="application" data-application_id="{{application.tracking_id}}">
 							<option value="">Please select one:</option>
 							<option value="new_application">New Application</option>
 							<option value="conversion">Conversion</option>
 							<option value="payor_change">Payor Change</option>
 						</select>
 						<span class="invisible DBinfo" id="DBapplication_type">{{application.application_type}}</span>
-						<!-- <input class="editable" id="application_type" data-table="application" data-alert_id="">{{application.application_type}} -->
+						<!-- <input class="editable" id="application_type" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="">{{application.application_type}} -->
 					</li>
 					<li class="step3">
 						<label>Spousal/Single:</label>
-						<select name="spousal" id="spousal_select" data-table="application">
+						<select name="spousal" id="spousal" data-table="application" data-application_id="{{application.tracking_id}}">
 							<option value="">Please select one:</option>
 							<option value="single">Single</option>
 							<option value="spousal">Spousal</option>
@@ -165,7 +161,7 @@
 					</li>
 					<li class="editableLi step3">
 						<label>Short-term/Long-Term Care:</label>
-						<select name="LTC" id="LTC_select" data-table="application">
+						<select name="LTC" id="LTC" data-table="application" data-application_id="{{application.tracking_id}}">
 							<option value="">Please select one:</option>
 							<option value="short_term">Short-Term</option>
 							<option value="long_term">Long-Term</option>
@@ -174,7 +170,7 @@
 					</li>
 					<li class="editableLi step3">
 						<label>Spousal Refusal:</label>
-						<select name="spousal_refusal" id="LTC_select" data-table="application">
+						<select name="spousal_refusal" id="spousal_refusal" data-table="application" data-application_id="{{application.tracking_id}}">
 							<option value="">Please select one:</option>
 							<option value="yes">Yes</option>
 							<option value="no">No</option>
@@ -185,55 +181,55 @@
 				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi step1">
 						<label>Applicant Meeting Date:</label>
-						<input class="editable date" id="appointment_date" data-table="application" data-alert_id="" type="date" value="{{application.appointment_date|date:'Y-m-d'}}">
+						<input class="editable date" id="appointment_date" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{application.appointment_date|date:'Y-m-d'}}">
 					</li>
 
 					<li class="editableLi step2">
 						<label>Medicaid Pickup Date:</label>
-							<input class="editable date" id="medicaid_pickup_date" data-table="application" data-alert_id=5 type="date" value="{{application.medicaid_pickup_date|date:'Y-m-d'}}">
+							<input class="editable date" id="medicaid_pickup_date" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id=5 type="date" value="{{application.medicaid_pickup_date|date:'Y-m-d'}}">
 					</li>
 					<li class="editableLi step3">
 						<label>Application County:</label>
-						<input class="editable" id="application_county" data-table="application" data-alert_id="" type="text" value="{{application.application_county}}">
+						<input class="editable" id="application_county" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="text" value="{{application.application_county}}">
 					</li>
 					<li class="editableLi step3">
 						<label>Application State:</label>
-						<input class="editable" id="application_state" data-table="application" data-alert_id="" type="text" value="{{application.application_state}}">
+						<input class="editable" id="application_state" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="text" value="{{application.application_state}}">
 					</li>
 
 						<li class="editableLi step3">
 						<label>Estimated NAMI/Income Contribution Amount:</label>
-						<input class="editable" id="estimated_nami" data-table="application" data-alert_id="" type="text" value="{{application.estimated_nami}}">
+						<input class="editable" id="estimated_nami" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="text" value="{{application.estimated_nami}}">
 					</li>
 				</div>
 				<div class="col-lg-4 applicationColumn">
 					<li class="step1">
-						<label class=""><input type="checkbox" class="meetingCheckbox" {% if alert.phase.phase_id > 1 %} checked="checked"{% endif %}>Met with Applicant</label>
+						<label class=""><input type="checkbox" class="meetingCheckbox" {% if resident.phase.phase_id > 1 %} checked="checked"{% endif %}>Met with Applicant</label>
 					</li>
 					<li class="editableLi step3">
 						<label>Date of Deadline:</label>
-						<input class="editable date" id="date_of_deadline" data-table="application" data-alert_id="" type="date" value="{{application.date_of_deadline|date:'Y-m-d'}}">
+						<input class="editable date" id="date_of_deadline" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{application.date_of_deadline|date:'Y-m-d'}}">
 					</li>
 					<li class="editableLi step3">
 						<label>DSS Contact Address:</label>
-						<input class="editable" id="dss_contact_address" data-table="application" data-alert_id="" type="text" value="{{application.dss_contact_address}}">
+						<input class="editable" id="dss_contact_address" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="text" value="{{application.dss_contact_address}}">
 					</li>
 					<li class="editableLi step3">
 						<label>DSS Contact Phone:</label>
-						<input class="editable" id="dss_contact_phone" data-table="application" data-alert_id="" type="text" value="{{application.dss_contact_phone}}">
+						<input class="editable" id="dss_contact_phone" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="text" value="{{application.dss_contact_phone}}">
 					</li>
 					<li class="editableLi step3">
 						<label>DSS Contact Email:</label>
-						<input class="editable" id="dss_contact_email" data-table="application" data-alert_id="" type="text" value="{{application.dss_contact_email}}">
+						<input class="editable" id="dss_contact_email" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="text" value="{{application.dss_contact_email}}">
 					</li>
 					<li class="editableLi step3">
 						<label>DSS Contact Fax:</label>
-						<input class="editable" id="dss_contact_fax" data-table="application" data-alert_id="" type="text" value="{{application.dss_contact_fax}}">
+						<input class="editable" id="dss_contact_fax" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="text" value="{{application.dss_contact_fax}}">
 					</li>
 					<!--
 					<li class="editableLi step3">
 						<label>Date of RFI:</label>
-						<input class="editable date" id="date_of_rfi" data-table="application" data-alert_id="" type="date" value="{{application.date_of_rfi|date:'Y-m-d'}}">
+						<input class="editable date" id="date_of_rfi" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{application.date_of_rfi|date:'Y-m-d'}}">
 					</li> -->
 				</div>
 			</div>
@@ -244,13 +240,13 @@
 			<div class="row">
 				<div class="col-lg-3">
 					<li class="step3 submission1">
-						<label class=""><input type="checkbox" class="submittedCheckbox" id="submittedCheckbox1" {% if alert.phase.phase_id > 3 %} checked="checked"{% endif %}>Medicaid Application Submitted</label>
+						<input type="checkbox" class="submittedCheckbox" id="submittedCheckbox1" {% if resident.phase.phase_id > 3 %} checked="checked"{% endif %}><label for="submittedCheckbox1"class="">Medicaid Application Submitted</label>
 					</li>
 				</div>
 				<div class="col-lg-3">
-					<li class="editableLi step4 submission1">
+					<li class="editableLi step3 submission1">
 						<label>Submission Date:</label>
-						<input class="editable date" id="date_of_medicaid_submission" data-table="application" data-alert_id="" type="date" value="{{application.date_of_medicaid_submission|date:'Y-m-d'}}">
+						<input class="editable date" id="date_of_medicaid_submission" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{application.date_of_medicaid_submission|date:'Y-m-d'}}">
 					</li>
 				</div>
 				<div class="col-lg-3">
@@ -260,7 +256,7 @@
 							<label>Upload Application Here:</label>
 							<input type="file" name="medicaid_application" value="{{application.medicaid_application}}" accept="image/jpeg
 							,image/png,application/pdf" multiple>
-							<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
+							<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
 							<input type="hidden" name="file_type" value="medicaid_application">
 							<button type="submit" class="uploadBtn">Upload</button>
 						</form>
@@ -269,7 +265,7 @@
 				<div class="col-lg-3">
 					<li class="editableLi step4 submission1">
 						<label>Response:</label>
-						<select name="application1_response" id="response1_select" data-table="application">
+						<select name="application1_response" id="application1_response" data-table="application" data-application_id="{{application.tracking_id}}">
 							<option value="not_recieved">Not recieved</option>
 							<option value="rfi">RFI</option>
 							<option value="approved">Approved</option>
@@ -277,11 +273,12 @@
 						</select>
 						<span class="invisible DBinfo" id="DBapplication1_response">{{application.application1_response}}</span>
 					</li>
+					<!-- <li class="invisible absolute" id="application_id">{{application.tracking_id}}</li> -->
 				</div>
 			</div>
 		</ul>
 	</section>
-
+{% endfor %}
 <!-- 	<section class="step3">
 		<h4>Document Upload:</h4>
 		<ul>
@@ -292,7 +289,7 @@
 						<label>Upload Medicaid Application Here:</label>
 						<input type="file" name="medicaid_application" value="{{application.medicaid_application}}" accept="image/jpeg
 						,image/png,application/pdf" multiple>
-						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
+						<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
 						<input type="hidden" name="file_type" value="medicaid_application">
 						<button type="submit" class="uploadBtn">Upload</button>
 					</form>
@@ -301,7 +298,7 @@
 						<label>Upload Medicaid Confirmation Here:</label>
 						<input type="file" name="medicaid_confirmation" value="{{application.medicaid_confirmation}}" accept="image/jpeg
 						,image/png,application/pdf" multiple>
-						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
+						<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
 						<input type="hidden" name="file_type" value="medicaid_confirmation">
 						<button type="submit" class="uploadBtn">Upload</button>
 					</form>
@@ -312,7 +309,7 @@
 						<label>Upload Medicaid RFI Here:</label>
 						<input type="file" name="rfi" value="{{application.rfi}}" accept="image/jpeg
 						,image/png,application/pdf" multiple>
-						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
+						<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
 						<input type="hidden" name="file_type" value="rfi">
 						<button type="submit" class="uploadBtn">Upload</button>
 					</form>
@@ -321,7 +318,7 @@
 						<label>Upload Medicaid Approval Here:</label>
 						<input type="file" name="medicaid_approval" value="{{application.medicaid_approval}}" accept="image/jpeg
 						,image/png,application/pdf" multiple>
-						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
+						<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
 						<input type="hidden" name="file_type" value="medicaid_approval">
 						<button type="submit" class="uploadBtn">Upload</button>
 					</form>
@@ -339,7 +336,7 @@
 					<h4>Approval Information:</h4>
 					<li class="editableLi">
 						<label>Approval Notice Date:</label>
-						 <input class="editable date" id="approval_notice_date" data-table="application" data-alert_id="" type="date" value="{{application.approval_notice_date|date:'Y-m-d'}}">
+						 <input class="editable date" id="approval_notice_date" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{application.approval_notice_date|date:'Y-m-d'}}">
 					</li>
 					<li class="step4 submission1">
 						<form class="fileInputLi" id="approval" method="post" enctype="multipart/form-data">
@@ -347,7 +344,7 @@
 							<label>Upload Approval Here:</label>
 							<input type="file" name="approval" value="{{application.approval}}" accept="image/jpeg
 							,image/png,application/pdf" multiple>
-							<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
+							<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
 							<input type="hidden" name="file_type" value="approval">
 							<button type="submit" class="uploadBtn">Upload</button>
 						</form>
@@ -357,11 +354,11 @@
 				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
 						<label>Approval Start Date:</label>
-						 <input class="editable date" id="approval_start_date" data-table="application" data-alert_id="" type="date" value="{{application.approval_start_date|date:'Y-m-d'}}">
+						 <input class="editable date" id="approval_start_date" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{application.approval_start_date|date:'Y-m-d'}}">
 					</li>
 					<li class="editableLi">
 						<label>Approval End Date:</label>
-						 <input class="editable date" id="approval_end_date" data-table="application" data-alert_id="" type="date" value="{{application.approval_end_date|date:'Y-m-d'}}">
+						 <input class="editable date" id="approval_end_date" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{application.approval_end_date|date:'Y-m-d'}}">
 					</li>
 					<li class="editableLi">
 						<label>NAMI/Income Contribution Amount:</label>
@@ -372,7 +369,7 @@
 				<div class="col-lg-4">
 					<li class="editableLi">
 						<label>Fair Hearing Required?</label>
-						<select name="fair_hearing_required" id="fair_hearing_required_select" data-table="application">
+						<select name="fair_hearing_required" id="fair_hearing_required" data-table="application" data-application_id="{{application.tracking_id}}">
 							<option value="">Please select one:</option>
 							<option value="yes">Yes</option>
 							<option value="no">No</option>
@@ -403,16 +400,17 @@
 
 
 		let submission = 1;
-		const submittedCheckbox1 = document.querySelector('#submittedCheckbox1');
+		const date_of_medicaid_submission = document.querySelector('#date_of_medicaid_submission');
 		$(document).ready(()=>{
-			if(submittedCheckbox1.checked) {
+			if(date_of_medicaid_submission.value) {
+				console.log(date_of_medicaid_submission)
 				$('.step4').css('display', 'block');
 				submission += 1;
 			}
 		})
 
-		submittedCheckbox1.addEventListener('change', (e) => {
-			if(submittedCheckbox1.checked) {
+		date_of_medicaid_submission.addEventListener('blur', (e) => {
+			if(date_of_medicaid_submission.value) {
 				submission += 1;
 					$('.step4').fadeIn();
 					phaseChange(4);
@@ -434,7 +432,7 @@
 							<label>Upload RFI Here:</label>
 							<input type="file" name="medicaid_application" value="{{application.medicaid_application}}" accept="image/jpeg
 							,image/png,application/pdf" multiple>
-							<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
+							<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
 							<input type="hidden" name="file_type" value="medicaid_application">
 							<button type="submit" class="uploadBtn">Upload</button>
 						</form>
@@ -443,23 +441,23 @@
 				<div class="col-lg-3">
 					<li class="editableLi submission${submission + 1}">
 						<label>RFI Due Date:</label>
-						<input class="editable date" id="date_of_rfi" data-table="application" data-alert_id="" type="date" value="{{application.date_of_rfi|date:'Y-m-d'}}">
+						<input class="editable date" id="date_of_rfi" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{application.date_of_rfi|date:'Y-m-d'}}">
 					</li>
 				</div>
 				<div class="col-lg-3">
 					<li class="step3 submission${submission + 1}">
-						<label><input type="checkbox" class="documentationSubmittedCheckbox" id="documentationSubmittedCheckbox${submission + 1}" {% if alert.phase.phase_id > 4 %} checked="checked"{% endif %}>Documentation Submitted</label>
+						<label><input type="checkbox" class="documentationSubmittedCheckbox" id="documentationSubmittedCheckbox${submission + 1}" {% if resident.phase.phase_id > 4 %} checked="checked"{% endif %}>Documentation Submitted</label>
 					</li>
 					<li class="editableLi step4 submission${submission + 1}">
 						<label>Submission Date:</label>
-						<input class="editable date" id="date_of_medicaid_submission" data-table="application" data-alert_id="" type="date" value="{{application.date_of_medicaid_submission|date:'Y-m-d'}}">
+						<input class="editable date" id="date_of_medicaid_submission" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{application.date_of_medicaid_submission|date:'Y-m-d'}}">
 					</li>
 				</div>
 
 				<div class="col-lg-3">
 					<li class="editableLi step4 submission${submission + 1}">
 						<label>Response:</label>
-						<select name="response_select" id="response${submission + 1}_select" data-table="application">
+						<select name="response_select" id="response${submission + 1}_select" data-table="application" data-application_id="{{application.tracking_id}}">
 							<option value="not_recieved">Not recieved</option>
 							<option value="rfi">RFI</option>
 							<option value="approved">Approved</option>
@@ -575,7 +573,7 @@
 // 	 					<label>Upload ${checkbox.value} Here:</label>
 // 	 					<input type="file" name="${checkbox.id.slice(0, -9)}" value="{{application.medicaid_application}}" accept="image/jpeg
 // 	 					,image/png,application/pdf" multiple>
-// 	 					<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
+// 	 					<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
 // 	 					<input type="hidden" name="file_type" value="${checkbox.id.slice(0, -9)}">
 // 	 					<button type="submit" class="uploadBtn">Upload</button>
 // 	 				</form>
@@ -596,7 +594,7 @@
 	// 					<label>Upload ${checkbox.value} Here:</label>
 	// 					<input type="file" name="${checkbox.id.slice(0, -9)}" value="{{application.medicaid_application}}" accept="image/jpeg
 	// 					,image/png,application/pdf" multiple>
-	// 					<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
+	// 					<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
 	// 					<input type="hidden" name="file_type" value="${checkbox.id.slice(0, -9)}">
 	// 					<button type="submit" class="uploadBtn">Upload</button>
 	// 				</form>
@@ -651,7 +649,7 @@
 			});
 		};
 
-		addEventListeners('#response1_select')
+		addEventListeners('#application1_response')
 </script>
 
 	<!-- <script type="text/javascript">
@@ -670,13 +668,13 @@
 		};
 
 		const personalInfoFields = [
-			['First Name','{{alert.first_name}}', 'text'],
-			['Last Name','{{alert.last_name}}', 'text'],
-			['Date of Birth','{{alert.dob|date:"Y-m-d"}}', 'date'],
+			['First Name','{{resident.first_name}}', 'text'],
+			['Last Name','{{resident.last_name}}', 'text'],
+			['Date of Birth','{{resident.dob|date:"Y-m-d"}}', 'date'],
 		]
 
-		// newLi('First Name','{{alert.first_name}}', 'text');
-		// newLi('Last Name','{{alert.last_name}}', 'text');
+		// newLi('First Name','{{resident.first_name}}', 'text');
+		// newLi('Last Name','{{resident.last_name}}', 'text');
 		for (var i = 0; i < personalInfoFields.length; i++) {
 			const field = personalInfoFields[i];
 			newLi(field[0],field[1], field[2]);

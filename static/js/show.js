@@ -40,42 +40,46 @@ const sendInputInfoToDB = input => {
 		column: input.id,
 		new_value: input.value
 	};
+	if (table == "application") {
+	 dataObject["application_id"] = input.getAttribute('data-application_id')
+	}
 	let successMessage = `Value of ${dataObject.column} in the ${table} table set to ${dataObject.new_value}`;
 	updateDB(table, dataObject, successMessage);
 	// If field affects alerts, update Alerts table:
 	const alertId = input.getAttribute('data-alert_id');
-	if (alertId != "") {
+	if (alertId) {
 		 dataObject = {
 		 	alert_id: alertId,
 			addressed: true
 		 };
+		 if (table == "application") {
+		 	dataObject["application_id"] = input.getAttribute('data-application_id')
+		 }
 		 successMessage = `Value of 'addressed' for alert with id ${dataObject.alert_id} in the alert table set to ${dataObject.addressed}`;
 		 updateDB("alert", dataObject, successMessage);
 	};
 };
 
-const sendSelectInfoToDB = selectField => {
-	const table = selectField.getAttribute('data-table');
-	const dataObject = {
-		resident_id: document.querySelector("#residentId").innerHTML,
-		column: selectField.getAttribute('name'),
-		new_value: selectField.value
-	};
-	const successMessage = `Value of ${dataObject.column} in the ${table} table set to ${dataObject.new_value}`;
-	updateDB(table, dataObject, successMessage);
-};
+
+
 
 const addSelectEventListener = selectField => {
 	selectField.addEventListener('change', () => {
-		sendSelectInfoToDB(selectField);
+		sendInputInfoToDB(selectField);
 	});
 };
-
 
 const meetingCheckbox = document.querySelector('.meetingCheckbox');
 $(document).ready(()=>{
 	if(meetingCheckbox.checked) {
 		$('.step2').css('display', 'block');
+	}
+})
+
+const pickup_date = document.querySelector('#medicaid_pickup_date');
+$(document).ready(()=>{
+	if(pickup_date.value != "") {
+		$('.step3').css('display', 'block');
 	}
 })
 
