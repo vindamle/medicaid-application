@@ -33,22 +33,22 @@ def update_list(request):
         requested_resident_id = request.GET['resident_id']
         track = request.GET['tracking']
         requested_resident_id = int(requested_resident_id)
-        alert = Resident.objects.get(resident_id = requested_resident_id)
-        
+        resident = Resident.objects.get(resident_id = requested_resident_id)
+
 
         if track == "true":
-            alert.tracking_status = True
-            alert.phase = Phase.objects.get(phase_id = 1)
-            application = ApplicationTracking(resident = alert)
-            application.save()
-            alert.save()
+            resident.tracking_status = True
+            if not ApplicationTracking.objects.filter(resident_id = requested_resident_id).exists():
+                resident.phase = Phase.objects.get(phase_id = 1)
+                application = ApplicationTracking(resident = resident)
+                application.save()
+            resident.save()
 
 
             # resident_info = AdditionalInfo()
         elif track == "false":
-            alert.tracking_status = False
-            alert.save()
-        # Sending an success response
+            resident.tracking_status = False
+            resident.save()
         return HttpResponse("200")
     else:
         return HttpResponse("Request method is not a GET")
@@ -90,8 +90,7 @@ def update_application(request):
     resident = Resident.objects.get(resident_id = resident_id)
     application = ApplicationTracking.objects.get(resident = resident)
 
-    field = setattr(application, column,new_value)
-
+    field = setattr(application,column,new_value)
     application.save()
 
 
