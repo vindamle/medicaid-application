@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 from django.views import View
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import ApplicationForm, UploadFileForm
-from application.models import Facility,Resident, ApplicationTracking, Alert
+from application.models import Facility,Resident, ApplicationTracking, Alert, Document
 import pandas as pd
 
 
@@ -140,32 +140,32 @@ class ShowView(View):
 
 
         application = results
-        # print(application)
+
         return render(request,self.template_name, {'alert':alert,'application':application,"resident_alert":resident_alert,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
 
-        '''if POST'''
+
         file = request.FILES.getlist('files')
         type = request.POST.get('file_type')
         resident_id = request.POST.get('resident_id')
-        # application_id = request.POST.get('application_id')
+        print(file, type, int(resident_id))
 
+        application_id = request.POST.get('application_id')
 
-        #
-        # tracking = ApplicationTracking.objects.get(resident_id = resident_id)
-        # field = getattr(tracking, type)
-        # # TODO
-        # field.save(str(resident_id),file)
-        # tracking.save()
-        return HttpResponse("200")
-        # self.list = list()
-        # for result in results:
-        #     facility = result.Facility
-        #
-        #     self.list.append(al.get_fields(result, facility))
-        #
-        # return render(request,self.template_name, {'list':self.list, "alert_length":len(self.list) , "form":self.form_class, 'facilities':facilities, "tracklist":self.tracklist})
+        resident = Resident.objects.get(resident_id = resident_id)
+        application = ApplicationTracking.objects.get(tracking_id = application_id)
+
+        Document.objects.create(
+            resident =resident,
+            application = application,
+            file = file,
+            description = type,
+            date_recieved = datetime.now(),
+        )
+
+        return redirect('/show/?resident_id={}'.format(request.POST.get('resident_id')))
+
 
 
 class ApprovalsView(View):
