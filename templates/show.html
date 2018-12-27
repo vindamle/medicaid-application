@@ -258,7 +258,7 @@
 						<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
 			  			{% csrf_token %}
 							<label>Upload Application Here:</label>
-							<input type="file" name="medicaid_application" value="{{application.medicaid_application}}" accept="image/jpeg
+							<input type="file" name="medicaid_application" value="" accept="image/jpeg
 							,image/png,application/pdf" multiple>
 							<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
 							<input type="hidden" name="file_type" value="medicaid_application">

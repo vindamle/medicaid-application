@@ -20,7 +20,7 @@ class HomeView(View):
 
         for result in results:
             self.list.append(result)
-            
+
         return render(request,self.template_name, {'list':self.list,"form":self.form_class, 'facilities':facilities})
 
     def post(self, request, *args, **kwargs):
@@ -146,16 +146,18 @@ class ShowView(View):
     def post(self, request, *args, **kwargs):
 
         '''if POST'''
-        file = request.FILES.getlist('files')[0]
+        file = request.FILES.getlist('files')
         type = request.POST.get('file_type')
         resident_id = request.POST.get('resident_id')
+        # application_id = request.POST.get('application_id')
 
 
-        tracking = ApplicationTracking.objects.get(resident_id = resident_id)
-        field = getattr(tracking, type)
-        # TODO
-        field.save(str(resident_id),file)
-        tracking.save()
+        #
+        # tracking = ApplicationTracking.objects.get(resident_id = resident_id)
+        # field = getattr(tracking, type)
+        # # TODO
+        # field.save(str(resident_id),file)
+        # tracking.save()
         return HttpResponse("200")
         # self.list = list()
         # for result in results:
