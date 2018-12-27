@@ -59,7 +59,7 @@ class Resident(models.Model):
     county = models.CharField(max_length = 50, null = True, blank = True)
     zip = models.IntegerField(null = True, blank = True)
     marital_status = models.CharField(max_length = 50, null = True, blank = True)
-
+    dismiss = models.BooleanField(default = False)
     phase = models.ForeignKey(
         Phase,
         on_delete = models.CASCADE,
@@ -81,26 +81,14 @@ class ApplicationTracking(models.Model):
         on_delete = models.CASCADE,
     )
     LTC = models.CharField(max_length = 50,null = True, blank = True)
-
     spousal = models.CharField(max_length = 50,null = True, blank = True)
     application_type = models.CharField(max_length = 50, null = True, blank = True)
-
-
     status = models.BooleanField(null = True, blank = True)
     is_medicaid_pending =  models.CharField(max_length = 50, null = True, blank = True)
-
     date_of_medicaid_submission  = models.DateTimeField(null = True, blank = True)
-    medicaid_application = models.FileField(upload_to = 'applications/',null = True, blank = True)
-    medicaid_confirmation = models.FileField(upload_to = 'applications/',null = True, blank = True)
-
-    date_of_rfi  = models.DateTimeField(null = True, blank = True)
-    rfi = models.FileField(upload_to = 'applications/',null = True, blank = True)
     date_of_deadline  = models.DateTimeField(null = True, blank = True)
-
     date_of_medicaid_approval  = models.DateTimeField(null = True, blank = True)
-    medicaid_approval = models.FileField(upload_to = 'applications/',null = True, blank = True)
     date_of_medicaid_recertification  = models.DateTimeField(null = True, blank = True)
-
     medicaid_pickup_date = models.DateTimeField(null = True, blank = True)
     approval_start_date = models.DateTimeField(null = True, blank = True)
     approval_end_date = models.DateTimeField(null = True, blank = True)
@@ -114,14 +102,11 @@ class ApplicationTracking(models.Model):
     fair_hearing_required  = models.BooleanField(null = True, blank = True)
     fair_hearing_notice_date = models.DateTimeField(null = True, blank = True)
     spousal_refusal= models.CharField(max_length = 50,null = True, blank = True)
-
     appointment_date = models.DateTimeField(null = True, blank = True)
     dss_contact_address  = models.CharField(max_length = 100, null = True, blank = True)
     dss_contact_phone  = models.CharField(max_length = 100, null = True, blank = True)
     dss_contact_email = models.EmailField(max_length = 100, null = True, blank = True)
     dss_contact_fax  = models.CharField(max_length = 100, null = True, blank = True)
-    notes_file = models.FileField(upload_to = 'applications/',null = True, blank = True)
-    
 
 
     class Meta:
@@ -129,9 +114,8 @@ class ApplicationTracking(models.Model):
         verbose_name_plural = 'ApplicationTracking'
 
 class AlertType(models.Model):
-
     alert_type_id = models.AutoField(primary_key = True)
-    alert_name = models.CharField(max_length = 20,  null = False, blank=False)
+    alert_name = models.CharField(max_length = 50,  null = False, blank=False)
 
 class Alert(models.Model):
     alert_id = models.AutoField(primary_key = True)
@@ -153,3 +137,64 @@ class Alert(models.Model):
     alert_priority = models.IntegerField(null=False,blank=False)
     alert_status =models.BooleanField(default = False)
     alert_message =models.CharField(max_length = 100,  null = False, blank=False)
+
+
+class Document(models.Model):
+    document_id  = models.AutoField(primary_key = True)
+    resident = models.ForeignKey(
+        Resident,
+        on_delete = models.CASCADE,
+    )
+    application = models.ForeignKey(
+        ApplicationTracking,
+        on_delete = models.CASCADE,
+        null = True,
+    )
+    file = models.FileField(upload_to = 'applications/',null = True, blank = True)
+    file_name = models.CharField(max_length = 100, null = True, blank = True)
+    description = models.CharField(max_length = 100, null = True, blank = True)
+    date_recieved  = models.DateTimeField(null = True, blank = True)
+
+class RFI(models.Model):
+    rfi_id  = models.AutoField(primary_key = True)
+    resident = models.ForeignKey(
+        Resident,
+        on_delete = models.CASCADE,
+    )
+    application = models.ForeignKey(
+        ApplicationTracking,
+        on_delete = models.CASCADE,
+        null = True,
+    )
+    document = models.ForeignKey(
+        Document,
+        on_delete = models.CASCADE,
+        null = True,
+    )
+    due_date  = models.DateTimeField(null = True, blank = True)
+    extension_request = models.BooleanField(null = True, blank = True)
+    extension_response = models.BooleanField(null = True, blank = True)
+    document_submitted = models.BooleanField(null = True, blank = True)
+
+
+class NAMI(models.Model):
+    nami_id  = models.AutoField(primary_key = True)
+    resident = models.ForeignKey(
+        Resident,
+        on_delete = models.CASCADE,
+    )
+    application = models.ForeignKey(
+        ApplicationTracking,
+        on_delete = models.CASCADE,
+        null = True,
+    )
+    document = models.ForeignKey(
+        Document,
+        on_delete = models.CASCADE,
+        null = True,
+    )
+    start_date  = models.DateField(null = True, blank = True)
+    start_date  = models.DateField(null = True, blank = True)
+    amount = models.FloatField(null = True, blank = True)
+    extension_response = models.BooleanField(null = True, blank = True)
+    document_submitted = models.BooleanField(null = True, blank = True)

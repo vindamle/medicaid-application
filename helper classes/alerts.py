@@ -3,6 +3,7 @@ from db import Db
 import pyodbc
 from sqlalchemy.dialects.postgresql import insert
 from datetime import datetime
+
 class Alerts:
 
 
@@ -49,9 +50,7 @@ class Alerts:
             activity_date= getattr(result, "ActivityDate"),
             activity_type = getattr(result, "Actual_Activity_Type_Flag"),
             sex = getattr(result, 'Sex'),
-
-
-            tracking_status = None,
+            dismiss = False
 
         )
 

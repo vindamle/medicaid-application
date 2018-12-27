@@ -12,7 +12,6 @@ class HomeView(View):
     list = []
     tracklist = []
 
-
     def get(self, request, *args, **kwargs):
         '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
@@ -21,13 +20,13 @@ class HomeView(View):
 
         for result in results:
             self.list.append(result)
+            
         return render(request,self.template_name, {'list':self.list,"form":self.form_class, 'facilities':facilities})
 
     def post(self, request, *args, **kwargs):
 
         '''if POST'''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-
 
         self.list = list()
         for result in results:
@@ -50,7 +49,7 @@ class ActivityView(View):
         '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
         new_admission_results = Resident.objects.filter(tracking_status = None, activity_type = 'A')
-        payor_change_results = Resident.objects.filter(tracking_status = None, activity_type = 'P')
+        payor_change_results = Resident.objects.filter(activity_type = 'P')
         discharge_results = Resident.objects.filter(tracking_status = None, activity_type = 'D')
         self.payor_change_list = []
         self.new_admission_list = []
@@ -127,25 +126,22 @@ class ShowView(View):
         '''if GET  '''
 
         resident_id= int(request.GET["resident_id"])
-
         results = Resident.objects.filter(resident_id = resident_id)
-
-        self.list = list()
 
         for result in results:
             alert = result
 
         resident = Resident.objects.get(resident_id = resident_id)
-
         results = ApplicationTracking.objects.filter(resident = resident)
 
-
-        
         for result in results:
-            print(result.copay)
-            application = result
+            application_alerts = result
+        resident_alert = Alert.objects.filter(resident_id = resident_id, application_id = application_alerts.tracking_id)
 
-        return render(request,self.template_name, {'alert':alert,'application':application,"form":self.form_class})
+
+        application = results
+        # print(application)
+        return render(request,self.template_name, {'alert':alert,'application':application,"resident_alert":resident_alert,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
 
@@ -207,8 +203,6 @@ class NotTrackingView(View):
     template_name = "not_tracking.html"
     list = []
     tracklist = []
-
-
 
     def get(self, request, *args, **kwargs):
         '''if GET  '''

@@ -105,18 +105,19 @@
 						<input class="editable" id="secondary_payor" data-table="resident" data-alert_id="" type="text" value="{{alert.secondary_payor}}">
 					</li>
 				</div>
+
 				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
 						<label>Copay:</label>
-						<input class="editable" id="copay" data-table="application" data-alert_id="" type="text" value="{{application.copay}}">
+						<input class="editable" id="copay" data-table="application" data-alert_id="" type="text" value="{{application.0.copay}}">
 					</li>
 					<li class="editableLi">
 						<label>Copay Start Date:</label>
-						<input class="editable date" id="copay_start_date" data-table="application" data-alert_id="" type="date" value="{{application.copay_start_date|date:'Y-m-d'}}">
+						<input class="editable date" id="copay_start_date" data-table="application" data-alert_id="" type="date" value="{{application.0.copay_start_date|date:'Y-m-d'}}">
 					</li>
 					<li class="editableLi">
 						<label>Secondary Insurance Copay Percentage:</label>
-						<input class="editable" id="secondary_pays_copay" data-table="application" data-alert_id="" type="text" value="{{application.secondary_pays_copay}}">
+						<input class="editable" id="secondary_pays_copay" data-table="application" data-alert_id="" type="text" value="{{application.0.secondary_pays_copay}}">
 					</li>
 				</div>
 				<div class="col-lg-4 applicationColumn">
@@ -132,7 +133,7 @@
 			</div>
 		</ul>
 	</section>
-	
+
 	<section id="applicationInfoSection">
 		<ul>
 			<div class="row">
@@ -143,7 +144,7 @@
 						<input class="editable" id="is_medicaid_pending" data-table="application" data-alert_id="" type="text" value="{{application.is_medicaid_pending}}">
 					</li> -->
 					<li class="step3">
-						<label>Application Type:</label> 
+						<label>Application Type:</label>
 						<select name="application_type" id="application_type_select" data-table="application">
 							<option value="">Please select one:</option>
 							<option value="new_application">New Application</option>
@@ -186,10 +187,10 @@
 						<label>Applicant Meeting Date:</label>
 						<input class="editable date" id="appointment_date" data-table="application" data-alert_id="" type="date" value="{{application.appointment_date|date:'Y-m-d'}}">
 					</li>
-					
+
 					<li class="editableLi step2">
 						<label>Medicaid Pickup Date:</label>
-							<input class="editable date" id="medicaid_pickup_date" data-table="application" data-alert_id=5 type="date" value="{{application.medicaid_pickup_date|date:'Y-m-d'}}">	
+							<input class="editable date" id="medicaid_pickup_date" data-table="application" data-alert_id=5 type="date" value="{{application.medicaid_pickup_date|date:'Y-m-d'}}">
 					</li>
 					<li class="editableLi step3">
 						<label>Application County:</label>
@@ -199,7 +200,7 @@
 						<label>Application State:</label>
 						<input class="editable" id="application_state" data-table="application" data-alert_id="" type="text" value="{{application.application_state}}">
 					</li>
-					
+
 						<li class="editableLi step3">
 						<label>Estimated NAMI/Income Contribution Amount:</label>
 						<input class="editable" id="estimated_nami" data-table="application" data-alert_id="" type="text" value="{{application.estimated_nami}}">
@@ -229,7 +230,7 @@
 						<label>DSS Contact Fax:</label>
 						<input class="editable" id="dss_contact_fax" data-table="application" data-alert_id="" type="text" value="{{application.dss_contact_fax}}">
 					</li>
-					<!-- 
+					<!--
 					<li class="editableLi step3">
 						<label>Date of RFI:</label>
 						<input class="editable date" id="date_of_rfi" data-table="application" data-alert_id="" type="date" value="{{application.date_of_rfi|date:'Y-m-d'}}">
@@ -351,7 +352,7 @@
 							<button type="submit" class="uploadBtn">Upload</button>
 						</form>
 					</li>
-					
+
 				</div>
 				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
@@ -363,10 +364,10 @@
 						 <input class="editable date" id="approval_end_date" data-table="application" data-alert_id="" type="date" value="{{application.approval_end_date|date:'Y-m-d'}}">
 					</li>
 					<li class="editableLi">
-						<label>NAMI/Income Contribution Amount:</label> 
+						<label>NAMI/Income Contribution Amount:</label>
 			 			<input class="editable" type="text" value="{{application.county}}">
 					</li>
-					
+
 				</div>
 				<div class="col-lg-4">
 					<li class="editableLi">
@@ -395,11 +396,11 @@
 {% load static %}
 {% block scripts %}
 	<script src="{% static 'js/show.js' %}"></script>
-	
+
 	<script type="text/javascript">
 		// Submission behavior, including generating new HTML based on Medicaid response:
 	const applicationInfoSection = document.querySelector('#applicationInfoSection');
-	
+
 
 		let submission = 1;
 		const submittedCheckbox1 = document.querySelector('#submittedCheckbox1');
@@ -454,7 +455,7 @@
 						<input class="editable date" id="date_of_medicaid_submission" data-table="application" data-alert_id="" type="date" value="{{application.date_of_medicaid_submission|date:'Y-m-d'}}">
 					</li>
 				</div>
-				
+
 				<div class="col-lg-3">
 					<li class="editableLi step4 submission${submission + 1}">
 						<label>Response:</label>
@@ -557,10 +558,10 @@
 // 				applicationInfoSection.innerHTML += "<h6>Documentation Upload</h6>"
 // 				let containerDiv = document.createElement('DIV');
 // 				containerDiv.classList.add('container-fluid')
-// 				containerDiv.id = "documentUploadFormsDiv"		
+// 				containerDiv.id = "documentUploadFormsDiv"
 // 				let rowDiv = document.createElement('DIV');
 // 				rowDiv.classList.add('row')
-// 				rowDiv.id = "documentUploadFormsRow"		
+// 				rowDiv.id = "documentUploadFormsRow"
 // 				containerDiv.appendChild(rowDiv)
 // 				applicationInfoSection.appendChild(containerDiv)
 // 				containsRow = true;
@@ -581,7 +582,7 @@
 // 	 			</div>
 // 	 		`
 // 		};
-			
+
 // 	});
 	// const documentationCheckBoxes = document.querySelectorAll('.documentationCheckBox');
 	// for (var i = 0; i < documentationCheckBoxes.length; i++) {
@@ -618,7 +619,7 @@
 							option.setAttribute("selected", "selected");
 						};
 					};
-		
+
 				//generate new html depending on selected option:
 
 				if (e.target.value == 'rfi') {
@@ -684,7 +685,7 @@
 		// console.log(personalInfoObjects);
 		const demoSection = document.querySelector('#demo');
 		// const someText = "<span>Hello</span>"
-		
+
 		for (var i = 0; i < personalInfoObjects.length; i++) {
 			const field = personalInfoObjects[i];
 			demoSection.innerHTML += `
