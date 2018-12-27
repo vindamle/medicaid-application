@@ -27,7 +27,7 @@ class Pickupdate:
         df = pd.read_sql(sql, con=self.engine)
         df2 = pd.read_sql(sql2, con=self.engine)
         df3 = pd.read_sql(sql3, con=self.engine)
-        print(df3)
+        
         # remove after implemented
         shift= pd.TimedeltaIndex(90+(df['medicaid_pickup_date'] + pd.DateOffset(days = 90)).dt.daysinmonth-(df['medicaid_pickup_date'] + pd.DateOffset(days = 90)).dt.day, unit = "D")
         df["medicaid_pickup_deadline"]=df['medicaid_pickup_date']+ shift

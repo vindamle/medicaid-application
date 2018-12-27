@@ -3,11 +3,6 @@ from django.db import models
 
 # Create your models here.
 
-# class Employee(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     department = models.CharField(max_length=100)
-#
-
 class Facility(models.Model):
     facility_id = models.AutoField(primary_key=True)
     facility_number= models.IntegerField(null=True, blank=True)

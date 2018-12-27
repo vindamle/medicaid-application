@@ -89,10 +89,8 @@ def update_application(request):
 
     resident = Resident.objects.get(resident_id = resident_id)
     application = ApplicationTracking.objects.get(resident = resident)
-    # for applications in application:
-    #     print(application)
-    field = setattr(application,column,new_value)
 
+    field = setattr(application,column,new_value)
     application.save()
 
 
