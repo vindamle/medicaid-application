@@ -129,7 +129,7 @@ class ShowView(View):
         results = Resident.objects.filter(resident_id = resident_id)
 
         for result in results:
-            alert = result
+            resident = result
 
         resident = Resident.objects.get(resident_id = resident_id)
         results = ApplicationTracking.objects.filter(resident = resident)
@@ -139,9 +139,9 @@ class ShowView(View):
         resident_alert = Alert.objects.filter(resident_id = resident_id, application_id = application_alerts.tracking_id)
 
 
-        application = results
-
-        return render(request,self.template_name, {'alert':alert,'application':application,"resident_alert":resident_alert,"form":self.form_class})
+        applications = results
+        # print(application)
+        return render(request,self.template_name, {'resident':resident,'applications':applications,"resident_alert":resident_alert,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
 
