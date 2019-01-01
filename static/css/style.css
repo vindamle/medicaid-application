@@ -22,27 +22,42 @@ nav ul {
 	background: white;
 	padding: 5px;
 	border-radius: 25px;
+	font-size: 18px;
+}
+
+
+nav a:hover {
+	text-decoration: none;
+}
+
+nav ul li {
+	margin: auto 10px;
 }
 
 @media(min-width: 990px) {
 	nav ul {
 		position: absolute;
+		margin-left: 100px;
 		right: 80px;
 	}
-}
 
-nav a:hover {
-	text-decoration: none;
+		nav ul li {
+		margin: auto 5px;
+	}
 }
 
 @media(min-width: 1400px) {
 	nav ul {
 	font-size: 22px;
 	}
+
+			nav ul li {
+		margin-right: 2vw;
+	}
 }
 
-nav ul li {
-	margin: auto 20px;
+@media(min-width: 1600px) {
+
 }
 
 nav li.grayText {
@@ -68,7 +83,7 @@ nav li.grayText {
 	margin-left: 10px;
 	display: inline-block;
 	left: 0;
-	width: 200px;
+	width: 180px;
 }
 
 .title {
@@ -82,11 +97,11 @@ nav li.grayText {
 
 }
 
-@media(max-width: 1365px) {
+@media(max-width: 989px) {
 	.logo {
 		display: inline-block;
 		position: relative;
-		width: 50px;
+		width: 100px;
 	}
 	.title {
 		text-align: left;
@@ -354,7 +369,7 @@ table button {
 }
 
 .residentInfoDiv h4 {
-	margin: -8px 0 20px -6px;
+	margin: -8px 0 20px -10px;
 	width: 380px;
 	/*display: inline-block;*/
 	padding: 15px 30px;
@@ -364,9 +379,13 @@ table button {
 	background-color: #237;
 	/*background-color: darkblue;*/
 	/*text-decoration: underline;*/
-	border-radius: 25px 0 25px 0;
+	/*border-radius: 25px 0 25px 0;*/
+	border-radius: 5px;
 	font-size: 20px;
 	box-shadow: 1px 5px 10px #224;
+	-moz-box-shadow: 1px 5px 10px #224, inset 0 0 10px #000000;
+   -webkit-box-shadow: 1px 5px 10px #224, inset 0 0 10px #000000;
+   box-shadow:  1px 5px 10px #224, inset 0 0 10px #000000;
 }
 
 .residentInfoDiv h6 {
@@ -386,13 +405,13 @@ table button {
 }
 
 .residentInfoDiv section {
-	border-radius: 25px 0 25px 0;
+	/*border-radius: 25px 0 25px 0;*/
+	border-radius: 5px;
 	margin-top: 30px;
 	/*height: 250px;*/
 	/*background: white;*/
 	border: 2px solid #eee;
 	box-shadow: 0 5px 5px #ccc;
-	/*border-radius: 25px;*/
 	/*padding: 15px 25px 0 25px;*/
 	padding: 0;
 	/*font-size: 16px;*/

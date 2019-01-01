@@ -3,24 +3,26 @@
 {% block title %}Patient Show Page{% endblock %}
 
 {% block content %}
-<!-- <div class="alertDiv">
-	<div class="alert alert-danger alert-dismissible fade show" role="alert">
-		<strong>Alert:</strong> RFI due within 10 days
-		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-		</button>
-	</div>
-	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+<div class="alertDiv">
+	{% for alert in resident_alerts %}
+			<div class="alert alert-danger alert-dismissible fade show" role="alert">
+				<strong>Alert:</strong> {{alert.alert_message}}
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+	{% endfor %}
+	<!-- <div class="alert alert-danger alert-dismissible fade show" role="alert">
 		<strong>Alert:</strong> NCS Discrepancy
 		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 		</button>
-	</div>
-</div> -->
+	</div> -->
+</div>
 
 <div class="container-fluid residentInfoDiv">
 	<h1 class="">{{resident.first_name}} {{resident.last_name}}</h1>
-	<h5>Status: {{resident.phase.phase_name}}</h5>
+	<h5 id="showStatus">Status: {{resident.phase.phase_name}}</h5>
 	<!-- <p class="centered">Click any field to edit.</p> -->
 	<!-- <button class="btn" id="editBtn">Edit</button> -->
 	<!-- <section >
@@ -123,11 +125,11 @@
 				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
 						<label>Last Medicare Date:</label>
-						<input class="editable date" type="date" value="{{applications.0.medicaid_pickup_date|date:'Y-m-d'}}">
+						<input class="editable date" type="date" value="{{applications.0.last_medicare_date|date:'Y-m-d'}}">
 					</li>
 					<li class="editableLi">
 						<label>Cut From Medicare/Insurance Date:</label>
-						<input class="editable date" type="date" value="{{applications.0.medicaid_pickup_date|date:'Y-m-d'}}">
+						<input class="editable date" type="date" value="{{applications.0.cut_from_medicare_date|date:'Y-m-d'}}">
 					</li>
 				</div>
 			</div>
@@ -396,6 +398,17 @@
 	<script src="{% static 'js/show.js' %}"></script>
 
 	<script type="text/javascript">
+		// $("#showStatus").click(function() {                
+  //     $.ajax({    //create an ajax request to display.php
+  //       type: "GET",
+  //       url: "/application/ajax/phase_change/",             
+  //       dataType: "html",   //expect html to be returned                
+  //       success: function(response){                    
+  //           $("#showStatus").html(response); 
+  //           //alert(response);
+  //       }
+  //   	});
+		// });
 		// Submission behavior, including generating new HTML based on Medicaid response:
 	const applicationInfoSection = document.querySelector('#applicationInfoSection');
 
@@ -404,7 +417,6 @@
 		const date_of_medicaid_submission = document.querySelector('#date_of_medicaid_submission');
 		$(document).ready(()=>{
 			if(date_of_medicaid_submission.value) {
-				console.log(date_of_medicaid_submission)
 				$('.step4').css('display', 'block');
 				submission += 1;
 			}
@@ -449,14 +461,14 @@
 					<li class="step3 submission${submission + 1}">
 						<label><input type="checkbox" class="documentationSubmittedCheckbox" id="documentationSubmittedCheckbox${submission + 1}" {% if resident.phase.phase_id > 4 %} checked="checked"{% endif %}>Documentation Submitted</label>
 					</li>
-					<li class="editableLi step4 submission${submission + 1}">
+					<li class="editableLi step5 submission${submission + 1}">
 						<label>Submission Date:</label>
 						<input class="editable date" id="date_of_medicaid_submission" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{application.date_of_medicaid_submission|date:'Y-m-d'}}">
 					</li>
 				</div>
 
 				<div class="col-lg-3">
-					<li class="editableLi step4 submission${submission + 1}">
+					<li class="editableLi step5 submission${submission + 1}">
 						<label>Response:</label>
 						<select name="response_select" id="response${submission + 1}_select" data-table="application" data-application_id="{{application.tracking_id}}">
 							<option value="not_recieved">Not recieved</option>
@@ -610,7 +622,7 @@
 		const addEventListeners = selectID => {
 			let response_select = document.querySelector(selectID);
 			response_select.addEventListener('change', (e) => {
-				sendSelectInfoToDB(response_select)
+				// sendInputInfoToDB(response_select)
 				const options = response_select.querySelectorAll('OPTION');
 					for (let x = 0; x < options.length; x++) {
 						const option = options[x];
@@ -618,12 +630,11 @@
 							option.setAttribute("selected", "selected");
 						};
 					};
-
 				//generate new html depending on selected option:
 
 				if (e.target.value == 'rfi') {
-					applicationInfoSection.innerHTML += newSubmissionRowHTML;
-					// addEventListenersToDocumentationCheckboxes();
+					$('#approvedSection').css('display', 'none');
+					applicationInfoSection.insertAdjacentHTML("beforeend", newSubmissionRowHTML);
 					let newID = `#response${submission}_select`
 					addEventListeners(newID);
 					const submittedCheckbox2 = document.querySelector('#documentationSubmittedCheckbox2');
@@ -632,7 +643,6 @@
 							$('.step4').css('display', 'block');
 						}
 					});
-
 					submittedCheckbox2.addEventListener('change', (e) => {
 						if(submittedCheckbox2.checked) {
 							submission += 1;
@@ -643,7 +653,7 @@
 						};
 					});
 				}	else if (e.target.value == 'denied') {
-					console.log("YUP!");
+					$('#approvedSection').css('display', 'none');
 				} else if (e.target.value == 'approved'){
 					$('#approvedSection').css('display', 'block');
 				};
