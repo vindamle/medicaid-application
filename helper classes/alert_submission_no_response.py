@@ -6,8 +6,16 @@ import pytz
 class NoResponse:
     def __init__(self):
 
+         # dotenv_path = join(dirname(__file__), '../.env')
+        # load_dotenv(dotenv_path)
+
+        # self.database = os.getenv("POSTGRES_DATABASE")
+        # self.username = os.getenv("POSTGRES_USERNAME")
+        # self.password = os.getenv("POSTGRES_PASSWORD")
+        # self.hostname = os.getenv("POSTGRES_HOSTNAME")
+
         self.user = 'postgres'
-        self.password = 'Aug.2018'
+        self.password = 'Oct.2018'
         self.database_name = 'medicaid'
 
         self.database_url = 'postgresql://{user}:{password}@localhost/{database_name}'.format(

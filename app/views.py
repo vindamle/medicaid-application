@@ -136,12 +136,12 @@ class ShowView(View):
 
         for result in results:
             application_alerts = result
-        resident_alert = Alert.objects.filter(resident_id = resident_id, application_id = application_alerts.tracking_id)
+        resident_alerts = Alert.objects.filter(resident_id = resident_id, application_id = application_alerts.tracking_id)
 
 
         applications = results
         # print(application)
-        return render(request,self.template_name, {'resident':resident,'applications':applications,"resident_alert":resident_alert,"form":self.form_class})
+        return render(request,self.template_name, {'resident':resident,'applications':applications,"resident_alerts":resident_alerts,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
 

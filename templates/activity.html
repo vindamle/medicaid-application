@@ -34,8 +34,8 @@
             <th>Primary Payor</th>
             <th>Secondary Payor</th>
             <th>Admission Date</th>
-            <th class="">Track</th>
-            <th class="">Don't Track</th>
+            <th class=""></th>
+            <th class=""></th>
           </tr>
         </thead>
         <tbody>
@@ -48,7 +48,7 @@
             <td>{{obj.secondary_payor}}</td>
             <td>{{obj.activity_date|date:"F d, Y"}}</td>
             <td class="btnCell trackBtnCell"><button class="btn-track">Track</button></td>
-            <td class="btnCell"><button class="btn-ignore">Don't Track</button></td>
+            <td class="btnCell"><button {% if 'Medicaid' in obj.primary_payor or 'Medicaid' in obj.secondary_payor %} disabled {% else %} class="btn-ignore" {% endif %}>Don't Track</button></td>
           </tr>
           {% endfor %}
         </tbody>
@@ -78,7 +78,7 @@
             <td>{{obj.secondary_payor}}</td>
             <td>{{obj.activity_date|date:"F d, Y"}}</td>
             <td class="trackBtnCell"><button class="btn-track">Track</button></td>
-            <td><button class="btn-ignore">Don't Track</button></td>
+            <td><button {% if 'Medicaid' in obj.primary_payor  %} disabled {% else %} class="btn-ignore" {% endif %}>Don't Track</button></td>
           </tr>
           {% endfor %}
         </tbody>
@@ -108,7 +108,7 @@
             <td>{{obj.secondary_payor}}</td>
             <td>{{obj.activity_date|date:"F d, Y"}}</td>
             <td class="trackBtnCell"><button class="btn-track">Track</button></td>
-            <td><button class="btn-ignore">Don't Track</button></td>
+            <td><button {% if 'Medicaid' in obj.primary_payor or 'Medicaid' in obj.secondary_payor %} disabled {% else %} class="btn-ignore" {% endif %}>Don't Track</button></td>
           </tr>
           {% endfor %}
         </tbody>
