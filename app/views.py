@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from .forms import ApplicationForm, UploadFileForm
 from application.models import Facility,Resident, ApplicationTracking, Alert, Document
 import pandas as pd
+from datetime import datetime
 
 
 class HomeView(View):
@@ -149,20 +150,21 @@ class ShowView(View):
         file = request.FILES.getlist('files')
         type = request.POST.get('file_type')
         resident_id = request.POST.get('resident_id')
-        print(file, type, int(resident_id))
-
         application_id = request.POST.get('application_id')
-
-        resident = Resident.objects.get(resident_id = resident_id)
+        print("____________",file, type, int(resident_id), int(application_id))
+        resident = Resident.objects.get(resident_id = int(resident_id))
         application = ApplicationTracking.objects.get(tracking_id = application_id)
-
-        Document.objects.create(
-            resident =resident,
-            application = application,
-            file = file,
-            description = type,
-            date_recieved = datetime.now(),
-        )
+        assert False
+        try:
+            Document.objects.create(
+                resident =resident,
+                application = application,
+                file = file[0],
+                description = type,
+                date_recieved = datetime.now(),
+            )
+        except:
+            pass
 
         return redirect('/show/?resident_id={}'.format(request.POST.get('resident_id')))
 
@@ -173,8 +175,6 @@ class ApprovalsView(View):
     template_name = "approvals.html"
     list = []
     tracklist = []
-
-
 
     def get(self, request, *args, **kwargs):
         '''if GET  '''
