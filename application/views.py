@@ -9,23 +9,23 @@ from .models import Resident, ApplicationTracking, Alert, AlertType,Phase
 from .additionalInfo import AdditionalInfo
 
 
-class create(generic.CreateView):
-    form_class = NameForm
-    success_url = reverse_lazy('home')
-    template_name = 'create.html'
-
-    def get(self, request, *args, **kwargs):
-        form = self.form_class(initial=self.initial)
-        return render(request, self.template_name, {'form': form})
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            # <process form cleaned data>
-            return HttpResponseRedirect('/success/')
-
-        return render(request, self.template_name, {'form': form})
-
+# class create(generic.CreateView):
+#     form_class = NameForm
+#     success_url = reverse_lazy('home')
+#     template_name = 'create.html'
+#
+#     def get(self, request, *args, **kwargs):
+#         form = self.form_class(initial=self.initial)
+#         return render(request, self.template_name, {'form': form})
+#
+#     def post(self, request, *args, **kwargs):
+#         form = self.form_class(request.POST)
+#         if form.is_valid():
+#             # <process form cleaned data>
+#             return HttpResponseRedirect('/success/')
+#
+#         return render(request, self.template_name, {'form': form})
+#
 
 
 def update_list(request):
@@ -60,7 +60,7 @@ def approval_verified(request):
         resident_id =int(request.GET['resident_id'])
 
         application = ApplicationTracking.objects.get(resident = resident_id)
-        print(application)
+
         if request.GET['approval_verified'] == "true":
             application.approval_verified = True
             application.save()
@@ -95,7 +95,6 @@ def update_application(request):
     field = setattr(application,column,new_value)
     application.save()
 
-
     return HttpResponse("200")
 
 def update_alert(request):
@@ -111,4 +110,7 @@ def phase_change(request):
     resident.phase = phase
     resident.save()
 
+    return HttpResponse("200")
+
+def update_rfi(request):
     return HttpResponse("200")
