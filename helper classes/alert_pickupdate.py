@@ -6,10 +6,10 @@ import pytz
 class Pickupdate:
     def __init__(self):
 
- 
+
 
         self.user = 'postgres'
-        self.password = 'Oct2018!'
+        self.password = 'Aug.2018'
         self.database_name = 'medicaid'
 
         self.database_url = 'postgresql://{user}:{password}@localhost/{database_name}'.format(
@@ -29,11 +29,9 @@ class Pickupdate:
         df = pd.read_sql(sql, con=self.engine)
         df2 = pd.read_sql(sql2, con=self.engine)
         df3 = pd.read_sql(sql3, con=self.engine)
-        
+
         # remove after implemented
-       
-        # shift= pd.TimedeltaIndex(90 - (df['medicaid_pickup_date'].dt.day),unit='D')
-        # print(shift)
+
         shift= pd.TimedeltaIndex(90+(df['medicaid_pickup_date'] + pd.DateOffset(days = 90)).dt.daysinmonth-(df['medicaid_pickup_date'] + pd.DateOffset(days = 90)).dt.day, unit = "D")
         df["medicaid_pickup_deadline"]=df['medicaid_pickup_date']+ shift
 
@@ -60,7 +58,7 @@ class Pickupdate:
                 alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_type_id"]] = alert_id
                 alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_message"]] = "Application Overdue"
                 alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_priority"]] = alert_priority
-            # print(alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days),(cols.values())])
+
             alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days),(cols.values())].\
             to_sql("application_alert",self.engine,if_exists = 'append', index = False)
 

@@ -3,6 +3,7 @@
 {% block title %}Patient Show Page{% endblock %}
 
 {% block content %}
+{% load static %}
 <div class="alertDiv">
 	{% for alert in resident_alerts %}
 			<div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -252,19 +253,23 @@
 						<input class="editable date" id="date_of_medicaid_submission" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{application.date_of_medicaid_submission|date:'Y-m-d'}}">
 					</li>
 				</div>
+				{% for document in documents %}
 				<div class="col-lg-3">
 					<li class="step4 submission1">
 						<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
 			  			{% csrf_token %}
 							<label>Upload Application Here:</label>
-							<input type="file" name="medicaid_application" value="{{application.medicaid_application}}" accept="image/jpeg
+							<input type="file" name="medicaid_application" value={{document.file}} accept="image/jpeg
 							,image/png,application/pdf" multiple>
 							<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
 							<input type="hidden" name="file_type" value="medicaid_application">
+							<input type="hidden" name="application_id" value="{{application.tracking_id}}">
 							<button type="submit" class="uploadBtn">Upload</button>
+							<a href="/{{ document.file }}" target = "_new">{{document.file_name}}</a>
 						</form>
 					</li>
 				</div>
+				{% endfor %}
 				<div class="col-lg-3">
 					<li class="editableLi step4 submission1">
 						<label>Response:</label>
@@ -393,18 +398,18 @@
 	</section>
 </div>
 {% endblock %}
-{% load static %}
+
 {% block scripts %}
 	<script src="{% static 'js/show.js' %}"></script>
 
 	<script type="text/javascript">
-		// $("#showStatus").click(function() {                
+		// $("#showStatus").click(function() {
   //     $.ajax({    //create an ajax request to display.php
   //       type: "GET",
-  //       url: "/application/ajax/phase_change/",             
-  //       dataType: "html",   //expect html to be returned                
-  //       success: function(response){                    
-  //           $("#showStatus").html(response); 
+  //       url: "/application/ajax/phase_change/",
+  //       dataType: "html",   //expect html to be returned
+  //       success: function(response){
+  //           $("#showStatus").html(response);
   //           //alert(response);
   //       }
   //   	});

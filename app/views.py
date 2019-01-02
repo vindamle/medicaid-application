@@ -1,9 +1,12 @@
 from django.http import HttpResponse
 from django.views import View
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import ApplicationForm, UploadFileForm
-from application.models import Facility,Resident, ApplicationTracking, Alert
+from application.models import Facility,Resident, ApplicationTracking, Alert, Document
 import pandas as pd
+from datetime import datetime
+import os
+from pathlib import Path
 
 
 class HomeView(View):
@@ -20,7 +23,7 @@ class HomeView(View):
 
         for result in results:
             self.list.append(result)
-            
+
         return render(request,self.template_name, {'list':self.list,"form":self.form_class, 'facilities':facilities})
 
     def post(self, request, *args, **kwargs):
@@ -49,7 +52,8 @@ class ActivityView(View):
         '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
         new_admission_results = Resident.objects.filter(tracking_status = None, activity_type = 'A')
-        payor_change_results = Resident.objects.filter(activity_type = 'P', dismiss= False)
+
+        payor_change_results = Resident.objects.filter(activity_type = 'P', dismiss = False)
         discharge_results = Resident.objects.filter(tracking_status = None, activity_type = 'D')
         self.payor_change_list = []
         self.new_admission_list = []
@@ -91,8 +95,8 @@ class PendingView(View):
         residents = Resident.objects.filter(tracking_status = True)
         self.list = list()
         for resident in residents:
+
             alerts = Alert.objects.filter(resident = resident , alert_status = False)
-            
 
             for alert in alerts:
                 print(alert.resident.resident_id)
@@ -139,32 +143,42 @@ class ShowView(View):
             application_alerts = result
         resident_alerts = Alert.objects.filter(resident_id = resident_id, application_id = application_alerts.tracking_id, alert_status = False)
 
-
+        documents = Document.objects.filter(resident_id = resident_id)
         applications = results
         # print(application)
-        return render(request,self.template_name, {'resident':resident,'applications':applications,"resident_alerts":resident_alerts,"form":self.form_class})
+        return render(request,self.template_name, {'documents':documents,'resident':resident,'applications':applications,"resident_alerts":resident_alerts,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
 
-        '''if POST'''
-        file = request.FILES.getlist('files')[0]
+
+        file = request.FILES.getlist('medicaid_application')
         type = request.POST.get('file_type')
         resident_id = request.POST.get('resident_id')
+        application_id = request.POST.get('application_id')
 
+        resident = Resident.objects.get(resident_id = int(resident_id))
+        application = ApplicationTracking.objects.get(tracking_id = application_id)
+        ROOT = Path.cwd()
+        path = Path(str(ROOT) + "/static/applications/"+str(resident_id)+"/"+str(application_id))
+        if not path.exists():
+            print("Create Path")
+            path.mkdir(parents=True, exist_ok = True)
 
-        tracking = ApplicationTracking.objects.get(resident_id = resident_id)
-        field = getattr(tracking, type)
-        # TODO
-        field.save(str(resident_id),file)
-        tracking.save()
-        return HttpResponse("200")
-        # self.list = list()
-        # for result in results:
-        #     facility = result.Facility
-        #
-        #     self.list.append(al.get_fields(result, facility))
-        #
-        # return render(request,self.template_name, {'list':self.list, "alert_length":len(self.list) , "form":self.form_class, 'facilities':facilities, "tracklist":self.tracklist})
+        try:
+            x = Document.objects.create(
+                resident =resident,
+                application = application,
+                file = file[0],
+                file_name = (file[0].name).split(".")[0],
+                description = type,
+                date_recieved = datetime.now(),
+            )
+        except Exception as e:
+            print("\n\n",str(e),"\n\n")
+            print("____________",file, type, int(resident_id), int(application_id))
+
+        return redirect('/show/?resident_id={}'.format(request.POST.get('resident_id')))
+
 
 
 class ApprovalsView(View):
@@ -172,8 +186,6 @@ class ApprovalsView(View):
     template_name = "approvals.html"
     list = []
     tracklist = []
-
-
 
     def get(self, request, *args, **kwargs):
         '''if GET  '''

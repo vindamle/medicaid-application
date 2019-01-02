@@ -15,7 +15,9 @@ class NoResponse:
         # self.hostname = os.getenv("POSTGRES_HOSTNAME")
 
         self.user = 'postgres'
+
         self.password = 'Oct2018!'
+
         self.database_name = 'medicaid'
 
         self.database_url = 'postgresql://{user}:{password}@localhost/{database_name}'.format(
