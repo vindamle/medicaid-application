@@ -1,4 +1,5 @@
 from django.db import models
+from pathlib import Path
 # from django.contrib.auth.models import User
 
 # Create your models here.
@@ -133,6 +134,8 @@ class Alert(models.Model):
     alert_status =models.BooleanField(default = False)
     alert_message =models.CharField(max_length = 100,  null = False, blank=False)
 
+def get_path(instance  , file_name):
+    return 'static/applications/'+ str(instance.resident.resident_id)+"/"+str(instance.application.tracking_id)+"/"+file_name
 
 class Document(models.Model):
     document_id  = models.AutoField(primary_key = True)
@@ -145,10 +148,13 @@ class Document(models.Model):
         on_delete = models.CASCADE,
         null = True,
     )
-    file = models.FileField(upload_to = 'applications/',null = True, blank = True)
+    file = models.FileField(upload_to = get_path ,null = True, blank = True)
     file_name = models.CharField(max_length = 100, null = True, blank = True)
     description = models.CharField(max_length = 100, null = True, blank = True)
     date_recieved  = models.DateTimeField(null = True, blank = True)
+
+
+
 
 class RFI(models.Model):
     rfi_id  = models.AutoField(primary_key = True)

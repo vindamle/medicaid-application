@@ -38,7 +38,9 @@ def update_list(request):
 
         if track == "true":
             resident.tracking_status = True
+            resident.dismiss = True
             if not ApplicationTracking.objects.filter(resident_id = requested_resident_id).exists():
+
                 resident.phase = Phase.objects.get(phase_id = 1)
                 application = ApplicationTracking(resident = resident)
                 application.save()
