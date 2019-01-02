@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.shortcuts import render, redirect
 from .forms import ApplicationForm, UploadFileForm
-from application.models import Facility,Resident, ApplicationTracking, Alert, Document
+from application.models import Facility,Resident, ApplicationTracking, Alert, Document, RFI
 import pandas as pd
 from datetime import datetime
 import os
@@ -131,22 +131,20 @@ class ShowView(View):
         '''if GET  '''
 
         resident_id= int(request.GET["resident_id"])
-        results = Resident.objects.filter(resident_id = resident_id)
-
-        for result in results:
-            resident = result
-
         resident = Resident.objects.get(resident_id = resident_id)
         results = ApplicationTracking.objects.filter(resident = resident)
 
         for result in results:
             application_alerts = result
+
         resident_alerts = Alert.objects.filter(resident_id = resident_id, application_id = application_alerts.tracking_id, alert_status = False)
 
         documents = Document.objects.filter(resident_id = resident_id)
+        rfis = RFI.objects.filter(resident_id = resident_id)
+        medicaid_application_documents = Document.objects.filter(resident_id = resident_id, description = "medicaid_application")
         applications = results
         # print(application)
-        return render(request,self.template_name, {'documents':documents,'resident':resident,'applications':applications,"resident_alerts":resident_alerts,"form":self.form_class})
+        return render(request,self.template_name, {'documents':documents,'resident':resident,'applications':applications,"resident_alerts":resident_alerts, 'medicaid_application_documents': medicaid_application_documents, "form":self.form_class})
 
     def post(self, request, *args, **kwargs):
 

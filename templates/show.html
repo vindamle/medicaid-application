@@ -253,23 +253,29 @@
 						<input class="editable date" id="date_of_medicaid_submission" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{application.date_of_medicaid_submission|date:'Y-m-d'}}">
 					</li>
 				</div>
-				{% for document in documents %}
 				<div class="col-lg-3">
 					<li class="step4 submission1">
-						<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
-			  			{% csrf_token %}
-							<label>Upload Application Here:</label>
-							<input type="file" name="medicaid_application" value={{document.file}} accept="image/jpeg
-							,image/png,application/pdf" multiple>
-							<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
-							<input type="hidden" name="file_type" value="medicaid_application">
-							<input type="hidden" name="application_id" value="{{application.tracking_id}}">
-							<button type="submit" class="uploadBtn">Upload</button>
-							<a href="/{{ document.file }}" target = "_new">{{document.file_name}}</a>
-						</form>
+							{% if medicaid_application_documents %}
+								{% for medicaid_application_document in medicaid_application_documents %}
+									{% if medicaid_application_document.application_id == application.tracking_id %}
+										<p>Document Uploaded:</p>
+											<a href="/{{ medicaid_application_document.file }}" target = "_blank">{{medicaid_application_document.file_name}}</a>
+									{% endif %}
+								{% endfor %}
+							{% else %}
+								<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
+					  			{% csrf_token %}
+									<label>Upload Application Here:</label>
+									<input type="file" name="medicaid_application" value="" accept="image/jpeg
+									,image/png,application/pdf" multiple>
+									<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
+									<input type="hidden" name="file_type" value="medicaid_application">
+									<input type="hidden" name="application_id" value="{{application.tracking_id}}">
+									<button type="submit" class="uploadBtn">Upload</button>
+								</form>
+							{% endif %}
 					</li>
 				</div>
-				{% endfor %}
 				<div class="col-lg-3">
 					<li class="editableLi step4 submission1">
 						<label>Response:</label>
@@ -439,19 +445,22 @@
 			}
 		})
 
+let rfi_number = 1
+
 		const newSubmissionRowHTML = `
 		<hr class="submission${submission + 1}">
 		<ul class="submission${submission + 1}">
 			<div class="row">
 			<div class="col-lg-3">
 					<li class="submission${submission + 1}">
-						<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
+						<form class="fileInputLi" id="rfi${rfi_number}" method="post" enctype="multipart/form-data">
 			  			{% csrf_token %}
 							<label>Upload RFI Here:</label>
-							<input type="file" name="medicaid_application" value="{{application.medicaid_application}}" accept="image/jpeg
+							<input type="file" name="rfi" value="" accept="image/jpeg
 							,image/png,application/pdf" multiple>
 							<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
-							<input type="hidden" name="file_type" value="medicaid_application">
+							<input type="hidden" name="file_type" value="rfi${rfi_number}">
+							<input type="hidden" name="application_id" value="{{application.tracking_id}}">
 							<button type="submit" class="uploadBtn">Upload</button>
 						</form>
 					</li>
@@ -589,7 +598,7 @@
 // 	 				<form class="fileInputLi" id="${checkbox.id.slice(0, -9)}" method="post" enctype="multipart/form-data">
 // 	 	  			{% csrf_token %}
 // 	 					<label>Upload ${checkbox.value} Here:</label>
-// 	 					<input type="file" name="${checkbox.id.slice(0, -9)}" value="{{application.medicaid_application}}" accept="image/jpeg
+// 	 					<input type="file" name="${checkbox.id.slice(0, -9)}" value="{{application.rfi}}" accept="image/jpeg
 // 	 					,image/png,application/pdf" multiple>
 // 	 					<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
 // 	 					<input type="hidden" name="file_type" value="${checkbox.id.slice(0, -9)}">
@@ -639,6 +648,7 @@
 
 				if (e.target.value == 'rfi') {
 					$('#approvedSection').css('display', 'none');
+					rfi_number += 1
 					applicationInfoSection.insertAdjacentHTML("beforeend", newSubmissionRowHTML);
 					let newID = `#response${submission}_select`
 					addEventListeners(newID);
