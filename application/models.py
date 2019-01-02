@@ -55,6 +55,7 @@ class Resident(models.Model):
     county = models.CharField(max_length = 50, null = True, blank = True)
     zip = models.IntegerField(null = True, blank = True)
     marital_status = models.CharField(max_length = 50, null = True, blank = True)
+    phone = models.CharField(max_length = 50, null = True, blank = True)
     dismiss = models.BooleanField(default = False)
     phase = models.ForeignKey(
         Phase,

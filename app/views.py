@@ -99,9 +99,8 @@ class PendingView(View):
             alerts = Alert.objects.filter(resident = resident , alert_status = False)
 
             for alert in alerts:
-                print(alert.resident.resident_id)
                 self.list.append(alert)
-        print(self.list)
+
         return render(request,self.template_name, {'list':self.list,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
@@ -173,7 +172,7 @@ class ShowView(View):
             )
         except Exception as e:
             print("\n\n",str(e),"\n\n")
-            print("____________",file, type, int(resident_id), int(application_id))
+
 
         return redirect('/show/?resident_id={}'.format(request.POST.get('resident_id')))
 
