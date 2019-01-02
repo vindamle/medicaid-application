@@ -49,7 +49,7 @@ class ActivityView(View):
         '''if GET  '''
         facilities =Facility.objects.filter(downstate_upstate__isnull = False )
         new_admission_results = Resident.objects.filter(tracking_status = None, activity_type = 'A')
-        payor_change_results = Resident.objects.filter(activity_type = 'P')
+        payor_change_results = Resident.objects.filter(activity_type = 'P', dismiss= False)
         discharge_results = Resident.objects.filter(tracking_status = None, activity_type = 'D')
         self.payor_change_list = []
         self.new_admission_list = []
@@ -89,9 +89,10 @@ class PendingView(View):
     def get(self, request, *args, **kwargs):
         '''if GET  '''
         residents = Resident.objects.filter(tracking_status = True)
+        self.list = list()
         for resident in residents:
             alerts = Alert.objects.filter(resident = resident , alert_status = False)
-            self.list = list()
+            
 
             for alert in alerts:
                 print(alert.resident.resident_id)
@@ -136,7 +137,7 @@ class ShowView(View):
 
         for result in results:
             application_alerts = result
-        resident_alerts = Alert.objects.filter(resident_id = resident_id, application_id = application_alerts.tracking_id)
+        resident_alerts = Alert.objects.filter(resident_id = resident_id, application_id = application_alerts.tracking_id, alert_status = False)
 
 
         applications = results

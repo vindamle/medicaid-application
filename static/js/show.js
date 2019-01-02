@@ -60,14 +60,25 @@ const sendInputInfoToDB = input => {
 	};
 };
 
-
-
-
 const addSelectEventListener = selectField => {
 	selectField.addEventListener('change', () => {
 		sendInputInfoToDB(selectField);
 	});
 };
+
+const alertDiv = document.querySelector('.alertDiv');
+alertDiv.addEventListener('click', (e) => {
+	if (e.target.classList.contains('dismissBtn')) {
+		const alert = e.target.parentNode;
+		const dataObject = {
+			alert_id: alert.querySelector(".alertId").innerHTML,
+			alert_status: true
+		}
+		const successMessage = `Alert status for alert with id ${dataObject.alert_id} set to true`;
+		updateDB("alert", dataObject, successMessage)
+		$(alert).css('display', 'none');
+	};
+});
 
 const meetingCheckbox = document.querySelector('.meetingCheckbox');
 $(document).ready(()=>{

@@ -15,7 +15,7 @@ class NoResponse:
         # self.hostname = os.getenv("POSTGRES_HOSTNAME")
 
         self.user = 'postgres'
-        self.password = 'Oct.2018'
+        self.password = 'Oct2018!'
         self.database_name = 'medicaid'
 
         self.database_url = 'postgresql://{user}:{password}@localhost/{database_name}'.format(
@@ -61,13 +61,14 @@ class NoResponse:
         alert_table["alert_priority"]= 0
         alert_table["alert_status"] = False
 
-        for i in range(1, 30):
+        for i in range(1, 100):
             alert_table["alert_date"] = (pytz.utc.localize(datetime.now()+timedelta(days = i ))-alert_table['date_of_medicaid_submission']).dt.days
             alert_table= alert_table.rename(index = str , columns = {'tracking_id':'application_id'})
             cols = {"a":"alert_priority","b":"alert_status","c":"alert_message","d":"alert_type_id","e":"application_id","f":"resident_id"}
             alert_table.loc[(alert_table.phase_id == 4)&(alert_table.alert_date == 30) ,["alert_type_id"]] = 8
             alert_table.loc[(alert_table.phase_id == 4)&(alert_table.alert_date == 30) ,["alert_message"]] = "No Medicaid Response in 30 Days"
             alert_table.loc[(alert_table.phase_id == 4)&(alert_table.alert_date == 30) ,["alert_priority"]] = 3
+            # print(alert_table.loc[(alert_table.phase_id == 4)&(alert_table.alert_date == 30),(cols.values())])
             alert_table.loc[(alert_table.phase_id == 4)&(alert_table.alert_date == 30),(cols.values())].\
             to_sql("application_alert",self.engine,if_exists = 'append', index = False)
 

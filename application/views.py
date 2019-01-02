@@ -97,6 +97,10 @@ def update_application(request):
     return HttpResponse("200")
 
 def update_alert(request):
+    alert_id = int(request.GET['alert_id'])
+    alert = Alert.objects.get(alert_id = alert_id)
+    field = setattr(alert, "alert_status",True)
+    alert.save()
     # Sending an success response
     return HttpResponse("200")
 

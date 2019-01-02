@@ -6,7 +6,8 @@
 <div class="alertDiv">
 	{% for alert in resident_alerts %}
 			<div class="alert alert-danger alert-dismissible fade show" role="alert">
-				<strong>Alert:</strong> {{alert.alert_message}}
+				<strong>Alert:</strong> {{alert.alert_message}} <button class="btn dismissBtn">Dismiss</button>
+				<span class="invisible alertId">{{alert.alert_id}}</span>
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>

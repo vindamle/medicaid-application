@@ -32,36 +32,37 @@ class Pickupdate:
         
         # remove after implemented
        
-        shift= pd.TimedeltaIndex(90 - (df['medicaid_pickup_date'].dt.day),unit='D')
-        print(shift)
-        # shift= pd.TimedeltaIndex(90+pd.to_datetime((df['medicaid_pickup_date'] + pd.DateOffset(days = 90)).dt.daysinmonth-(df['medicaid_pickup_date'] + pd.DateOffset(days = 90)).dt.day, unit = "D"),utc = True)
-        # df["medicaid_pickup_deadline"]=df['medicaid_pickup_date']+ shift
+        # shift= pd.TimedeltaIndex(90 - (df['medicaid_pickup_date'].dt.day),unit='D')
+        # print(shift)
+        shift= pd.TimedeltaIndex(90+(df['medicaid_pickup_date'] + pd.DateOffset(days = 90)).dt.daysinmonth-(df['medicaid_pickup_date'] + pd.DateOffset(days = 90)).dt.day, unit = "D")
+        df["medicaid_pickup_deadline"]=df['medicaid_pickup_date']+ shift
 
-        # alert_table = pd.merge(df, df2, how = 'inner', on="resident_id")
-        # alert_table["alert_type_id"] = 0
-        # alert_table["alert_message"] = ""
-        # alert_table["alert_priority"]= 0
-        # alert_table["alert_status"] = False
+        alert_table = pd.merge(df, df2, how = 'inner', on="resident_id")
+        alert_table["alert_type_id"] = 0
+        alert_table["alert_message"] = ""
+        alert_table["alert_priority"]= 0
+        alert_table["alert_status"] = False
 
-        # alert_table= alert_table.rename(index = str , columns = {'tracking_id':'application_id'})
-        # cols = {"a":"alert_priority","b":"alert_status","c":"alert_message","d":"alert_type_id","e":"application_id","f":"resident_id"}
-        # for i in range(0,100):
+        alert_table= alert_table.rename(index = str , columns = {'tracking_id':'application_id'})
+        cols = {"a":"alert_priority","b":"alert_status","c":"alert_message","d":"alert_type_id","e":"application_id","f":"resident_id"}
+        for i in range(0,100):
 
-        #     alert_table["daysLeft"] = (alert_table["medicaid_pickup_deadline"]-pd.to_datetime(pytz.utc.localize(datetime.now()+ timedelta(days=i)))).dt.days
-        #     if days > 0:
-        #         alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_type_id"]] = alert_id
-        #         alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_message"]] = str(days) + " Days to Application Due"
-        #         alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_priority"]] = alert_priority
-        #     elif days == 0:
-        #         alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_type_id"]] = alert_id
-        #         alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_message"]] = "Application Due"
-        #         alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_priority"]] = alert_priority
-        #     else:
-        #         alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_type_id"]] = alert_id
-        #         alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_message"]] = "Application Overdue"
-        #         alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_priority"]] = alert_priority
-        #     alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days),(cols.values())].\
-        #     to_sql("application_alert",self.engine,if_exists = 'append', index = False)
+            alert_table["daysLeft"] = (alert_table["medicaid_pickup_deadline"]-pd.to_datetime(pytz.utc.localize(datetime.now()+ timedelta(days=i)))).dt.days
+            if days > 0:
+                alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_type_id"]] = alert_id
+                alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_message"]] = str(days) + " Days to Application Due"
+                alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_priority"]] = alert_priority
+            elif days == 0:
+                alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_type_id"]] = alert_id
+                alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_message"]] = "Application Due"
+                alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_priority"]] = alert_priority
+            else:
+                alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_type_id"]] = alert_id
+                alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_message"]] = "Application Overdue"
+                alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_priority"]] = alert_priority
+            # print(alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days),(cols.values())])
+            alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days),(cols.values())].\
+            to_sql("application_alert",self.engine,if_exists = 'append', index = False)
 
     # def check_alert(self, days, alert_priority, alert_id):
 
