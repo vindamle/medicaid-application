@@ -11,6 +11,7 @@ urlpatterns = [
     path('ajax/update_alert/', views.update_alert, name = 'update_alert'),
     path('ajax/phase_change/', views.phase_change, name = 'phase_change'),
     path('ajax/update_rfi/', views.update_rfi, name = 'update_rfi'),
+    path('ajax/create_rfi/', views.create_rfi, name = 'create_rfi'),
 
 
 ]

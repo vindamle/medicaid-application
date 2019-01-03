@@ -116,14 +116,20 @@ def phase_change(request):
 
     return HttpResponse(str(phase.phase_name))
 
-def update_rfi(request):
+def create_rfi(request):
     resident_id =int(request.GET['resident_id'])
-    # application_id = int(request.GET['application_id'])
-    # if request.GET['method'] == "create":
-    #     new_RFI =RFI(resident_id = resident_id, application_id = application_id)
-    #     new_RFI.save()
-    #     return HttpResponse("200")
-    # elif if request.GET['method'] == "update":
-    return HttpResponse("200")
+    application_id = int(request.GET['application_id'])
+    RFI = RFI(resident_id = resident_id, application_id = application_id)
+    RFI.save()
+    return HttpResponse(str(RFI.rfi_id))
 
-    
+
+def update_rfi(request):
+
+    rfi_id = int(request.GET['rfi_id'])
+    column =request.GET['column']
+    new_value =request.GET['new_value']
+    RFI = RFI.objects.get(rfi_id = rfi_id)
+    field = setattr(RFI, column,new_value)
+    RFI.save()
+    return HttpResponse("200")
