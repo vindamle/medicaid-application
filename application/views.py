@@ -114,7 +114,16 @@ def phase_change(request):
     resident.phase = phase
     resident.save()
 
-    return HttpResponse("200")
+    return HttpResponse(str(phase.phase_name))
 
 def update_rfi(request):
+    resident_id =int(request.GET['resident_id'])
+    # application_id = int(request.GET['application_id'])
+    # if request.GET['method'] == "create":
+    #     new_RFI =RFI(resident_id = resident_id, application_id = application_id)
+    #     new_RFI.save()
+    #     return HttpResponse("200")
+    # elif if request.GET['method'] == "update":
     return HttpResponse("200")
+
+    
