@@ -8,14 +8,15 @@ const phaseChange = new_phase_id => {
 	{
 		type:"GET",
 		url: `/application/ajax/phase_change/`,
+		dataType: "html",
 		data: dataObject,
-		success: function() 
+		success: function(response) 
 		{
-			console.log(successMessage)
+			console.log(successMessage);
+			const status = document.querySelector('#showStatus');
+			status.innerHTML = response;
 		}
 	});
-	$('#phase').innerHTML = new_phase_id;
-	// console.log($('#phase'));
 	return(ajaxCall);
 }
 
@@ -60,14 +61,25 @@ const sendInputInfoToDB = input => {
 	};
 };
 
-
-
-
 const addSelectEventListener = selectField => {
 	selectField.addEventListener('change', () => {
 		sendInputInfoToDB(selectField);
 	});
 };
+
+const alertDiv = document.querySelector('.alertDiv');
+alertDiv.addEventListener('click', (e) => {
+	if (e.target.classList.contains('dismissBtn')) {
+		const alert = e.target.parentNode;
+		const dataObject = {
+			alert_id: alert.querySelector(".alertId").innerHTML,
+			alert_status: true
+		}
+		const successMessage = `Alert status for alert with id ${dataObject.alert_id} set to true`;
+		updateDB("alert", dataObject, successMessage)
+		$(alert).css('display', 'none');
+	};
+});
 
 const meetingCheckbox = document.querySelector('.meetingCheckbox');
 $(document).ready(()=>{
@@ -91,11 +103,17 @@ meetingCheckbox.addEventListener('change', (e) => {
 			return;
 		} 
 			$('.step2').fadeIn();
-			phaseChange(2);
+			 phaseChange(2);
+			// console.log(phaseName)
+			// document.querySelector('#showStatus').innerHTML = phaseName;
+
 	} else {
 		$('.step2').css('display', 'none');
 		$('.step3').css('display', 'none');
-		phaseChange(1);
+		 phaseChange(1);
+		// console.log(phaseName)
+		// document.querySelector('#showStatus').innerHTML = phaseName;
+
 	}
 })
 
@@ -141,7 +159,10 @@ for (var i = 0; i < editableInputs.length; i++) {
   	// if the field user is completing is medicaid pickup date, show fields relevant to next step:
   	if (input.id == "medicaid_pickup_date" && input.value != "") {
   		$('.step3').fadeIn();
-  		phaseChange(3);
+  		 phaseChange(3);
+  		// console.log(phaseName)
+  		// document.querySelector('#showStatus').innerHTML = phaseName;
+
   	};
 		sendInputInfoToDB(input);
 	});

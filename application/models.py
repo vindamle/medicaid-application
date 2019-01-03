@@ -104,7 +104,7 @@ class ApplicationTracking(models.Model):
     dss_contact_phone  = models.CharField(max_length = 100, null = True, blank = True)
     dss_contact_email = models.EmailField(max_length = 100, null = True, blank = True)
     dss_contact_fax  = models.CharField(max_length = 100, null = True, blank = True)
-
+    initial_response = models.CharField(max_length = 20, null = True, blank = True)
 
     class Meta:
         verbose_name = 'ApplicationTracking'
@@ -177,6 +177,7 @@ class RFI(models.Model):
     extension_request = models.BooleanField(null = True, blank = True)
     extension_response = models.BooleanField(null = True, blank = True)
     document_submitted = models.BooleanField(null = True, blank = True)
+    response = models.CharField(max_length = 20, null = True, blank = True)
 
 
 class NAMI(models.Model):

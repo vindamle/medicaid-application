@@ -15,7 +15,9 @@ class NoResponse:
         # self.hostname = os.getenv("POSTGRES_HOSTNAME")
 
         self.user = 'postgres'
-        self.password = 'Aug.2018'
+
+        self.password = 'Oct2018!'
+
         self.database_name = 'medicaid'
 
         self.database_url = 'postgresql://{user}:{password}@localhost/{database_name}'.format(
@@ -68,6 +70,7 @@ class NoResponse:
             alert_table.loc[(alert_table.phase_id == 4)&(alert_table.alert_date == 30) ,["alert_type_id"]] = 8
             alert_table.loc[(alert_table.phase_id == 4)&(alert_table.alert_date == 30) ,["alert_message"]] = "No Medicaid Response in 30 Days"
             alert_table.loc[(alert_table.phase_id == 4)&(alert_table.alert_date == 30) ,["alert_priority"]] = 3
+            # print(alert_table.loc[(alert_table.phase_id == 4)&(alert_table.alert_date == 30),(cols.values())])
             alert_table.loc[(alert_table.phase_id == 4)&(alert_table.alert_date == 30),(cols.values())].\
             to_sql("application_alert",self.engine,if_exists = 'append', index = False)
 

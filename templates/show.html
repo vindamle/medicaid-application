@@ -7,7 +7,8 @@
 <div class="alertDiv">
 	{% for alert in resident_alerts %}
 			<div class="alert alert-danger alert-dismissible fade show" role="alert">
-				<strong>Alert:</strong> {{alert.alert_message}}
+				<strong>Alert:</strong> {{alert.alert_message}} <button class="btn dismissBtn">Dismiss</button>
+				<span class="invisible alertId">{{alert.alert_id}}</span>
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -138,6 +139,7 @@
 	</section>
 {% for application in applications %}
 	<section id="applicationInfoSection">
+		<span class="invisible applicationId">{{application.tracking_id}}</span>
 		<ul>
 			<div class="row">
 				<div class="col-lg-4 applicationColumn">
@@ -252,23 +254,29 @@
 						<input class="editable date" id="date_of_medicaid_submission" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{application.date_of_medicaid_submission|date:'Y-m-d'}}">
 					</li>
 				</div>
-				{% for document in documents %}
 				<div class="col-lg-3">
 					<li class="step4 submission1">
-						<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
-			  			{% csrf_token %}
-							<label>Upload Application Here:</label>
-							<input type="file" name="medicaid_application" value={{document.file}} accept="image/jpeg
-							,image/png,application/pdf" multiple>
-							<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
-							<input type="hidden" name="file_type" value="medicaid_application">
-							<input type="hidden" name="application_id" value="{{application.tracking_id}}">
-							<button type="submit" class="uploadBtn">Upload</button>
-							<a href="/{{ document.file }}" target = "_new">{{document.file_name}}</a>
-						</form>
+							{% if medicaid_application_documents %}
+								{% for medicaid_application_document in medicaid_application_documents %}
+									{% if medicaid_application_document.application_id == application.tracking_id %}
+										<p>Document Uploaded:</p>
+											<a href="/{{ medicaid_application_document.file }}" target = "_blank">{{medicaid_application_document.file_name}}</a>
+									{% endif %}
+								{% endfor %}
+							{% else %}
+								<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
+					  			{% csrf_token %}
+									<label>Upload Application Here:</label>
+									<input type="file" name="medicaid_application" value="" accept="image/jpeg
+									,image/png,application/pdf" multiple>
+									<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
+									<input type="hidden" name="file_type" value="medicaid_application">
+									<input type="hidden" name="application_id" value="{{application.tracking_id}}">
+									<button type="submit" class="uploadBtn">Upload</button>
+								</form>
+							{% endif %}
 					</li>
 				</div>
-				{% endfor %}
 				<div class="col-lg-3">
 					<li class="editableLi step4 submission1">
 						<label>Response:</label>
@@ -402,20 +410,9 @@
 	<script src="{% static 'js/show.js' %}"></script>
 
 	<script type="text/javascript">
-		// $("#showStatus").click(function() {
-  //     $.ajax({    //create an ajax request to display.php
-  //       type: "GET",
-  //       url: "/application/ajax/phase_change/",
-  //       dataType: "html",   //expect html to be returned
-  //       success: function(response){
-  //           $("#showStatus").html(response);
-  //           //alert(response);
-  //       }
-  //   	});
-		// });
+		
 		// Submission behavior, including generating new HTML based on Medicaid response:
 	const applicationInfoSection = document.querySelector('#applicationInfoSection');
-
 
 		let submission = 1;
 		const date_of_medicaid_submission = document.querySelector('#date_of_medicaid_submission');
@@ -438,54 +435,158 @@
 			}
 		})
 
+let rfi_number = 1
+let section = 1
+// let application_id;
+
+const addAjaxEventListenersToAllInputTypes = (parent) => {
+	const inputs = parent.querySelectorAll('INPUT'); //this includes checkboxes
+	const selectFields = parent.querySelector('SELECT');
+	// Add eventListeners for select fields to send their info to DB via AJAX: 
+		for (let i = 0; i < selectFields.length; i++) {
+		const selectField = selectFields[i];
+		addSelectEventListener(selectField);
+	};
+	// Add eventListeners for inputs to focus them and send their info to DB via AJAX: 
+	for (var i = 0; i < inputs.length; i++) {
+		const input = inputs[i]
+		if (input.type == 'checkbox') {
+			console.log("It's a checkbox!");
+		} else {
+			//add autofocus on clicking an input:
+			input.addEventListener('click', () => {
+				input.select();
+			})
+			// Pressing 'Enter' in an input leaves editing mode - MIGHT BE IRRELEVANT, AS PRESSING 'ENTER' = FOCUSOUT
+			input.addEventListener('keyup',(e)=>{
+		    if (e.keyCode === 13) {
+					input.blur(); // this will trigger the 'blur' eventListener and send info to DB
+			  };
+			});
+			// Leaving an input is same as pressing 'Enter':
+			input.addEventListener('blur',()=>{
+				sendInputInfoToDB(input);
+			});
+		}
+	};
+}
+
+		const addEventListenerToResponse = (selectID) => {
+			const appSection = document.querySelector('#applicationInfoSection');
+			let response_select = document.querySelector(selectID);
+			response_select.addEventListener('change', (e) => {
+				// sendInputInfoToDB(response_select)
+				const options = response_select.querySelectorAll('OPTION');
+					for (let x = 0; x < options.length; x++) {
+						const option = options[x];
+						if (option.value == e.target.value) {
+							option.setAttribute("selected", "selected");
+						};
+					};
+				//generate new html depending on selected option:
+
+				if (e.target.value == 'rfi') {
+					// send selection to db:
+					const section = e.target.parentNode.parentNode.parentNode.parentNode.parentNode;
+					const application_id = section.querySelector('.applicationId').innerHTML;
+					dataObject = {
+						method: "create",
+						resident_id: {{resident.resident_id}},
+						application_id: application_id
+					}
+					updateDB("rfi", dataObject, "RFI row created!");
+					// if approved was showing, unshow it:
+					$('#approvedSection').css('display', 'none');
+					//add rfi section:
+					applicationInfoSection.insertAdjacentHTML("beforeend", newSubmissionRowHTML);
+					// set application_id in needed sections of the new html:
+					section.querySelector('.formApplicationId').setAttribute('value', application_id)
+					const rfiRow = section.lastElementChild;
+					const elements = rfiRow.querySelectorAll('.needsAppIdSet');
+					for (var i = 0; i < elements.length; i++) {
+						const element = elements[i];
+						element.setAttribute('data-application_id', application_id);
+					}
+					addAjaxEventListenersToAllInputTypes(rfiRow)
+
+					// let newID = `#response${submission}_select`
+					// addEventListeners(newID);
+					// const submittedCheckbox2 = document.querySelector('#documentationSubmittedCheckbox2');
+					// $(document).ready(()=>{
+					// 	if(submittedCheckbox2.checked) {
+					// 		$('.step4').css('display', 'block');
+					// 	}
+					// });
+					// submittedCheckbox2.addEventListener('change', (e) => {
+					// 	if(submittedCheckbox2.checked) {
+					// 		submission += 1;
+					// 			$('.step4').fadeIn();
+					// 	} else {
+					// 		submission -= 1;
+					// 		// $('.step4').css('display', 'none');
+					// 	};
+					// });
+				}	else if (e.target.value == 'denied') {
+					$('#approvedSection').css('display', 'none');
+				} else if (e.target.value == 'approved'){
+					$('#approvedSection').css('display', 'block');
+				};
+			});
+		};
+
 		const newSubmissionRowHTML = `
-		<hr class="submission${submission + 1}">
-		<ul class="submission${submission + 1}">
+		<hr class="">
+		<ul class="" id="">
 			<div class="row">
 			<div class="col-lg-3">
-					<li class="submission${submission + 1}">
-						<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
+					<li class="">
+						<form class="fileInputLi rfiFileUpload" method="post" enctype="multipart/form-data">
 			  			{% csrf_token %}
 							<label>Upload RFI Here:</label>
-							<input type="file" name="medicaid_application" value="{{application.medicaid_application}}" accept="image/jpeg
+							<input type="file" name="rfi" value="" accept="image/jpeg
 							,image/png,application/pdf" multiple>
 							<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
-							<input type="hidden" name="file_type" value="medicaid_application">
+							<input type="hidden" name="file_type" value="rfi">
+							<input type="hidden" name="application_id" class="formApplicationId" value="">
 							<button type="submit" class="uploadBtn">Upload</button>
 						</form>
 					</li>
 				</div>
 				<div class="col-lg-3">
-					<li class="editableLi submission${submission + 1}">
+					<li class="editableLi ">
 						<label>RFI Due Date:</label>
-						<input class="editable date" id="date_of_rfi" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{application.date_of_rfi|date:'Y-m-d'}}">
+						<input class="editable date needsAppIdSet date_of_rfi" id="" data-table="rfi" data-application_id="" data-alert_id="" type="date" value="{{application.date_of_rfi|date:'Y-m-d'}}">
 					</li>
 				</div>
 				<div class="col-lg-3">
-					<li class="step3 submission${submission + 1}">
-						<label><input type="checkbox" class="documentationSubmittedCheckbox" id="documentationSubmittedCheckbox${submission + 1}" {% if resident.phase.phase_id > 4 %} checked="checked"{% endif %}>Documentation Submitted</label>
+					<li class="">
+						<label><input type="checkbox" class="documentationSubmittedCheckbox" id="" {% if resident.phase.phase_id > 4 %} checked="checked"{% endif %}>Documentation Submitted</label>
 					</li>
-					<li class="editableLi step5 submission${submission + 1}">
+					<li class="editableLi step5 ">
 						<label>Submission Date:</label>
-						<input class="editable date" id="date_of_medicaid_submission" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{application.date_of_medicaid_submission|date:'Y-m-d'}}">
+						<input class="editable date needsAppIdSet" id="date_of_rfi_submission" data-table="rfi" data-application_id="" data-alert_id="" type="date" value="{{application.date_of_medicaid_submission|date:'Y-m-d'}}">
 					</li>
 				</div>
 
 				<div class="col-lg-3">
-					<li class="editableLi step5 submission${submission + 1}">
+					<li class="editableLi step5 ">
 						<label>Response:</label>
-						<select name="response_select" id="response${submission + 1}_select" data-table="application" data-application_id="{{application.tracking_id}}">
+						<select name="response_select" class="needsAppIdSet responseSelect" id="" data-table="rfi" data-application_id="">
 							<option value="not_recieved">Not recieved</option>
 							<option value="rfi">RFI</option>
 							<option value="approved">Approved</option>
 							<option value="denied">Denied</option>
 						</select>
-						<span class="invisible DBinfo" id="DBspousal_refusal">{{application.spousal_refusal}}</span>
 					</li>
 				</div>
 			</div>
 		</ul>
 		`
+
+		addEventListenerToResponse('#application1_response')
+</script>
+
+	<!-- <script type="text/javascript">
 // const documentation = [
 // "U.S. Birth Certificate",
 // "Naturalization papers or alien registration card",
@@ -588,7 +689,7 @@
 // 	 				<form class="fileInputLi" id="${checkbox.id.slice(0, -9)}" method="post" enctype="multipart/form-data">
 // 	 	  			{% csrf_token %}
 // 	 					<label>Upload ${checkbox.value} Here:</label>
-// 	 					<input type="file" name="${checkbox.id.slice(0, -9)}" value="{{application.medicaid_application}}" accept="image/jpeg
+// 	 					<input type="file" name="${checkbox.id.slice(0, -9)}" value="{{application.rfi}}" accept="image/jpeg
 // 	 					,image/png,application/pdf" multiple>
 // 	 					<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
 // 	 					<input type="hidden" name="file_type" value="${checkbox.id.slice(0, -9)}">
@@ -621,53 +722,6 @@
 	// };
 // }
 // console.log(documentationChecklist);
-
-
-		const addEventListeners = selectID => {
-			let response_select = document.querySelector(selectID);
-			response_select.addEventListener('change', (e) => {
-				// sendInputInfoToDB(response_select)
-				const options = response_select.querySelectorAll('OPTION');
-					for (let x = 0; x < options.length; x++) {
-						const option = options[x];
-						if (option.value == e.target.value) {
-							option.setAttribute("selected", "selected");
-						};
-					};
-				//generate new html depending on selected option:
-
-				if (e.target.value == 'rfi') {
-					$('#approvedSection').css('display', 'none');
-					applicationInfoSection.insertAdjacentHTML("beforeend", newSubmissionRowHTML);
-					let newID = `#response${submission}_select`
-					addEventListeners(newID);
-					const submittedCheckbox2 = document.querySelector('#documentationSubmittedCheckbox2');
-					$(document).ready(()=>{
-						if(submittedCheckbox2.checked) {
-							$('.step4').css('display', 'block');
-						}
-					});
-					submittedCheckbox2.addEventListener('change', (e) => {
-						if(submittedCheckbox2.checked) {
-							submission += 1;
-								$('.step4').fadeIn();
-						} else {
-							submission -= 1;
-							// $('.step4').css('display', 'none');
-						};
-					});
-				}	else if (e.target.value == 'denied') {
-					$('#approvedSection').css('display', 'none');
-				} else if (e.target.value == 'approved'){
-					$('#approvedSection').css('display', 'block');
-				};
-			});
-		};
-
-		addEventListeners('#application1_response')
-</script>
-
-	<!-- <script type="text/javascript">
 
 		const personalInfoObjects = [];
 

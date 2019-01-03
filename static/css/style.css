@@ -451,7 +451,8 @@ table button {
 }
 
 .residentInfoDiv li {
-	margin: 10px 0 10px 20px;
+	/*margin: 10px 0 10px 20px;*/
+	margin: 5px 0 5px 20px;
 }
 
 .residentInfoDiv label {
@@ -554,17 +555,30 @@ input[type=date]::-webkit-inner-spin-button {
 	/*display: inline-block;*/
 }
 .alert {
+	text-align: right;
 	/*display: inline-block;*/
 	/*position: fixed;*/
 }
 
 @media(min-width: 768px) {
 	.alertDiv, #editBtn {
-		position: absolute;
+		position: fixed;
+		z-index: 10000;
+		left: 10px;
+		top: 70px;
 	}
 	.alert {
-		width: 350px;
+		width: 450px;
 	}
+}
+
+.dismissBtn {
+	text-align: right;
+	background-color: #567;
+	color: white;
+	margin-left: 10px;
+	border-radius: 5px;
+	padding: 2px 5px !important;
 }
 
 .documentationCheckBox{
