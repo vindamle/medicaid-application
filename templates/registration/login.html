@@ -5,12 +5,19 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-  <h2>Login</h2>
-    <form method="post">
+	<div class="formDiv">
+		<h1>Please log in below:</h1>
+		<form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        <p><input type="text" name="username" placeholder="Username"></p>
+				<p><input type="password" name="password" placeholder="Password"></p>
 
-        <button type="submit">Login</button>
+        <button type="submit" class="btn btn-success">Log In</button>
         <a href="{% url 'password_reset' %}">Forgot Password</a>
     </form>
+		<!-- <form method="post">
+			<p><input type="text" name="username" placeholder="Username"></p>
+			<p><input type="password" name="password" placeholder="Password"></p>
+		</form> -->
+	</div>
 {% endblock %}

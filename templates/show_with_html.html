@@ -1,0 +1,433 @@
+{% extends 'base.html' %}
+
+{% block title %}Patient Show Page{% endblock %}
+
+{% block content %}
+<div class="alertDiv">
+	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		<strong>Alert:</strong> RFI due within 10 days
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		<strong>Alert:</strong> NCS Discrepancy
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+</div>
+
+<div class="container-fluid residentInfoDiv">
+	<h1 class="">{{alert.first_name}} {{alert.last_name}}</h1>
+	<!-- <p class="centered">Click any field to edit.</p> -->
+	<!-- <button class="btn" id="editBtn">Edit</button> -->
+<!-- 	<section id="demo">
+		<h4>Demo of JS-Populated Personal Information:</h4>
+		
+	</section> -->
+	<section>
+		<h4>Personal Information:</h4>
+		<ul>
+			<div class="row">
+				<div class="col-lg-4">
+					<li>
+						<label>Resident Name:</label>
+						<span class="">{{alert.first_name}} {{alert.last_name}}</span>
+					</li>
+					<!--
+					EXPERIMENTING WITH RADIO BUTTONS AND SELECT DROPDOWNS:
+					<li>
+						<label>Short-Term / Long-Term Care: </label>
+						<select name="LTC" id="LTC_select" data-table="application">
+							<option value="short_term">Short-Term</option>
+							<option value="long_term">Long-Term</option>
+						</select>
+					</li>
+					<li>
+						<label>Short-Term / Long-Term Care: </label><br>
+						<form class="radio_form" data-table="application">
+							<input type="radio" name="LTC" value="short_term"> Short-Term<br>
+  						<input type="radio" name="LTC" value="long_term"> Long-Term<br>
+  					</form>
+					</li>
+					<li>
+						<label>Spousal Refusal: </label><br>
+						<form class="radio_form"  data-table="application">
+							<input type="radio" name="LTC" value=true> Yes<br>
+  						<input type="radio" name="LTC" value=false> No<br>
+  					</form>
+					</li> -->
+					<li>
+						<label>Date of Birth:</label>
+						<span class="">{{alert.dob|date:"Y-m-d"}}</span>
+					</li>
+					<li class="editableLi">
+						<label>Address:</label>
+						<input class="editable" id="address" data-table="resident" data-alert_id="" type="text" value="{{alert.address}}">
+					</li>
+				</div>
+				<div class="col-lg-4">
+					<li class="editableLi">
+						<label>City:</label>
+						<input class="editable" id="city" data-table="resident" data-alert_id="" type="text" value="{{alert.city}}">
+					</li>
+					<li class="editableLi">
+						<label>State:</label>
+						<input class="editable" id="state" data-table="resident" data-alert_id="" type="text" value="{{alert.state}}">
+					</li>
+					<li class="editableLi">
+						<label>Zip:</label>
+						<input class="editable" id="zip" data-table="resident" data-alert_id="" type="text" value="{{alert.zip}}">
+					</li>
+				</div>
+				<div class="col-lg-4">
+					<li class="editableLi">
+						<label>County:</label>
+						<input class="editable" id="county" data-table="resident" data-alert_id="" type="text" value="{{alert.county}}">
+					</li>
+					<li class="editableLi">
+						<label>Marital Status:</label>
+						<input class="editable" id="marital_status" data-table="resident" data-alert_id="" type="text" value="{{alert.marital_status}}">
+					</li>
+					<li>
+						<label>Facility:</label>
+						<input class="" type="text" value="{{alert.facility}}">
+					</li>
+					<li class="invisible absolute" id="residentId" type="text">{{alert.resident_id}}</li>
+					<li class="invisible absolute" id="phase">{{alert.phase.phase_id}}</li>
+				</div>
+			</div>
+		</ul>
+	</section>
+	<section>
+		<h4>Insurance Information:</h4>
+		<ul>
+			<div class="row">
+				<div class="col-lg-4">
+					<li class="editableLi">
+						<label>Primary Payor:</label>
+						<input class="editable" id="primary_payor" data-table="resident" data-alert_id="" type="text" value="{{alert.primary_payor}}">
+					</li>
+					<li class="editableLi">
+						<label>Secondary Payor:</label>
+						<input class="editable" id="secondary_payor" data-table="resident" data-alert_id="" type="text" value="{{alert.secondary_payor}}">
+					</li>
+				</div>
+				<div class="col-lg-4">
+					<li class="editableLi">
+						<label>Copay:</label>
+						<input class="editable" id="copay" data-table="application" data-alert_id="" type="text" value="{{application.copay}}">
+					</li>
+					<li class="editableLi">
+						<label>Copay Start Date:</label>
+						<input class="editable date" id="copay_start_date" data-table="application" data-alert_id="" type="date" value="{{application.copay_start_date}}">
+					</li>
+					<li class="editableLi">
+						<label>Secondary Insurance Copay Percentage:</label>
+						<input class="editable" id="secondary_pays_copay" data-table="application" data-alert_id="" type="text" value="{{application.secondary_pays_copay}}">
+					</li>
+				</div>
+				<div class="col-lg-4">
+					<li class="editableLi">
+						<label>Last Medicare Date:</label>
+						<input class="editable date" type="date" value="{{application.medicaid_pickup_date}}">
+					</li>
+					<li class="editableLi">
+						<label>Cut From Medicare/Insurance Date:</label>
+						<input class="editable date" type="date" value="{{application.medicaid_pickup_date}}">
+					</li>
+				</div>
+			</div>
+		</ul>
+	</section>
+	
+	<section>
+		<h4>Medicaid Application Information:</h4>
+		<ul>
+			<div class="row">
+				<div class="col-lg-4">
+					<li class="editableLi step1">
+						<label>Applicant Meeting Date:</label>
+						<input class="editable date" id="appointment_date" data-table="application" data-alert_id="" type="date" value="{{application.appointment_date|date:'Y-m-d'}}">
+					</li>
+					<li class="editableLi step3">
+						<label>Is Medicaid Pending?</label>
+						<input class="editable" id="is_medicaid_pending" data-table="application" data-alert_id="" type="text" value="{{application.is_medicaid_pending}}">
+					</li>
+					<li class="editableLi step3">
+						<label>Date of Medicaid Submission:</label>
+						<input class="editable date" id="date_of_medicaid_submission" data-table="application" data-alert_id="" type="date" value="{{application.date_of_medicaid_submission}}">
+					</li>
+					<li class="editableLi step3">
+						<label>Application County:</label>
+						<input class="editable" id="application_county" data-table="application" data-alert_id="" type="text" value="{{application.application_county}}">
+					</li>
+					<li class="editableLi step3">
+						<label>Application State:</label>
+						<input class="editable" id="application_state" data-table="application" data-alert_id="" type="text" value="{{application.application_state}}">
+					</li>
+				</div>
+				<div class="col-lg-4">
+					<li class="step1">
+						<label class=""><input type="checkbox" class="meetingCheckbox" {% if alert.phase.phase_id > 1 %} checked="checked"{% endif %}>Met with Applicant</label>
+						<!-- <select name="spousal" id="spousal_select" data-table="application">
+							<option value="no">No</option>
+							<option value="yes">Yes</option>
+						</select> 
+						<input class="invisible DBinfo" id="DBspousal">{{application.spousal}}-->
+					</li>
+					<li class="step3">
+						<label>Application Type:</label> 
+						<select name="application_type" id="application_type_select" data-table="application">
+							<option value="">Please select one:</option>
+							<option value="new_application">New Application</option>
+							<option value="conversion">Conversion</option>
+							<option value="payor_change">Payor Change</option>
+						</select>
+						<span class="invisible DBinfo" id="DBapplication_type">{{application.application_type}}</span>
+						<!-- <input class="editable" id="application_type" data-table="application" data-alert_id="">{{application.application_type}} -->
+					</li>
+					<li class="step3">
+						<label>Spousal/Single:</label>
+						<select name="spousal" id="spousal_select" data-table="application">
+							<option value="">Please select one:</option>
+							<option value="single">Single</option>
+							<option value="spousal">Spousal</option>
+						</select>
+						<span class="invisible DBinfo" id="DBspousal">{{application.spousal}}</span>
+					</li>
+					<li class="editableLi step3">
+						<label>Short-term/Long-Term Care:</label>
+						<select name="LTC" id="LTC_select" data-table="application">
+							<option value="">Please select one:</option>
+							<option value="short_term">Short-Term</option>
+							<option value="long_term">Long-Term</option>
+						</select>
+			 			<span class="invisible DBinfo" id="DBLTC">{{application.LTC}}</span>
+					</li>
+					<li class="editableLi step3">
+						<label>Spousal Refusal:</label>
+						<select name="spousal_refusal" id="LTC_select" data-table="application">
+							<option value="">Please select one:</option>
+							<option value="yes">Yes</option>
+							<option value="no">No</option>
+						</select>
+						<span class="invisible DBinfo" id="DBspousal_refusal">{{application.spousal_refusal}}</span>
+					</li>
+						<li class="editableLi step3">
+						<label>Estimated NAMI/Income Cont Amt:</label>
+						<input class="editable" id="estimated_nami" data-table="application" data-alert_id="" type="text" value="{{application.estimated_nami}}">
+					</li>
+					<li class="editableLi step3">
+						<label>Date of RFI:</label>
+						<input class="editable date" id="date_of_rfi" data-table="application" data-alert_id="" type="date" value="{{application.date_of_rfi|date:'Y-m-d'}}">
+					</li>
+				</div>
+				<div class="col-lg-4">
+					<li class="editableLi step2">
+						<label>Medicaid Pickup Date:</label>
+							<input class="editable date" id="medicaid_pickup_date" data-table="application" data-alert_id=5 type="date" value="{{application.medicaid_pickup_date|date:'Y-m-d'}}">	
+					</li>
+					<li class="editableLi step3">
+						<label>Date of Deadline:</label>
+						<input class="editable date" id="date_of_deadline" data-table="application" data-alert_id="" type="date" value="{{application.date_of_deadline|date:'Y-m-d'}}">
+					</li>
+					<li class="editableLi step3">
+						<label>DSS Contact Address:</label>
+						<input class="editable" id="dss_contact_address" data-table="application" data-alert_id="" type="text" value="{{application.dss_contact_address}}">
+					</li>
+					<li class="editableLi step3">
+						<label>DSS Contact Phone:</label>
+						<input class="editable" id="dss_contact_phone" data-table="application" data-alert_id="" type="text" value="{{application.dss_contact_phone}}">
+					</li>
+					<li class="editableLi step3">
+						<label>DSS Contact Email:</label>
+						<input class="editable" id="dss_contact_email" data-table="application" data-alert_id="" type="text" value="{{application.dss_contact_email}}">
+					</li>
+					<li class="editableLi step3">
+						<label>DSS Contact Fax:</label>
+						<input class="editable" id="dss_contact_fax" data-table="application" data-alert_id="" type="text" value="{{application.dss_contact_fax}}">
+					</li>
+				</div>
+			</div>
+		</ul>
+	</section>
+
+	<section class="step3">
+		<h4>Document Upload:</h4>
+		<ul>
+			<div class="row">
+				<div class="col-lg-4">
+					<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
+		  			{% csrf_token %}
+						<label>Upload Medicaid Application Here:</label>
+						<input type="file" name="medicaid_application" value="{{application.medicaid_application}}" accept="image/jpeg
+						,image/png,application/pdf" multiple>
+						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
+						<input type="hidden" name="file_type" value="medicaid_application">
+						<button type="submit" class="uploadBtn">Upload</button>
+					</form>
+					<form class="fileInputLi" id="medicaid_confirmation" method="post" enctype="multipart/form-data">
+			 			{% csrf_token %}
+						<label>Upload Medicaid Confirmation Here:</label>
+						<input type="file" name="medicaid_confirmation" value="{{application.medicaid_confirmation}}" accept="image/jpeg
+						,image/png,application/pdf" multiple>
+						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
+						<input type="hidden" name="file_type" value="medicaid_confirmation">
+						<button type="submit" class="uploadBtn">Upload</button>
+					</form>
+				</div>
+				<div class="col-lg-4">
+					<form class="fileInputLi" id="rfi" method="post" enctype="multipart/form-data">
+			 			{% csrf_token %}
+						<label>Upload Medicaid RFI Here:</label>
+						<input type="file" name="rfi" value="{{application.rfi}}" accept="image/jpeg
+						,image/png,application/pdf" multiple>
+						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
+						<input type="hidden" name="file_type" value="rfi">
+						<button type="submit" class="uploadBtn">Upload</button>
+					</form>
+					<form class="fileInputLi" id="medicaid_approval" method="post" enctype="multipart/form-data">
+			 			{% csrf_token %}
+						<label>Upload Medicaid Approval Here:</label>
+						<input type="file" name="medicaid_approval" value="{{application.medicaid_approval}}" accept="image/jpeg
+						,image/png,application/pdf" multiple>
+						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
+						<input type="hidden" name="file_type" value="medicaid_approval">
+						<button type="submit" class="uploadBtn">Upload</button>
+					</form>
+				</div>
+				<!-- <div class="col-lg-4"> -->
+
+				<!-- </div> -->
+			</div>
+		</ul>
+	</section>
+	<!-- <div class="approveBtnDiv"> -->
+		<button class="btn btn-success centered step3" id="approveBtn">Approve</button>
+	<!-- </div> -->
+	<section class="step4" id="approvedSection">
+		<h4>Approval Information:</h4>
+		<ul>
+			<div class="row">
+				<div class="col-lg-4">
+					<li class="editableLi">
+						<label>Approval Notice Date:</label>
+						 <input class="editable date" id="approval_notice_date" data-table="application" data-alert_id="" type="date" value="{{application.approval_notice_date}}">
+					</li>
+					<li class="editableLi">
+						<label>Approval Start Date:</label>
+						 <input class="editable date" id="approval_start_date" data-table="application" data-alert_id="" type="date" value="{{application.approval_start_date}}">
+					</li>
+					<li class="editableLi">
+						<label>Approval End Date:</label>
+						 <input class="editable date" id="approval_end_date" data-table="application" data-alert_id="" type="date" value="{{application.approval_end_date}}">
+					</li>
+				</div>
+				<div class="col-lg-4">
+					<li class="editableLi">
+						<label>NAMI/Income Contribution Amount:</label> 
+			 			<input class="editable" type="text" value="{{application.county}}">
+					</li>
+					<li class="editableLi">
+						<label>Fair Hearing Required?</label>
+			 			<input class="editable" id="fair_hearing_required" type="text" value="{{application.fair_hearing_required}}">
+					</li>
+					<li class="editableLi">
+						<label>Date of Medicaid Recertification:</label>
+						<input class="editable date" type="date" value="{{application.date_of_medicaid_recertification}}">
+					</li>
+				</div>
+				<div class="col-lg-4">
+
+				</div>
+			</div>
+		</ul>
+	</section>
+</div>
+{% endblock %}
+{% load static %}
+{% block scripts %}
+
+	<script src="{% static 'js/show.js' %}"></script>
+
+	<script type="text/javascript">
+		function NewLi(labelValue, spanValue) {
+			this.labelValue = labelValue;
+  		this.spanValue = spanValue;
+		};
+
+		const fields = [
+			['First Name','{{alert.first_name}}'],
+			['Last Name','{{alert.last_name}}'],
+			['Date of Birth','{{alert.dob}}'],
+		]
+
+		const newField = new NewLi('First Name','{{alert.first_name}}');
+
+		const demoSection = document.querySelector('#demo');
+		// const someText = "<span>Hello</span>"
+
+		for (var i = 0; i < fields.length; i++) {
+			const field = fields[i];
+			demoSection.innerHTML += `
+			<li class="editableLi">
+				<label>${field[0]}</label>
+				<span class="editable" id="first_name" data-table="alert" data-alert_id="">${field[1]}</span>
+			</li>
+			`
+		}
+
+		// const fields = [
+		// 	{
+		// 		label: 'First Name',
+		// 		value: '{{alert.first_name}}'
+		// 	}
+		// ]
+		// console.log(fields);
+
+		// <li class="editableLi">
+		// 	<label>Copay:</label>
+		// 	<span class="editable" id="copay" data-table="application" data-alert_id="">{{application.copay}}</span>
+		// </li>
+		// <li class="editableLi">
+		// 	<label>Copay Start Date:</label>
+		// 	<span class="editable date" id="copay_start_date" data-table="application" data-alert_id="">{{application.copay_start_date}}</span>
+		// </li>
+	</script>
+{% endblock %}
+
+<!--
+•	Any admission that is Medicaid (or MLTC) should have a page created. The page should have:
+o	Name of resident (preferably generated from NCS)
+o	Admission date (preferably generated from NCS)
+o	Medicaid Pickup Date (i.e. the date from which Medicaid is needed to cover)
+o	Application type (New application, conversion, recertification – single, spousal, SSI)
+o	County in which the application is being filed (specific to most states which have a county system)
+o	Applicant resource information
+o	Income and NAMI information (preferably generated from NCS)
+
+Application History
+The program should include the following fields for data entry
+•	Date of application submission
+o	Field to upload the Medicaid application (requirements will vary by state)
+o	Field to upload confirmation of receipt by the Medicaid office
+•	Date of RFI issued by the Medicaid Office
+o	Field to upload RFI
+•	Date of RFI deadline
+•	Items required for the RFI (have it become a checklist once typed in as we have in some other programs)
+•	Note section for correspondence with the Medicaid office
+If approved
+•	Date of Medicaid approval
+o	Field to upload Medicaid approval
+•	Date recertification is needed
+If denied
+•	Date of Medicaid Denial
+o	Field to upload Medicaid denial
+•	Date of fair hearing request
+o	Field to upload confirmation of fair hearing request
+•	Date of fair hearing
+o	Field to upload fair hearing notice
+•	Denial triggers the need for new application which should restart the process
+-->
