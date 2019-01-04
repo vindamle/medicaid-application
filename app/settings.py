@@ -82,9 +82,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'medicaid',
-        'USER': 'marc',
-        'PASSWORD': 'Aug.2018',
-        # 'PASSWORD': 'Oct2018!',
+        'USER': 'postgres',
+        # 'PASSWORD': 'Aug.2018',
+        'PASSWORD': 'Oct2018!',
     }
 }
 

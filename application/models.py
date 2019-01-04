@@ -154,9 +154,6 @@ class Document(models.Model):
     description = models.CharField(max_length = 100, null = True, blank = True)
     date_recieved  = models.DateTimeField(null = True, blank = True)
 
-
-
-
 class RFI(models.Model):
     rfi_id  = models.AutoField(primary_key = True)
     resident = models.ForeignKey(
@@ -173,11 +170,11 @@ class RFI(models.Model):
         on_delete = models.CASCADE,
         null = True,
     )
-    due_date  = models.DateTimeField(null = True, blank = True)
-    extension_request = models.BooleanField(null = True, blank = True)
-    extension_response = models.BooleanField(null = True, blank = True)
-    document_submitted = models.BooleanField(null = True, blank = True)
-    response = models.CharField(max_length = 20, null = True, blank = True)
+    rfi_due_date  = models.DateTimeField(null = True, blank = True)
+    rfi_extension_request = models.BooleanField(null = True, blank = True)
+    rfi_extension_response = models.BooleanField(null = True, blank = True)
+    rfi_documentation_submitted = models.BooleanField(null = True, blank = True)
+    rfi_response = models.CharField(max_length = 20, null = True, blank = True)
 
 
 class NAMI(models.Model):
