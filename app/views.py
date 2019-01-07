@@ -143,7 +143,7 @@ class ShowView(View):
         medicaid_application_documents = Document.objects.filter(resident_id = resident_id, description = "medicaid_application")
         applications = results
         # print(application)
-        return render(request,self.template_name, {'documents':documents,'resident':resident,'applications':applications,"resident_alerts":resident_alerts, 'medicaid_application_documents': medicaid_application_documents, "form":self.form_class})
+        return render(request,self.template_name, {'rfis':rfis,'documents':documents,'resident':resident,'applications':applications,"resident_alerts":resident_alerts, 'medicaid_application_documents': medicaid_application_documents, "form":self.form_class})
 
     def post(self, request, *args, **kwargs):
 

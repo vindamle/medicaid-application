@@ -5,7 +5,7 @@ from django.views import generic
 from .forms import NameForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .models import Resident, ApplicationTracking, Alert, AlertType,Phase
+from .models import Resident, ApplicationTracking, Alert, AlertType,Phase, RFI
 from .additionalInfo import AdditionalInfo
 
 
@@ -119,17 +119,16 @@ def phase_change(request):
 def create_rfi(request):
     resident_id =int(request.GET['resident_id'])
     application_id = int(request.GET['application_id'])
-    RFI = RFI(resident_id = resident_id, application_id = application_id)
-    RFI.save()
-    return HttpResponse(str(RFI.rfi_id))
+    print(resident_id, application_id)
+    rfi = RFI.objects.create(resident_id = resident_id, application_id = application_id)
+    return HttpResponse(str(rfi.rfi_id))
 
 
 def update_rfi(request):
-
     rfi_id = int(request.GET['rfi_id'])
     column =request.GET['column']
     new_value =request.GET['new_value']
-    RFI = RFI.objects.get(rfi_id = rfi_id)
-    field = setattr(RFI, column,new_value)
-    RFI.save()
+    rfi = RFI.objects.get(rfi_id = rfi_id)
+    field = setattr(rfi, column,new_value)
+    rfi.save()
     return HttpResponse("200")

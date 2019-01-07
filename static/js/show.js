@@ -43,6 +43,8 @@ const sendInputInfoToDB = input => {
 	};
 	if (table == "application") {
 	 dataObject["application_id"] = input.getAttribute('data-application_id')
+	} else if (table == "rfi") {
+	 dataObject["rfi_id"] = input.getAttribute('data-rfi_id')	
 	}
 	let successMessage = `Value of ${dataObject.column} in the ${table} table set to ${dataObject.new_value}`;
 	updateDB(table, dataObject, successMessage);

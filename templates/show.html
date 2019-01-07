@@ -280,18 +280,19 @@
 				<div class="col-lg-3">
 					<li class="editableLi step4 submission1">
 						<label>Response:</label>
-						<select name="application1_response" id="application1_response" data-table="application" data-application_id="{{application.tracking_id}}">
+						<select name="initial_response" id="initial_response" data-table="application" data-application_id="{{application.tracking_id}}" onchange="createResponseRow({{application.tracking_id}}, this.value)">
 							<option value="not_recieved">Not recieved</option>
 							<option value="rfi">RFI</option>
 							<option value="approved">Approved</option>
 							<option value="denied">Denied</option>
 						</select>
-						<span class="invisible DBinfo" id="DBapplication1_response">{{application.application1_response}}</span>
+						<span class="invisible DBinfo" id="DBinitial_response">{{application.initial_response}}</span>
 					</li>
 					<!-- <li class="invisible absolute" id="application_id">{{application.tracking_id}}</li> -->
 				</div>
 			</div>
 		</ul>
+		
 	</section>
 {% endfor %}
 <!-- 	<section class="step3">
@@ -403,6 +404,65 @@
 			</div>
 		</ul>
 	</section>
+	<section class="" id="deniedSection">
+		<ul>
+			<div class="row">
+				<div class="col-lg-4 applicationColumn">
+					<h4>Denial Information:</h4>
+					<li class="editableLi">
+						<label>Denial Notice Date:</label>
+						 <input class="editable date" id="denial_notice_date" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{application.denial_notice_date|date:'Y-m-d'}}">
+					</li>
+					<li class="step4 submission1">
+						<form class="fileInputLi" id="denial" method="post" enctype="multipart/form-data">
+			  			{% csrf_token %}
+							<label>Upload Denial Here:</label>
+							<input type="file" name="denial" value="{{application.denial}}" accept="image/jpeg
+							,image/png,application/pdf" multiple>
+							<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
+							<input type="hidden" name="file_type" value="denial">
+							<button type="submit" class="uploadBtn">Upload</button>
+						</form>
+					</li>
+
+				</div>
+				<div class="col-lg-4 applicationColumn">
+					<li class="editableLi">
+						<label>Denial Start Date:</label>
+						 <input class="editable date" id="denial_start_date" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{application.denial_start_date|date:'Y-m-d'}}">
+					</li>
+					<li class="editableLi">
+						<label>Denial End Date:</label>
+						 <input class="editable date" id="denial_end_date" data-table="application" data-application_id="{{application.tracking_id}}" data-alert_id="" type="date" value="{{application.denial_end_date|date:'Y-m-d'}}">
+					</li>
+					<li class="editableLi">
+						<label>NAMI/Income Contribution Amount:</label>
+			 			<input class="editable" type="text" value="{{application.county}}">
+					</li>
+
+				</div>
+				<div class="col-lg-4">
+					<li class="editableLi">
+						<label>Fair Hearing Required?</label>
+						<select name="fair_hearing_required" id="fair_hearing_required" data-table="application" data-application_id="{{application.tracking_id}}">
+							<option value="">Please select one:</option>
+							<option value="yes">Yes</option>
+							<option value="no">No</option>
+						</select>
+						<span class="invisible DBinfo" id="DBspousal_refusal">{{application.spousal_refusal}}</span>
+					</li>
+					<li class="editableLi">
+						<label>Date of Medicaid Recertification:</label>
+						<input class="editable date" type="date" value="{{application.date_of_medicaid_recertification|date:'Y-m-d'}}">
+					</li>
+				</div>
+
+				<!-- <div class="col-lg-4 applicationColumn">
+
+				</div> -->
+			</div>
+		</ul>
+	</section>
 </div>
 {% endblock %}
 
@@ -410,33 +470,37 @@
 	<script src="{% static 'js/show.js' %}"></script>
 
 	<script type="text/javascript">
-		
-		// Submission behavior, including generating new HTML based on Medicaid response:
+
+		// Submission behavior, including generating new HTML based on Medicaid response(s):
 	const applicationInfoSection = document.querySelector('#applicationInfoSection');
 
-		let submission = 1;
 		const date_of_medicaid_submission = document.querySelector('#date_of_medicaid_submission');
+		const initial_response = document.querySelector('#initial_response');
 		$(document).ready(()=>{
 			if(date_of_medicaid_submission.value) {
 				$('.step4').css('display', 'block');
-				submission += 1;
+			}
+			if(initial_response.value == 'approved') {
+				$('#approvedSection').css('display', 'block');
+			} else if(initial_response.value == 'denied') {
+				$('#deniedSection').css('display', 'block');
 			}
 		})
 
 		date_of_medicaid_submission.addEventListener('blur', (e) => {
 			if(date_of_medicaid_submission.value) {
-				submission += 1;
+				// submission += 1;
 					$('.step4').fadeIn();
 					phaseChange(4);
 			} else {
-				submission -= 1;
+				// submission -= 1;
 				$('.step4').css('display', 'none');
 				phaseChange(3);
 			}
 		})
 
-let rfi_number = 1
-let section = 1
+// let rfi_number = 1
+// let section = 1
 // let application_id;
 
 const addAjaxEventListenersToAllInputTypes = (parent) => {
@@ -471,119 +535,129 @@ const addAjaxEventListenersToAllInputTypes = (parent) => {
 	};
 }
 
-		const addEventListenerToResponse = (selectID) => {
-			const appSection = document.querySelector('#applicationInfoSection');
-			let response_select = document.querySelector(selectID);
-			response_select.addEventListener('change', (e) => {
-				// sendInputInfoToDB(response_select)
-				const options = response_select.querySelectorAll('OPTION');
-					for (let x = 0; x < options.length; x++) {
-						const option = options[x];
-						if (option.value == e.target.value) {
-							option.setAttribute("selected", "selected");
-						};
-					};
-				//generate new html depending on selected option:
 
-				if (e.target.value == 'rfi') {
-					// send selection to db:
-					const section = e.target.parentNode.parentNode.parentNode.parentNode.parentNode;
-					const application_id = section.querySelector('.applicationId').innerHTML;
-					dataObject = {
-						method: "create",
-						resident_id: {{resident.resident_id}},
-						application_id: application_id
-					}
-					updateDB("rfi", dataObject, "RFI row created!");
-					// if approved was showing, unshow it:
-					$('#approvedSection').css('display', 'none');
-					//add rfi section:
-					applicationInfoSection.insertAdjacentHTML("beforeend", newSubmissionRowHTML);
-					// set application_id in needed sections of the new html:
-					section.querySelector('.formApplicationId').setAttribute('value', application_id)
-					const rfiRow = section.lastElementChild;
-					const elements = rfiRow.querySelectorAll('.needsAppIdSet');
-					for (var i = 0; i < elements.length; i++) {
-						const element = elements[i];
-						element.setAttribute('data-application_id', application_id);
-					}
-					addAjaxEventListenersToAllInputTypes(rfiRow)
 
-					// let newID = `#response${submission}_select`
-					// addEventListeners(newID);
-					// const submittedCheckbox2 = document.querySelector('#documentationSubmittedCheckbox2');
-					// $(document).ready(()=>{
-					// 	if(submittedCheckbox2.checked) {
-					// 		$('.step4').css('display', 'block');
-					// 	}
-					// });
-					// submittedCheckbox2.addEventListener('change', (e) => {
-					// 	if(submittedCheckbox2.checked) {
-					// 		submission += 1;
-					// 			$('.step4').fadeIn();
-					// 	} else {
-					// 		submission -= 1;
-					// 		// $('.step4').css('display', 'none');
-					// 	};
-					// });
-				}	else if (e.target.value == 'denied') {
-					$('#approvedSection').css('display', 'none');
-				} else if (e.target.value == 'approved'){
-					$('#approvedSection').css('display', 'block');
-				};
-			});
-		};
+class RfiRowHTML {
+	constructor (applicationId,rfiId) {
+	this.html = `
+			<hr class="">
+			<ul class="" id="">
+			<h6 class="numberOfRFIs">RFI</h6>
+				<div class="row">
+					<div class="col-lg-3">
+						<li class="invisible applicationId">
+						</li>
+						<li class="">
+							<form class="fileInputLi rfiFileUpload" method="post" enctype="multipart/form-data">
+				  			{% csrf_token %}
+								<label>Upload RFI Here:</label>
+								<input type="file" name="rfi" value="" accept="image/jpeg
+								,image/png,application/pdf" multiple>
+								<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
+								<input type="hidden" name="file_type" value="rfi">
+								<input type="hidden" name="application_id" value="${applicationId}">
+								<input type="hidden" name="rfi_id" value="${rfiId}">
+								<button type="submit" class="uploadBtn">Upload</button>
+							</form>
+						</li>
+					</div>
+					<div class="col-lg-3">
+						<li class="editableLi ">
+							<label>RFI Due Date:</label>
+							<input class="editable date  due_date" id="rfi_due_date" data-table="rfi" data-alert_id="" data-application_id="${applicationId}" data-rfi_id="${rfiId}" type="date" value="{{rfi.rfi_due_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+						</li>
+					</div>
+					<div class="col-lg-3">
+						<li class="">
+							<label><input type="checkbox" class="documentationSubmittedCheckbox " id="rfi_documentation_submitted" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" {% if resident.phase.phase_id > 4 %} checked="checked"{% endif %}>Documentation Submitted</label>
+						</li>
+						<li class="editableLi step5 ">
+							<label>Submission Date:</label>
+							<input class="editable date " id="date_of_rfi_submission" data-table="rfi" data-alert_id="" data-application_id="${applicationId}" data-rfi_id="${rfiId}" type="date" value="{{application.date_of_medicaid_submission|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+						</li>
+					</div>
 
-		const newSubmissionRowHTML = `
-		<hr class="">
-		<ul class="" id="">
-			<div class="row">
-			<div class="col-lg-3">
-					<li class="">
-						<form class="fileInputLi rfiFileUpload" method="post" enctype="multipart/form-data">
-			  			{% csrf_token %}
-							<label>Upload RFI Here:</label>
-							<input type="file" name="rfi" value="" accept="image/jpeg
-							,image/png,application/pdf" multiple>
-							<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
-							<input type="hidden" name="file_type" value="rfi">
-							<input type="hidden" name="application_id" class="formApplicationId" value="">
-							<button type="submit" class="uploadBtn">Upload</button>
-						</form>
-					</li>
+					<div class="col-lg-3">
+						<li class="editableLi step5 ">
+							<label>Response:</label>
+							<select name="response_select" class=" responseSelect" id="rfi_response" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" onchange="createResponseRow(${applicationId}, this.value); sendInputInfoToDB(this)">
+								<option value="not_recieved">Not recieved</option>
+								<option value="rfi">RFI</option>
+								<option value="approved">Approved</option>
+								<option value="denied">Denied</option>
+							</select>
+						</li>
+					</div>
 				</div>
-				<div class="col-lg-3">
-					<li class="editableLi ">
-						<label>RFI Due Date:</label>
-						<input class="editable date needsAppIdSet due_date" id="due_date" data-table="rfi" data-rfi_id="" data-alert_id="" type="date" value="{{rfi.due_date|date:'Y-m-d'}}">
-					</li>
-				</div>
-				<div class="col-lg-3">
-					<li class="">
-						<label><input type="checkbox" class="documentationSubmittedCheckbox" id="rfi_documentation_submitted" {% if resident.phase.phase_id > 4 %} checked="checked"{% endif %}>Documentation Submitted</label>
-					</li>
-					<li class="editableLi step5 ">
-						<label>Submission Date:</label>
-						<input class="editable date needsAppIdSet" id="date_of_rfi_submission" data-table="rfi" data-rfi_id="" data-alert_id="" type="date" value="{{application.date_of_medicaid_submission|date:'Y-m-d'}}">
-					</li>
-				</div>
-
-				<div class="col-lg-3">
-					<li class="editableLi step5 ">
-						<label>Response:</label>
-						<select name="response_select" class="needsAppIdSet responseSelect" id="rfi_response" data-table="rfi" data-rfi_id="">
-							<option value="not_recieved">Not recieved</option>
-							<option value="rfi">RFI</option>
-							<option value="approved">Approved</option>
-							<option value="denied">Denied</option>
-						</select>
-					</li>
-				</div>
-			</div>
-		</ul>
+			</ul>
 		`
+	}
+}
 
-		addEventListenerToResponse('#application1_response')
+
+
+// let numberOfRFIs = 0;
+const createResponseRow = (applicationId, responseFieldValue) => {
+	if (responseFieldValue == "rfi") {
+		
+		// numberOfRFIs += 1;
+		$('#deniedSection').css('display', 'none');
+		$('#approvedSection').css('display', 'none');
+		const resident_id = document.querySelector("#residentId").innerHTML;
+		// const application_id = applicationId;
+		const ajaxCall = $.ajax(
+		{
+			type:"GET",
+			url: `/application/ajax/create_rfi`,
+			data: {
+				resident_id: resident_id,
+				application_id: applicationId
+			},
+			success: function(response_of_rfi_id) {
+				const newRfiRowHTML = new RfiRowHTML(applicationId,response_of_rfi_id)
+				applicationInfoSection.insertAdjacentHTML("beforeend", newRfiRowHTML.html);
+				// set application_id and rfi_id in needed sections of the new html:
+				// const rfiRow = applicationInfoSection.lastElementChild;
+				// rfiRow.querySelector('.formApplicationId').setAttribute('value', applicationId)
+				// const elements = rfiRow.querySelectorAll('.needsAttributesSet');
+				// for (var i = 0; i < elements.length; i++) {
+				// 	const element = elements[i];
+				// 	element.setAttribute('data-application_id', applicationId);
+				// 	element.setAttribute('data-rfi_id', response_of_rfi_id);
+				// };
+				// set heading of rfiRow:
+				// console.log(rfiRow)
+				// const heading = rfiRow.querySelector('.numberOfRFIs');
+				// heading.innerHTML += numberOfRFIs;
+			}
+		});
+		// return(ajaxCall);
+	} else if (responseFieldValue == 'approved'){
+		$('#deniedSection').css('display', 'none');
+		$('#approvedSection').css('display', 'block');
+	} else if (responseFieldValue == 'denied'){
+		$('#approvedSection').css('display', 'none');
+		$('#deniedSection').css('display', 'block');
+	};
+}
+
+		
+
+const checkIfEnterKey = (input,event) => {
+	if (event.keyCode == 13) {
+		// sendInputInfoToDB(input);
+		input.blur();
+	}
+}
+
+$(document).ready(()=>{
+	{% for rfi in rfis %}
+		newRfiRowHTML = new RfiRowHTML({{rfi.application.tracking_id}},{{rfi.rfi_id}});
+		applicationInfoSection.insertAdjacentHTML("beforeend", newRfiRowHTML.html);
+	{% endfor %}
+})
+
+		// addEventListenerToResponse(document.querySelector('#initial_response'))
 </script>
 
 	<!-- <script type="text/javascript">
@@ -762,6 +836,71 @@ const addAjaxEventListenersToAllInputTypes = (parent) => {
 			</li>
 			`
 		}
+
+			const addEventListenerToResponse = (responseFieldValue) => {
+			// const appSection = document.querySelector('#applicationInfoSection');
+			// console.log(responseField);
+			responseField.addEventListener('change', (e) => {
+				// sendInputInfoToDB(response_select)
+				// const options = responseField.querySelectorAll('OPTION');
+				// 	for (let x = 0; x < options.length; x++) {
+				// 		const option = options[x];
+				// 		if (option.value == e.target.value) {
+				// 			option.setAttribute("selected", "selected");
+				// 		};
+				// 	};
+				//generate new html depending on selected option:
+
+				if (e.target.value == 'rfi') {
+					// send selection to db:
+					// const section = e.target.parentNode.parentNode.parentNode.parentNode.parentNode;
+					// const application_id = section.querySelector('.applicationId').innerHTML;
+					// dataObject = {
+					// 	// method: "create",
+					// 	resident_id: {{resident.resident_id}},
+					// 	application_id: application_id
+					// 	// rfi_id: 
+					// }
+					// updateDB("rfi", dataObject, "RFI row created!");
+					// if approved was showing, unshow it:
+					// $('#approvedSection').css('display', 'none');
+					//add rfi section:
+					// applicationInfoSection.insertAdjacentHTML("beforeend", newRfiRowHTML);
+					// set application_id in needed sections of the new html:
+					// section.querySelector('.formApplicationId').setAttribute('value', application_id)
+					// const rfiRow = section.lastElementChild;
+					// const elements = rfiRow.querySelectorAll('.needsAttributesSet');
+					// for (var i = 0; i < elements.length; i++) {
+					// 	const element = elements[i];
+					// 	element.setAttribute('data-application_id', application_id);
+					// }
+					// addAjaxEventListenersToAllInputTypes(rfiRow)
+
+					// let newID = `#response${submission}_select`
+					// addEventListeners(newID);
+					// const submittedCheckbox2 = document.querySelector('#documentationSubmittedCheckbox2');
+					// $(document).ready(()=>{
+					// 	if(submittedCheckbox2.checked) {
+					// 		$('.step4').css('display', 'block');
+					// 	}
+					// });
+					// submittedCheckbox2.addEventListener('change', (e) => {
+					// 	if(submittedCheckbox2.checked) {
+					// 		submission += 1;
+					// 			$('.step4').fadeIn();
+					// 	} else {
+					// 		submission -= 1;
+					// 		// $('.step4').css('display', 'none');
+					// 	};
+					// });
+				}	else if (e.target.value == 'denied') {
+					$('#approvedSection').css('display', 'none');
+				} else if (e.target.value == 'approved'){
+					$('#approvedSection').css('display', 'block');
+				};
+			});
+		};
+
 	</script> -->
 
 
