@@ -8,26 +8,6 @@ from django.shortcuts import render
 from .models import Resident, ApplicationTracking, Alert, AlertType,Phase, RFI
 from .additionalInfo import AdditionalInfo
 
-
-# class create(generic.CreateView):
-#     form_class = NameForm
-#     success_url = reverse_lazy('home')
-#     template_name = 'create.html'
-#
-#     def get(self, request, *args, **kwargs):
-#         form = self.form_class(initial=self.initial)
-#         return render(request, self.template_name, {'form': form})
-#
-#     def post(self, request, *args, **kwargs):
-#         form = self.form_class(request.POST)
-#         if form.is_valid():
-#             # <process form cleaned data>
-#             return HttpResponseRedirect('/success/')
-#
-#         return render(request, self.template_name, {'form': form})
-#
-
-
 def update_list(request):
     if request.method == 'GET':
         requested_resident_id = request.GET['resident_id']
