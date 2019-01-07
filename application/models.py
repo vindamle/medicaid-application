@@ -174,6 +174,7 @@ class RFI(models.Model):
     rfi_extension_request = models.BooleanField(null = True, blank = True)
     rfi_extension_response = models.BooleanField(null = True, blank = True)
     rfi_documentation_submitted = models.BooleanField(null = True, blank = True)
+    rfi_documentation_submitted_date = models.DateField(null = True , blank = True)
     rfi_response = models.CharField(max_length = 20, null = True, blank = True)
 
 
