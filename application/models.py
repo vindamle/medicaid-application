@@ -153,6 +153,7 @@ class Document(models.Model):
     file_name = models.CharField(max_length = 100, null = True, blank = True)
     description = models.CharField(max_length = 100, null = True, blank = True)
     date_recieved  = models.DateTimeField(null = True, blank = True)
+    rfi_id = models.IntegerField(null = True, blank = True)
 
 class RFI(models.Model):
     rfi_id  = models.AutoField(primary_key = True)

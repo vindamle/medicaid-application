@@ -292,7 +292,7 @@
 				</div>
 			</div>
 		</ul>
-		
+
 	</section>
 {% endfor %}
 <!-- 	<section class="step3">
@@ -505,8 +505,8 @@ class RfiRowHTML {
 		`
 		{% if rfi_documents %}
 			{% for rfi_document in rfi_documents %}
-			var rfi_document_application_id = {{rfi_document.application_id}}
-			var rfi_document_rfi_id = {{rfi_document.rfi_id}}
+				var rfi_document_application_id = {{rfi_document.application_id}};
+				var rfi_document_rfi_id = {{rfi_document.rfi_id}};
 				if (rfi_document_application_id == applicationId && rfi_document_rfi_id == rfiId) {
 					this.html += `
 					<p>Document Uploaded:</p>
@@ -547,7 +547,7 @@ class RfiRowHTML {
 				<input class="editable date " id="rfi_documentation_submitted_date" data-table="rfi" data-alert_id="" data-application_id="${applicationId}" data-rfi_id="${rfiId}" type="date" value="${rfiDocumentationSubmittedDate}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
 				</li>
 				</div>
-		
+
 				<div class="col-lg-3">
 				<li class="editableLi step5 ">
 				<label>Response:</label>
@@ -651,12 +651,12 @@ $(document).ready(()=>{
 //	const addAjaxEventListenersToAllInputTypes = (parent) => {
 // 	const inputs = parent.querySelectorAll('INPUT'); //this includes checkboxes
 // 	const selectFields = parent.querySelector('SELECT');
-// 	// Add eventListeners for select fields to send their info to DB via AJAX: 
+// 	// Add eventListeners for select fields to send their info to DB via AJAX:
 // 		for (let i = 0; i < selectFields.length; i++) {
 // 		const selectField = selectFields[i];
 // 		addSelectEventListener(selectField);
 // 	};
-// 	// Add eventListeners for inputs to focus them and send their info to DB via AJAX: 
+// 	// Add eventListeners for inputs to focus them and send their info to DB via AJAX:
 // 	for (var i = 0; i < inputs.length; i++) {
 // 		const input = inputs[i]
 // 		if (input.type == 'checkbox') {
@@ -879,7 +879,7 @@ $(document).ready(()=>{
 					// 	// method: "create",
 					// 	resident_id: {{resident.resident_id}},
 					// 	application_id: application_id
-					// 	// rfi_id: 
+					// 	// rfi_id:
 					// }
 					// updateDB("rfi", dataObject, "RFI row created!");
 					// if approved was showing, unshow it:
