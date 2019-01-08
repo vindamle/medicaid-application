@@ -267,7 +267,7 @@
 								<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
 					  			{% csrf_token %}
 									<label>Upload Application Here:</label>
-									<input type="file" name="medicaid_application" value="" accept="image/jpeg
+									<input type="file" name="document" value="" accept="image/jpeg
 									,image/png,application/pdf" multiple>
 									<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
 									<input type="hidden" name="file_type" value="medicaid_application">
@@ -456,10 +456,6 @@
 						<input class="editable date" type="date" value="{{application.date_of_medicaid_recertification|date:'Y-m-d'}}">
 					</li>
 				</div>
-
-				<!-- <div class="col-lg-4 applicationColumn">
-
-				</div> -->
 			</div>
 		</ul>
 	</section>
@@ -467,144 +463,117 @@
 {% endblock %}
 
 {% block scripts %}
-	<script src="{% static 'js/show.js' %}"></script>
+<script src="{% static 'js/show.js' %}"></script>
+<script type="text/javascript">
+// Submission behavior, including generating new HTML based on Medicaid response(s):
+const applicationInfoSection = document.querySelector('#applicationInfoSection');
+const date_of_medicaid_submission = document.querySelector('#date_of_medicaid_submission');
+const initial_response = document.querySelector('#initial_response');
+$(document).ready(()=>{
+	if(date_of_medicaid_submission.value) {
+		$('.step4').css('display', 'block');
+	}
+	if(initial_response.value == 'approved') {
+		$('#approvedSection').css('display', 'block');
+	} else if(initial_response.value == 'denied') {
+		$('#deniedSection').css('display', 'block');
+	}
+})
 
-	<script type="text/javascript">
-
-		// Submission behavior, including generating new HTML based on Medicaid response(s):
-	const applicationInfoSection = document.querySelector('#applicationInfoSection');
-
-		const date_of_medicaid_submission = document.querySelector('#date_of_medicaid_submission');
-		const initial_response = document.querySelector('#initial_response');
-		$(document).ready(()=>{
-			if(date_of_medicaid_submission.value) {
-				$('.step4').css('display', 'block');
-			}
-			if(initial_response.value == 'approved') {
-				$('#approvedSection').css('display', 'block');
-			} else if(initial_response.value == 'denied') {
-				$('#deniedSection').css('display', 'block');
-			}
-		})
-
-		date_of_medicaid_submission.addEventListener('blur', (e) => {
-			if(date_of_medicaid_submission.value) {
-				// submission += 1;
-					$('.step4').fadeIn();
-					phaseChange(4);
-			} else {
-				// submission -= 1;
-				$('.step4').css('display', 'none');
-				phaseChange(3);
-			}
-		})
-
-// let rfi_number = 1
-// let section = 1
-// let application_id;
-
-const addAjaxEventListenersToAllInputTypes = (parent) => {
-	const inputs = parent.querySelectorAll('INPUT'); //this includes checkboxes
-	const selectFields = parent.querySelector('SELECT');
-	// Add eventListeners for select fields to send their info to DB via AJAX: 
-		for (let i = 0; i < selectFields.length; i++) {
-		const selectField = selectFields[i];
-		addSelectEventListener(selectField);
-	};
-	// Add eventListeners for inputs to focus them and send their info to DB via AJAX: 
-	for (var i = 0; i < inputs.length; i++) {
-		const input = inputs[i]
-		if (input.type == 'checkbox') {
-			console.log("It's a checkbox!");
-		} else {
-			//add autofocus on clicking an input:
-			input.addEventListener('click', () => {
-				input.select();
-			})
-			// Pressing 'Enter' in an input leaves editing mode - MIGHT BE IRRELEVANT, AS PRESSING 'ENTER' = FOCUSOUT
-			input.addEventListener('keyup',(e)=>{
-		    if (e.keyCode === 13) {
-					input.blur(); // this will trigger the 'blur' eventListener and send info to DB
-			  };
-			});
-			// Leaving an input is same as pressing 'Enter':
-			input.addEventListener('blur',()=>{
-				sendInputInfoToDB(input);
-			});
-		}
-	};
-}
-
+date_of_medicaid_submission.addEventListener('blur', (e) => {
+	if(date_of_medicaid_submission.value) {
+		$('.step4').fadeIn();
+		phaseChange(4);
+	} else {
+		$('.step4').css('display', 'none');
+		phaseChange(3);
+	}
+})
 
 
 class RfiRowHTML {
-	constructor (applicationId,rfiId) {
-	this.html = `
-			<hr class="">
-			<ul class="" id="">
-			<h6 class="numberOfRFIs">RFI</h6>
-				<div class="row">
-					<div class="col-lg-3">
-						<li class="invisible applicationId">
-						</li>
-						<li class="">
-							<form class="fileInputLi rfiFileUpload" method="post" enctype="multipart/form-data">
-				  			{% csrf_token %}
-								<label>Upload RFI Here:</label>
-								<input type="file" name="rfi" value="" accept="image/jpeg
-								,image/png,application/pdf" multiple>
-								<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
-								<input type="hidden" name="file_type" value="rfi">
-								<input type="hidden" name="application_id" value="${applicationId}">
-								<input type="hidden" name="rfi_id" value="${rfiId}">
-								<button type="submit" class="uploadBtn">Upload</button>
-							</form>
-						</li>
-					</div>
-					<div class="col-lg-3">
-						<li class="editableLi ">
-							<label>RFI Due Date:</label>
-							<input class="editable date  due_date" id="rfi_due_date" data-table="rfi" data-alert_id="" data-application_id="${applicationId}" data-rfi_id="${rfiId}" type="date" value="{{rfi.rfi_due_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-						</li>
-					</div>
-					<div class="col-lg-3">
-						<li class="">
-							<label><input type="checkbox" class="documentationSubmittedCheckbox " id="rfi_documentation_submitted" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" {% if resident.phase.phase_id > 4 %} checked="checked"{% endif %}>Documentation Submitted</label>
-						</li>
-						<li class="editableLi step5 ">
-							<label>Submission Date:</label>
-							<input class="editable date " id="date_of_rfi_submission" data-table="rfi" data-alert_id="" data-application_id="${applicationId}" data-rfi_id="${rfiId}" type="date" value="{{application.date_of_medicaid_submission|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-						</li>
-					</div>
-
-					<div class="col-lg-3">
-						<li class="editableLi step5 ">
-							<label>Response:</label>
-							<select name="response_select" class=" responseSelect" id="rfi_response" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" onchange="createResponseRow(${applicationId}, this.value); sendInputInfoToDB(this)">
-								<option value="not_recieved">Not recieved</option>
-								<option value="rfi">RFI</option>
-								<option value="approved">Approved</option>
-								<option value="denied">Denied</option>
-							</select>
-						</li>
-					</div>
+	constructor (applicationId,rfiId,rfiDueDate,checked,rfiDocumentationSubmittedDate) {
+		this.html = `
+		<hr class="">
+		<ul class="" id="">
+		<h6 class="numberOfRFIs">RFI #${numberOfRFIs}</h6>
+		<div class="row">
+		<div class="col-lg-3">
+		<li class="invisible applicationId">
+		</li>
+		<li class="">
+		`
+		{% if rfi_documents %}
+			{% for rfi_document in rfi_documents %}
+			var rfi_document_application_id = {{rfi_document.application_id}};
+			var rfi_document_rfi_id = {{rfi_document.rfi_id}};
+				if (rfi_document_application_id == applicationId && ) {
+					this.html += `
+					<p>Document Uploaded:</p>
+						<a href="/{{ rfi_document.file }}" target = "_blank">{{rfi_document.file_name}}</a>
+					`
+				}
+			{% endfor %}
+		{% else %}
+			this.html += `
+				<form class="fileInputLi rfiFileUpload" method="post" enctype="multipart/form-data">
+				{% csrf_token %}
+				<label>Upload RFI Here:</label>
+				<input type="file" name="document" value="" accept="image/jpeg
+				,image/png,application/pdf" multiple>
+				<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
+				<input type="hidden" name="file_type" value="rfi">
+				<input type="hidden" name="application_id" value="${applicationId}">
+				<input type="hidden" name="rfi_id" value="${rfiId}">
+				<button type="submit" class="uploadBtn">Upload</button>
+				</form>
+			`
+		{% endif %}
+		this.html += `
+		</li>
 				</div>
-			</ul>
+				<div class="col-lg-3">
+				<li class="editableLi ">
+				<label>RFI Due Date:</label>
+				<input class="editable date  due_date" id="rfi_due_date" data-table="rfi" data-alert_id="" data-application_id="${applicationId}" data-rfi_id="${rfiId}" type="date" value="${rfiDueDate}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+				</li>
+				</div>
+				<div class="col-lg-3">
+				<li class="">
+				<label><input type="checkbox" class="documentationSubmittedCheckbox " id="rfi_documentation_submitted" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" checked="${checked}">Documentation Submitted</label>
+				</li>
+				<li class="editableLi step5 ">
+				<label>Submission Date:</label>
+				<input class="editable date " id="rfi_documentation_submitted_date" data-table="rfi" data-alert_id="" data-application_id="${applicationId}" data-rfi_id="${rfiId}" type="date" value="${rfiDocumentationSubmittedDate}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+				</li>
+				</div>
+		
+				<div class="col-lg-3">
+				<li class="editableLi step5 ">
+				<label>Response:</label>
+				<select name="response_select" class=" responseSelect" id="rfi_response" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" onchange="createResponseRow(${applicationId}, this.value); sendInputInfoToDB(this)">
+				<option value="not_recieved">Not recieved</option>
+				<option value="rfi" selected="selected">RFI</option>
+				<option value="approved">Approved</option>
+				<option value="denied">Denied</option>
+				</select>
+				<span class="invisible DBinfo" id="DBrfi_response">{{rfi.rfi_response}}</span>
+				</li>
+				</div>
+				</div>
+				</ul>
 		`
 	}
 }
 
-
-
-// let numberOfRFIs = 0;
+let numberOfRFIs = 0;
 const createResponseRow = (applicationId, responseFieldValue) => {
 	if (responseFieldValue == "rfi") {
-		
-		// numberOfRFIs += 1;
+
+		numberOfRFIs += 1;
 		$('#deniedSection').css('display', 'none');
 		$('#approvedSection').css('display', 'none');
 		const resident_id = document.querySelector("#residentId").innerHTML;
-		// const application_id = applicationId;
 		const ajaxCall = $.ajax(
 		{
 			type:"GET",
@@ -616,51 +585,103 @@ const createResponseRow = (applicationId, responseFieldValue) => {
 			success: function(response_of_rfi_id) {
 				const newRfiRowHTML = new RfiRowHTML(applicationId,response_of_rfi_id)
 				applicationInfoSection.insertAdjacentHTML("beforeend", newRfiRowHTML.html);
-				// set application_id and rfi_id in needed sections of the new html:
-				// const rfiRow = applicationInfoSection.lastElementChild;
-				// rfiRow.querySelector('.formApplicationId').setAttribute('value', applicationId)
-				// const elements = rfiRow.querySelectorAll('.needsAttributesSet');
-				// for (var i = 0; i < elements.length; i++) {
-				// 	const element = elements[i];
-				// 	element.setAttribute('data-application_id', applicationId);
-				// 	element.setAttribute('data-rfi_id', response_of_rfi_id);
-				// };
-				// set heading of rfiRow:
-				// console.log(rfiRow)
-				// const heading = rfiRow.querySelector('.numberOfRFIs');
-				// heading.innerHTML += numberOfRFIs;
-			}
-		});
-		// return(ajaxCall);
-	} else if (responseFieldValue == 'approved'){
-		$('#deniedSection').css('display', 'none');
-		$('#approvedSection').css('display', 'block');
-	} else if (responseFieldValue == 'denied'){
-		$('#approvedSection').css('display', 'none');
-		$('#deniedSection').css('display', 'block');
+
+// reset response filed to "not Received"
+const rfiRow = applicationInfoSection.lastElementChild;
+const selectField = rfiRow.querySelector('SELECT');
+console.log(selectField);
+const options = selectField.querySelectorAll('OPTION');
+for (let x = 0; x < options.length; x++) {
+	const option = options[x];
+	if (option.value == 'not_recieved') {
+		option.setAttribute("selected", "selected");
 	};
 }
-
-		
+}
+});
+// return(ajaxCall);
+} else if (responseFieldValue == 'approved'){
+	$('#deniedSection').css('display', 'none');
+	$('#approvedSection').css('display', 'block');
+} else if (responseFieldValue == 'denied'){
+	$('#approvedSection').css('display', 'none');
+	$('#deniedSection').css('display', 'block');
+};
+}
 
 const checkIfEnterKey = (input,event) => {
 	if (event.keyCode == 13) {
-		// sendInputInfoToDB(input);
 		input.blur();
 	}
 }
 
 $(document).ready(()=>{
 	{% for rfi in rfis %}
-		newRfiRowHTML = new RfiRowHTML({{rfi.application.tracking_id}},{{rfi.rfi_id}});
+		numberOfRFIs += 1;
+		var checked = "";
+		{% if rfi.rfi_documentation_submitted_date %}
+		console.log("{{rfi.rfi_documentation_submitted_date}}");
+			// checked = "checked";
+		{% endif %}
+		newRfiRowHTML = new RfiRowHTML(
+				{{rfi.application.tracking_id}},
+				{{rfi.rfi_id}},
+				"{{rfi.rfi_due_date|date:'Y-m-d'}}",
+				checked,
+				"{{rfi.rfi_documentation_submitted_date|date:'Y-m-d'}}"
+			);
 		applicationInfoSection.insertAdjacentHTML("beforeend", newRfiRowHTML.html);
 	{% endfor %}
+	const rfiRow = applicationInfoSection.lastElementChild;
+	const selectField = rfiRow.querySelector('SELECT');
+	const options = selectField.querySelectorAll('OPTION');
+	for (let x = 0; x < options.length; x++) {
+		const option = options[x];
+		if (option.value == 'not_recieved') {
+			option.setAttribute("selected", "selected");
+		};
+	};
 })
 
-		// addEventListenerToResponse(document.querySelector('#initial_response'))
+
+// addEventListenerToResponse(document.querySelector('#initial_response'))
 </script>
 
 	<!-- <script type="text/javascript">
+
+//	const addAjaxEventListenersToAllInputTypes = (parent) => {
+// 	const inputs = parent.querySelectorAll('INPUT'); //this includes checkboxes
+// 	const selectFields = parent.querySelector('SELECT');
+// 	// Add eventListeners for select fields to send their info to DB via AJAX: 
+// 		for (let i = 0; i < selectFields.length; i++) {
+// 		const selectField = selectFields[i];
+// 		addSelectEventListener(selectField);
+// 	};
+// 	// Add eventListeners for inputs to focus them and send their info to DB via AJAX: 
+// 	for (var i = 0; i < inputs.length; i++) {
+// 		const input = inputs[i]
+// 		if (input.type == 'checkbox') {
+// 			console.log("It's a checkbox!");
+// 		} else {
+// 			//add autofocus on clicking an input:
+// 			input.addEventListener('click', () => {
+// 				input.select();
+// 			})
+// 			// Pressing 'Enter' in an input leaves editing mode - MIGHT BE IRRELEVANT, AS PRESSING 'ENTER' = FOCUSOUT
+// 			input.addEventListener('keyup',(e)=>{
+// 		    if (e.keyCode === 13) {
+// 					input.blur(); // this will trigger the 'blur' eventListener and send info to DB
+// 			  };
+// 			});
+// 			// Leaving an input is same as pressing 'Enter':
+// 			input.addEventListener('blur',()=>{
+// 				sendInputInfoToDB(input);
+// 			});
+// 		}
+// 	};
+// }
+
+
 // const documentation = [
 // "U.S. Birth Certificate",
 // "Naturalization papers or alien registration card",

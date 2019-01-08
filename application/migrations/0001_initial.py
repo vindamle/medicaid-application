@@ -158,7 +158,6 @@ class Migration(migrations.Migration):
                 ('rfi_extension_request', models.BooleanField(blank=True, null=True)),
                 ('rfi_extension_response', models.BooleanField(blank=True, null=True)),
                 ('rfi_documentation_submitted', models.BooleanField(blank=True, null=True)),
-                ('rfi_documentation_submitted_date', models.DateField(blank=True, null=True)),
                 ('rfi_response', models.CharField(blank=True, max_length=20, null=True)),
                 ('application', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='application.ApplicationTracking')),
                 ('document', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='application.Document')),
