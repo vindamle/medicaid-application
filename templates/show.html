@@ -35,7 +35,7 @@
 		<ul>
 			<div class="row">
 				<div class="col-lg-4 applicationColumn">
-					<h4>Personal Information:</h4>
+					<h4 class="collapsible">Personal Information:</h4>
 					<li>
 						<label>Resident Name:</label>
 						<span class="">{{resident.first_name}} {{resident.last_name}}</span>
@@ -505,9 +505,9 @@ class RfiRowHTML {
 		`
 		{% if rfi_documents %}
 			{% for rfi_document in rfi_documents %}
-			var rfi_document_application_id = {{rfi_document.application_id}};
-			var rfi_document_rfi_id = {{rfi_document.rfi_id}};
-				if (rfi_document_application_id == applicationId && ) {
+			var rfi_document_application_id = {{rfi_document.application_id}}
+			var rfi_document_rfi_id = {{rfi_document.rfi_id}}
+				if (rfi_document_application_id == applicationId && rfi_document_rfi_id == rfiId) {
 					this.html += `
 					<p>Document Uploaded:</p>
 						<a href="/{{ rfi_document.file }}" target = "_blank">{{rfi_document.file_name}}</a>
@@ -589,7 +589,6 @@ const createResponseRow = (applicationId, responseFieldValue) => {
 // reset response filed to "not Received"
 const rfiRow = applicationInfoSection.lastElementChild;
 const selectField = rfiRow.querySelector('SELECT');
-console.log(selectField);
 const options = selectField.querySelectorAll('OPTION');
 for (let x = 0; x < options.length; x++) {
 	const option = options[x];

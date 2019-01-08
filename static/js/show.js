@@ -106,16 +106,10 @@ meetingCheckbox.addEventListener('change', (e) => {
 		} 
 			$('.step2').fadeIn();
 			 phaseChange(2);
-			// console.log(phaseName)
-			// document.querySelector('#showStatus').innerHTML = phaseName;
-
 	} else {
 		$('.step2').css('display', 'none');
 		$('.step3').css('display', 'none');
 		 phaseChange(1);
-		// console.log(phaseName)
-		// document.querySelector('#showStatus').innerHTML = phaseName;
-
 	}
 })
 
@@ -170,8 +164,6 @@ for (var i = 0; i < editableInputs.length; i++) {
 	});
 };
 
-
-
 // Approve Button toggles display of Approval Information Section
 // const approveBtn = document.querySelector('#approveBtn');
 // approveBtn.addEventListener('click', () => {
@@ -184,4 +176,11 @@ for (var i = 0; i < editableInputs.length; i++) {
 // 	}
 // })
 
+const collapsibleDiv = document.querySelector('.collapsible');
+collapsibleDiv.addEventListener('click', (e) => {
+	const section = e.target.parentNode.parentNode.parentNode.parentNode;
+	section.style.height = "50px";
+	section.style.width = "0";
+	section.style.overflowY = "hidden";
+})
 
