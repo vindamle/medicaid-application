@@ -300,15 +300,6 @@
 		<ul>
 			<div class="row">
 				<div class="col-lg-4 applicationColumn">
-					<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
-		  			{% csrf_token %}
-						<label>Upload Medicaid Application Here:</label>
-						<input type="file" name="medicaid_application" value="{{application.medicaid_application}}" accept="image/jpeg
-						,image/png,application/pdf" multiple>
-						<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
-						<input type="hidden" name="file_type" value="medicaid_application">
-						<button type="submit" class="uploadBtn">Upload</button>
-					</form>
 					<form class="fileInputLi" id="medicaid_confirmation" method="post" enctype="multipart/form-data">
 			 			{% csrf_token %}
 						<label>Upload Medicaid Confirmation Here:</label>
@@ -320,15 +311,6 @@
 					</form>
 				</div>
 				<div class="col-lg-4 applicationColumn">
-					<form class="fileInputLi" id="rfi" method="post" enctype="multipart/form-data">
-			 			{% csrf_token %}
-						<label>Upload Medicaid RFI Here:</label>
-						<input type="file" name="rfi" value="{{application.rfi}}" accept="image/jpeg
-						,image/png,application/pdf" multiple>
-						<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
-						<input type="hidden" name="file_type" value="rfi">
-						<button type="submit" class="uploadBtn">Upload</button>
-					</form>
 					<form class="fileInputLi" id="medicaid_approval" method="post" enctype="multipart/form-data">
 			 			{% csrf_token %}
 						<label>Upload Medicaid Approval Here:</label>
@@ -397,10 +379,6 @@
 						<input class="editable date" type="date" value="{{application.date_of_medicaid_recertification|date:'Y-m-d'}}">
 					</li>
 				</div>
-
-				<!-- <div class="col-lg-4 applicationColumn">
-
-				</div> -->
 			</div>
 		</ul>
 	</section>
@@ -493,43 +471,45 @@ date_of_medicaid_submission.addEventListener('blur', (e) => {
 
 class RfiRowHTML {
 	constructor (applicationId,rfiId,rfiDueDate,checked,rfiDocumentationSubmittedDate) {
-		this.html = `
-		<hr class="">
-		<ul class="" id="">
-		<h6 class="numberOfRFIs">RFI #${numberOfRFIs}</h6>
-		<div class="row">
-		<div class="col-lg-3">
-		<li class="invisible applicationId">
-		</li>
-		<li class="">
-		`
 		{% if rfi_documents %}
 			{% for rfi_document in rfi_documents %}
 				var rfi_document_application_id = {{rfi_document.application_id}};
 				var rfi_document_rfi_id = {{rfi_document.rfi_id}};
+				console.log(`app id = ${rfi_document_application_id}`);
+				console.log(`rfi id = ${rfi_document_rfi_id}`);
+				console.log(`rfiId = ${rfiId}`);
+				this.html = `
+					<hr class="">
+					<ul class="" id="">
+					<h6 class="numberOfRFIs">RFI #${numberOfRFIs}</h6>
+					<div class="row">
+					<div class="col-lg-3">
+					<li class="invisible applicationId">
+					</li>
+					<li class="">
+					`
 				if (rfi_document_application_id == applicationId && rfi_document_rfi_id == rfiId) {
 					this.html += `
 					<p>Document Uploaded:</p>
 						<a href="/{{ rfi_document.file }}" target = "_blank">{{rfi_document.file_name}}</a>
 					`
-				}
-			{% endfor %}
-		{% else %}
-			this.html += `
-				<form class="fileInputLi rfiFileUpload" method="post" enctype="multipart/form-data">
-				{% csrf_token %}
-				<label>Upload RFI Here:</label>
-				<input type="file" name="document" value="" accept="image/jpeg
-				,image/png,application/pdf" multiple>
-				<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
-				<input type="hidden" name="file_type" value="rfi">
-				<input type="hidden" name="application_id" value="${applicationId}">
-				<input type="hidden" name="rfi_id" value="${rfiId}">
-				<button type="submit" class="uploadBtn">Upload</button>
-				</form>
-			`
-		{% endif %}
-		this.html += `
+
+				} else if (rfi_document_application_id == applicationId && rfi_document_rfi_id != rfiId) {
+					this.html += `
+						<form class="fileInputLi rfiFileUpload" method="post" enctype="multipart/form-data">
+						{% csrf_token %}
+						<label>Upload RFI Here:</label>
+						<input type="file" name="document" value="" accept="image/jpeg
+						,image/png,application/pdf" multiple>
+						<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
+						<input type="hidden" name="file_type" value="rfi">
+						<input type="hidden" name="application_id" value="${applicationId}">
+						<input type="hidden" name="rfi_id" value="${rfiId}">
+						<button type="submit" class="uploadBtn">Upload</button>
+						</form>
+					`				
+				};
+				this.html += `
 		</li>
 				</div>
 				<div class="col-lg-3">
@@ -540,7 +520,7 @@ class RfiRowHTML {
 				</div>
 				<div class="col-lg-3">
 				<li class="">
-				<label><input type="checkbox" class="documentationSubmittedCheckbox " id="rfi_documentation_submitted" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" checked="${checked}">Documentation Submitted</label>
+				<label><input type="checkbox" class="documentationSubmittedCheckbox " id="rfi_documentation_submitted" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" ${checked}>Documentation Submitted</label>
 				</li>
 				<li class="editableLi step5 ">
 				<label>Submission Date:</label>
@@ -563,6 +543,65 @@ class RfiRowHTML {
 				</div>
 				</ul>
 		`
+			{% endfor %}
+		{% else %}
+		this.html = `
+		<hr class="">
+		<ul class="" id="">
+		<h6 class="numberOfRFIs">RFI #${numberOfRFIs}</h6>
+		<div class="row">
+		<div class="col-lg-3">
+		<li class="invisible applicationId">
+		</li>
+		<li class="">
+		`
+			this.html += `
+				<form class="fileInputLi rfiFileUpload" method="post" enctype="multipart/form-data">
+				{% csrf_token %}
+				<label>Upload RFI Here:</label>
+				<input type="file" name="document" value="" accept="image/jpeg
+				,image/png,application/pdf" multiple>
+				<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
+				<input type="hidden" name="file_type" value="rfi">
+				<input type="hidden" name="application_id" value="${applicationId}">
+				<input type="hidden" name="rfi_id" value="${rfiId}">
+				<button type="submit" class="uploadBtn">Upload</button>
+				</form>
+		</li>
+				</div>
+				<div class="col-lg-3">
+				<li class="editableLi ">
+				<label>RFI Due Date:</label>
+				<input class="editable date  due_date" id="rfi_due_date" data-table="rfi" data-alert_id="" data-application_id="${applicationId}" data-rfi_id="${rfiId}" type="date" value="${rfiDueDate}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+				</li>
+				</div>
+				<div class="col-lg-3">
+				<li class="">
+				<label><input type="checkbox" class="documentationSubmittedCheckbox " id="rfi_documentation_submitted" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" ${checked}>Documentation Submitted</label>
+				</li>
+				<li class="editableLi step5 ">
+				<label>Submission Date:</label>
+				<input class="editable date " id="rfi_documentation_submitted_date" data-table="rfi" data-alert_id="" data-application_id="${applicationId}" data-rfi_id="${rfiId}" type="date" value="${rfiDocumentationSubmittedDate}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+				</li>
+				</div>
+
+				<div class="col-lg-3">
+				<li class="editableLi step5 ">
+				<label>Response:</label>
+				<select name="response_select" class=" responseSelect" id="rfi_response" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" onchange="createResponseRow(${applicationId}, this.value); sendInputInfoToDB(this)">
+				<option value="not_recieved">Not recieved</option>
+				<option value="rfi" selected="selected">RFI</option>
+				<option value="approved">Approved</option>
+				<option value="denied">Denied</option>
+				</select>
+				<span class="invisible DBinfo" id="DBrfi_response">{{rfi.rfi_response}}</span>
+				</li>
+				</div>
+				</div>
+				</ul>
+		`
+		{% endif %}
+		
 	}
 }
 
@@ -619,8 +658,7 @@ $(document).ready(()=>{
 		numberOfRFIs += 1;
 		var checked = "";
 		{% if rfi.rfi_documentation_submitted_date %}
-		console.log("{{rfi.rfi_documentation_submitted_date}}");
-			// checked = "checked";
+			checked = `checked="checked"`;
 		{% endif %}
 		newRfiRowHTML = new RfiRowHTML(
 				{{rfi.application.tracking_id}},

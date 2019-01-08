@@ -141,7 +141,7 @@ class ShowView(View):
         documents = Document.objects.filter(resident_id = resident_id)
         rfis = RFI.objects.filter(resident_id = resident_id)
         medicaid_application_documents = Document.objects.filter(resident_id = resident_id, description = "medicaid_application")
-        rfi_documents = Document.objects.filter(resident_id = resident_id, description = "rfi")
+        rfi_documents = Document.objects.filter(resident_id = resident_id, description = "rfi").order_by('date_recieved')
         applications = results
         # print(application)
         return render(request,self.template_name, {'rfis':rfis,'documents':documents,'resident':resident,'applications':applications,"resident_alerts":resident_alerts, 'medicaid_application_documents': medicaid_application_documents, "rfi_documents":rfi_documents, "form":self.form_class})
