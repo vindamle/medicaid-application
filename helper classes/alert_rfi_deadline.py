@@ -29,7 +29,7 @@ class RFIDeadline:
 
         alert_table = pd.merge(df, pd.merge(df3, df2, how = 'inner', on="resident_id"), how = 'inner', on="resident_id")
         cols = {"a":"alert_priority","b":"alert_status","c":"alert_message","d":"alert_type_id","e":"application_id","f":"resident_id"}
-        
+
         alert_table["alert_type_id"] = 0
         alert_table["alert_message"] = ""
         alert_table["alert_priority"]= 0
@@ -44,15 +44,14 @@ class RFIDeadline:
                 alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == day)&(alert_table.document_id.isna()),["alert_priority"]] = 4
                 alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == day)&(alert_table.document_id.isna()),["alert_message"]] = "RFI Due in 10 days"
             elif day == 0:
-                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == 0)&(alert_table.document_id.isna()), ["alert_type_id"]] = 10
-                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == 0)&(alert_table.document_id.isna()),["alert_priority"]] = 5
-                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == 0)&(alert_table.document_id.isna()),["alert_message"]] = "RFI Due Today"
+                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == day)&(alert_table.document_id.isna()), ["alert_type_id"]] = 10
+                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == day)&(alert_table.document_id.isna()),["alert_priority"]] = 5
+                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == day)&(alert_table.document_id.isna()),["alert_message"]] = "RFI Due Today"
             elif day == -1:
-                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == 10)&(alert_table.document_id.isna()), ["alert_type_id"]] = 11
-                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == 10)&(alert_table.document_id.isna()),["alert_priority"]] = 5
-                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == 10)&(alert_table.document_id.isna()),["alert_message"]] = "RFI Overdue"
-
-            alert_table.loc[(alert_table.phase_id == 4)&(alert_table.alert_date == 30),(cols.values())].\
+                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == day)&(alert_table.document_id.isna()), ["alert_type_id"]] = 11
+                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == day)&(alert_table.document_id.isna()),["alert_priority"]] = 5
+                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == day)&(alert_table.document_id.isna()),["alert_message"]] = "RFI Overdue"
+            alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == day)&(alert_table.document_id.isna()),(cols.values())].\
             to_sql("application_alert",self.engine,if_exists = 'append', index = False)
 
 RFIDeadline().check_alerts_test(10)
