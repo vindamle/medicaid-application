@@ -62,7 +62,7 @@ class NoResponse:
         alert_table["alert_message"] = ""
         alert_table["alert_priority"]= 0
         alert_table["alert_status"] = False
-
+        # print(pd.to_datetime(alert_table['date_of_medicaid_submission']),utc = False)
         for i in range(1, 100):
             alert_table["alert_date"] = (pytz.utc.localize(datetime.now()+timedelta(days = i ))-alert_table['date_of_medicaid_submission']).dt.days
             alert_table= alert_table.rename(index = str , columns = {'tracking_id':'application_id'})

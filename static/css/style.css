@@ -370,9 +370,10 @@ table button {
 
 .residentInfoDiv h4 {
 	margin: -8px 0 20px -10px;
-	width: 380px;
+	margin-left: 0;
+	/*width: 420px;*/
 	/*display: inline-block;*/
-	padding: 15px 30px;
+	padding: 15px 10px;
 	text-align: center;
 	/*color: #ee7700;*/
 	color: white;
@@ -387,6 +388,45 @@ table button {
    -webkit-box-shadow: 1px 5px 10px #224, inset 0 0 10px #000000;
    box-shadow:  1px 5px 10px #224, inset 0 0 10px #000000;
 }
+
+.collapsibleSection {
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+}
+
+.activeSection, .collapsibleSection:hover {
+  background-color: #3040A6;
+}
+
+.residentInfoDiv ul.collapsibleContent {
+  /*max-height: 0;*/
+  overflow: hidden;
+  transition: height 0.2s ease-out;
+}
+
+.collapsibleSection:after {
+	position: relative;
+  content: "\2796"; /* Unicode character for "minus" sign (-) */
+  font-size: 13px;
+  /*line-height: 1;*/
+  color: red;
+  /*border: 2px solid steelblue;*/
+  border-radius: 5px;
+  float: right;
+  margin-left: 20px;
+  right: 15px;
+}
+
+.activeSection:after {
+	position: relative;
+  content: '\02795'; /* Unicode character for "plus" sign (+) */
+  padding-bottom: 2px;
+}
+
 
 .residentInfoDiv h6 {
 	/*margin: -8px 0 20px -6px;*/
@@ -453,6 +493,10 @@ table button {
 .residentInfoDiv li {
 	/*margin: 10px 0 10px 20px;*/
 	margin: 5px 0 5px 20px;
+}
+
+.residentInfoDiv p {
+	margin-bottom: 0;
 }
 
 .residentInfoDiv label {

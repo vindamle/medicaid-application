@@ -14,7 +14,7 @@ const phaseChange = new_phase_id => {
 		{
 			console.log(successMessage);
 			const status = document.querySelector('#showStatus');
-			status.innerHTML = response;
+			status.innerHTML = `Status: ${response}`;
 		}
 	});
 	return(ajaxCall);
@@ -176,11 +176,48 @@ for (var i = 0; i < editableInputs.length; i++) {
 // 	}
 // })
 
-const collapsibleDiv = document.querySelector('.collapsible');
-collapsibleDiv.addEventListener('click', (e) => {
-	const section = e.target.parentNode.parentNode.parentNode.parentNode;
-	section.style.height = "50px";
-	section.style.width = "0";
-	section.style.overflowY = "hidden";
-})
+// const collapsibleDiv = document.querySelector('.collapsible');
+// collapsibleDiv.addEventListener('click', (e) => {
+// 	const section = e.target.parentNode;
+// 	const ul = e.target.nextElementSibling;
+// 	$(ul).fadeOut(200, () => {
+// 		section.style.height = "50px";
+// 		section.style.width = "350px";
+// 	});
+	// section.classList.add('disappear');
+	// const stuff = section.querySelectorAll('*:not(h4)')
+	
+	// section.style.overflow = "hidden";
+	// for (var i = 0; i < stuff.length; i++) {
+	// 	thingy = stuff[i];
+	// 	thingy.style.display = "none";
+	// }
+// })
 
+
+const coll = document.getElementsByClassName("collapsibleSection");
+for (let i = 0; i < coll.length; i++) {
+	let h4 = coll[i];
+  h4.addEventListener("click", function() {
+  	console.log('clicked')
+    let content = h4.nextElementSibling;
+		const section =h4.parentNode;
+
+    console.log(content)
+    if (content.style.display !== "none") {
+    	h4.style.width = '100%';
+    	h4.style.marginLeft = '0';
+			section.style.width = "100%";
+			// section.style.width = "400px";
+			section.style.height = "50px";
+      content.style.display = "none";
+
+    } else {
+    	// h4.style.width = '420px';
+    	section.style.width = "initial";
+			section.style.height = "initial";
+      content.style.display = "block";
+    }
+    this.classList.toggle("activeSection");
+  });
+}

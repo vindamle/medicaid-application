@@ -9,7 +9,7 @@ class Pickupdate:
 
 
         self.user = 'postgres'
-        self.password = 'Aug.2018'
+        self.password = 'Oct2018!'
         self.database_name = 'medicaid'
 
         self.database_url = 'postgresql://{user}:{password}@localhost/{database_name}'.format(
