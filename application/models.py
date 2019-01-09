@@ -105,6 +105,8 @@ class ApplicationTracking(models.Model):
     dss_contact_email = models.EmailField(max_length = 100, null = True, blank = True)
     dss_contact_fax  = models.CharField(max_length = 100, null = True, blank = True)
     initial_response = models.CharField(max_length = 20, null = True, blank = True)
+    satisfied_with_approval = models.BooleanField(null = True, blank = True)
+
 
     class Meta:
         verbose_name = 'ApplicationTracking'
