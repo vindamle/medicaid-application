@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone,tzinfo
 import pandas as pd
 from sqlalchemy import create_engine
 import pytz
@@ -18,25 +18,43 @@ class RFIDeadline:
 
         self.engine = create_engine(self.database_url, echo=False)
 
-    def check_alerts_test(self):
+    def check_alerts_test(self, day):
         sql = """SELECT * FROM application_applicationtracking;"""
         sql2 = """SELECT * FROM application_resident;"""
+        sql3 = """SELECT * FROM application_rfi;"""
 
         df = pd.read_sql(sql, con=self.engine)
         df2 = pd.read_sql(sql2, con=self.engine)
+        df3 = pd.read_sql(sql3, con=self.engine)
 
-        alert_table = pd.merge(df, df2, how = 'inner', on="resident_id")
+        alert_table = pd.merge(df, pd.merge(df3, df2, how = 'inner', on="resident_id"), how = 'inner', on="resident_id")
+        cols = {"a":"alert_priority","b":"alert_status","c":"alert_message","d":"alert_type_id","e":"application_id","f":"resident_id"}
+        
         alert_table["alert_type_id"] = 0
         alert_table["alert_message"] = ""
         alert_table["alert_priority"]= 0
         alert_table["alert_status"] = False
 
         alert_table= alert_table.rename(index = str , columns = {'tracking_id':'application_id'})
-        print(list(alert_table))
-        # for i in range(1, 30):
-        #     alert_table.loc[(alert_table.phase_id == 4)&(alert_table.alert_date == 30) ,["alert_message"]] = "No Medicaid Response in 30 Days"
-        #     alert_table.loc[(alert_table.phase_id == 4)&(alert_table.alert_date == 30) ,["alert_priority"]] = 3
-        #     alert_table.loc[(alert_table.phase_id == 4)&(alert_table.alert_date == 30),(cols.values())].\
-        #     to_sql("application_alert",self.engine,if_exists = 'append', index = False)
 
-RFIDeadline().check_alerts_test()
+        for i in range(1, 30):
+            alert_table["alert_date"] = (alert_table['rfi_due_date']-pytz.utc.localize(datetime.now()+timedelta(days = i ))).dt.days
+            if day == 10:
+                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == day)&(alert_table.document_id.isna()), ["alert_type_id"]] = 9
+                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == day)&(alert_table.document_id.isna()),["alert_priority"]] = 4
+                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == day)&(alert_table.document_id.isna()),["alert_message"]] = "RFI Due in 10 days"
+            elif day == 0:
+                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == 0)&(alert_table.document_id.isna()), ["alert_type_id"]] = 10
+                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == 0)&(alert_table.document_id.isna()),["alert_priority"]] = 5
+                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == 0)&(alert_table.document_id.isna()),["alert_message"]] = "RFI Due Today"
+            elif day == -1:
+                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == 10)&(alert_table.document_id.isna()), ["alert_type_id"]] = 11
+                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == 10)&(alert_table.document_id.isna()),["alert_priority"]] = 5
+                alert_table.loc[(alert_table.phase_id == 5)&(alert_table.alert_date == 10)&(alert_table.document_id.isna()),["alert_message"]] = "RFI Overdue"
+
+            alert_table.loc[(alert_table.phase_id == 4)&(alert_table.alert_date == 30),(cols.values())].\
+            to_sql("application_alert",self.engine,if_exists = 'append', index = False)
+
+RFIDeadline().check_alerts_test(10)
+RFIDeadline().check_alerts_test(0)
+RFIDeadline().check_alerts_test(-1)
