@@ -39,7 +39,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for obj in list %}
+          {% for obj in admission %}
           <tr id="{{obj.resident_id}}">
             <td>{{obj.first_name}}</td>
             <td>{{obj.last_name}}</td>
@@ -125,7 +125,7 @@
 
 
 
-<!-- 
+<!--
 // $(document).ready(function() {
 
 //        Dtable1 =$('#example').DataTable({
@@ -188,4 +188,3 @@
 </script> -->
 
 {% endblock %}
-

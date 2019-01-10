@@ -8,60 +8,28 @@ from datetime import datetime
 import os
 from pathlib import Path
 
-
+# Pending View
+# Shows List of All Currently Tracked Applications
 class PendingView(View):
-    form_class = ApplicationForm
     template_name = "pending.html"
-    list = []
-    tracklist = []
 
+    #Returns Applcations with status of track set to True
     def get(self, request, *args, **kwargs):
-        '''if GET  '''
+        application = Application.objects.filter(tracking_status = True)
+        return render(request,self.template_name, {'list':application})
 
-        applications = Application.objects.filter(tracking_status = True)
-        self.applications = list()
-
-        for application in applications:
-            self.applications.append(result)
-
-        return render(request,self.template_name, {'list':self.list,"form":self.form_class})
-
-    def post(self, request, *args, **kwargs):
-
-        pass
-
+# ActivityView
+# Shows Lists of all residents that have not been tracked or untracked
 class ActivityView(View):
-    form_class = ApplicationForm
     template_name = "activity.html"
-    list = []
-    tracklist = []
 
-
-
+    #Returns Residents with new activitys that have not been tracked/not tracked
     def get(self, request, *args, **kwargs):
-        '''if GET  '''
+        new_admission = Resident.objects.filter(tracking_status = None, activity_type = 'A')
+        payor_change = Resident.objects.filter(activity_type = 'P', dismiss = False)
+        discharge= Resident.objects.filter(tracking_status = None, activity_type = 'D')
 
-        new_admission_results = Resident.objects.filter(tracking_status = None, activity_type = 'A')
-
-        payor_change_results = Resident.objects.filter(activity_type = 'P', dismiss = False)
-        discharge_results = Resident.objects.filter(tracking_status = None, activity_type = 'D')
-        self.payor_change_list = []
-        self.new_admission_list = []
-        self.discharge_list = []
-
-        for result in payor_change_results:
-            self.payor_change_list.append(result)
-        for result in new_admission_results:
-            self.new_admission_list.append(result)
-        for result in discharge_results:
-            self.discharge_list.append(result)
-
-        return render(request,self.template_name, {'discharge':self.discharge_list,'list':self.new_admission_list,'payor_change':self.payor_change_list,"form":self.form_class})
-
-    def post(self, request, *args, **kwargs):
-
-        pass
-
+        return render(request,self.template_name, {'discharge':discharge,'admission':new_admission,'payor_change':payor_change})
 
 
 
@@ -93,8 +61,7 @@ class PendingAlertsView(View):
 class ShowView(View):
     form_class = UploadFileForm
     template_name = "show.html"
-    list = []
-    tracklist = []
+
 
 
 
@@ -102,22 +69,19 @@ class ShowView(View):
         '''if GET  '''
 
         resident_id= int(request.GET["resident_id"])
-        resident = Resident.objects.get(resident_id = resident_id)
-        results = Application.objects.filter(resident = resident)
+        applications = Application.objects.filter(resident = Resident.objects.get(resident_id = resident_id))
 
-        for result in results:
-            application_alerts = result
 
-        resident_alerts = Alert.objects.filter(resident_id = resident_id, application_id = application_alerts.tracking_id, alert_status = False)
+        # resident_alerts = Alert.objects.filter(resident_id = resident_id, application_id = application_alerts.tracking_id, alert_status = False)
 
-        documents = Document.objects.filter(resident_id = resident_id)
-        rfis = RFI.objects.filter(resident_id = resident_id).order_by('application_id','rfi_id')
-        medicaid_application_documents = Document.objects.filter(resident_id = resident_id, description = "medicaid_application")
-        rfi_documents = Document.objects.filter(resident_id = resident_id, description = "rfi").order_by('rfi_id')
-        applications = results
+        # documents = Document.objects.filter(resident_id = resident_id)
+        # rfis = RFI.objects.filter(resident_id = resident_id).order_by('application_id','rfi_id')
+        # medicaid_application_documents = Document.objects.filter(resident_id = resident_id, description = "medicaid_application")
+        # rfi_documents = Document.objects.filter(resident_id = resident_id, description = "rfi").order_by('rfi_id')
+        # applications = results
         # print(application)
-        return render(request,self.template_name, {'rfis':rfis,'documents':documents,'resident':resident,'applications':applications,"resident_alerts":resident_alerts, 'medicaid_application_documents': medicaid_application_documents, "rfi_documents":rfi_documents, "form":self.form_class})
-
+        # return render(request,self.template_name, {'rfis':rfis,'documents':documents,'resident':resident,'applications':applications,"resident_alerts":resident_alerts, 'medicaid_application_documents': medicaid_application_documents, "rfi_documents":rfi_documents, "form":self.form_class})
+        return render(request, self.template_name, {'applications':applications})
     def post(self, request, *args, **kwargs):
 
 
