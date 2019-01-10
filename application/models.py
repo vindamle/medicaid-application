@@ -106,6 +106,7 @@ class Application(models.Model):
     medicaid_pickup_date = models.DateTimeField(null = True, blank = True)
     estimated_nami = models.DecimalField(max_digits=10,decimal_places=2,null = True, blank = True)
     copay  = models.DecimalField(max_digits=10,decimal_places=2,null = True, blank = True)
+    copay_start_date =  models.DateTimeField(null = True, blank = True)
     secondary_pays_copay  = models.DecimalField(max_digits=10,decimal_places=2,null = True, blank = True)
     application_state = models.CharField(max_length = 50, null = True, blank = True)
     application_county = models.CharField(max_length = 50, null = True, blank = True)
