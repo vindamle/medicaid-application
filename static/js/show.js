@@ -1,7 +1,7 @@
-const phaseChange = new_phase_id => {
+const phaseChange = (element, phaseId) => {
 	const dataObject = {
-		resident_id: document.querySelector("#residentId").innerHTML,
-		phase_id: new_phase_id
+		application_id: $(element).closest('.applicationPage').get(0).getAttribute('data-application_id'),
+		phase_id: phaseId
 	}
 		const successMessage = `phase changed to ${dataObject.phase_id}`;
 		const ajaxCall = $.ajax(
@@ -105,11 +105,11 @@ meetingCheckbox.addEventListener('change', (e) => {
 			return;
 		} 
 			$('.step2').fadeIn();
-			 phaseChange(2);
+			 phaseChange(meetingCheckbox, 2);
 	} else {
 		$('.step2').css('display', 'none');
 		$('.step3').css('display', 'none');
-		 phaseChange(1);
+		 phaseChange(meetingCheckbox, 1);
 	}
 })
 
@@ -141,7 +141,7 @@ for (var i = 0; i < editableInputs.length; i++) {
   	// if the field user is completing is medicaid pickup date, show fields relevant to next step:
   	if (input.id == "medicaid_pickup_date" && input.value != "") {
   		$('.step3').fadeIn();
-  		 phaseChange(3);
+  		 phaseChange(input, 3);
   		// console.log(phaseName)
   		// document.querySelector('#showStatus').innerHTML = phaseName;
 
