@@ -9,32 +9,31 @@ from .models import Resident, Application, Alert, AlertType,Phase, RFI
 from .additionalInfo import AdditionalInfo
 
 def update_list(request):
-    if request.method == 'GET':
-        requested_resident_id = request.GET['resident_id']
-        track = request.GET['tracking']
+    
+    requested_resident_id = request.GET['resident_id']
+    track = request.GET['tracking']
+
+    requested_resident_id = int(requested_resident_id)
+    resident = Resident.objects.get(resident_id = requested_resident_id)
 
 
-        requested_resident_id = int(requested_resident_id)
-        resident = Resident.objects.get(resident_id = requested_resident_id)
+    if track == "true":
+        resident.tracking_status = True
+        resident.dismiss = True
+        if not Application.objects.filter(resident_id = requested_resident_id).exists():
+
+            application = Application(resident = resident, phase = Phase.objects.get(phase_id = 1),tracking_status = True)
+            application.save()
+        resident.save()
 
 
-        if track == "true":
-            resident.tracking_status = True
-            resident.dismiss = True
-            if not Application.objects.filter(resident_id = requested_resident_id).exists():
+        # resident_info = AdditionalInfo()
+    elif track == "false":
+        resident.tracking_status = False
+        resident.dismiss = True
+        resident.save()
+    return HttpResponse("200")
 
-                application = Application(resident = resident, phase = Phase.objects.get(phase_id = 1))
-                application.save()
-            resident.save()
-
-
-            # resident_info = AdditionalInfo()
-        elif track == "false":
-            resident.tracking_status = False
-            resident.save()
-        return HttpResponse("200")
-    else:
-        return HttpResponse("Request method is not a GET")
 
 def approval_verified(request):
     if request.method == 'GET':

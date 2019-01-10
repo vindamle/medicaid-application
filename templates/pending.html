@@ -21,8 +21,8 @@
       <tbody>
         {% for obj in list%}
         <tr id="{{obj.resident_id}}">
-          <td>{{obj.first_name}}</td>
-          <td>{{obj.last_name}}</td>
+          <td>{{obj.resident.first_name}}</td>
+          <td>{{obj.resident.last_name}}</td>
           <!-- <td>{{obj.facility}}</td> -->
           <td>{{obj.medicaid_pickup_date|date:"F d, Y"}}</td>
           <td>{{obj.phase.phase_name}}</td>

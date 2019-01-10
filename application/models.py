@@ -118,6 +118,8 @@ class Application(models.Model):
     dss_contact_email = models.EmailField(max_length = 100, null = True, blank = True)
     dss_contact_fax  = models.CharField(max_length = 100, null = True, blank = True)
 
+    tracking_status = models.BooleanField(null = True, blank = True)
+
     # date_of_medicaid_approval  = models.DateTimeField(null = True, blank = True)
     # date_of_medicaid_recertification  = models.DateTimeField(null = True, blank = True)
 
