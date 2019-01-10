@@ -1,0 +1,56 @@
+{% for rfi in rfis %}
+			<hr class="">
+			<ul class="" id="">
+			<h6 class="numberOfRFIs">RFI</h6>
+				<div class="row">
+				<div class="col-lg-3">
+						<li class="">
+							<form class="fileInputLi rfiFileUpload" method="post" enctype="multipart/form-data">
+				  			{% csrf_token %}
+								<label>Upload RFI Here:</label>
+								<input type="file" name="rfi" value="{{rfi.document}}" accept="image/jpeg
+								,image/png,application/pdf" multiple>
+								<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
+								<input type="hidden" name="file_type" value="rfi">
+								<input type="hidden" name="application_id" class="formApplicationId" value="">
+								<button type="submit" class="uploadBtn">Upload</button>
+							</form>
+						</li>
+					</div>
+					<div class="col-lg-3">
+						<li class="editableLi ">
+							<label>RFI Due Date:</label>
+							<input class="editable date  due_date" id="rfi_due_date" data-table="rfi" data-rfi_id="{{rfi.rfi_id}}" data-alert_id="" type="date" value="{{rfi.rfi_due_date|date:'Y-m-d'}}" >
+						</li>
+					</div>
+					<div class="col-lg-3">
+						<li class="">
+							<label><input type="checkbox" class="documentationSubmittedCheckbox " id="rfi_documentation_submitted" data-table="rfi" data-rfi_id="{{rfi.rfi_id}}" {% if rfi.rfi_documentation_submitted %} checked="checked"{% endif %}>Documentation Submitted</label>
+						</li>
+						<li class="editableLi step5 ">
+							<label>Submission Date:</label>
+							<input class="editable date " id="date_of_rfi_submission" data-table="rfi" data-rfi_id="{{rfi.rfi_id}}" data-alert_id="" type="date" value="{{rfi.date_of_rfi_submission|date:'Y-m-d'}}" >
+						</li>
+					</div>
+
+					<div class="col-lg-3">
+						<li class="editableLi step5 ">
+							<label>Response:</label>
+							<select name="response_select" class=" responseSelect" id="rfi_response" data-table="rfi" data-application_id="{{rfi.application.tracking_id}}" data-rfi_id="{{rfi.rfi_id}}" onchange="createResponseRow(this, this.value);">
+								<option value="not_recieved">Not recieved</option>
+								<option value="rfi">RFI</option>
+								<option value="approved">Approved</option>
+								<option value="denied">Denied</option>
+							</select>
+							<span class="invisible DBinfo" id="DBrfi_response">{{rfi.rfi_response}}</span>
+						</li>
+					</div>
+				</div>
+			</ul>
+		{% endfor %}
+
+
+
+
+
+		

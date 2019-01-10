@@ -113,22 +113,8 @@ meetingCheckbox.addEventListener('change', (e) => {
 	}
 })
 
-// Make select fields default to value in database (if there is one):
-const selectFields = document.querySelectorAll('SELECT');
-for (let i = 0; i < selectFields.length; i++) {
-	const selectField = selectFields[i];
-	const selectFieldParent = selectField.parentNode;
-	const DBinfo = selectFieldParent.querySelector('.DBinfo').innerHTML;
-	const options = selectField.querySelectorAll('OPTION');
-	for (let x = 0; x < options.length; x++) {
-		const option = options[x];
-		if (option.value == DBinfo) {
-			option.setAttribute("selected", "selected");
-		};
-	};
-};
-
 // Add eventListeners for select fields to send their info to DB via AJAX: 
+const selectFields = document.querySelectorAll('SELECT');
 for (let i = 0; i < selectFields.length; i++) {
 	const selectField = selectFields[i];
 	if (selectField.id != 'response1_select') {
@@ -199,25 +185,30 @@ const coll = document.getElementsByClassName("collapsibleSection");
 for (let i = 0; i < coll.length; i++) {
 	let h4 = coll[i];
   h4.addEventListener("click", function() {
-  	console.log('clicked')
-    let content = h4.nextElementSibling;
-		const section =h4.parentNode;
-
-    console.log(content)
-    if (content.style.display !== "none") {
-    	h4.style.width = '100%';
-    	h4.style.marginLeft = '0';
-			section.style.width = "100%";
-			// section.style.width = "400px";
-			section.style.height = "50px";
-      content.style.display = "none";
-
-    } else {
-    	// h4.style.width = '420px';
-    	section.style.width = "initial";
-			section.style.height = "initial";
-      content.style.display = "block";
-    }
     this.classList.toggle("activeSection");
+    let content = h4.nextElementSibling; 
+    console.log(content)
+    console.log(content.style.maxHeight);
+    if (content.style.maxHeight != "0px"){
+      content.style.maxHeight = "0px";
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    } 
+
+
+   //  if (content.style.display !== "none") {
+   //  	h4.style.width = '100%';
+   //  	h4.style.marginLeft = '0';
+			// section.style.width = "100%";
+			// // section.style.width = "400px";
+			// section.style.height = "50px";
+   //    content.style.display = "none";
+
+   //  } else {
+   //  	// h4.style.width = '420px';
+   //  	section.style.width = "initial";
+			// section.style.height = "initial";
+   //    content.style.display = "block";
+   //  }
   });
 }

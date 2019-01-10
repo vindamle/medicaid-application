@@ -402,10 +402,14 @@ table button {
   background-color: #3040A6;
 }
 
-.residentInfoDiv ul.collapsibleContent {
-  /*max-height: 0;*/
+ .collapsibleContent {
+  max-height: 1000px;
   overflow: hidden;
-  transition: height 0.2s ease-out;
+  transition: max-height 0.2s ease-out;
+}
+
+.residentInfoDiv #applicationInfoSection {
+	max-height: initial;
 }
 
 .collapsibleSection:after {

@@ -9,9 +9,9 @@ import os
 from pathlib import Path
 
 
-class HomeView(View):
+class PendingView(View):
     form_class = ApplicationForm
-    template_name = "home.html"
+    template_name = "pending.html"
     list = []
     tracklist = []
 
@@ -65,7 +65,7 @@ class ActivityView(View):
 
 
 
-class PendingView(View):
+class PendingAlertsView(View):
     form_class = ApplicationForm
     template_name = "pending_alerts.html"
     list = []

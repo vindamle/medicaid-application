@@ -99,7 +99,7 @@
 		</ul>
 	</section>
 	<section>
-					<h4 class="collapsibleSection">Insurance Information:</h4>
+		<h4 class="collapsibleSection">Insurance Information:</h4>
 		<ul class="collapsibleContent">
 			<div class="row">
 				<div class="col-lg-4 applicationColumn">
@@ -141,10 +141,11 @@
 		</ul>
 	</section>
 {% for application in applications %}
-	<section id="applicationInfoSection">
+	<section >
 		<span class="invisible applicationId">{{application.tracking_id}}</span>
-		<h4>Medicaid Application Information:</h4>
-		<ul>
+		<h4 class="collapsibleSection">Medicaid Application Information:</h4>
+		<div class="collapsibleContent" id="applicationInfoSection">
+			<ul>
 			<div class="row">
 				<div class="col-lg-4 applicationColumn">
 					<li class="step3">
@@ -271,7 +272,7 @@
 					  			{% csrf_token %}
 									<label>Upload Application Here:</label>
 									<input type="file" name="document" value="" accept="image/jpeg
-									,image/png,application/pdf" multiple required>
+									,image/png,application/pdf" required>
 									<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
 									<input type="hidden" name="file_type" value="medicaid_application">
 									<input type="hidden" name="application_id" value="{{application.tracking_id}}">
@@ -295,44 +296,12 @@
 				</div>
 			</div>
 		</ul>
+		</div>
 
 	</section>
-{% endfor %}
-<!-- 	<section class="step3">
-		<h4 class="collapsibleSection">Document Upload:</h4>
-		<ul>
-			<div class="row">
-				<div class="col-lg-4 applicationColumn">
-					<form class="fileInputLi" id="medicaid_confirmation" method="post" enctype="multipart/form-data">
-			 			{% csrf_token %}
-						<label>Upload Medicaid Confirmation Here:</label>
-						<input type="file" name="medicaid_confirmation" value="{{application.medicaid_confirmation}}" accept="image/jpeg
-						,image/png,application/pdf" multiple>
-						<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
-						<input type="hidden" name="file_type" value="medicaid_confirmation">
-						<button type="submit" class="uploadBtn">Upload</button>
-					</form>
-				</div>
-				<div class="col-lg-4 applicationColumn">
-					<form class="fileInputLi" id="medicaid_approval" method="post" enctype="multipart/form-data">
-			 			{% csrf_token %}
-						<label>Upload Medicaid Approval Here:</label>
-						<input type="file" name="medicaid_approval" value="{{application.medicaid_approval}}" accept="image/jpeg
-						,image/png,application/pdf" multiple>
-						<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
-						<input type="hidden" name="file_type" value="medicaid_approval">
-						<button type="submit" class="uploadBtn">Upload</button>
-					</form>
-				</div>
-			</div>
-		</ul>
-	</section> -->
-	<!-- <div class="approveBtnDiv"> -->
-		<!-- <button class="btn btn-success centered step3" id="approveBtn">Approve</button> -->
-	<!-- </div> -->
 	<section class="" id="approvedSection">
 		<h4 class="collapsibleSection">Approval Information:</h4>
-		<ul>
+		<ul class="collapsibleContent">
 			<div class="row">
 				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi step6">
@@ -359,7 +328,6 @@
 							<button type="submit" class="uploadBtn">Upload</button>
 						</form>
 					</li>
-
 				</div>
 				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
@@ -449,6 +417,40 @@
 			</div>
 		</ul>
 	</section>
+{% endfor %}
+<!-- 	<section class="step3">
+		<h4 class="collapsibleSection">Document Upload:</h4>
+		<ul>
+			<div class="row">
+				<div class="col-lg-4 applicationColumn">
+					<form class="fileInputLi" id="medicaid_confirmation" method="post" enctype="multipart/form-data">
+			 			{% csrf_token %}
+						<label>Upload Medicaid Confirmation Here:</label>
+						<input type="file" name="medicaid_confirmation" value="{{application.medicaid_confirmation}}" accept="image/jpeg
+						,image/png,application/pdf" multiple>
+						<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
+						<input type="hidden" name="file_type" value="medicaid_confirmation">
+						<button type="submit" class="uploadBtn">Upload</button>
+					</form>
+				</div>
+				<div class="col-lg-4 applicationColumn">
+					<form class="fileInputLi" id="medicaid_approval" method="post" enctype="multipart/form-data">
+			 			{% csrf_token %}
+						<label>Upload Medicaid Approval Here:</label>
+						<input type="file" name="medicaid_approval" value="{{application.medicaid_approval}}" accept="image/jpeg
+						,image/png,application/pdf" multiple>
+						<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
+						<input type="hidden" name="file_type" value="medicaid_approval">
+						<button type="submit" class="uploadBtn">Upload</button>
+					</form>
+				</div>
+			</div>
+		</ul>
+	</section> -->
+	<!-- <div class="approveBtnDiv"> -->
+		<!-- <button class="btn btn-success centered step3" id="approveBtn">Approve</button> -->
+	<!-- </div> -->
+	
 </div>
 {% endblock %}
 
@@ -504,7 +506,7 @@ class RfiRowHTML {
 				{% csrf_token %}
 				<label>Upload RFI Here:</label>
 				<input type="file" name="document" value="" accept="image/jpeg
-				,image/png,application/pdf" multiple required>
+				,image/png,application/pdf" required>
 				<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
 				<input type="hidden" name="file_type" value="rfi">
 				<input type="hidden" name="application_id" value="${applicationId}">
@@ -517,6 +519,14 @@ class RfiRowHTML {
 				<li class="editableLi ">
 				<label>RFI Due Date:</label>
 				<input class="editable date  due_date" id="rfi_due_date" data-table="rfi" data-alert_id="" data-application_id="${applicationId}" data-rfi_id="${rfiId}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+				</li>
+				<li class="editableLi">
+					<label>Extension Requested?</label>
+					<select name="rfi_extension_request" id="rfi_extension_request" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" onchange="sendInputInfoToDB(this); extensionRequested(this, ${applicationId}, ${rfiId})">
+						<option value="no">No</option>
+						<option value="yes">Yes</option>
+					</select>
+					<span class="invisible DBinfo" id="DBrfi_extension_request">{{rfi.rfi_extension_request}}</span>
 				</li>
 				</div>
 				<div class="col-lg-3">
@@ -546,7 +556,20 @@ class RfiRowHTML {
 	}
 }
 
-
+const extensionRequested = (extensionRequestedField,applicationId,rfiId) => {
+	const col = extensionRequestedField.parentNode.parentNode;
+	const html = `
+	<li class="editableLi">
+		<label>Extension Granted?</label>
+		<select name="rfi_extension_response" id="rfi_extension_response" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" onchange="sendInputInfoToDB(this)">
+			<option value="no">No</option>
+			<option value="yes">Yes</option>
+		</select>
+		<span class="invisible DBinfo" id="DBrfi_extension_response">{{rfi.rfi_extension_response}}</span>
+	</li>
+	`
+	col.insertAdjacentHTML("beforeend", html);
+} 
 
 
 
@@ -581,20 +604,21 @@ const createResponseRow = (applicationId, responseFieldValue) => {
 				const newRfiRowHTML = new RfiRowHTML(applicationId,response_of_rfi_id)
 				applicationInfoSection.insertAdjacentHTML("beforeend", newRfiRowHTML.html);
 
-// reset response filed to "not Received"
-const rfiRow = applicationInfoSection.lastElementChild;
-const selectField = rfiRow.querySelector('SELECT');
-const options = selectField.querySelectorAll('OPTION');
-for (let x = 0; x < options.length; x++) {
-	const option = options[x];
-	if (option.value == 'not_recieved') {
-		option.setAttribute("selected", "selected");
-	};
-}
-}
+	// reset response field to "not Received"
+		const rfiRow = applicationInfoSection.lastElementChild;
+		const selectField = rfiRow.querySelector('SELECT');
+		const options = selectField.querySelectorAll('OPTION');
+		for (let x = 0; x < options.length; x++) {
+			const option = options[x];
+			if (option.value == 'not_recieved') {
+				option.setAttribute("selected", "selected");
+			};
+		}
+	}
 });
 // return(ajaxCall);
 } else if (responseFieldValue == 'approved'){
+	phaseChange(6);
 	$('#deniedSection').css('display', 'none');
 	$('#approvedSection').css('display', 'block');
 } else if (responseFieldValue == 'denied'){
@@ -630,7 +654,7 @@ $(document).ready(()=>{
 		var applicationId = {{rfi.application.tracking_id}};
 		var rfiId = {{rfi.rfi_id}};
 		var rfiDocumentationSubmittedDate = "{{rfi.rfi_documentation_submitted_date}}";
-		var rfiDueDate = "{{rfi.rfi_due_date}}";
+		var rfiDueDate = "{{rfi.rfi_due_date|date:'Y-m-d'}}";
 		 
 		{% if rfi.document_id %}
 			{% for rfi_document in rfi_documents %}
@@ -647,7 +671,7 @@ $(document).ready(()=>{
 						{% csrf_token %}
 						<label>Upload RFI Here:</label>
 						<input type="file" name="document" value="" accept="image/jpeg
-						,image/png,application/pdf" multiple required>
+						,image/png,application/pdf" required>
 						<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
 						<input type="hidden" name="file_type" value="rfi">
 						<input type="hidden" name="application_id" value="${applicationId}">
@@ -664,6 +688,30 @@ $(document).ready(()=>{
 			<label>RFI Due Date:</label>
 			<input class="editable date  due_date" id="rfi_due_date" data-table="rfi" data-alert_id="" data-application_id="${applicationId}" data-rfi_id="${rfiId}" type="date" value="${rfiDueDate}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
 			</li>
+			<li class="editableLi">
+					<label>Extension Requested?</label>
+					<select name="rfi_extension_request" id="rfi_extension_request" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" onchange="sendInputInfoToDB(this); extensionRequested(this, ${applicationId}, ${rfiId})">
+						<option value="no">No</option>
+						<option value="yes">Yes</option>
+					</select>
+					<span class="invisible DBinfo" id="DBrfi_extension_request">{{rfi.rfi_extension_request}}</span>
+				</li>
+			`
+			{% if rfi.rfi_extension_request == "yes" %}
+
+			html += `
+			<li class="editableLi">
+				<label>Extension Granted?</label>
+				<select name="rfi_extension_response" id="rfi_extension_response" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" onchange="sendInputInfoToDB(this)">
+					<option value="no">No</option>
+					<option value="yes">Yes</option>
+				</select>
+				<span class="invisible DBinfo" id="DBrfi_extension_response">{{rfi.rfi_extension_response}}</span>
+			</li>
+			`
+
+			{% endif %}
+			html += `
 			</div>
 			<div class="col-lg-3">
 			<li class="">
@@ -694,14 +742,44 @@ $(document).ready(()=>{
 	{% endfor %}
 	const rfiRow = applicationInfoSection.lastElementChild;
 	const selectField = rfiRow.querySelector('SELECT');
-	const options = selectField.querySelectorAll('OPTION');
-	for (let x = 0; x < options.length; x++) {
-		const option = options[x];
-		if (option.value == 'not_recieved') {
-			option.setAttribute("selected", "selected");
+	
+
+	//show approved section if approved:
+	if({{resident.phase.phase_id}} == 6) {
+		const options = selectField.querySelectorAll('OPTION');
+		for (let x = 0; x < options.length; x++) {
+			const option = options[x];
+			if (option.value == 'approved') {
+				option.setAttribute("selected", "selected");
+			};
+		};
+		document.querySelector('#approvedSection').style.display = "block";
+	} else if ({{resident.phase.phase_id}} == 5) {
+		const options = selectField.querySelectorAll('OPTION');
+		for (let x = 0; x < options.length; x++) {
+			const option = options[x];
+			if (option.value == 'not_recieved') {
+				option.setAttribute("selected", "selected");
+			};
+		};
+	}
+
+
+	// Make select fields default to value in database (if there is one):
+	const selectFields = document.querySelectorAll('SELECT');
+	for (let i = 0; i < selectFields.length; i++) {
+		const selectField = selectFields[i];
+		const selectFieldParent = selectField.parentNode;
+		const DBinfo = selectFieldParent.querySelector('.DBinfo').innerHTML;
+		const options = selectField.querySelectorAll('OPTION');
+		for (let x = 0; x < options.length; x++) {
+			const option = options[x];
+			if (option.value == DBinfo) {
+				option.setAttribute("selected", "selected");
+			};
 		};
 	};
-})
+}) // end document.ready
 
 
 // addEventListenerToResponse(document.querySelector('#initial_response'))
