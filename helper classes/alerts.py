@@ -40,7 +40,7 @@ class Alerts:
             last_name = getattr(result, "LastName").capitalize(),
             dob = getattr(result, "DOB"),
             facility_id = getattr(result, "Facility_Skey"),
-            facility = getattr(result, "Facility"),
+            facility_name= getattr(result, "Facility"),
             primary_payor_id = getattr(result, "PrimaryPayorSkey"),
             primary_payor_grp = getattr(result, "PrimaryPayor"),
             primary_payor = getattr(result, "PrimaryPayorName"),

@@ -24,7 +24,7 @@ class HomeView(View):
         for result in results:
             self.list.append(result)
 
-        return render(request,self.template_name, {'list':self.list,"form":self.form_class, 'facilities':facilities})
+        return render(request,self.template_name, {'list':self.list,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
 
@@ -40,7 +40,7 @@ class ActivityView(View):
 
     def get(self, request, *args, **kwargs):
         '''if GET  '''
-        
+
         new_admission_results = Resident.objects.filter(tracking_status = None, activity_type = 'A')
 
         payor_change_results = Resident.objects.filter(activity_type = 'P', dismiss = False)
@@ -56,7 +56,7 @@ class ActivityView(View):
         for result in discharge_results:
             self.discharge_list.append(result)
 
-        return render(request,self.template_name, {'discharge':self.discharge_list,'list':self.new_admission_list,'payor_change':self.payor_change_list,"form":self.form_class, 'facilities':facilities})
+        return render(request,self.template_name, {'discharge':self.discharge_list,'list':self.new_admission_list,'payor_change':self.payor_change_list,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
 
