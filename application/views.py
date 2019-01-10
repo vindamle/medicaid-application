@@ -12,6 +12,8 @@ def update_list(request):
     if request.method == 'GET':
         requested_resident_id = request.GET['resident_id']
         track = request.GET['tracking']
+
+
         requested_resident_id = int(requested_resident_id)
         resident = Resident.objects.get(resident_id = requested_resident_id)
 
@@ -21,8 +23,7 @@ def update_list(request):
             resident.dismiss = True
             if not Application.objects.filter(resident_id = requested_resident_id).exists():
 
-                resident.phase = Phase.objects.get(phase_id = 1)
-                application = Application(resident = resident)
+                application = Application(resident = resident, phase = Phase.objects.get(phase_id = 1))
                 application.save()
             resident.save()
 
