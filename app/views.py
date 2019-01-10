@@ -18,11 +18,11 @@ class PendingView(View):
     def get(self, request, *args, **kwargs):
         '''if GET  '''
 
-        results = Resident.objects.filter(tracking_status = True)
-        self.list = list()
+        applications = Application.objects.filter(tracking_status = True)
+        self.applications = list()
 
-        for result in results:
-            self.list.append(result)
+        for application in applications:
+            self.applications.append(result)
 
         return render(request,self.template_name, {'list':self.list,"form":self.form_class})
 
