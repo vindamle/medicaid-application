@@ -87,12 +87,12 @@ def update_alert(request):
 
 def phase_change(request):
     # Sending an success response
-    resident_id =int(request.GET['resident_id'])
+    application_id =int(request.GET['application_id'])
     phase_id =int(request.GET['phase_id'])
-    resident = Resident.objects.get(resident_id = resident_id)
+    application = Application.objects.get(application_id = application_id)
     phase = Phase.objects.get(phase_id = phase_id)
-    resident.phase = phase
-    resident.save()
+    application.phase = phase
+    application.save()
 
     return HttpResponse(str(phase.phase_name))
 
