@@ -5,7 +5,7 @@ from django.views import generic
 from .forms import NameForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .models import Resident, ApplicationTracking, Alert, AlertType,Phase, RFI
+from .models import Resident, Application, Alert, AlertType,Phase, RFI
 from .additionalInfo import AdditionalInfo
 
 def update_list(request):
@@ -19,10 +19,10 @@ def update_list(request):
         if track == "true":
             resident.tracking_status = True
             resident.dismiss = True
-            if not ApplicationTracking.objects.filter(resident_id = requested_resident_id).exists():
+            if not Application.objects.filter(resident_id = requested_resident_id).exists():
 
                 resident.phase = Phase.objects.get(phase_id = 1)
-                application = ApplicationTracking(resident = resident)
+                application = Application(resident = resident)
                 application.save()
             resident.save()
 
@@ -39,7 +39,7 @@ def approval_verified(request):
     if request.method == 'GET':
         resident_id =int(request.GET['resident_id'])
 
-        application = ApplicationTracking.objects.get(resident = resident_id)
+        application = Application.objects.get(resident = resident_id)
 
         if request.GET['approval_verified'] == "true":
             application.approval_verified = True
@@ -70,7 +70,7 @@ def update_application(request):
     new_value =request.GET['new_value']
 
     resident = Resident.objects.get(resident_id = resident_id)
-    application = ApplicationTracking.objects.get(resident = resident)
+    application = Application.objects.get(resident = resident)
 
     field = setattr(application,column,new_value)
     application.save()

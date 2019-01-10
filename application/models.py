@@ -155,7 +155,7 @@ class Document(models.Model):
 class ResponseType(models.Model):
     # Response Type Definitions
     response_type_id  = models.AutoField(primary_key = True)
-    response_type = models.CharField(primary_key = True)
+    response_type = models.CharField(max_length = 50,  null = True, blank=True)
 
     class Meta:
         verbose_name = 'Response Types'
@@ -198,7 +198,6 @@ class RFI(models.Model):
         on_delete = models.CASCADE,
     )
 
-    )
     document = models.ForeignKey(
         Document,
         on_delete = models.CASCADE,
@@ -257,7 +256,7 @@ class Alert(models.Model):
 #         on_delete = models.CASCADE,
 #     )
 #     application = models.ForeignKey(
-#         ApplicationTracking,
+#         Application,
 #         on_delete = models.CASCADE,
 #         null = True,
 #     )
@@ -271,7 +270,7 @@ class Alert(models.Model):
 #     amount = models.FloatField(null = True, blank = True)
 #     document_submitted = models.BooleanField(null = True, blank = True)
 
-
-class Snowden(models.Models):
-    log_id = models.BigAutoField(primary_key = True)
-    # user = models.RFi
+#
+# class Snowden(models.Models):
+#     log_id = models.BigAutoField(primary_key = True)
+#     # user = models.RFi

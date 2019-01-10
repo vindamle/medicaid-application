@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.shortcuts import render, redirect
 from .forms import ApplicationForm, UploadFileForm
-from application.models import Facility,Resident, ApplicationTracking, Alert, Document, RFI
+from application.models import Resident, Application, Alert, Document, RFI
 import pandas as pd
 from datetime import datetime
 import os
@@ -17,7 +17,7 @@ class HomeView(View):
 
     def get(self, request, *args, **kwargs):
         '''if GET  '''
-        facilities =Facility.objects.filter(downstate_upstate__isnull = False )
+
         results = Resident.objects.filter(tracking_status = True)
         self.list = list()
 
@@ -28,17 +28,7 @@ class HomeView(View):
 
     def post(self, request, *args, **kwargs):
 
-        '''if POST'''
-        facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-
-        self.list = list()
-        for result in results:
-            facility = result.Facility
-
-            self.list.append(al.get_fields(result, facility))
-
-        return render(request,self.template_name, {'list':self.list, "alert_length":len(self.list) , "form":self.form_class, 'facilities':facilities, "tracklist":self.tracklist})
-
+        pass
 
 class ActivityView(View):
     form_class = ApplicationForm
@@ -50,7 +40,7 @@ class ActivityView(View):
 
     def get(self, request, *args, **kwargs):
         '''if GET  '''
-        facilities =Facility.objects.filter(downstate_upstate__isnull = False )
+        
         new_admission_results = Resident.objects.filter(tracking_status = None, activity_type = 'A')
 
         payor_change_results = Resident.objects.filter(activity_type = 'P', dismiss = False)
@@ -70,17 +60,9 @@ class ActivityView(View):
 
     def post(self, request, *args, **kwargs):
 
-        '''if POST'''
-        facilities =Facility.objects.filter(downstate_upstate__isnull = False )
+        pass
 
 
-        self.list = list()
-        for result in results:
-            facility = result.Facility
-
-            self.list.append(al.get_fields(result, facility))
-
-        return render(request,self.template_name, {'list':self.list, "alert_length":len(self.list) , "form":self.form_class, 'facilities':facilities, "tracklist":self.tracklist})
 
 
 class PendingView(View):
@@ -105,17 +87,7 @@ class PendingView(View):
 
     def post(self, request, *args, **kwargs):
 
-        '''if POST'''
-        facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-
-
-        self.list = list()
-        for result in results:
-            facility = result.Facility
-
-            self.list.append(al.get_fields(result, facility))
-
-        return render(request,self.template_name, {'list':self.list, "alert_length":len(self.list) , "form":self.form_class, 'facilities':facilities, "tracklist":self.tracklist})
+        pass
 
 
 class ShowView(View):
@@ -131,7 +103,7 @@ class ShowView(View):
 
         resident_id= int(request.GET["resident_id"])
         resident = Resident.objects.get(resident_id = resident_id)
-        results = ApplicationTracking.objects.filter(resident = resident)
+        results = Application.objects.filter(resident = resident)
 
         for result in results:
             application_alerts = result
@@ -155,9 +127,9 @@ class ShowView(View):
         application_id = request.POST.get('application_id')
 
         resident = Resident.objects.get(resident_id = int(resident_id))
-        application = ApplicationTracking.objects.get(tracking_id = application_id)
+        application = Application.objects.get(tracking_id = application_id)
 
-        
+
         ROOT = Path.cwd()
         path = Path(str(ROOT) + "/static/applications/"+str(resident_id)+"/"+str(application_id))
         if not path.exists():
@@ -198,7 +170,7 @@ class ApprovalsView(View):
 
     def get(self, request, *args, **kwargs):
         '''if GET  '''
-        facilities =Facility.objects.filter(downstate_upstate__isnull = False )
+
         results = Resident.objects.filter(tracking_status = True)
         self.list = list()
 
@@ -208,17 +180,7 @@ class ApprovalsView(View):
 
     def post(self, request, *args, **kwargs):
 
-        '''if POST'''
-        facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-
-
-        self.list = list()
-        for result in results:
-            facility = result.Facility
-
-            self.list.append(al.get_fields(result, facility))
-
-        return render(request,self.template_name, {'list':self.list, "alert_length":len(self.list) , "form":self.form_class, 'facilities':facilities, "tracklist":self.tracklist})
+        pass
 
 class NotTrackingView(View):
     form_class = ApplicationForm
@@ -228,7 +190,7 @@ class NotTrackingView(View):
 
     def get(self, request, *args, **kwargs):
         '''if GET  '''
-        facilities =Facility.objects.filter(downstate_upstate__isnull = False )
+
         results = Resident.objects.filter(tracking_status = False)
         self.list = list()
 
@@ -238,15 +200,4 @@ class NotTrackingView(View):
         return render(request,self.template_name, {'list':self.list,"form":self.form_class, 'facilities':facilities})
 
     def post(self, request, *args, **kwargs):
-
-        '''if POST'''
-        facilities =Facility.objects.filter(downstate_upstate__isnull = False )
-
-
-        self.list = list()
-        for result in results:
-            facility = result.Facility
-
-            self.list.append(al.get_fields(result, facility))
-
-        return render(request,self.template_name, {'list':self.list, "alert_length":len(self.list) , "form":self.form_class, 'facilities':facilities, "tracklist":self.tracklist})
+        pass
