@@ -87,42 +87,39 @@ class ShowView(View):
 
         file = request.FILES.getlist('document')
         type = request.POST.get('file_type')
-        resident_id = request.POST.get('resident_id')
         application_id = request.POST.get('application_id')
-
-        resident = Resident.objects.get(resident_id = int(resident_id))
-        application = Application.objects.get(tracking_id = application_id)
+        resident_id = request.POST.get('resident_id')
 
 
         ROOT = Path.cwd()
-        path = Path(str(ROOT) + "/static/applications/"+str(resident_id)+"/"+str(application_id))
+        path = Path(str(ROOT) + "/static/applications/"+resident_id+"/"+str(application_id))
         if not path.exists():
             print("Create Path")
             path.mkdir(parents=True, exist_ok = True)
 
-        # if type == 'rfi':
-        #     rfi = RFI.objects.get(rfi_id = int(request.POST.get('rfi_id')))
-
-
         try:
-            x = Document.objects.create(
-                resident =resident,
-                application = application,
+            new_document = Document.objects.create(
+                resident = Resident.objects.get(resident_id = request.POST.get('resident_id')),
+                application_id = application_id,
                 file = file[0],
                 file_name = (file[0].name).split(".")[0],
                 description = type,
-                date_recieved = datetime.now(),
-                rfi_id = int(request.POST.get('rfi_id')) if type == 'rfi' else None
+                date_uploaded = datetime.now(),
             )
         except Exception as e:
             print("\n\n",str(e),"\n\n")
 
-        if type == 'rfi':
-            rfi = RFI.objects.get(rfi_id = int(request.POST.get('rfi_id')))
-            rfi.document_id = x.document_id
-            rfi.save()
+        if type  == 'medicaid_application':
+            application = Application.objects.get(application_id = int(application_id))
+            application.application_document = new_document
+            application.save()
 
-        return redirect('/show/?resident_id={}'.format(request.POST.get('resident_id')))
+        # if type == 'rfi':
+        #     rfi = RFI.objects.get(rfi_id = int(request.POST.get('rfi_id')))
+        #     rfi.document_id = x.document_id
+        #     rfi.save()
+
+        return redirect('/show/?resident_id={}'.format(str(resident_id)))
 
 
 
