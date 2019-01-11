@@ -76,6 +76,27 @@ class Phase(models.Model):
         verbose_name = 'Phases'
         verbose_name_plural = 'Phases'
 
+def get_path(instance  , file_name):
+    return 'static/applications/'+str(instance.resident.resident_id)+"/"+str(instance.application_id)+"/"+file_name
+
+class Document(models.Model):
+    document_id  = models.AutoField(primary_key = True)
+    # File Info
+
+    resident = models.ForeignKey(
+        Resident,
+        on_delete = models.CASCADE,
+    )
+    application_id = models.IntegerField(null = True, blank = True)
+
+    file = models.FileField(upload_to = get_path ,null = True, blank = True)
+    file_name = models.CharField(max_length = 100, null = True, blank = True)
+    description = models.CharField(max_length = 100, null = True, blank = True)
+    date_uploaded  = models.DateTimeField(null = True, blank = True)
+
+    class Meta:
+        verbose_name = 'Documents'
+        verbose_name_plural = 'Documents'
 
 class Application(models.Model):
 
@@ -121,6 +142,13 @@ class Application(models.Model):
 
     tracking_status = models.BooleanField(null = True, blank = True)
 
+    application_document = models.ForeignKey(
+        Document,
+        on_delete = models.CASCADE,
+        null = True,
+
+
+    )
     # date_of_medicaid_approval  = models.DateTimeField(null = True, blank = True)
     # date_of_medicaid_recertification  = models.DateTimeField(null = True, blank = True)
 
@@ -140,20 +168,7 @@ class Application(models.Model):
         verbose_name_plural = 'Applications'
 
 
-def get_path(instance  , file_name):
-    return 'static/applications/'+ str(instance.resident.resident_id)+"/"+str(instance.application.tracking_id)+"/"+file_name
 
-class Document(models.Model):
-    document_id  = models.AutoField(primary_key = True)
-    # File Info
-    file = models.FileField(upload_to = get_path ,null = True, blank = True)
-    file_name = models.CharField(max_length = 100, null = True, blank = True)
-    description = models.CharField(max_length = 100, null = True, blank = True)
-    date_recieved  = models.DateTimeField(null = True, blank = True)
-
-    class Meta:
-        verbose_name = 'Documents'
-        verbose_name_plural = 'Documents'
 
 class ResponseType(models.Model):
     # Response Type Definitions

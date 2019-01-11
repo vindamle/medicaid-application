@@ -255,20 +255,16 @@
 				</div>
 				<div class="col-lg-3">
 					<li class="step4">
-							{% if medicaid_application_documents %}
-								{% for medicaid_application_document in medicaid_application_documents %}
-									{% if medicaid_application_document.application_id == application.application_id %}
+							{% if application.application_document %}
 										<p>Document Uploaded:</p>
-											<a href="/{{ medicaid_application_document.file }}" target = "_blank">{{medicaid_application_document.file_name}}</a>
-									{% endif %}
-								{% endfor %}
+											<a href="/{{ application.application_document.file }}" target = "_blank">{{application.application_document.file_name}}</a>
 							{% else %}
 								<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
 					  			{% csrf_token %}
 									<label>Upload Application Here:</label>
 									<input type="file" name="document" value="" accept="image/jpeg
 									,image/png,application/pdf" required>
-									<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
+									<input type="hidden" name="resident_id" value="{{application.resident.resident_id}}">
 									<input type="hidden" name="file_type" value="medicaid_application">
 									<input type="hidden" name="application_id" value="{{application.application_id}}">
 									<button type="submit" class="uploadBtn">Upload</button>
@@ -445,7 +441,7 @@
 	<!-- <div class="approveBtnDiv"> -->
 		<!-- <button class="btn btn-success centered step3" id="approveBtn">Approve</button> -->
 	<!-- </div> -->
-	
+
 </div>
 {% endblock %}
 
@@ -547,7 +543,7 @@ class RfiRowHTML {
 				</div>
 				</div>
 				</ul>
-		`		
+		`
 	}
 }
 
@@ -564,7 +560,7 @@ const extensionRequested = (extensionRequestedField,applicationId,rfiId) => {
 	</li>
 	`
 	col.insertAdjacentHTML("beforeend", html);
-} 
+}
 
 
 
@@ -650,7 +646,7 @@ $(document).ready(()=>{
 		var rfiId = {{rfi.rfi_id}};
 		var rfiDocumentationSubmittedDate = "{{rfi.rfi_documentation_submitted_date}}";
 		var rfiDueDate = "{{rfi.rfi_due_date|date:'Y-m-d'}}";
-		 
+
 		{% if rfi.document_id %}
 			{% for rfi_document in rfi_documents %}
 				{% if rfi_document.rfi_id == rfi.rfi_id %}
@@ -659,7 +655,7 @@ $(document).ready(()=>{
 							<a href="/{{ rfi_document.file }}" target = "_blank">{{rfi_document.file_name}}</a>
 						`
 				{% endif %}
-		  {% endfor %}			
+		  {% endfor %}
 		{% else %}
 			html += `
 						<form class="fileInputLi rfiFileUpload" method="post" enctype="multipart/form-data">
@@ -673,7 +669,7 @@ $(document).ready(()=>{
 						<input type="hidden" name="rfi_id" value="${rfiId}">
 						<button type="submit" class="uploadBtn">Upload</button>
 						</form>
-					`				
+					`
 		{% endif %}
 		html += `
 			</li>
@@ -737,7 +733,7 @@ $(document).ready(()=>{
 	{% endfor %}
 	const rfiRow = applicationInfoSection.lastElementChild;
 	const selectField = rfiRow.querySelector('SELECT');
-	
+
 
 	//show approved section if approved:
 	// if({{application.phase.phase_id}} == 6) {
