@@ -236,6 +236,65 @@ class RFI(models.Model):
         verbose_name = 'RFIS'
         verbose_name_plural = 'RFIS'
 
+
+class Approval(models.Model):
+
+    approval_id  = models.AutoField(primary_key = True)
+
+    response = models.ForeignKey(
+        Response,
+        on_delete = models.CASCADE,
+    )
+
+    document = models.ForeignKey(
+        Document,
+        on_delete = models.CASCADE,
+        null = True,
+    )
+
+    approval_notice_date  = models.DateTimeField(null = True, blank = True)
+    satisfied_with_approval = models.CharField(max_length = 50,  null = True, blank=True)
+    fair_hearing_required = models.CharField(max_length = 50,  null = True, blank=True)
+
+    class Meta:
+        verbose_name = 'Approvals'
+        verbose_name_plural = 'Aprrovals'
+
+# class Denial(models.Model):
+#     denial_id  = models.AutoField(primary_key = True)
+#
+#     response = models.ForeignKey(
+#         Response,
+#         on_delete = models.CASCADE,
+#     )
+#
+#     document = models.ForeignKey(
+#         Document,
+#         on_delete = models.CASCADE,
+#         null = True,
+#     )
+#
+#     class Meta:
+#         verbose_name = 'Denials'
+#         verbose_name_plural = 'Denials'
+
+class NAMI(models.Model):
+    nami_id  = models.AutoField(primary_key = True)
+
+    approval = models.ForeignKey(
+        Approval,
+        on_delete = models.CASCADE,
+    )
+
+    nami_start_date  = models.DateField(null = True, blank = True)
+    nami_end_date  = models.DateField(null = True, blank = True)
+    nami_amount = models.FloatField(null = True, blank = True)
+
+    class Meta:
+        verbose_name = 'NAMIS'
+        verbose_name_plural = 'NAMIS'
+
+
 class AlertType(models.Model):
     alert_type_id = models.AutoField(primary_key = True)
     alert_name = models.CharField(max_length = 50,  null = False, blank=False)
@@ -267,28 +326,10 @@ class Alert(models.Model):
 
 
 #
-# class NAMI(models.Model):
-#     nami_id  = models.AutoField(primary_key = True)
-#     resident = models.ForeignKey(
-#         Resident,
-#         on_delete = models.CASCADE,
-#     )
-#     application = models.ForeignKey(
-#         Application,
-#         on_delete = models.CASCADE,
-#         null = True,
-#     )
-#     document = models.ForeignKey(
-#         Document,
-#         on_delete = models.CASCADE,
-#         null = True,
-#     )
-#     start_date  = models.DateField(null = True, blank = True)
-#     end_date  = models.DateField(null = True, blank = True)
-#     amount = models.FloatField(null = True, blank = True)
-#     document_submitted = models.BooleanField(null = True, blank = True)
 
-#
+
+
+
 # class Snowden(models.Models):
 #     log_id = models.BigAutoField(primary_key = True)
 #     # user = models.RFi
