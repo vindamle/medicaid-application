@@ -5,11 +5,11 @@ from django.views import generic
 from .forms import NameForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .models import *
+from .models import Resident, Application, Alert, AlertType,Phase, RFI
 from .additionalInfo import AdditionalInfo
 
 def update_list(request):
-    
+
     requested_resident_id = request.GET['resident_id']
     track = request.GET['tracking']
 
@@ -97,14 +97,15 @@ def phase_change(request):
     return HttpResponse(str(phase.phase_name))
 
 def create_response(request):
+
     application_id = int(request.GET['application_id'])
     response_type = request.GET['response_type']
     response = Response.objects.create(application_id = application_id, response_type = ResponseType.objects.get(response_type = response_type))
     if response_type == 'rfi':
         rfi = RFI.objects.create(response = response)
-    return_info = rfi.rfi_id
-    # elif response_type == 'approved':
-    #     response_id = 2
+        return_info = rfi.rfi_id
+    elif response_type == 'approved':
+        return_info = 45
     # elif response_type == 'denied':
     #     response_id = 3
     return HttpResponse(return_info)
@@ -117,4 +118,23 @@ def update_rfi(request):
     rfi = RFI.objects.get(rfi_id = rfi_id)
     field = setattr(rfi, column,new_value)
     rfi.save()
+    return HttpResponse("200")
+
+
+def update_denial(request):
+    # rfi_id = int(request.GET['rfi_id'])
+    # column =request.GET['column']
+    # new_value =request.GET['new_value']
+    # rfi = RFI.objects.get(rfi_id = rfi_id)
+    # field = setattr(rfi, column,new_value)
+    # rfi.save()
+    return HttpResponse("200")
+
+def update_approval(request):
+    # rfi_id = int(request.GET['rfi_id'])
+    # column =request.GET['column']
+    # new_value =request.GET['new_value']
+    # rfi = RFI.objects.get(rfi_id = rfi_id)
+    # field = setattr(rfi, column,new_value)
+    # rfi.save()
     return HttpResponse("200")

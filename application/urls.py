@@ -12,6 +12,9 @@ urlpatterns = [
     path('ajax/phase_change/', views.phase_change, name = 'phase_change'),
     path('ajax/update_rfi/', views.update_rfi, name = 'update_rfi'),
     path('ajax/create_response/', views.create_response, name = 'create_response'),
+    path('ajax/update_approval/', views.update_approval, name = 'update_approval'),
+    path('ajax/update_denial/', views.update_denial, name = 'update_denial'),
+
 
 
 ]
