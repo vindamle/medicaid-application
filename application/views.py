@@ -5,7 +5,7 @@ from django.views import generic
 from .forms import NameForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .models import Resident, Application, Alert, AlertType,Phase, RFI
+from .models import Resident, Application, Alert, AlertType,Phase, RFI, Response, ResponseType
 from .additionalInfo import AdditionalInfo
 
 def update_list(request):
