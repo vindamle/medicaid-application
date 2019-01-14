@@ -187,8 +187,8 @@ for (let i = 0; i < coll.length; i++) {
   h4.addEventListener("click", function() {
     this.classList.toggle("activeSection");
     let content = h4.nextElementSibling; 
-    console.log(content)
-    console.log(content.style.maxHeight);
+    // console.log(content)
+    // console.log(content.style.maxHeight);
     if (content.style.maxHeight != "0px"){
       content.style.maxHeight = "0px";
     } else {

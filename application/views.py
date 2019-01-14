@@ -5,7 +5,7 @@ from django.views import generic
 from .forms import NameForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .models import Resident, Application, Alert, AlertType,Phase, RFI
+from .models import *
 from .additionalInfo import AdditionalInfo
 
 def update_list(request):
@@ -96,12 +96,18 @@ def phase_change(request):
 
     return HttpResponse(str(phase.phase_name))
 
-def create_rfi(request):
-    resident_id =int(request.GET['resident_id'])
+def create_response(request):
     application_id = int(request.GET['application_id'])
-    print(resident_id, application_id)
-    rfi = RFI.objects.create(resident_id = resident_id, application_id = application_id)
-    return HttpResponse(str(rfi.rfi_id))
+    response_type = request.GET['response_type']
+    response = Response.objects.create(application_id = application_id, response_type = ResponseType.objects.get(response_type = response_type))
+    if response_type == 'rfi':
+        rfi = RFI.objects.create(response = response)
+    return_info = rfi.rfi_id
+    # elif response_type == 'approved':
+    #     response_id = 2
+    # elif response_type == 'denied':
+    #     response_id = 3
+    return HttpResponse(return_info)
 
 
 def update_rfi(request):
