@@ -102,9 +102,9 @@ def create_response(request):
     response = Response.objects.create(application_id = application_id, response_type = ResponseType.objects.get(response_type = response_type))
     if response_type == 'rfi':
         rfi = RFI.objects.create(response = response)
-    return_info = rfi.rfi_id
-    # elif response_type == 'approved':
-    #     response_id = 2
+        return_info = rfi.rfi_id
+    elif response_type == 'approved':
+        return_info = 45
     # elif response_type == 'denied':
     #     response_id = 3
     return HttpResponse(return_info)
