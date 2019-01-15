@@ -79,6 +79,8 @@ class Phase(models.Model):
 def get_path(instance  , file_name):
     return 'static/applications/'+str(instance.resident.resident_id)+"/"+str(instance.application_id)+"/"+file_name
 
+
+
 class Document(models.Model):
     document_id  = models.AutoField(primary_key = True)
     # File Info
@@ -97,6 +99,22 @@ class Document(models.Model):
     class Meta:
         verbose_name = 'Documents'
         verbose_name_plural = 'Documents'
+
+
+class Confirmation(models.Model):
+    confirmation_id  = models.AutoField(primary_key = True)
+
+    confirmation_document = models.ForeignKey(
+        Document,
+        on_delete = models.CASCADE,
+    )
+
+    description = models.CharField(max_length = 100, null = True, blank = True)
+    date_uploaded  = models.DateTimeField(null = True, blank = True)
+
+    class Meta:
+        verbose_name = 'Confirmations'
+        verbose_name_plural = 'Confirmations'
 
 class Application(models.Model):
 
@@ -146,8 +164,12 @@ class Application(models.Model):
         Document,
         on_delete = models.CASCADE,
         null = True,
+    )
 
-
+    application_confirmation = models.ForeignKey(
+        Confirmation,
+        on_delete = models.CASCADE,
+        null = True,
     )
     # date_of_medicaid_approval  = models.DateTimeField(null = True, blank = True)
     # date_of_medicaid_recertification  = models.DateTimeField(null = True, blank = True)
