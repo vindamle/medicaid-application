@@ -6,10 +6,8 @@ import pytz
 class Pickupdate:
     def __init__(self):
 
-
-
-        self.user = 'postgres'
-        self.password = 'Oct2018!'
+        self.user = 'marc'
+        self.password = 'Aug.2018'
         self.database_name = 'medicaid'
 
         self.database_url = 'postgresql://{user}:{password}@localhost/{database_name}'.format(
@@ -22,7 +20,7 @@ class Pickupdate:
 
     def check_alert_test(self, days, alert_priority, alert_id):
 
-        sql = """SELECT * FROM application_applicationtracking;"""
+        sql = """SELECT * FROM application_application;"""
         sql2 = """SELECT * FROM application_resident;"""
         sql3 = """SELECT * FROM application_alerttype;"""
 
@@ -42,7 +40,7 @@ class Pickupdate:
         alert_table["alert_status"] = False
 
         alert_table= alert_table.rename(index = str , columns = {'tracking_id':'application_id'})
-        cols = {"a":"alert_priority","b":"alert_status","c":"alert_message","d":"alert_type_id","e":"application_id","f":"resident_id"}
+        cols = {"a":"alert_priority","b":"alert_status","d":"alert_type_id","e":"application_id","f":"resident_id"}
         for i in range(0,100):
 
             alert_table["daysLeft"] = (alert_table["medicaid_pickup_deadline"]-pd.to_datetime(pytz.utc.localize(datetime.now()+ timedelta(days=i)))).dt.days
