@@ -352,3 +352,311 @@ $('#approveBtn').click((e) => {
 // 		};
 // 	};
 // });
+
+	<!-- <script type="text/javascript">
+
+//	const addAjaxEventListenersToAllInputTypes = (parent) => {
+// 	const inputs = parent.querySelectorAll('INPUT'); //this includes checkboxes
+// 	const selectFields = parent.querySelector('SELECT');
+// 	// Add eventListeners for select fields to send their info to DB via AJAX:
+// 		for (let i = 0; i < selectFields.length; i++) {
+// 		const selectField = selectFields[i];
+// 		addSelectEventListener(selectField);
+// 	};
+// 	// Add eventListeners for inputs to focus them and send their info to DB via AJAX:
+// 	for (var i = 0; i < inputs.length; i++) {
+// 		const input = inputs[i]
+// 		if (input.type == 'checkbox') {
+// 			console.log("It's a checkbox!");
+// 		} else {
+// 			//add autofocus on clicking an input:
+// 			input.addEventListener('click', () => {
+// 				input.select();
+// 			})
+// 			// Pressing 'Enter' in an input leaves editing mode - MIGHT BE IRRELEVANT, AS PRESSING 'ENTER' = FOCUSOUT
+// 			input.addEventListener('keyup',(e)=>{
+// 		    if (e.keyCode === 13) {
+// 					input.blur(); // this will trigger the 'blur' eventListener and send info to DB
+// 			  };
+// 			});
+// 			// Leaving an input is same as pressing 'Enter':
+// 			input.addEventListener('blur',()=>{
+// 				sendInputInfoToDB(input);
+// 			});
+// 		}
+// 	};
+// }
+
+
+// const documentation = [
+// "U.S. Birth Certificate",
+// "Naturalization papers or alien registration card",
+// "Social Security Card",
+// "Marriage/Divorce/Death Certificates",
+// "Veterans discharge paperwork",
+// "Medicare Card",
+// "Other Health Insurance cards",
+// "Proof of health insurance premiums",
+// "If employed current pay stubs for past 8 weeks",
+// "Social Security Amount Received Monthly:   Award letter",
+// "Workers’ Compensation:   Award letter or Check stub ",
+// "Veterans’ Benefits: award letter or letter from Veterans Affair",
+// "Military Pay:  Award letter or pay stub",
+// "Income from Rent or Room/Board:   Letter from roomer, boarder, tenant, copy of lease",
+// "Private Pensions/Annuities:  Letter from company or pay stub",
+// "Power of Attorney or statement assigning representative",
+// "Property Deed",
+// "All bank account statement for past 5 years",
+// "Verification of any sold or closed stock accounts past 5 years",
+// "Verification of any transferred property past 5 years",
+// "Life insurance policies:  Cash and Face Values",
+// "Copy of all Trust Funds",
+// "Information on pending lawsuits",
+// "Proof of Irrevocable burial accounts",
+// "Burial Plots",
+// "Unpaid medical bills",
+// "Proof from Doctor at Nursing Home if short-term or long-term care"
+// ]
+
+
+// const third = documentation.length/3
+// const columnsArray = [
+// 	documentation.slice(0,third),
+// 	documentation.slice(third,(third*2)),
+// 	documentation.slice((third*2),documentation.length + 1)
+// ]
+
+// // function dividArray(myArray){
+//     // let index = 0;
+//     const arrayLength = documentation.length;
+//     let tempArray = [];
+//     for (let index = 0; index < arrayLength; index += 3) {
+//         const myChunk = documentation.slice(index, index+3);
+//         // Do something if you want with the group
+//         tempArray.push(myChunk);
+//     }
+// console.log(tempArray)
+
+
+
+
+
+// let rfiHTML = `
+// <div class="container-fluid">
+// 	<div class="row">
+// `
+
+// for (var i = 0; i < columnsArray.length; i++) {
+// 	rfiHTML += "<div class='col-lg-4'>"
+// 	const columnArray = columnsArray[i]
+// 	let documentationChecklist = ""
+// 	for (let i = 0; i < columnArray.length; i++) {
+// 		doc = columnArray[i]
+// 		const words = doc.split(' ')
+// 		const docNoSpaces = words.join('_')
+// 		documentationChecklist += `
+// 		<input type="checkbox" value="${doc}" class="documentationCheckBox" id="${docNoSpaces}_checkbox"><label for="${docNoSpaces}_checkbox" class="documentationLabel">${doc}</label>
+// 		<br>
+// 		`
+// 	}
+// 	rfiHTML += documentationChecklist;
+// 	rfiHTML += "</div>"
+// }
+
+// rfiHTML += `
+// </div>
+// </div>
+// `
+// let containsRow = false
+// const addEventListenersToDocumentationCheckboxes = () => {
+// 	document.addEventListener('change', (e) => {
+// 		if (e.target.classList.contains('documentationCheckBox') && e.target.checked){
+// 			if (!containsRow) {
+// 				applicationInfoSection.innerHTML += "<h6>Documentation Upload</h6>"
+// 				let containerDiv = document.createElement('DIV');
+// 				containerDiv.classList.add('container-fluid')
+// 				containerDiv.id = "documentUploadFormsDiv"
+// 				let rowDiv = document.createElement('DIV');
+// 				rowDiv.classList.add('row')
+// 				rowDiv.id = "documentUploadFormsRow"
+// 				containerDiv.appendChild(rowDiv)
+// 				applicationInfoSection.appendChild(containerDiv)
+// 				containsRow = true;
+// 			}
+// 			const checkbox = e.target;
+// 			let rowDiv = document.querySelector('#documentUploadFormsRow')
+// 			rowDiv.innerHTML += `
+// 	 			<div class="col-lg-4">
+// 	 				<form class="fileInputLi" id="${checkbox.id.slice(0, -9)}" method="post" enctype="multipart/form-data">
+// 	 	  			{% csrf_token %}
+// 	 					<label>Upload ${checkbox.value} Here:</label>
+// 	 					<input type="file" name="${checkbox.id.slice(0, -9)}" value="{{application.rfi}}" accept="image/jpeg
+// 	 					,image/png,application/pdf" multiple>
+// 	 					<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
+// 	 					<input type="hidden" name="file_type" value="${checkbox.id.slice(0, -9)}">
+// 	 					<button type="submit" class="uploadBtn">Upload</button>
+// 	 				</form>
+// 	 			</div>
+// 	 		`
+// 		};
+
+// 	});
+	// const documentationCheckBoxes = document.querySelectorAll('.documentationCheckBox');
+	// for (var i = 0; i < documentationCheckBoxes.length; i++) {
+	// 	const checkbox = documentationCheckBoxes[i];
+	// 	console.log(checkbox)
+	// 	checkbox.addEventListener('change', () => {
+	// 		applicationInfoSection.innerHTML += `
+	// 			<div class="col-lg-3">
+	// 				<form class="fileInputLi" id="${checkbox.id.slice(0, -9)}" method="post" enctype="multipart/form-data">
+	// 	  			{% csrf_token %}
+	// 					<label>Upload ${checkbox.value} Here:</label>
+	// 					<input type="file" name="${checkbox.id.slice(0, -9)}" value="{{application.medicaid_application}}" accept="image/jpeg
+	// 					,image/png,application/pdf" multiple>
+	// 					<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
+	// 					<input type="hidden" name="file_type" value="${checkbox.id.slice(0, -9)}">
+	// 					<button type="submit" class="uploadBtn">Upload</button>
+	// 				</form>
+	// 			</div>
+	// 		`
+	// 	});
+	// };
+// }
+// console.log(documentationChecklist);
+
+		const personalInfoObjects = [];
+
+		function newLi(labelValue, inputValue, inputType) {
+			const liObject = {
+				label: labelValue,
+				value: inputValue,
+				type: inputType
+			};
+			personalInfoObjects.push(liObject);
+			// this.labelValue = labelValue;
+  	// 	this.spanValue = spanValue;
+		};
+
+		const personalInfoFields = [
+			['First Name','{{resident.first_name}}', 'text'],
+			['Last Name','{{resident.last_name}}', 'text'],
+			['Date of Birth','{{resident.dob|date:"Y-m-d"}}', 'date'],
+		]
+
+		// newLi('First Name','{{resident.first_name}}', 'text');
+		// newLi('Last Name','{{resident.last_name}}', 'text');
+		for (var i = 0; i < personalInfoFields.length; i++) {
+			const field = personalInfoFields[i];
+			newLi(field[0],field[1], field[2]);
+		};
+
+		// console.log(personalInfoObjects);
+		const demoSection = document.querySelector('#demo');
+		// const someText = "<span>Hello</span>"
+
+		for (var i = 0; i < personalInfoObjects.length; i++) {
+			const field = personalInfoObjects[i];
+			demoSection.innerHTML += `
+			<li class="editableLi">
+				<label>${field['label']}</label>
+				<input type="${field['type']}" class="editable" id="first_name" data-table="alert" data-alert_id="" value="${field['value']}">
+			</li>
+			`
+		}
+
+			const addEventListenerToResponse = (responseField.value) => {
+			// const appSection = document.querySelector('#applicationInfoSection');
+			// console.log(responseField);
+			responseField.addEventListener('change', (e) => {
+				// sendInputInfoToDB(response_select)
+				// const options = responseField.querySelectorAll('OPTION');
+				// 	for (let x = 0; x < options.length; x++) {
+				// 		const option = options[x];
+				// 		if (option.value == e.target.value) {
+				// 			option.setAttribute("selected", "selected");
+				// 		};
+				// 	};
+				//generate new html depending on selected option:
+
+				if (e.target.value == 'rfi') {
+					// send selection to db:
+					// const section = e.target.parentNode.parentNode.parentNode.parentNode.parentNode;
+					// const application_id = section.querySelector('.applicationId').innerHTML;
+					// dataObject = {
+					// 	// method: "create",
+					// 	resident_id: {{resident.resident_id}},
+					// 	application_id: application_id
+					// 	// rfi_id:
+					// }
+					// updateDB("rfi", dataObject, "RFI row created!");
+					// if approved was showing, unshow it:
+					// $('#approvedSection').css('display', 'none');
+					//add rfi section:
+					// applicationInfoSection.insertAdjacentHTML("beforeend", newResponseRowHTML);
+					// set application_id in needed sections of the new html:
+					// section.querySelector('.formApplicationId').setAttribute('value', application_id)
+					// const rfiRow = section.lastElementChild;
+					// const elements = rfiRow.querySelectorAll('.needsAttributesSet');
+					// for (var i = 0; i < elements.length; i++) {
+					// 	const element = elements[i];
+					// 	element.setAttribute('data-application_id', application_id);
+					// }
+					// addAjaxEventListenersToAllInputTypes(rfiRow)
+
+					// let newID = `#response${submission}_select`
+					// addEventListeners(newID);
+					// const submittedCheckbox2 = document.querySelector('#documentationSubmittedCheckbox2');
+					// $(document).ready(()=>{
+					// 	if(submittedCheckbox2.checked) {
+					// 		$('.step4').css('display', 'block');
+					// 	}
+					// });
+					// submittedCheckbox2.addEventListener('change', (e) => {
+					// 	if(submittedCheckbox2.checked) {
+					// 		submission += 1;
+					// 			$('.step4').fadeIn();
+					// 	} else {
+					// 		submission -= 1;
+					// 		// $('.step4').css('display', 'none');
+					// 	};
+					// });
+// 				}	else if (e.target.value == 'denied') {
+// 					$('#approvedSection').css('display', 'none');
+// 				} else if (e.target.value == 'approved'){
+// 					$('#approvedSection').css('display', 'block');
+// 				};
+// 			});
+// 		};
+
+// 	</script> 
+// •	Any admission that is Medicaid (or Mltc) should have a page created. The page should have:
+// o	Name of resident (preferably generated from NCS)
+// o	Admission date (preferably generated from NCS)
+// o	Medicaid Pickup Date (i.e. the date from which Medicaid is needed to cover)
+// o	Application type (New application, conversion, recertification – single, spousal, SSI)
+// o	County in which the application is being filed (specific to most states which have a county system)
+// o	Applicant resource information
+// o	Income and NAMI information (preferably generated from NCS)
+
+// Application History
+// The program should include the following fields for data entry
+// •	Date of application submission
+// o	Field to upload the Medicaid application (requirements will vary by state)
+// o	Field to upload confirmation of receipt by the Medicaid office
+// •	Date of RFI issued by the Medicaid Office
+// o	Field to upload RFI
+// •	Date of RFI deadline
+// •	Items required for the RFI (have it become a checklist once typed in as we have in some other programs)
+// •	Note section for correspondence with the Medicaid office
+// If approved
+// •	Date of Medicaid approval
+// o	Field to upload Medicaid approval
+// •	Date recertification is needed
+// If denied
+// •	Date of Medicaid Denial
+// o	Field to upload Medicaid denial
+// •	Date of fair hearing request
+// o	Field to upload confirmation of fair hearing request
+// •	Date of fair hearing
+// o	Field to upload fair hearing notice
+// •	Denial triggers the need for new application which should restart the process

@@ -45,6 +45,12 @@ const sendInputInfoToDB = input => {
 	 dataObject["application_id"] = input.getAttribute('data-application_id')
 	} else if (table == "rfi") {
 	 dataObject["rfi_id"] = input.getAttribute('data-rfi_id')	
+	} else if (table == "approval") {
+	 dataObject["approval_id"] = input.getAttribute('data-approval_id')	
+	} else if (table == "denial") {
+	 dataObject["denial_id"] = input.getAttribute('data-denial_id')	
+	} else if (table == "nami") {
+	 dataObject["nami_id"] = input.getAttribute('data-nami_id')
 	}
 	let successMessage = `Value of ${dataObject.column} in the ${table} table set to ${dataObject.new_value}`;
 	updateDB(table, dataObject, successMessage);
@@ -181,34 +187,3 @@ for (var i = 0; i < editableInputs.length; i++) {
 // })
 
 
-const coll = document.getElementsByClassName("collapsibleSection");
-for (let i = 0; i < coll.length; i++) {
-	let h4 = coll[i];
-  h4.addEventListener("click", function() {
-    this.classList.toggle("activeSection");
-    let content = h4.nextElementSibling; 
-    // console.log(content)
-    // console.log(content.style.maxHeight);
-    if (content.style.maxHeight != "0px"){
-      content.style.maxHeight = "0px";
-    } else {
-      content.style.maxHeight = content.scrollHeight + "px";
-    } 
-
-
-   //  if (content.style.display !== "none") {
-   //  	h4.style.width = '100%';
-   //  	h4.style.marginLeft = '0';
-			// section.style.width = "100%";
-			// // section.style.width = "400px";
-			// section.style.height = "50px";
-   //    content.style.display = "none";
-
-   //  } else {
-   //  	// h4.style.width = '420px';
-   //  	section.style.width = "initial";
-			// section.style.height = "initial";
-   //    content.style.display = "block";
-   //  }
-  });
-}
