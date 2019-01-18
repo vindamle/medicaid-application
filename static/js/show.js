@@ -2,7 +2,7 @@ const phaseChange = (element, phaseId) => {
 	const dataObject = {
 		application_id: $(element).closest('.applicationPage').get(0).getAttribute('data-application_id'),
 		phase_id: phaseId
-	}
+	};
 		const successMessage = `phase changed to ${dataObject.phase_id}`;
 		const ajaxCall = $.ajax(
 	{
@@ -18,7 +18,7 @@ const phaseChange = (element, phaseId) => {
 		}
 	});
 	return(ajaxCall);
-}
+};
 
 const updateDB = (table, dataObject, successMessage) => {
 	const ajaxCall = $.ajax(
@@ -32,8 +32,7 @@ const updateDB = (table, dataObject, successMessage) => {
 		}
 	});
 	return(ajaxCall);
-}
-
+};
 const sendInputInfoToDB = input => {
 	const table = input.getAttribute('data-table');
 	let dataObject = {
@@ -42,15 +41,15 @@ const sendInputInfoToDB = input => {
 		new_value: input.value
 	};
 	if (table == "application") {
-	 dataObject["application_id"] = input.getAttribute('data-application_id')
+	 dataObject.application_id = input.getAttribute('data-application_id')
 	} else if (table == "rfi") {
-	 dataObject["rfi_id"] = input.getAttribute('data-rfi_id')	
+	 dataObject.rfi_id = input.getAttribute('data-rfi_id')	
 	} else if (table == "approval") {
-	 dataObject["approval_id"] = input.getAttribute('data-approval_id')	
+	 dataObject.approval_id = input.getAttribute('data-approval_id')	
 	} else if (table == "denial") {
-	 dataObject["denial_id"] = input.getAttribute('data-denial_id')	
+	 dataObject.denial_id = input.getAttribute('data-denial_id')	
 	} else if (table == "nami") {
-	 dataObject["nami_id"] = input.getAttribute('data-nami_id')
+	 dataObject.nami_id = input.getAttribute('data-nami_id')
 	}
 	let successMessage = `Value of ${dataObject.column} in the ${table} table set to ${dataObject.new_value}`;
 	updateDB(table, dataObject, successMessage);
@@ -62,11 +61,11 @@ const sendInputInfoToDB = input => {
 			addressed: true
 		 };
 		 if (table == "application") {
-		 	dataObject["application_id"] = input.getAttribute('data-application_id')
+		 	dataObject.application_id = input.getAttribute('data-application_id')
 		 }
 		 successMessage = `Value of 'addressed' for alert with id ${dataObject.alert_id} in the alert table set to ${dataObject.addressed}`;
 		 updateDB("alert", dataObject, successMessage);
-	};
+	}
 };
 
 const addSelectEventListener = selectField => {
@@ -86,7 +85,7 @@ alertDiv.addEventListener('click', (e) => {
 		const successMessage = `Alert status for alert with id ${dataObject.alert_id} set to true`;
 		updateDB("alert", dataObject, successMessage)
 		$(alert).css('display', 'none');
-	};
+	}
 });
 
 const meetingCheckbox = document.querySelector('.meetingCheckbox');
@@ -103,7 +102,7 @@ $(document).ready(()=>{
 	}
 })
 
-meetingCheckbox.addEventListener('change', (e) => {
+meetingCheckbox.addEventListener('change', () => {
 	if(meetingCheckbox.checked) {
 		if(!$('#appointment_date').val()){
 			alert("Please enter a meeting date")

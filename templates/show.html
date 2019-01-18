@@ -6,8 +6,6 @@
 {% load static %}
 {% load humanize %}
 
-{% load application_extras %}
-
 <div class="alertDiv">
 	{% for alert in resident_alerts %}
 			<div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -25,10 +23,10 @@
 	<h1 class="">{{application.resident.first_name}} {{application.resident.last_name}}</h1>
 	<h5 id="showStatus">Status: {{application.phase.phase_name}}</h5>
 	<section>
-		<h4 class="collapsibleSection">Personal Information:</h4>
+		<h4 class="collapsibleSection" onclick="collapseSection(this)">Personal Info:</h4>
 		<ul class="collapsibleContent">
 			<div class="row">
-				<div class="col-lg-4 applicationColumn">
+				<div class="col-lg-4 applicationColumn firstColumn">
 					<li>
 						<label>Resident Name:</label>
 						<span class="">{{application.resident.first_name}} {{application.resident.last_name}}</span>
@@ -81,10 +79,10 @@
 		</ul>
 	</section>
 	<section>
-		<h4 class="collapsibleSection">Insurance Information:</h4>
+		<h4 class="collapsibleSection"  onclick="collapseSection(this)">Insurance Info:</h4>
 		<ul class="collapsibleContent">
 			<div class="row">
-				<div class="col-lg-4 applicationColumn">
+				<div class="col-lg-4 applicationColumn firstColumn">
 					<li class="editableLi">
 						<label>Primary Payor:</label>
 						<input class="editable" id="primary_payor" data-table="resident" data-alert_id="" type="text" value="{{application.resident.primary_payor}}">
@@ -122,17 +120,17 @@
 			</div>
 		</ul>
 	</section>
-	<section >
+		<div id="applicationDiv">
+	<section id="applicationInfoSection">
 		<span class="invisible applicationId">{{application.application_id}}</span>
-		<h4 class="collapsibleSection">Medicaid Application Information:</h4>
-		<div class="collapsibleContent" id="applicationInfoSection">
-			<ul>
+		<h4 class="collapsibleSection" onclick="collapseSection(this)">Application Info:</h4>
+			<ul class="collapsibleContent">
 				<div class="row">
-					<div class="col-lg-4 applicationColumn">
+					<div class="col-lg-4 applicationColumn firstColumn">
 						<li class="step3">
 							<label>Application Type:</label>
 							<select name="application_type" id="application_type" data-table="application" data-application_id="{{application.application_id}}">
-								<option value="">Please select one:</option>
+								<option value="">Select one:</option>
 								<option value="new_application">New Application</option>
 								<option value="conversion">Conversion</option>
 								<option value="payor_change">Payor Change</option>
@@ -142,7 +140,7 @@
 						<li class="step3">
 							<label>Spousal/Single:</label>
 							<select name="spousal" id="spousal" data-table="application" data-application_id="{{application.application_id}}">
-								<option value="">Please select one:</option>
+								<option value="">Select one:</option>
 								<option value="single">Single</option>
 								<option value="spousal">Spousal</option>
 							</select>
@@ -151,7 +149,7 @@
 						<li class="editableLi step3">
 							<label>Short-term/Long-Term Care:</label>
 							<select name="ltc" id="ltc" data-table="application" data-application_id="{{application.application_id}}">
-								<option value="">Please select one:</option>
+								<option value="">Select one:</option>
 								<option value="short_term">Short-Term</option>
 								<option value="long_term">Long-Term</option>
 							</select>
@@ -160,7 +158,7 @@
 						<li class="editableLi step3">
 							<label>Spousal Refusal:</label>
 							<select name="spousal_refusal" id="spousal_refusal" data-table="application" data-application_id="{{application.application_id}}">
-								<option value="">Please select one:</option>
+								<option value="">Select one:</option>
 								<option value="yes">Yes</option>
 								<option value="no">No</option>
 							</select>
@@ -218,10 +216,8 @@
 						</li>
 					</div>
 				</div>
-			</ul>
 			<hr class= step3">
 			<!-- <h6 class="step3" id=Heading">Submission #1</h6> -->
-			<ul class="">
 				<div class="row">
 					<div class="col-lg-3">
 						<li class="step3">
@@ -233,6 +229,7 @@
 						</li>
 					</div>
 					<div class="col-lg-3">
+						<li class="step3">
 						{% if application.application_document %}
 						<p>Document Uploaded:</p>
 						<a href="/{{ application.application_document.file }}" target = "_blank">{{application.application_document.file_name}}</a>
@@ -247,19 +244,20 @@
 							<button type="submit" class="uploadBtn">Upload</button>
 						</form>
 						{% endif %}
+					</li>
 					</div>
 					<div class="col-lg-3">
 						<li class="step4">
-							{% if application.application_confirmation.document %}
+							{% if application.application_confirmation.confirmation_document %}
 							<p>Document Uploaded:</p>
-							<a href="/{{ application.application_document.file }}" target = "_blank">{{application.application_document.file_name}}</a>
+							<a href="/{{ application.application_confirmation.confirmation_document.file }}" target = "_blank">{{application.application_confirmation.confirmation_document.file_name}}</a>
 							{% else %}
-							<form class="fileInputLi" id="medicaid_confirmation" method="post" enctype="multipart/form-data">
+							<form class="fileInputLi" id="application_confirmation" method="post" enctype="multipart/form-data">
 								{% csrf_token %}
 								<label>Upload Medicaid Confirmation Here:</label>
 								<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
-								<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
-								<input type="hidden" name="file_type" value="medicaid_confirmation">
+								<input type="hidden" name="resident_id" value="{{application.resident.resident_id}}">
+								<input type="hidden" name="file_type" value="application_confirmation">
 								<input type="hidden" name="application_id" value="{{application.application_id}}">
 								<button type="submit" class="uploadBtn">Upload</button>
 							</form>
@@ -284,7 +282,7 @@
 		</div>
 	</section>
 	<section class="" id="deniedSection">
-		<h4 class="collapsibleSection">Denial Information:</h4>
+		<h4 class="collapsibleSection" onclick="collapseSection(this)">Denial Info:</h4>
 		<ul>
 			<div class="row">
 				<div class="col-lg-4 applicationColumn">
@@ -324,7 +322,7 @@
 					<li class="editableLi">
 						<label>Fair Hearing Required?</label>
 						<select name="fair_hearing_required" id="fair_hearing_required" data-table="application" data-application_id="{{application.application_id}}">
-							<option value="">Please select one:</option>
+							<option value="">Select one:</option>
 							<option value="yes">Yes</option>
 							<option value="no">No</option>
 						</select>
@@ -338,17 +336,10 @@
 			</div>
 		</ul>
 	</section>
+</div><!-- end of applicationDiv-->
 {% endfor %} <!-- end of for application in applications loop -->
 </div>
 {% endblock %}
-
-
-
-
-
-
-
-
 
 
 
@@ -370,7 +361,7 @@
 <script src="{% static 'js/show.js' %}"></script>
 <script type="text/javascript">
 // Submission behavior, including generating new HTML based on Medicaid response(s):
-const applicationInfoSection = document.querySelector('#applicationInfoSection');
+const applicationDiv = document.querySelector('#applicationDiv');
 const date_of_application_submission = document.querySelector('#date_of_application_submission');
 const initial_response = document.querySelector('#initial_response');
 let numberOfNAMIs;
@@ -418,33 +409,41 @@ $(document).ready(()=>{
 		};
 	};
 
-	const coll = document.getElementsByClassName("collapsibleSection");
-for (let i = 0; i < coll.length; i++) {
-	let h4 = coll[i];
-  h4.addEventListener("click", function() {
-    this.classList.toggle("activeSection");
-    let content = h4.nextElementSibling; 
-    // console.log(content)
-    // console.log(content.style.maxHeight);
-    if (content.style.maxHeight != "0px"){
-      content.style.maxHeight = "0px";
-    } else {
-      content.style.maxHeight = content.scrollHeight + "0px";
-    } 
-  });
-}
+
+
+
+// 	const coll = document.getElementsByClassName("collapsibleSection");
+// for (let i = 0; i < coll.length; i++) {
+// 	let h4 = coll[i];
+//   h4.addEventListener("click", function() {
+//   	console.log(this)
+//     this.classList.toggle("activeSection");
+//     let content = h4.nextElementSibling; 
+//     // console.log(content)
+//     // console.log(content.style.maxHeight);
+//     if (content.style.maxHeight != "0px"){
+//       content.style.maxHeight = "0px";
+//       content.parentNode.style.maxWidth = "300px";
+//       content.parentNode.style.marginBottom = "60px";
+//     } else {
+//       content.style.maxHeight = content.scrollHeight + "0px";
+//       content.parentNode.style.maxWidth = "100%";
+//       content.parentNode.style.marginBottom = "20px";
+//     } 
+//   });
+// }
 
 {% for rfi in rfis %}
-	  var rfiAppId = {{rfi.response.application.application_id}}
-	  var sectionDiv = document.querySelector("[data-application_id='{{rfi.response.application.application_id}}']");
-	  var section = sectionDiv.querySelector('#applicationInfoSection')
-		numberOfRFIs += 1;
+  var rfiAppId = {{rfi.response.application.application_id}}
+  var sectionDiv = document.querySelector("[data-application_id='{{rfi.response.application.application_id}}']");
+  // var section = sectionDiv.querySelector('#applicationDiv')
+	numberOfRFIs += 1;
 		html += `
-			<hr class="">
-			<h4 class="numberOfRFIs collapsibleSection">RFI #${numberOfRFIs}</h4>
+		<section class="">
+			<h4 class="numberOfRFIs collapsibleSection responseH4" onclick="collapseSection(this)">RFI #${numberOfRFIs}</h4>
 			<ul class="collapsibleContent" id="">
 				<div class="row">
-					<div class="col-lg-3">
+					<div class="col-lg-3 firstColumn applicationColumn">
 						<li class="invisible applicationId">
 						</li>
 						<li class="">
@@ -470,7 +469,7 @@ for (let i = 0; i < coll.length; i++) {
 					<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
 					<input type="hidden" name="resident_id" value="{{rfi.response.application.resident.resident_id}}">
 					<input type="hidden" name="file_type" value="rfi">
-					<input type="hidden" name="application_id" value="${applicationId}">
+					<input type="hidden" name="application_id" value="${rfiAppId}">
 					<input type="hidden" name="rfi_id" value="${rfiId}">
 					<button type="submit" class="uploadBtn">Upload</button>
 				</form>
@@ -479,14 +478,14 @@ for (let i = 0; i < coll.length; i++) {
 		html += `
 			</li>
 			</div>
-			<div class="col-lg-3">
+			<div class="col-lg-3 applicationColumn">
 			<li class="editableLi ">
 			<label>RFI Due Date:</label>
-			<input class="editable date  due_date" id="rfi_due_date" data-table="rfi" data-alert_id="" data-application_id="${applicationId}" data-rfi_id="${rfiId}" type="date" value="${rfiDueDate}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+			<input class="editable date  due_date" id="rfi_due_date" data-table="rfi" data-alert_id="" data-application_id="${rfiAppId}" data-rfi_id="${rfiId}" type="date" value="${rfiDueDate}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
 			</li>
 			<li class="editableLi">
 					<label>Extension Requested?</label>
-					<select name="rfi_extension_request" id="rfi_extension_request" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" onchange="sendInputInfoToDB(this); extensionRequested(this, ${applicationId}, ${rfiId})">
+					<select name="rfi_extension_request" id="rfi_extension_request" data-table="rfi" data-application_id="${rfiAppId}" data-rfi_id="${rfiId}" onchange="sendInputInfoToDB(this); extensionRequested(this, ${rfiAppId}, ${rfiId})">
 						<option value="no">No</option>
 						<option value="yes">Yes</option>
 					</select>
@@ -498,7 +497,7 @@ for (let i = 0; i < coll.length; i++) {
 			html += `
 			<li class="editableLi">
 				<label>Extension Granted?</label>
-				<select name="rfi_extension_response" id="rfi_extension_response" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" onchange="sendInputInfoToDB(this); newRfiDueDatePrompt(this)">
+				<select name="rfi_extension_response" id="rfi_extension_response" data-table="rfi" data-application_id="${rfiAppId}" data-rfi_id="${rfiId}" onchange="sendInputInfoToDB(this); newRfiDueDatePrompt(this)">
 					<option value="no">No</option>
 					<option value="yes">Yes</option>
 				</select>
@@ -509,19 +508,19 @@ for (let i = 0; i < coll.length; i++) {
 			{% endif %}
 			html += `
 				</div>
-				<div class="col-lg-3">
+				<div class="col-lg-3 applicationColumn">
 					<li class="">
-					<label><input type="checkbox" class="documentationSubmittedCheckbox " id="rfi_documentation_submitted" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" ${checked}>Documentation Submitted</label>
+					<label><input type="checkbox" class="documentationSubmittedCheckbox " id="rfi_documentation_submitted" data-table="rfi" data-application_id="${rfiAppId}" data-rfi_id="${rfiId}" ${checked}>Documentation Submitted</label>
 					</li>
 					<li class="editableLi step5 ">
 						<label>Submission Date:</label>
-						<input class="editable date " id="rfi_documentation_submitted_date" data-table="rfi" data-alert_id="" data-application_id="${applicationId}" data-rfi_id="${rfiId}" type="date" value="${rfiDocumentationSubmittedDate}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+						<input class="editable date " id="rfi_documentation_submitted_date" data-table="rfi" data-alert_id="" data-application_id="${rfiAppId}" data-rfi_id="${rfiId}" type="date" value="${rfiDocumentationSubmittedDate}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
 					</li>
 				</div>
-				<div class="col-lg-3">
+				<div class="col-lg-3 applicationColumn">
 					<li class="editableLi step5 ">
 						<label>Response:</label>
-						<select name="response_select" class=" responseSelect" id="rfi_response" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" onchange="createResponseRow(${applicationId}, this); sendInputInfoToDB(this)">
+						<select name="response_select" class=" responseSelect" id="rfi_response" data-table="rfi" data-application_id="${rfiAppId}" data-rfi_id="${rfiId}" onchange="createResponseRow(${rfiAppId}, this); sendInputInfoToDB(this)">
 							<option value="not_recieved">Not recieved</option>
 							<option value="rfi">RFI</option>
 							<option value="approved">Approved</option>
@@ -532,23 +531,40 @@ for (let i = 0; i < coll.length; i++) {
 				</div>
 			</div>
 		</ul>
+		</section>
 		`
 	{% endfor %}
 
 	{% for approval in approvals %}
 		var approvalAppId = {{approval.response.application.application_id}}
 	  var sectionDiv = document.querySelector("[data-application_id='{{approval.response.application.application_id}}']");
-	  var section = sectionDiv.querySelector('#applicationInfoSection')
+	  // var section = sectionDiv.querySelector('#applicationDiv')
 		numberOfApprovals += 1;
 		html += `
-			<hr class="">
-			<h4 class="collapsibleSection">Approval #${numberOfApprovals}:</h4>
+			<section class="">
+			<h4 class="collapsibleSection responseH4"  onclick="collapseSection(this)">Approval #${numberOfApprovals}:</h4>
 			<ul class="collapsibleContent">
 				<div class="row">
-					<div class="col-lg-4 applicationColumn">
-						<li class="editableLi">
+					
+					<div class=" offset-lg-2 col-lg-3 applicationColumn">
+					<li class="editableLi">
 							<label>Approval Notice Date:</label>
 							 <input class="editable date" id="approval_notice_date" data-table="approval" data-approval_id="{{approval.approval_id}}" data-alert_id="" type="date" value="{{approval.approval_notice_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+						</li>
+						<li class="editableLi">
+							<label>Approval Start Date:</label>
+							 <input class="editable date" id="approval_start_date" data-table="approval" data-approval_id="{{approval.approval_id}}" data-alert_id="" type="date" value="{{approval.approval_start_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+						</li>
+						<li class="editableLi">
+							<label>Approval End Date:</label>
+							 <input class="editable date" id="approval_end_date" data-table="approval" data-approval_id="{{approval.approval_id}}" data-alert_id="" type="date" value="{{approval.approval_end_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+						</li>
+</div>
+					<div class="col-lg-4 applicationColumn">
+
+						<li class="editableLi">
+							<label>Recertification Date:</label>
+							<input class="editable date" type="date" value="{{approval.date_of_medicaid_recertification|date:'Y-m-d'}}" data-table="approval" data-approval_id="{{approval.approval_id}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
 						</li>
 						<li class="">
 		`
@@ -572,88 +588,134 @@ for (let i = 0; i < coll.length; i++) {
 		`
 		{% endif %}
 		html += `
+						
 						</li>
-					</div>
-					<div class="col-lg-4 applicationColumn">
-						<li class="editableLi">
-							<label>Approval Start Date:</label>
-							 <input class="editable date" id="approval_start_date" data-table="approval" data-approval_id="{{approval.approval_id}}" data-alert_id="" type="date" value="{{approval.approval_start_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-						</li>
-						<li class="editableLi">
-							<label>Approval End Date:</label>
-							 <input class="editable date" id="approval_end_date" data-table="approval" data-approval_id="{{approval.approval_id}}" data-alert_id="" type="date" value="{{approval.approval_end_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-						</li>
-					</div>
-					<div class="col-lg-4">`
+					
+					`
 						// <li class="editableLi">
 						// 	<label>Fair Hearing Required?</label>
 						// 	<select name="fair_hearing_required" id="fair_hearing_required" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this)">
-						// 		<option value="">Please select one:</option>
+						// 		<option value="">Select one:</option>
 						// 		<option value="yes">Yes</option>
 						// 		<option value="no">No</option>
 						// 	</select>
 						// 	<span class="invisible DBinfo" id="DBspousal_refusal">{{approval.fair_hearing_required}}</span>
 						// </li>
-						html += `<li class="editableLi">
-							<label>Date of Medicaid Recertification:</label>
-							<input class="editable date" type="date" value="{{approval.date_of_medicaid_recertification|date:'Y-m-d'}}" data-table="approval" data-approval_id="{{approval.approval_id}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+						
+							// <!-- Button trigger modal -->
+							html += `
+						`
+						
+						numberOfNAMIs = 1;
+						 html += `
+					
+<div class="modal fade bd-example-modal-lg" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLongTitle">NAMIs</h5>
+      </div>
+      <div class="modal-body">
+        
+							`
+													{% for nami in namis %}
+							{% if nami.approval.approval_id == approval.approval_id %}
+								html += `
+								<div class="NAMIrow">
+											<h6 class="namiH6">NAMI ${numberOfNAMIs}:</h6>
+
+						<div class="col-lg-4 col-sm-12 namiColumn">
+									<li>
+										<label>NAMI End Date:</label>
+											<input class="editable date" id="nami_end_date" data-table="nami" data-nami_id="{{nami.nami_id}}" type="date" value="{{nami.nami_end_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+										</li>
+										
+										</div>
+						<div class="col-lg-4 col-sm-12 namiColumn">
+									<li>
+									<label>NAMI Start Date:</label>
+											<input class="editable date" id="nami_start_date" data-table="nami" data-nami_id="{{nami.nami_id}}" type="date" value="{{nami.nami_start_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+										</li>
+										</div>
+						<div class="col-lg-4 col-sm-12 namiColumn">
+										
+										<li>
+									<label>Amount:</label>
+											$<input type="number" class="editable" id="nami_amount" data-table="nami" data-nami_id="{{nami.nami_id}}" value="{{nami.nami_amount|floatformat:2}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+										</li>
+										</div>
+								</div>		
+										
+										
+								`
+								numberOfNAMIs += 1;
+							{%endif%}
+						{% endfor %}
+      html += `
+      </div>
+      <div class="modal-footer">
+      <div class="editableLi addNamiBtnLi">
+				<button class="addNamiBtn" onclick="addNAMIRowHTML(this, {{approval.approval_id}})">Add NAMI &#x271A; </button>
+			</div>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+`
+		html += `</div>
+						<div class="col-lg-3 applicationColumn">
+						<li>
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" id="namiModalBtn">View/Add NAMIs</button>	
 						</li>
-						<li class="editableLi step6">
-							<label>Satisfied with approval?</label>
-							<select name="satisfied_with_approval" id="satisfied_with_approval" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this)">
-								<option value="">Please select one:</option>
-								<option value="yes">Yes</option>
-								<option value="no">No</option>
-							</select>
-							<span class="invisible DBinfo" id="DBsatisfied_with_approval">{{approval.satisfied_with_approval}}</span>
-						</li>
-					</div>
-					<div class="editableLi addNamiBtnLi">
-							<button class="addNamiBtn" onclick="addNAMIRowHTML(this, {{approval.approval_id}})">Add NAMI &#x271A; </button>
+							<li class="editableLi step6">
+								<label>Satisfied with approval?</label>
+								<select name="satisfied_with_approval" id="satisfied_with_approval" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this)">
+									<option value="">Select one:</option>
+									<option value="yes">Yes</option>
+									<option value="no">No</option>
+								</select>
+								<span class="invisible DBinfo" id="DBsatisfied_with_approval">{{approval.satisfied_with_approval}}</span>
+							</li>
 						</div>
-				</div>
-
-			</ul>
-
+					</div>
+				</ul>
+			</section>
 		`
-		numberOfNAMIs = 1;
-		{% for nami in namis %}
-			{% if nami.approval.approval_id == approval.approval_id %}
-				html += `
-					<div class="row NAMIrow">
-						<div class="col-lg-3">
-							<h6 class="namiH6">NAMI ${numberOfNAMIs}:</h6>
-						</div>
-						<div class="col-lg-3">
-						<label>NAMI Start Date:</label>
-							<input class="editable date" id="nami_start_date" data-table="nami" data-nami_id="{{nami.nami_id}}" type="date" value="{{nami.nami_start_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-						</div>
-						<div class="col-lg-3">
-						<label>NAMI End Date:</label>
-							<input class="editable date" id="nami_end_date" data-table="nami" data-nami_id="{{nami.nami_id}}" type="date" value="{{nami.nami_end_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-						</div>
-						<div class="col-lg-3">
-						<label>Amount:</label>
-							$<input type="text" class="editable" id="nami_amount" data-table="nami" data-nami_id="{{nami.nami_id}}" value="{{nami.nami_amount|floatformat:2}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-						</div>
-					</div>
-				`
-				numberOfNAMIs += 1;
-			{%endif%}
-		{% endfor %}
+		
 	{% endfor %}
 	
-	section.insertAdjacentHTML("beforeend", html);
+						// applicationDiv.insertAdjacentHTML('beforebegin', html);
+	applicationDiv.insertAdjacentHTML("beforeend", html);
 }) // end document.ready
+
+const collapseSection = (h4) => {
+	h4.classList.toggle("activeSection");
+    let content = h4.nextElementSibling; 
+    // console.log(content)
+    // console.log(content.style.maxHeight);
+    if (content.style.maxHeight != "0px"){
+      content.style.maxHeight = "0px";
+      content.parentNode.style.maxWidth = "100px";
+      content.parentNode.style.marginBottom = "30px";
+    } else {
+      content.style.maxHeight = content.scrollHeight + "0px";
+      content.parentNode.style.maxWidth = "100%";
+      content.parentNode.style.marginBottom = "20px";
+    } 
+}
 
 class ResponseRowHTML {
 	constructor (applicationId,responseId) {
 		this.rfiRowHtml = `
 			<hr class="">
-				<h4 class="numberOfRFIs collapsibleSection">RFI #${numberOfRFIs}</h6>
+				<h4 class="numberOfRFIs collapsibleSection responseH4" onclick="collapseSection(this)">RFI #${numberOfRFIs}</h6>
 			<ul class="collapsibleContent" id="">
 				<div class="row">
-					<div class="col-lg-3">
+					<div class="col-lg-3 firstColumn">
 						<li class="invisible applicationId">
 						</li>
 						<li class="">
@@ -709,7 +771,7 @@ class ResponseRowHTML {
 
 		this.approvedRowHtml = `
 		<hr class="">
-		<h4 class="collapsibleSection">Approval Information:</h4>
+		<h4 class="collapsibleSection responseH4" onclick="collapseSection(this)">Approval:</h4>
 		<ul class="collapsibleContent">
 			<div class="row">
 				<div class="col-lg-4 applicationColumn">
@@ -748,7 +810,7 @@ class ResponseRowHTML {
 					<li class="editableLi">
 						<label>Fair Hearing Required?</label>
 						<select name="fair_hearing_required" id="fair_hearing_required" data-table="approval" data-approval_id="${responseId}"  onchange="sendInputInfoToDB(this)">
-							<option value="">Please select one:</option>
+							<option value="">Select one:</option>
 							<option value="yes">Yes</option>
 							<option value="no">No</option>
 						</select>
@@ -761,7 +823,7 @@ class ResponseRowHTML {
 					<li class="editableLi step6">
 						<label>Satisfied with approval?</label>
 						<select name="satisfied_with_approval" id="satisfied_with_approval" data-table="approval" data-approval_id="${responseId}"  onchange="sendInputInfoToDB(this)">
-							<option value="">Please select one:</option>
+							<option value="">Select one:</option>
 							<option value="yes">Yes</option>
 							<option value="no">No</option>
 						</select>
@@ -784,27 +846,33 @@ const addNAMIRowHTML = (addNamiBtn, approvalId) => {
 			},
 			success: function(nami_id) {
 				const html = `
-					<div class="row NAMIrow">
-						<div class="col-lg-3">
+
+
+
+
+					<div class="NAMIrow">
 							<h6 class="namiH6">NAMI ${numberOfNAMIs}:</h6>
-						</div>
-						<div class="col-lg-3">
+						
+						<div class="col-lg-4 col-sm-12 namiColumn">
 						<label>NAMI Start Date:</label>
+						
 							<input class="editable date" id="nami_start_date" data-table="nami" data-nami_id="${nami_id}" type="date" value="{{nami.nami_start_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
 						</div>
-						<div class="col-lg-3">
+						<div class="col-lg-4 col-sm-12 namiColumn">
 						<label>NAMI End Date:</label>
+						
 							<input class="editable date" id="nami_end_date" data-table="nami" data-nami_id="${nami_id}" type="date" value="{{nami.nami_end_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
 						</div>
-						<div class="col-lg-3">
+						<div class="col-lg-4 col-sm-12 namiColumn">
 						<label>Amount:</label>
-							$<input type="text" class="editable" id="nami_amount" data-table="nami" data-nami_id="${nami_id}" value="{{nami.nami_amount}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+						
+							$<input type="number" class="editable" id="nami_amount" data-table="nami" data-nami_id="${nami_id}" value="{{nami.nami_amount|floatformat:2}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
 						</div>
 					</div>
 				`
-				const section = addNamiBtn.parentNode.parentNode.parentNode.parentNode.parentNode;
-				console.log(section)
-				section.insertAdjacentHTML('beforeend', html)
+				const modalBody = addNamiBtn.parentNode.parentNode.parentNode.querySelector('.modal-body');
+				console.log(modalBody)
+				modalBody.insertAdjacentHTML('beforeend', html)
 				numberOfNAMIs += 1;
 			}
 		});
@@ -852,10 +920,10 @@ const createResponseRow = (applicationId, responseField) => {
 			},
 			success: function(responseId) {
 				const newResponseRowHTML = new ResponseRowHTML(applicationId, responseId)
-				applicationInfoSection.insertAdjacentHTML("beforeend", newResponseRowHTML.rfiRowHtml);
+				applicationDiv.insertAdjacentHTML("beforeend", newResponseRowHTML.rfiRowHtml);
 
 				// reset response field to "not Received"
-				const rfiRow = applicationInfoSection.lastElementChild;
+				const rfiRow = applicationDiv.lastElementChild;
 				const selectField = rfiRow.querySelector('SELECT');
 				const options = selectField.querySelectorAll('OPTION');
 				for (let x = 0; x < options.length; x++) {
@@ -878,7 +946,7 @@ const createResponseRow = (applicationId, responseField) => {
 			},
 			success: function(responseId) {
 				const newResponseRowHTML = new ResponseRowHTML(applicationId,responseId)
-				applicationInfoSection.insertAdjacentHTML("beforeend", newResponseRowHTML.approvedRowHtml);
+				applicationDiv.insertAdjacentHTML("beforeend", newResponseRowHTML.approvedRowHtml);
 				phaseChange(responseField, 6);
 			}
 		});

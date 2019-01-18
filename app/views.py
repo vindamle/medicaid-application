@@ -116,16 +116,19 @@ class ShowView(View):
             application = Application.objects.get(application_id = int(application_id))
             application.application_document = new_document
             application.save()
-
-        if type == 'rfi':
+        elif type == 'rfi':
             rfi = RFI.objects.get(rfi_id = int(request.POST.get('rfi_id')))
             rfi.document_id = new_document.document_id
-            rfi.save()
-        
-        if type == 'approval':
+            rfi.save()        
+        elif type == 'approval':
             approval = Approval.objects.get(approval_id = int(request.POST.get('approval_id')))
             approval.document_id = new_document.document_id
             approval.save()
+        elif type == 'application_confirmation':
+            confirmation = Confirmation.objects.create(confirmation_document = new_document, description = type)
+            application = Application.objects.get(application_id = int(application_id))
+            application.application_confirmation = confirmation
+            application.save()
 
         return redirect('/show/?resident_id={}'.format(str(resident_id)))
 
@@ -145,7 +148,7 @@ class ApprovalsView(View):
 
         for result in results:
             self.list.append(result)
-        return render(request,self.template_name, {'list':self.list,"form":self.form_class, 'facilities':facilities})
+        return render(request,self.template_name, {'list':self.list,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
 
@@ -166,7 +169,7 @@ class NotTrackingView(View):
         for result in results:
             self.list.append(result)
 
-        return render(request,self.template_name, {'list':self.list,"form":self.form_class, 'facilities':facilities})
+        return render(request,self.template_name, {'list':self.list,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
         pass

@@ -2,10 +2,14 @@ html, body {
 	overflow-x: hidden;
 }
 
+ul {
+	list-style: none !important;
+}
+
 nav {
 	width: 100vw;
-	position: absolute !important;
-	z-index: 10000;
+	position: relative !important;
+	/*z-index: 10000;*/
 	font-size: 20px;
 	/*background: white;*/
 
@@ -18,7 +22,6 @@ nav li a:hover {
 	color: purple !important;
 }
 nav ul {
-	list-style: none;
 	background: white;
 	padding: 5px;
 	border-radius: 25px;
@@ -136,13 +139,13 @@ nav li.grayText {
 .content {
 	display: none;
 	width: 80vw;
-	margin: 120px 10vw;
+	margin: 20px 10vw 120px 10vw;
 }
 
-@media(max-width: 1399px) {
+@media(max-width: 1824px) {
 	.content {
 		width: 95vw;
-		margin: 100px 2.5vw 20px 0;
+		margin: 100px 2.5vw 20px 1vw;
 	}
 }
 
@@ -369,30 +372,41 @@ table button {
 }
 
 .residentInfoDiv h4 {
-	margin: -8px 0 20px -10px;
-	margin-left: 0;
-	/*width: 420px;*/
+	margin: -20px 0 20px -30px;
+	width: 220px;
+	
 	/*display: inline-block;*/
-	padding: 15px 10px;
+	padding: 10px;
 	text-align: center;
 	/*color: #ee7700;*/
 	color: white;
 	background-color: #237;
 	/*background-color: darkblue;*/
 	/*text-decoration: underline;*/
-	/*border-radius: 25px 0 25px 0;*/
-	border-radius: 5px;
+	/*border-radius: 25px 10px 25px 10px;*/
+	border-radius: 10px;
 	font-size: 20px;
-	box-shadow: 1px 5px 10px #224;
 	-moz-box-shadow: 1px 5px 10px #224, inset 0 0 10px #000000;
    -webkit-box-shadow: 1px 5px 10px #224, inset 0 0 10px #000000;
    box-shadow:  1px 5px 10px #224, inset 0 0 10px #000000;
 }
 
+
+@media(min-width: 998px) {
+	.residentInfoDiv h4 {
+		position: absolute;
+	}
+}
+
+
+.residentInfoDiv h4.responseH4 {
+	width: 220px;
+}
+
 .collapsibleSection {
   cursor: pointer;
   padding: 18px;
-  width: 100%;
+  /*width: 100%;*/
   border: none;
   text-align: left;
   outline: none;
@@ -417,32 +431,39 @@ table button {
 }
 
  .collapsibleContent {
+ 	width: 100%;
   max-height: 1000px;
   overflow: hidden;
-  transition: max-height 0.2s ease-out;
+  /*transition: max-height 0.2s ease-out;*/
 }
 
-.residentInfoDiv #applicationInfoSection {
+ .collapsibleContent {
 	max-height: initial;
 }
 
 .collapsibleSection:after {
-	position: relative;
-  content: "\2796"; /* Unicode character for "minus" sign (-) */
-  font-size: 13px;
+	/*position: relative;*/
+  /*content: "\2796";  Unicode character for "minus" sign (-) */
+  content: '-';
+  /*font-size: 28px;*/
   /*line-height: 1;*/
-  color: red;
+  /*color: white;*/
+  outline: none;
+  /*background: steelblue;*/
+  /*width: 20px;*/
+  /*height: 18px;*/
   /*border: 2px solid steelblue;*/
-  border-radius: 5px;
+  /*border-radius: 5px;*/
   float: right;
-  margin-left: 20px;
-  right: 15px;
+  /*margin-left: 20px;*/
+  /*right: 15px;*/
 }
 
 .activeSection:after {
-	position: relative;
-  content: '\02795'; /* Unicode character for "plus" sign (+) */
-  padding-bottom: 2px;
+	/*position: relative;*/
+  /*content: '\02795';  Unicode character for "plus" sign (+) */
+  content: '+';
+  /*padding-bottom: 2px;*/
 }
 
 
@@ -463,6 +484,7 @@ table button {
 }
 
 .residentInfoDiv section {
+	overflow: hidden;
 	/*border-radius: 25px 0 25px 0;*/
 	border-radius: 5px;
 	margin-top: 30px;
@@ -470,25 +492,31 @@ table button {
 	/*background: white;*/
 	border: 2px solid #eee;
 	box-shadow: 0 5px 5px #ccc;
-	/*padding: 15px 25px 0 25px;*/
-	padding: 0;
 	/*font-size: 16px;*/
 	margin-bottom: 20px;
 }
 
-
+@media(min-width: 768px) {
+	.residentInfoDiv section {
+		padding: 15px 25px 0 25px;
+	}
+}
 @media(max-width: 998px) {
 	.residentInfoDiv section {
 		border-radius: 35px;
+
 	}
-	.residentInfoDiv h4 {
+	.residentInfoDiv h4, .residentInfoDiv h4.responseH4 {
 		width: 100%;
 		margin: 0 auto 20px auto;
-		border-radius: 35px 35px 0 0;
+		/*border-radius: 35px 35px 0 0;*/
+	}
+	.residentInfoDiv h4.responseH4 {
+		border-radius: 5px;
 	}
 }
 
-@media(min-width: 768px) {
+@media(min-width: 1200px) {
 	.residentInfoDiv {
 		font-size: 18px;
 	}
@@ -501,16 +529,22 @@ table button {
 .residentInfoDiv ul {
 	/*padding-left: 10px;*/
 	padding: 0;
-	list-style: none;
+	
 }
 
-.residentInfoDiv .applicationColumn:not(:first-of-type) {
-	margin-top: 10px;
+@media(min-width: 998px) {
+	.residentInfoDiv .firstColumn {
+		margin-top: 45px;
+	}
+}
+
+.residentInfoDiv .applicationColumn {
+	padding-top: 10px;
 }
 
 .residentInfoDiv li {
 	/*margin: 10px 0 10px 20px;*/
-	margin: 5px 0 5px 20px;
+	/*margin: 5px 0 5px 20px;*/
 }
 
 .residentInfoDiv p {
@@ -559,13 +593,14 @@ table button {
 }
  
 input[type="number"] {
-	width: 70px;
+	width: 120px;
 	text-align: center;
     -moz-appearance: textfield;
 }
 
 .residentInfoDiv input[type='date'] {
 	width: 160px;
+	background: white;
 }
 
 input[type=date]::-webkit-inner-spin-button {
@@ -583,6 +618,7 @@ input[type=date]::-webkit-inner-spin-button {
 	text-align: center;
 	padding: 2px;
 	border: none;
+	background: white;
 	color: darkblue;
 	font-weight: bold;
 }
@@ -693,25 +729,69 @@ input[type=date]::-webkit-inner-spin-button {
 .NAMIrow {
 	padding: 10px;
 	margin: 0 0 2px 0;
-	border-top: 2px solid #eee;
+	border: 2px solid #eee;
+}
+
+.namiColumn label {
+	display: inline-block;
+}
+@media(min-width: 768px) {
+	.namiColumn {
+		display: inline-block;
+		padding: 0;
+		margin: 0;
+		width: 30%;
+		text-align: center;
+	}
+	.namiColumn label {
+	display: block;
+}
+}
+.namiColumn li {
+	padding: 0;
+	margin: 0;
 }
 
 .addNamiBtnLi {
 	text-align: center;
 	width: 100%;
+	/*margin-top: 10px;*/
+}
+
+#namiModalBtn {
+	margin: 15px 25px;
 }
 
 .residentInfoDiv .namiH6 {
 	/*background: #237;*/
 	/*color: white;*/
-	padding: 0 10px;
+	padding: 5px 10px 0 10px;
 	border-radius: 0 25px 25px 0;
 	/*width: 100px;*/
 }
 
 @media(min-width: 768px) {
 	.residentInfoDiv .namiH6 {
-		text-align: right;
+		/*text-align: right;*/
+		/*display: inline-block;*/
+	}
+}
+
+.residentInfoDiv .modal-title {
+	margin-top: 20px !important;
+	width: 150px !important;
+}
+
+	.modal-lg {
+		max-width: 90vw !important;
+		width: 90vw !important;
+		margin-left: 5vw !important;
+	}
+@media(min-width: 998px) {
+	.modal-lg {
+		max-width: 800px !important;
+		width: 800px !important;
+		margin: auto !important;
 	}
 }
 
