@@ -544,8 +544,7 @@ $(document).ready(()=>{
 			<section class="">
 			<h4 class="collapsibleSection responseH4"  onclick="collapseSection(this)">Approval #${numberOfApprovals}:</h4>
 			<ul class="collapsibleContent">
-				<div class="row">
-					
+				<div class="row">		
 					<div class=" offset-lg-2 col-lg-3 applicationColumn">
 					<li class="editableLi">
 							<label>Approval Notice Date:</label>
@@ -559,7 +558,7 @@ $(document).ready(()=>{
 							<label>Approval End Date:</label>
 							 <input class="editable date" id="approval_end_date" data-table="approval" data-approval_id="{{approval.approval_id}}" data-alert_id="" type="date" value="{{approval.approval_end_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
 						</li>
-</div>
+					</div>
 					<div class="col-lg-4 applicationColumn">
 
 						<li class="editableLi">
@@ -770,68 +769,84 @@ class ResponseRowHTML {
 		`
 
 		this.approvedRowHtml = `
-		<hr class="">
-		<h4 class="collapsibleSection responseH4" onclick="collapseSection(this)">Approval:</h4>
-		<ul class="collapsibleContent">
-			<div class="row">
-				<div class="col-lg-4 applicationColumn">
+			<section class="">
+			<h4 class="collapsibleSection responseH4"  onclick="collapseSection(this)">Approval</h4>
+			<ul class="collapsibleContent">
+				<div class="row">		
+					<div class=" offset-lg-2 col-lg-3 applicationColumn">
 					<li class="editableLi">
-						<label>Approval Notice Date:</label>
-						 <input class="editable date" id="approval_notice_date" data-table="approval" data-approval_id="${responseId}" data-alert_id="" type="date" value="{{approval.approval_notice_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-					</li>
-					<li class="step4">
-						<form class="fileInputLi" id="approval" method="post" enctype="multipart/form-data">
-			  			{% csrf_token %}
-							<label>Upload Approval Here:</label>
-							<input type="file" name="approval" value="" accept="image/jpeg
-							,image/png,application/pdf" required>
-							<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
-							<input type="hidden" name="file_type" value="approval">
-							<button type="submit" class="uploadBtn">Upload</button>
-						</form>
-					</li>
-				</div>
-				<div class="col-lg-4 applicationColumn">
-					<li class="editableLi">
-						<label>Approval Start Date:</label>
-						 <input class="editable date" id="approval_start_date" data-table="approval" data-approval_id="${responseId}" data-alert_id="" type="date" value="{{approval.approval_start_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-					</li>
-					<li class="editableLi">
-						<label>Approval End Date:</label>
-						 <input class="editable date" id="approval_end_date" data-table="approval" data-approval_id="${responseId}" data-alert_id="" type="date" value="{{approval.approval_end_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-					</li>
-					<li class="editableLi">
-						<label>Number of NAMI's</label>
-			 			<input class="editable" type="number" value="{{approval.county}}" data-table="approval" data-approval_id="${responseId}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-					</li>
+							<label>Approval Notice Date:</label>
+							 <input class="editable date" id="approval_notice_date" data-table="approval" data-approval_id="${responseId}" data-alert_id="" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+						</li>
+						<li class="editableLi">
+							<label>Approval Start Date:</label>
+							 <input class="editable date" id="approval_start_date" data-table="approval" data-approval_id="${responseId}" data-alert_id="" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+						</li>
+						<li class="editableLi">
+							<label>Approval End Date:</label>
+							 <input class="editable date" id="approval_end_date" data-table="approval" data-approval_id="${responseId}" data-alert_id="" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+						</li>
+					</div>
+					<div class="col-lg-4 applicationColumn">
 
-				</div>
-				<div class="col-lg-4">
-					<li class="editableLi">
-						<label>Fair Hearing Required?</label>
-						<select name="fair_hearing_required" id="fair_hearing_required" data-table="approval" data-approval_id="${responseId}"  onchange="sendInputInfoToDB(this)">
-							<option value="">Select one:</option>
-							<option value="yes">Yes</option>
-							<option value="no">No</option>
-						</select>
-						<span class="invisible DBinfo" id="DBspousal_refusal">{{approval.spousal_refusal}}</span>
-					</li>
-					<li class="editableLi">
-						<label>Date of Medicaid Recertification:</label>
-						<input class="editable date" type="date" value="{{approval.date_of_medicaid_recertification|date:'Y-m-d'}}" data-table="approval" data-approval_id="${responseId}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-					</li>
-					<li class="editableLi step6">
-						<label>Satisfied with approval?</label>
-						<select name="satisfied_with_approval" id="satisfied_with_approval" data-table="approval" data-approval_id="${responseId}"  onchange="sendInputInfoToDB(this)">
-							<option value="">Select one:</option>
-							<option value="yes">Yes</option>
-							<option value="no">No</option>
-						</select>
-						<span class="invisible DBinfo" id="DBsatisfied_with_approval">{{approval.satisfied_with_approval}}</span>
-					</li>
-				</div>
-			</div>
-		</ul>
+						<li class="editableLi">
+							<label>Recertification Date:</label>
+							<input class="editable date" type="date" data-table="approval" data-approval_id="${responseId}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+						</li>
+						<li class="">
+							<form class="fileInputLi" id="approval" method="post" enctype="multipart/form-data">
+				  			{% csrf_token %}
+								<label>Upload Approval Here:</label>
+								<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
+								<input type="hidden" name="resident_id" value="{{approval.response.application.resident.resident_id}}">
+								<input type="hidden" name="application_id" value="{{approval.response.application.application_id}}">
+								<input type="hidden" name="approval_id" value="${responseId}">
+								<input type="hidden" name="file_type" value="approval">
+								<button type="submit" class="uploadBtn">Upload</button>
+							</form>						
+						</li>			
+					`
+						numberOfNAMIs = 1;
+						 this.approvedRowHtml += `			
+							<div class="modal fade bd-example-modal-lg" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+							  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+							    <div class="modal-content">
+							      <div class="">
+							        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							          <span aria-hidden="true">&times;</span>
+							        </button>
+							        <h5 class="modal-title" id="exampleModalLongTitle">NAMIs</h5>
+							      </div>
+							     <div class="modal-body">			
+     						</div>
+					      <div class="modal-footer">
+						      <div class="editableLi addNamiBtnLi">
+										<button class="addNamiBtn" onclick="addNAMIRowHTML(this, ${responseId})">Add NAMI &#x271A; </button>
+									</div>
+						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						      </div>
+						    </div>
+						  </div>
+						</div>
+					`
+		this.approvedRowHtml += `</div>
+						<div class="col-lg-3 applicationColumn">
+						<li>
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" id="namiModalBtn">View/Add NAMIs</button>	
+						</li>
+							<li class="editableLi step6">
+								<label>Satisfied with approval?</label>
+								<select name="satisfied_with_approval" id="satisfied_with_approval" data-table="approval" data-approval_id="${responseId}"  onchange="sendInputInfoToDB(this)">
+									<option value="">Select one:</option>
+									<option value="yes">Yes</option>
+									<option value="no">No</option>
+								</select>
+								<span class="invisible DBinfo" id="DBsatisfied_with_approval">{{approval.satisfied_with_approval}}</span>
+							</li>
+						</div>
+					</div>
+				</ul>
+			</section>
 		`
 	}
 }
@@ -846,10 +861,6 @@ const addNAMIRowHTML = (addNamiBtn, approvalId) => {
 			},
 			success: function(nami_id) {
 				const html = `
-
-
-
-
 					<div class="NAMIrow">
 							<h6 class="namiH6">NAMI ${numberOfNAMIs}:</h6>
 						
@@ -923,15 +934,15 @@ const createResponseRow = (applicationId, responseField) => {
 				applicationDiv.insertAdjacentHTML("beforeend", newResponseRowHTML.rfiRowHtml);
 
 				// reset response field to "not Received"
-				const rfiRow = applicationDiv.lastElementChild;
-				const selectField = rfiRow.querySelector('SELECT');
-				const options = selectField.querySelectorAll('OPTION');
-				for (let x = 0; x < options.length; x++) {
-					const option = options[x];
-					if (option.value == 'not_recieved') {
-						option.setAttribute("selected", "selected");
-					};
-				}
+				// const rfiRow = applicationDiv.lastElementChild;
+				// const selectField = rfiRow.querySelector('SELECT');
+				// const options = selectField.querySelectorAll('OPTION');
+				// for (let x = 0; x < options.length; x++) {
+				// 	const option = options[x];
+				// 	if (option.value == 'not_recieved') {
+				// 		option.setAttribute("selected", "selected");
+				// 	};
+				// }
 			}
 		});
 // return(ajaxCall);
