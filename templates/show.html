@@ -365,10 +365,8 @@ const applicationDiv = document.querySelector('#applicationDiv');
 const date_of_application_submission = document.querySelector('#date_of_application_submission');
 const initial_response = document.querySelector('#initial_response');
 let numberOfNAMIs;
-
-$(document).ready(()=>{
-
-})
+let html = "";
+let numberOfApprovals = 0;
 
 date_of_application_submission.addEventListener('blur', (e) => {
 	if(date_of_application_submission.value) {
@@ -381,8 +379,7 @@ date_of_application_submission.addEventListener('blur', (e) => {
 })
 
 $(document).ready(()=>{
-		let html = "";
-		let numberOfApprovals = 0;
+
 
 		if(date_of_application_submission.value) {
 		$('.step4').css('display', 'block');
@@ -394,20 +391,7 @@ $(document).ready(()=>{
 		$('#deniedSection').css('display', 'block');
 	}
 
-	// Make select fields default to value in database (if there is one):
-	const selectFields = document.querySelectorAll('SELECT');
-	for (let i = 0; i < selectFields.length; i++) {
-		const selectField = selectFields[i];
-		const selectFieldParent = selectField.parentNode;
-		const DBinfo = selectFieldParent.querySelector('.DBinfo').innerHTML;
-		const options = selectField.querySelectorAll('OPTION');
-		for (let x = 0; x < options.length; x++) {
-			const option = options[x];
-			if (option.value == DBinfo) {
-				option.setAttribute("selected", "selected");
-			};
-		};
-	};
+
 
 
 
@@ -608,7 +592,7 @@ $(document).ready(()=>{
 						numberOfNAMIs = 1;
 						 html += `
 					
-<div class="modal fade bd-example-modal-lg" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="namiModal" tabindex="-1" role="dialog" aria-labelledby="namiModalTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="">
@@ -620,7 +604,7 @@ $(document).ready(()=>{
       <div class="modal-body">
         
 							`
-													{% for nami in namis %}
+						{% for nami in namis %}
 							{% if nami.approval.approval_id == approval.approval_id %}
 								html += `
 								<div class="NAMIrow">
@@ -668,7 +652,7 @@ $(document).ready(()=>{
 		html += `</div>
 						<div class="col-lg-3 applicationColumn">
 						<li>
-							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" id="namiModalBtn">View/Add NAMIs</button>	
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#namiModal" id="namiModalBtn">View/Add NAMIs</button>	
 						</li>
 							<li class="editableLi step6">
 								<label>Satisfied with approval?</label>
@@ -689,6 +673,24 @@ $(document).ready(()=>{
 	
 						// applicationDiv.insertAdjacentHTML('beforebegin', html);
 	applicationDiv.insertAdjacentHTML("beforeend", html);
+
+	// Make select fields default to value in database (if there is one):
+	const selectFields = document.querySelectorAll('SELECT');
+	for (let i = 0; i < selectFields.length; i++) {
+		const selectField = selectFields[i];
+		const selectFieldParent = selectField.parentNode;
+		const DBinfo = selectFieldParent.querySelector('.DBinfo').innerHTML;
+		const options = selectField.querySelectorAll('OPTION');
+		for (let x = 0; x < options.length; x++) {
+			const option = options[x];
+			if (option.value == DBinfo) {
+				option.setAttribute("selected", "selected");
+			};
+		};
+	};
+
+
+
 }) // end document.ready
 
 const collapseSection = (h4) => {
@@ -710,62 +712,62 @@ const collapseSection = (h4) => {
 class ResponseRowHTML {
 	constructor (applicationId,responseId) {
 		this.rfiRowHtml = `
-			<hr class="">
-				<h4 class="numberOfRFIs collapsibleSection responseH4" onclick="collapseSection(this)">RFI #${numberOfRFIs}</h6>
-			<ul class="collapsibleContent" id="">
-				<div class="row">
-					<div class="col-lg-3 firstColumn">
-						<li class="invisible applicationId">
-						</li>
-						<li class="">
-							<form class="fileInputLi rfiFileUpload" method="post" enctype="multipart/form-data">
-								{% csrf_token %}
-								<label>Upload RFI Here:</label>
-								<input type="file" name="document" value="" accept="image/jpe,image/png,application/pdf" required>
-								<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
-								<input type="hidden" name="file_type" value="rfi">
-								<input type="hidden" name="rfi_id" value="${responseId}">
-								<button type="submit" class="uploadBtn">Upload</button>
-							</form>
-						</li>
+			<section class="">
+				<h4 class="numberOfRFIs collapsibleSection responseH4" onclick="collapseSection(this)">RFI #${numberOfRFIs}</h4>
+				<ul class="collapsibleContent" id="">
+					<div class="row">
+						<div class="col-lg-3 firstColumn applicationColumn">
+							<li class="">
+								<form class="fileInputLi rfiFileUpload" method="post" enctype="multipart/form-data">
+									{% csrf_token %}
+									<label>Upload RFI Here:</label>
+									<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
+									<input type="hidden" name="resident_id" value="{{rfi.response.application.resident.resident_id}}">
+									<input type="hidden" name="file_type" value="rfi">
+									<input type="hidden" name="application_id" value="${applicationId}">
+									<input type="hidden" name="rfi_id" value="${responseId}">
+									<button type="submit" class="uploadBtn">Upload</button>
+								</form>
+							</li>
+						</div>
+						<div class="col-lg-3 applicationColumn">
+							<li class="editableLi ">
+								<label>RFI Due Date:</label>
+								<input class="editable date  due_date" id="rfi_due_date" data-table="rfi" data-alert_id="" data-application_id="${applicationId}" data-rfi_id="${responseId}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+							</li>
+							<li class="editableLi">
+								<label>Extension Requested?</label>
+								<select name="rfi_extension_request" id="rfi_extension_request" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${responseId}" onchange="sendInputInfoToDB(this); extensionRequested(this, ${applicationId}, ${responseId})">
+									<option value="no">No</option>
+									<option value="yes">Yes</option>
+								</select>
+								<span class="invisible DBinfo" id="DBrfi_extension_request">{{rfi.rfi_extension_request}}</span>
+							</li>
+						</div>
+						<div class="col-lg-3 applicationColumn">
+							<li class="">
+								<label><input type="checkbox" class="documentationSubmittedCheckbox " id="rfi_documentation_submitted" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${responseId}">Documentation Submitted</label>
+							</li>
+							<li class="editableLi step5 ">
+								<label>Submission Date:</label>
+								<input class="editable date " id="rfi_documentation_submitted_date" data-table="rfi" data-alert_id="" data-application_id="${applicationId}" data-rfi_id="${responseId}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+							</li>
+						</div>
+						<div class="col-lg-3 applicationColumn">
+							<li class="editableLi step5 ">
+								<label>Response:</label>
+								<select name="response_select" class=" responseSelect" id="rfi_response" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${responseId}" onchange="createResponseRow(${applicationId}, this); sendInputInfoToDB(this)">
+									<option value="not_recieved">Not recieved</option>
+									<option value="rfi">RFI</option>
+									<option value="approved">Approved</option>
+									<option value="denied">Denied</option>
+								</select>
+								<span class="invisible DBinfo" id="DBrfi_response">{{rfi.rfi_response}}</span>
+							</li>
+						</div>
 					</div>
-					<div class="col-lg-3">
-						<li class="editableLi ">
-							<label>RFI Due Date:</label>
-							<input class="editable date  due_date" id="rfi_due_date" data-table="rfi" data-alert_id="" data-rfi_id="${responseId}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-						</li>
-						<li class="editableLi">
-							<label>Extension Requested?</label>
-							<select name="rfi_extension_request" id="rfi_extension_request" data-table="rfi" data-rfi_id="${responseId}" onchange="sendInputInfoToDB(this); extensionRequested(this, ${applicationId}, ${responseId})">
-								<option value="no">No</option>
-								<option value="yes">Yes</option>
-							</select>
-							<span class="invisible DBinfo" id="DBrfi_extension_request">{{rfi.rfi_extension_request}}</span>
-						</li>
-					</div>
-					<div class="col-lg-3">
-						<li class="">
-						<label><input type="checkbox" class="documentationSubmittedCheckbox " id="rfi_documentation_submitted" data-table="rfi" data-rfi_id="${responseId}">Documentation Submitted</label>
-						</li>
-						<li class="editableLi step5 ">
-						<label>Submission Date:</label>
-						<input class="editable date " id="rfi_documentation_submitted_date" data-table="rfi" data-alert_id="" data-rfi_id="${responseId}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-						</li>
-					</div>
-					<div class="col-lg-3">
-						<li class="editableLi step5 ">
-							<label>Response:</label>
-							<select name="response_select" class=" responseSelect" id="rfi_response" data-table="rfi" data-rfi_id="${responseId}" onchange="createResponseRow(${applicationId}, this); sendInputInfoToDB(this)">
-								<option value="not_recieved">Not recieved</option>
-								<option value="rfi">RFI</option>
-								<option value="approved">Approved</option>
-								<option value="denied">Denied</option>
-							</select>
-							<span class="invisible DBinfo" id="DBrfi_response">{{rfi.rfi_response}}</span>
-						</li>
-					</div>
-				</div>
-			</ul>
+				</ul>
+			</section>
 		`
 
 		this.approvedRowHtml = `
@@ -808,7 +810,7 @@ class ResponseRowHTML {
 					`
 						numberOfNAMIs = 1;
 						 this.approvedRowHtml += `			
-							<div class="modal fade bd-example-modal-lg" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+							<div class="modal fade bd-example-modal-lg" id="namiModal" tabindex="-1" role="dialog" aria-labelledby="namiModalTitle" aria-hidden="true">
 							  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 							    <div class="modal-content">
 							      <div class="">
@@ -832,7 +834,7 @@ class ResponseRowHTML {
 		this.approvedRowHtml += `</div>
 						<div class="col-lg-3 applicationColumn">
 						<li>
-							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" id="namiModalBtn">View/Add NAMIs</button>	
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#namiModal" id="namiModalBtn">View/Add NAMIs</button>	
 						</li>
 							<li class="editableLi step6">
 								<label>Satisfied with approval?</label>
@@ -915,52 +917,25 @@ const newRfiDueDatePrompt = selectField => {
 
 let numberOfRFIs = 0;
 const createResponseRow = (applicationId, responseField) => {
+	const ajaxCall = $.ajax(
+		{
+			type:"GET",
+			url: `/application/ajax/create_response`,
+			data: {
+				application_id: applicationId,
+				response_type: responseField.value
+			},
+			success: function(responseId) {
+				newResponseRowHTML = new ResponseRowHTML(applicationId, responseId)
+				applicationDiv.insertAdjacentHTML("beforeend", newResponseRowHTML[`${responseField.value}RowHtml`]);
+			}
+		});
 	if (responseField.value == "rfi") {
 		phaseChange(responseField, 5);
-		numberOfRFIs += 1;
-		$('#deniedSection').css('display', 'none');
-		$('#approvedSection').css('display', 'none');
-		const residentId = document.querySelector("#residentId").innerHTML;
-		const ajaxCall = $.ajax(
-		{
-			type:"GET",
-			url: `/application/ajax/create_response`,
-			data: {
-				application_id: applicationId,
-				response_type: "rfi"
-			},
-			success: function(responseId) {
-				const newResponseRowHTML = new ResponseRowHTML(applicationId, responseId)
-				applicationDiv.insertAdjacentHTML("beforeend", newResponseRowHTML.rfiRowHtml);
-
-				// reset response field to "not Received"
-				// const rfiRow = applicationDiv.lastElementChild;
-				// const selectField = rfiRow.querySelector('SELECT');
-				// const options = selectField.querySelectorAll('OPTION');
-				// for (let x = 0; x < options.length; x++) {
-				// 	const option = options[x];
-				// 	if (option.value == 'not_recieved') {
-				// 		option.setAttribute("selected", "selected");
-				// 	};
-				// }
-			}
-		});
+		numberOfRFIs += 1;		
 // return(ajaxCall);
 	} else if (responseField.value == 'approved'){
-		const ajaxCall = $.ajax(
-		{
-			type:"GET",
-			url: `/application/ajax/create_response`,
-			data: {
-				application_id: applicationId,
-				response_type: "approved"
-			},
-			success: function(responseId) {
-				const newResponseRowHTML = new ResponseRowHTML(applicationId,responseId)
-				applicationDiv.insertAdjacentHTML("beforeend", newResponseRowHTML.approvedRowHtml);
-				phaseChange(responseField, 6);
-			}
-		});
+		phaseChange(responseField, 6);
 	} else if (responseField.value == 'denied'){
 		// $('#approvedSection').css('display', 'none');
 		// $('#deniedSection').css('display', 'block');
