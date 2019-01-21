@@ -16,6 +16,7 @@ urlpatterns = [
     path('ajax/update_approval/', views.update_approval, name = 'update_approval'),
     path('ajax/update_denial/', views.update_denial, name = 'update_denial'),
     path('ajax/update_nami/', views.update_nami, name = 'update_nami'),
+    path('ajax/delete_nami/', views.delete_nami, name = 'delete_nami'),
 
 
 

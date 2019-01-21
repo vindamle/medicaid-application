@@ -145,7 +145,7 @@ nav li.grayText {
 @media(max-width: 1824px) {
 	.content {
 		width: 95vw;
-		margin: 100px 2.5vw 20px 1vw;
+		margin: 20px 2.5vw 20px 1vw;
 	}
 }
 
@@ -545,6 +545,15 @@ table button {
 .residentInfoDiv li {
 	/*margin: 10px 0 10px 20px;*/
 	/*margin: 5px 0 5px 20px;*/
+}
+
+@media(max-width: 989px) {
+	.residentInfoDiv li {
+		/*margin: 10px 0 10px 20px;*/
+		/*border-top: 1px solid #ddd;*/
+		padding: 5px 10px;
+		margin: 5px 0;
+	}
 }
 
 .residentInfoDiv p {

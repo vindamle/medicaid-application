@@ -153,3 +153,9 @@ def update_nami(request):
     field = setattr(nami, column,new_value)
     nami.save()
     return HttpResponse("200")
+
+def delete_nami(request):
+    nami_id = int(request.GET['nami_id'])
+    nami = NAMI.objects.get(nami_id = nami_id)
+    nami.delete()
+    return HttpResponse("200")
