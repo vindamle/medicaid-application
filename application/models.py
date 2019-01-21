@@ -280,25 +280,25 @@ class Approval(models.Model):
 
     class Meta:
         verbose_name = 'Approvals'
-        verbose_name_plural = 'Aprrovals'
+        verbose_name_plural = 'Approvals'
 
-# class Denial(models.Model):
-#     denial_id  = models.AutoField(primary_key = True)
-#
-#     response = models.ForeignKey(
-#         Response,
-#         on_delete = models.CASCADE,
-#     )
-#
-#     document = models.ForeignKey(
-#         Document,
-#         on_delete = models.CASCADE,
-#         null = True,
-#     )
-#
-#     class Meta:
-#         verbose_name = 'Denials'
-#         verbose_name_plural = 'Denials'
+class Denial(models.Model):
+    denial_id  = models.AutoField(primary_key = True)
+
+    response = models.ForeignKey(
+        Response,
+        on_delete = models.CASCADE,
+    )
+
+    document = models.ForeignKey(
+        Document,
+        on_delete = models.CASCADE,
+        null = True,
+    )
+
+    class Meta:
+        verbose_name = 'Denials'
+        verbose_name_plural = 'Denials'
 
 class NAMI(models.Model):
     nami_id  = models.AutoField(primary_key = True)

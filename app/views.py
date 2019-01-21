@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.shortcuts import render, redirect
 from .forms import ApplicationForm, UploadFileForm
-from application.models import Resident, Application, Alert, Document, RFI
+from application.models import *
 import pandas as pd
 from datetime import datetime
 import os
@@ -76,12 +76,14 @@ class ShowView(View):
 
         # documents = Document.objects.filter(resident_id = resident_id)
         rfis = RFI.objects.filter(response__application__resident__resident_id = resident_id).order_by('response__application__application_id','rfi_id')
+        approvals = Approval.objects.filter(response__application__resident__resident_id = resident_id).order_by('response__application__application_id','approval_id')
+        namis = NAMI.objects.filter(approval__response__application__resident__resident_id = resident_id).order_by('approval__approval_id', 'nami_id')
         # medicaid_application_documents = Document.objects.filter(resident_id = resident_id, description = "medicaid_application")
         # rfi_documents = Document.objects.filter(resident_id = resident_id, description = "rfi").order_by('rfi_id')
         # applications = results
         # print(application)
         # return render(request,self.template_name, {'rfis':rfis,'documents':documents,'resident':resident,'applications':applications,"resident_alerts":resident_alerts, 'medicaid_application_documents': medicaid_application_documents, "rfi_documents":rfi_documents, "form":self.form_class})
-        return render(request, self.template_name, {'applications':applications, 'rfis':rfis})
+        return render(request, self.template_name, {'applications':applications, 'rfis':rfis, 'approvals': approvals, 'namis': namis})
     def post(self, request, *args, **kwargs):
 
 
@@ -98,6 +100,7 @@ class ShowView(View):
             path.mkdir(parents=True, exist_ok = True)
 
         try:
+
             new_document = Document.objects.create(
                 resident = Resident.objects.get(resident_id = request.POST.get('resident_id')),
                 application_id = application_id,
@@ -113,11 +116,19 @@ class ShowView(View):
             application = Application.objects.get(application_id = int(application_id))
             application.application_document = new_document
             application.save()
-
-        # if type == 'rfi':
-        #     rfi = RFI.objects.get(rfi_id = int(request.POST.get('rfi_id')))
-        #     rfi.document_id = x.document_id
-        #     rfi.save()
+        elif type == 'rfi':
+            rfi = RFI.objects.get(rfi_id = int(request.POST.get('rfi_id')))
+            rfi.document_id = new_document.document_id
+            rfi.save()        
+        elif type == 'approval':
+            approval = Approval.objects.get(approval_id = int(request.POST.get('approval_id')))
+            approval.document_id = new_document.document_id
+            approval.save()
+        elif type == 'application_confirmation':
+            confirmation = Confirmation.objects.create(confirmation_document = new_document, description = type)
+            application = Application.objects.get(application_id = int(application_id))
+            application.application_confirmation = confirmation
+            application.save()
 
         return redirect('/show/?resident_id={}'.format(str(resident_id)))
 
@@ -137,7 +148,7 @@ class ApprovalsView(View):
 
         for result in results:
             self.list.append(result)
-        return render(request,self.template_name, {'list':self.list,"form":self.form_class, 'facilities':facilities})
+        return render(request,self.template_name, {'list':self.list,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
 
@@ -158,7 +169,7 @@ class NotTrackingView(View):
         for result in results:
             self.list.append(result)
 
-        return render(request,self.template_name, {'list':self.list,"form":self.form_class, 'facilities':facilities})
+        return render(request,self.template_name, {'list':self.list,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
         pass
