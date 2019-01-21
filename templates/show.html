@@ -5,7 +5,7 @@
 {% block content %}
 {% load static %}
 
-{% load application_extras %}
+
 
 <div class="alertDiv">
 	{% for alert in resident_alerts %}
@@ -748,7 +748,7 @@ const createResponseRow = (applicationId, responseField) => {
 				response_type: "approved"
 			},
 			success: function(response_id) {
-				
+
 			}
 		});
 		phaseChange(responseField, 6);
