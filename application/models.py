@@ -174,9 +174,7 @@ class Application(models.Model):
     # date_of_medicaid_approval  = models.DateTimeField(null = True, blank = True)
     # date_of_medicaid_recertification  = models.DateTimeField(null = True, blank = True)
 
-    approval_start_date = models.DateTimeField(null = True, blank = True)
-    approval_end_date = models.DateTimeField(null = True, blank = True)
-    approval_recertification_date = models.DateTimeField(null = True, blank = True)
+
 
     # approval_notice_date = models.DateTimeField(null = True, blank = True)
 
@@ -276,6 +274,9 @@ class Approval(models.Model):
         null = True,
     )
 
+    approval_start_date = models.DateTimeField(null = True, blank = True)
+    approval_end_date = models.DateTimeField(null = True, blank = True)
+    approval_recertification_date = models.DateTimeField(null = True, blank = True)
     approval_notice_date  = models.DateTimeField(null = True, blank = True)
     satisfied_with_approval = models.CharField(max_length = 50,  null = True, blank=True)
     fair_hearing_required = models.CharField(max_length = 50,  null = True, blank=True)
