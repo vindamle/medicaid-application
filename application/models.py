@@ -174,8 +174,10 @@ class Application(models.Model):
     # date_of_medicaid_approval  = models.DateTimeField(null = True, blank = True)
     # date_of_medicaid_recertification  = models.DateTimeField(null = True, blank = True)
 
-    # approval_start_date = models.DateTimeField(null = True, blank = True)
-    # approval_end_date = models.DateTimeField(null = True, blank = True)
+    approval_start_date = models.DateTimeField(null = True, blank = True)
+    approval_end_date = models.DateTimeField(null = True, blank = True)
+    approval_recertification_date = models.DateTimeField(null = True, blank = True)
+
     # approval_notice_date = models.DateTimeField(null = True, blank = True)
 
 
