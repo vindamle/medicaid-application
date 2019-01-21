@@ -383,7 +383,7 @@ $(document).ready(()=>{
 		if(date_of_application_submission.value) {
 		$('.step4').css('display', 'block');
 	}
-	
+
 	if(initial_response.value == 'approved') {
 		$('#approvedSection').css('display', 'block');
 	} else if(initial_response.value == 'denied') {
@@ -397,7 +397,7 @@ $(document).ready(()=>{
 //   h4.addEventListener("click", function() {
 //   	console.log(this)
 //     this.classList.toggle("activeSection");
-//     let content = h4.nextElementSibling; 
+//     let content = h4.nextElementSibling;
 //     // console.log(content)
 //     // console.log(content.style.maxHeight);
 //     if (content.style.maxHeight != "0px"){
@@ -408,7 +408,7 @@ $(document).ready(()=>{
 //       content.style.maxHeight = content.scrollHeight + "0px";
 //       content.parentNode.style.maxWidth = "100%";
 //       content.parentNode.style.marginBottom = "20px";
-//     } 
+//     }
 //   });
 // }
 
@@ -523,7 +523,7 @@ $(document).ready(()=>{
 			<section class="">
 			<h4 class="collapsibleSection responseH4"  onclick="collapseSection(this)">Approval #${numberOfApprovals}:</h4>
 			<ul class="collapsibleContent">
-				<div class="row">		
+				<div class="row">
 					<div class=" offset-lg-2 col-lg-3 applicationColumn">
 					<li class="editableLi">
 							<label>Approval Notice Date:</label>
@@ -566,9 +566,9 @@ $(document).ready(()=>{
 		`
 		{% endif %}
 		html += `
-						
+
 						</li>
-					
+
 					`
 						// <li class="editableLi">
 						// 	<label>Fair Hearing Required?</label>
@@ -579,25 +579,23 @@ $(document).ready(()=>{
 						// 	</select>
 						// 	<span class="invisible DBinfo" id="DBspousal_refusal">{{approval.fair_hearing_required}}</span>
 						// </li>
-						
+
 							// <!-- Button trigger modal -->
 							html += `
 						`
-						
+
 						numberOfNAMIs = 1;
-						 html += `
-					
-<div class="modal fade bd-example-modal-lg" id="namiModal{{approval.approval_id}}" tabindex="-1" role="dialog" aria-labelledby="namiModalTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <h5 class="modal-title" id="exampleModalLongTitle">NAMIs</h5>
-      </div>
-      <div class="modal-body">
-        
+						 html += `					
+							<div class="modal fade bd-example-modal-lg" id="namiModal{{approval.approval_id}}" tabindex="-1" role="dialog" aria-labelledby="namiModalTitle" aria-hidden="true">
+							  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+							    <div class="modal-content">
+							      <div class="">
+							        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							          <span aria-hidden="true">&times;</span>
+							        </button>
+							        <h5 class="modal-title" id="exampleModalLongTitle">NAMIs</h5>
+							      </div>
+							      <div class="modal-body">
 							`
 						{% for nami in namis %}
 							{% if nami.approval.approval_id == approval.approval_id %}
@@ -612,7 +610,7 @@ $(document).ready(()=>{
 										<label>NAMI End Date:</label>
 											<input class="editable date" id="nami_end_date" data-table="nami" data-nami_id="{{nami.nami_id}}" type="date" value="{{nami.nami_end_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
 										</li>
-										
+
 										</div>
 						<div class="col-lg-4 col-sm-12 namiColumn">
 									<li>
@@ -621,15 +619,15 @@ $(document).ready(()=>{
 										</li>
 										</div>
 						<div class="col-lg-4 col-sm-12 namiColumn">
-										
+
 										<li>
 									<label>Amount:</label>
 											$<input type="number" class="editable" id="nami_amount" data-table="nami" data-nami_id="{{nami.nami_id}}" value="{{nami.nami_amount|floatformat:2}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
 										</li>
 										</div>
-								</div>		
-										
-										
+								</div>
+
+
 								`
 								numberOfNAMIs += 1;
 							{%endif%}
@@ -649,7 +647,7 @@ $(document).ready(()=>{
 		html += `</div>
 						<div class="col-lg-3 applicationColumn">
 						<li>
-							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#namiModal{{approval.approval_id}}" id="namiModalBtn">View/Add NAMIs</button>	
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#namiModal{{approval.approval_id}}" id="namiModalBtn">View/Add NAMIs</button>
 						</li>
 							<li class="editableLi step6">
 								<label>Satisfied with approval?</label>
@@ -665,9 +663,9 @@ $(document).ready(()=>{
 				</ul>
 			</section>
 		`
-		
+
 	{% endfor %}
-	
+
 						// applicationDiv.insertAdjacentHTML('beforebegin', html);
 	applicationDiv.insertAdjacentHTML("beforeend", html);
 
@@ -692,7 +690,7 @@ $(document).ready(()=>{
 
 const collapseSection = (h4) => {
 	h4.classList.toggle("activeSection");
-    let content = h4.nextElementSibling; 
+    let content = h4.nextElementSibling;
     // console.log(content)
     // console.log(content.style.maxHeight);
     if (content.style.maxHeight != "0px"){
@@ -703,7 +701,7 @@ const collapseSection = (h4) => {
       content.style.maxHeight = content.scrollHeight + "0px";
       content.parentNode.style.maxWidth = "100%";
       content.parentNode.style.marginBottom = "20px";
-    } 
+    }
 }
 
 class ResponseRowHTML {
@@ -772,7 +770,7 @@ class ResponseRowHTML {
 			<section class="">
 			<h4 class="collapsibleSection responseH4"  onclick="collapseSection(this)">Approval</h4>
 			<ul class="collapsibleContent">
-				<div class="row">		
+				<div class="row">
 					<div class=" offset-lg-2 col-lg-3 applicationColumn">
 					<li class="editableLi">
 							<label>Approval Notice Date:</label>
@@ -803,8 +801,8 @@ class ResponseRowHTML {
 								<input type="hidden" name="approval_id" value="${responseId}">
 								<input type="hidden" name="file_type" value="approval">
 								<button type="submit" class="uploadBtn">Upload</button>
-							</form>						
-						</li>			
+							</form>
+						</li>
 					`
 						numberOfNAMIs = 1;
 						 this.approvedRowHtml += `			
@@ -817,7 +815,7 @@ class ResponseRowHTML {
 							        </button>
 							        <h5 class="modal-title" id="exampleModalLongTitle">NAMIs</h5>
 							      </div>
-							     <div class="modal-body">			
+							     <div class="modal-body">
      						</div>
 					      <div class="modal-footer">
 						      <div class="editableLi addNamiBtnLi">
@@ -948,7 +946,7 @@ const createResponseRow = (applicationId, responseField) => {
 		});
 	if (responseField.value == "rfi") {
 		phaseChange(responseField, 5);
-		numberOfRFIs += 1;		
+		numberOfRFIs += 1;
 // return(ajaxCall);
 	} else if (responseField.value == 'approved'){
 		phaseChange(responseField, 6);

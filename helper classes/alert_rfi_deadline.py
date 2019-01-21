@@ -6,7 +6,7 @@ import pytz
 class RFIDeadline:
     def __init__(self):
 
-        self.user = 'postgres'
+        self.user = 'marc'
         self.password = 'Aug.2018'
         self.database_name = 'medicaid'
 
@@ -19,16 +19,22 @@ class RFIDeadline:
         self.engine = create_engine(self.database_url, echo=False)
 
     def check_alerts_test(self, day):
-        sql = """SELECT * FROM application_applicationtracking;"""
+        sql = """SELECT * FROM application_application;"""
         sql2 = """SELECT * FROM application_resident;"""
-        sql3 = """SELECT * FROM application_rfi;"""
+        sql3 = """SELECT * FROM application_response;"""
+        sql4 = """SELECT * FROM application_rfi;"""
 
         df = pd.read_sql(sql, con=self.engine)
         df2 = pd.read_sql(sql2, con=self.engine)
         df3 = pd.read_sql(sql3, con=self.engine)
+        df4 = pd.read_sql(sql4, con=self.engine)
 
-        alert_table = pd.merge(df, pd.merge(df3, df2, how = 'inner', on="resident_id"), how = 'inner', on="resident_id")
-        cols = {"a":"alert_priority","b":"alert_status","c":"alert_message","d":"alert_type_id","e":"application_id","f":"resident_id"}
+        # print(list(df),list(df2),list(df3),list(df4))
+
+        alert_table  = pd.merge(df2, pd.merge(df , pd.merge(df3, df4, how = 'inner', on = 'response_id'), how = 'inner', on = 'application_id'), how = 'inner', on = 'resident_id')
+
+
+        cols = {"a":"alert_priority","b":"alert_status","d":"alert_type_id","e":"application_id","f":"resident_id"}
 
         alert_table["alert_type_id"] = 0
         alert_table["alert_message"] = ""
