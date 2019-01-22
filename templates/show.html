@@ -542,7 +542,7 @@ $(document).ready(()=>{
 
 						<li class="editableLi">
 							<label>Recertification Date:</label>
-							<input class="editable date" type="date" value="{{approval.date_of_medicaid_recertification|date:'Y-m-d'}}" data-table="approval" data-approval_id="{{approval.approval_id}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+							<input class="editable date" type="date" id="approval_recertification_date" value="{{approval.approval_recertification_date|date:'Y-m-d'}}" data-table="approval" data-approval_id="{{approval.approval_id}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
 						</li>
 						<li class="">
 		`
@@ -646,9 +646,14 @@ $(document).ready(()=>{
 `
 		html += `</div>
 						<div class="col-lg-3 applicationColumn">
-						<li>
-							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#namiModal{{approval.approval_id}}" id="namiModalBtn">View/Add NAMIs</button>
-						</li>
+							<li>
+								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#namiModal{{approval.approval_id}}" id="namiModalBtn">View/Add NAMIs</button>
+							</li>
+						</div>
+					</div>
+
+					<div class="row satisfiedRow">
+						<div class="col-lg-4">
 							<li class="editableLi step6">
 								<label>Satisfied with approval?</label>
 								<select name="satisfied_with_approval" id="satisfied_with_approval" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this)">
@@ -657,6 +662,28 @@ $(document).ready(()=>{
 									<option value="no">No</option>
 								</select>
 								<span class="invisible DBinfo" id="DBsatisfied_with_approval">{{approval.satisfied_with_approval}}</span>
+							</li>
+						</div>
+						<div class="col-lg-4">
+							<li class="editableLi step6">
+								<label>Contacted DSS?</label>
+								<select name="contacted_dss" id="contacted_dss" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this)">
+									<option value="">Select one:</option>
+									<option value="yes">Yes</option>
+									<option value="no">No</option>
+								</select>
+								<span class="invisible DBinfo" id="DBcontacted_dss">{{approval.contacted_dss}}</span>
+							</li>
+						</div>
+						<div class="col-lg-4">
+							<li class="editableLi step6">
+								<label>Resolved through DSS?</label>
+								<select name="resolved_through_dss" id="resolved_through_dss" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this)">
+									<option value="">Select one:</option>
+									<option value="yes">Yes</option>
+									<option value="no">No</option>
+								</select>
+								<span class="invisible DBinfo" id="DBresolved_through_dss">{{approval.resolved_through_dss}}</span>
 							</li>
 						</div>
 					</div>
@@ -789,7 +816,7 @@ class ResponseRowHTML {
 
 						<li class="editableLi">
 							<label>Recertification Date:</label>
-							<input class="editable date" type="date" data-table="approval" data-approval_id="${responseId}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+							<input class="editable date" type="date" id="approval_recertification_date" data-table="approval" data-approval_id="${responseId}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
 						</li>
 						<li class="">
 							<form class="fileInputLi" id="approval" method="post" enctype="multipart/form-data">
