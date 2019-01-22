@@ -89,11 +89,11 @@ def phase_change(request):
     # Sending an success response
     application_id =int(request.GET['application_id'])
     phase_id =int(request.GET['phase_id'])
+
     application = Application.objects.get(application_id = application_id)
     phase = Phase.objects.get(phase_id = phase_id)
     application.phase = phase
     application.save()
-
     return HttpResponse(str(phase.phase_name))
 
 def create_response(request):
