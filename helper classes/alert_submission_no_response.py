@@ -14,8 +14,8 @@ class NoResponse:
         # self.password = os.getenv("POSTGRES_PASSWORD")
         # self.hostname = os.getenv("POSTGRES_HOSTNAME")
 
-        self.user = 'marc'
-        self.password = 'Aug.2018'
+        self.user = 'postgres'
+        self.password = 'Oct2018!'
         self.database_name = 'medicaid'
 
         self.database_url = 'postgresql://{user}:{password}@localhost/{database_name}'.format(
@@ -63,6 +63,7 @@ class NoResponse:
         alert_table["alert_status"] = False
         # print(list(alert_table))
         # print(pd.to_datetime(alert_table['date_of_application_submission']),utc = False)
+        # print(alert_table['date_of_application_submission'])
         for i in range(1, 100):
             alert_table["alert_date"] = (pytz.utc.localize(datetime.now()+timedelta(days = i ))-alert_table['date_of_application_submission']).dt.days
             alert_table= alert_table.rename(index = str , columns = {'tracking_id':'application_id'})

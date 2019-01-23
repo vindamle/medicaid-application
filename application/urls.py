@@ -17,6 +17,7 @@ urlpatterns = [
     path('ajax/update_denial/', views.update_denial, name = 'update_denial'),
     path('ajax/update_nami/', views.update_nami, name = 'update_nami'),
     path('ajax/delete_nami/', views.delete_nami, name = 'delete_nami'),
+    path('ajax/create_application/', views.create_application, name = 'create_application'),
 
 
 

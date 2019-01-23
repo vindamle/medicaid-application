@@ -8,8 +8,11 @@ from django.shortcuts import render
 from .models import *
 from .additionalInfo import AdditionalInfo
 
-def update_list(request):
 
+def update_application_tracking(request):
+    application = requests.GET["application_id"]
+
+def update_list(request):
     requested_resident_id = request.GET['resident_id']
     track = request.GET['tracking']
 
@@ -21,13 +24,10 @@ def update_list(request):
         resident.tracking_status = True
         resident.dismiss = True
         if not Application.objects.filter(resident_id = requested_resident_id).exists():
-
             application = Application(resident = resident, phase = Phase.objects.get(phase_id = 1),tracking_status = True)
             application.save()
         resident.save()
 
-
-        # resident_info = AdditionalInfo()
     elif track == "false":
         resident.tracking_status = False
         resident.dismiss = True
@@ -64,13 +64,12 @@ def update_resident(request):
     return HttpResponse("200")
 
 def update_application(request):
-
-    resident_id =int(request.GET['resident_id'])
+    # resident_id =int(request.GET['resident_id'])
+    application_id =int(request.GET['application_id'])
     column =request.GET['column']
     new_value =request.GET['new_value']
-
-    resident = Resident.objects.get(resident_id = resident_id)
-    application = Application.objects.get(resident = resident)
+    # resident = Resident.objects.get(resident_id = resident_id)
+    application = Application.objects.get(application_id = application_id)
 
     field = setattr(application,column,new_value)
     application.save()
@@ -107,8 +106,9 @@ def create_response(request):
     elif response_type == 'approved':
         approval = Approval.objects.create(response = response)
         return_info = approval.approval_id
-    # elif response_type == 'denied':
-    #     response_id = 3
+    elif response_type == 'denied':
+        denial = Denial.objects.create(response = response)
+        return_info = denial.denial_id
     return HttpResponse(return_info)
 
 
@@ -159,3 +159,8 @@ def delete_nami(request):
     nami = NAMI.objects.get(nami_id = nami_id)
     nami.delete()
     return HttpResponse("200")
+
+def create_application(request):
+    resident_id = int(request.GET['resident_id'])
+    application = Application.objects.create(resident = Resident.objects.get(resident_id = resident_id), phase = Phase.objects.get(phase_id = 1))
+    return HttpResponse(int(application.application_id))

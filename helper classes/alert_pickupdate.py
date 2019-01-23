@@ -6,8 +6,8 @@ import pytz
 class Pickupdate:
     def __init__(self):
 
-        self.user = 'marc'
-        self.password = 'Aug.2018'
+        self.user = 'postgres'
+        self.password = 'Oct2018!'
         self.database_name = 'medicaid'
 
         self.database_url = 'postgresql://{user}:{password}@localhost/{database_name}'.format(

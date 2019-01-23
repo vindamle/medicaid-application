@@ -8,7 +8,7 @@
 <div class="alertDiv">
 	{% for alert in resident_alerts %}
 			<div class="alert alert-danger alert-dismissible fade show" role="alert">
-				<strong>Alert:</strong> {{alert.alert_message}} <button class="btn dismissBtn">Dismiss</button>
+				<strong>Alert:</strong> {{alert.alert_type.alert_name}} <!-- <button class="btn dismissBtn">Dismiss</button> -->
 				<span class="invisible alertId">{{alert.alert_id}}</span>
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -16,11 +16,48 @@
 			</div>
 	{% endfor %}
 </div>
-{% for application in applications %}
 
 <div class="container-fluid residentInfoDiv applicationPage" data-application_id="{{application.application_id}}">
-	<h1 class="">{{application.resident.first_name}} {{application.resident.last_name}}</h1>
+	<h1 class="">{{resident.first_name}} {{resident.last_name}}</h1>
+	<ul class="nav nav-tabs">
+	{% for application in applications %}
+    <li {% if application == applications.last %} class="active"{% endif %}>
+      <a data-toggle="tab" href="#application{{application.application_id}}" {% if application == applications.last %} class="active show"{% endif %}>
+        App #{{ forloop.counter }}: <span>{{application.phase.phase_name}}</span>
+      </a>
+    </li>
+	{% endfor %}
+  </ul>
+<div class="tab-content">
+{% for application in applications %}
+<div id="application{{application.application_id}}" class="tab-pane {% if application == applications.last %} in active {% else %} fade {% endif %}">
 	<h5 id="showStatus">Status: {{application.phase.phase_name}}</h5>
+
+	<!-- Trigger for Notes Modal -->
+	<div class="notesModalBtnDiv">
+		<button type="button" class="btn" data-toggle="modal" data-target="#notesModal{{application.application_id}}" id="notesModalBtn">&#128221; Notes</button>
+	</div>
+	<!-- Notes Modal -->
+	<div class="modal fade bd-example-modal-lg" id="notesModal{{application.application_id}}" tabindex="-1" role="dialog" aria-labelledby="notesModal{{application.application_id}}Title" aria-hidden="true">
+	  <div class="modal-dialog modal-lg modal-dialog-centered " role="document">
+	    <div class="modal-content">
+	      <div class="">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	        <h5 class="modal-title" id="">Notes</h5>
+	      </div>
+	      <div class="modal-body">
+	        ...Coming Soon!
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+	        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
 	<section>
 		<h4 class="collapsibleSection" onclick="collapseSection(this)">Personal Info:</h4>
 		<ul class="collapsibleContent">
@@ -42,33 +79,33 @@
 				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
 						<label>Address:</label>
-						<input class="editable" id="address" data-table="resident" data-alert_id="" type="text" value="{{application.resident.address}}">
+						<input class="editable" id="address" data-table="resident" data-alert_id="" type="text" value="{{application.resident.address|default_if_none:''}}">
 					</li>
 					<li class="editableLi">
 						<label>City:</label>
-						<input class="editable" id="city" data-table="resident" data-alert_id="" type="text" value="{{application.resident.city}}">
+						<input class="editable" id="city" data-table="resident" data-alert_id="" type="text" value="{{application.resident.cit|default_if_none:''}}">
 					</li>
 					<li class="editableLi">
 						<label>State:</label>
-						<input class="editable" id="state" data-table="resident" data-alert_id="" type="text" value="{{application.resident.state}}">
+						<input class="editable" id="state" data-table="resident" data-alert_id="" type="text" value="{{application.resident.state|default_if_none:''}}">
 					</li>
 					<li class="editableLi">
 						<label>Zip:</label>
-						<input class="editable" id="zip" data-table="resident" data-alert_id="" type="number" value="{{application.resident.zip}}">
+						<input class="editable" id="zip" data-table="resident" data-alert_id="" type="number" value="{{application.resident.zip|default_if_none:''}}">
 					</li>
 				</div>
 				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
 						<label>County:</label>
-						<input class="editable" id="county" data-table="resident" data-alert_id="" type="text" value="{{application.resident.county}}">
+						<input class="editable" id="county" data-table="resident" data-alert_id="" type="text" value="{{application.resident.county|default_if_none:''}}">
 					</li>
 					<li class="editableLi">
 						<label>Phone:</label>
-						<input class="editable" id="phone" data-table="resident" data-alert_id="" type="tel" value="{{application.resident.phone}}">
+						<input class="editable" id="phone" data-table="resident" data-alert_id="" type="tel" value="{{application.resident.phone|default_if_none:''}}">
 					</li>
 					<li class="editableLi">
 						<label>Marital Status:</label>
-						<input class="editable" id="marital_status" data-table="resident" data-alert_id="" type="text" value="{{application.resident.marital_status}}">
+						<input class="editable" id="marital_status" data-table="resident" data-alert_id="" type="text" value="{{application.resident.marital_status|default_if_none:''}}">
 					</li>
 					<li class="invisible absolute" id="residentId" type="text">{{application.resident.resident_id}}</li>
 					<li class="invisible absolute applicationId" id="applicationId" type="text">{{application.application_id}}</li>
@@ -84,36 +121,36 @@
 				<div class="col-lg-4 applicationColumn firstColumn">
 					<li class="editableLi">
 						<label>Primary Payor:</label>
-						<input class="editable" id="primary_payor" data-table="resident" data-alert_id="" type="text" value="{{application.resident.primary_payor}}">
+						<input class="editable" id="primary_payor" data-table="resident" data-alert_id="" type="text" value="{{application.resident.primary_payor|default_if_none:''}}">
 					</li>
 					<li class="editableLi">
 						<label>Secondary Payor:</label>
-						<input class="editable" id="secondary_payor" data-table="resident" data-alert_id="" type="text" value="{{application.resident.secondary_payor}}">
+						<input class="editable" id="secondary_payor" data-table="resident" data-alert_id="" type="text" value="{{application.resident.secondary_payor|default_if_none:''}}">
 					</li>
 				</div>
 
 				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
 						<label>Copay:</label>
-						$<input class="editable" id="copay" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="text" value="{{application.copay}}">
+						$<input class="editable" id="copay" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="text" value="{{application.copay|default_if_none:''}}">
 					</li>
 					<li class="editableLi">
 						<label>Copay Start Date:</label>
-						<input class="editable date" id="copay_start_date" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="date" value="{{application.copay_start_date|date:'Y-m-d'}}">
+						<input class="editable date" id="copay_start_date" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="date" value="{{application.copay_start_date|date:'Y-m-d'|default_if_none:''}}">
 					</li>
 					<li class="editableLi">
 						<label>Secondary Insurance Copay Percentage:</label>
-						<input class="editable" id="secondary_pays_copay" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="number" value="{{application.secondary_pays_copay}}"> %
+						<input class="editable" id="secondary_pays_copay" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="number" value="{{application.secondary_pays_copay|default_if_none:''}}"> %
 					</li>
 				</div>
 				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
 						<label>Last Medicare Date:</label>
-						<input class="editable date" type="date" value="{{application.last_medicare_date|date:'Y-m-d'}}">
+						<input class="editable date" type="date" value="{{application.last_medicare_date|date:'Y-m-d'|default_if_none:''}}">
 					</li>
 					<li class="editableLi">
 						<label>Cut From Medicare/Insurance Date:</label>
-						<input class="editable date" type="date" value="{{application.cut_from_medicare_date|date:'Y-m-d'}}">
+						<input class="editable date" type="date" value="{{application.cut_from_medicare_date|date:'Y-m-d'|default_if_none:''}}">
 					</li>
 				</div>
 			</div>
@@ -167,51 +204,51 @@
 					<div class="col-lg-4 applicationColumn">
 						<li class="editableLi step1">
 							<label>Applicant Meeting Date:</label>
-							<input class="editable date" id="appointment_date" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="date" value="{{application.appointment_date|date:'Y-m-d'}}">
+							<input class="editable date" id="appointment_date" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="date" value="{{application.appointment_date|date:'Y-m-d'|default_if_none:''}}">
 						</li>
 
 						<li class="editableLi step2">
 							<label>Medicaid Pickup Date:</label>
-							<input class="editable date" id="medicaid_pickup_date" data-table="application" data-application_id="{{application.application_id}}" data-alert_id=5 type="date" value="{{application.medicaid_pickup_date|date:'Y-m-d'}}">
+							<input class="editable date" id="medicaid_pickup_date" data-table="application" data-application_id="{{application.application_id}}" data-alert_id=5 type="date" value="{{application.medicaid_pickup_date|date:'Y-m-d'|default_if_none:''}}">
 						</li>
 						<li class="editableLi step3">
 							<label>Application County:</label>
-							<input class="editable" id="application_county" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="text" value="{{application.application_county}}">
+							<input class="editable" id="application_county" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="text" value="{{application.application_county|default_if_none:''}}">
 						</li>
 						<li class="editableLi step3">
 							<label>Application State:</label>
-							<input class="editable" id="application_state" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="text" value="{{application.application_state}}">
+							<input class="editable" id="application_state" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="text" value="{{application.application_state|default_if_none:''}}">
 						</li>
 
 						<li class="editableLi step3">
 							<label>Estimated NAMI/Income Contribution Amount:</label>
 							<br>
-							$<input type="text" class="editable" id="estimated_nami" data-table="application" data-application_id="{{application.application_id}}" value="{{application.estimated_nami|floatformat:2}}">
+							$<input type="text" class="editable" id="estimated_nami" data-table="application" data-application_id="{{application.application_id}}" value="{{application.estimated_nami|floatformat:2|default_if_none:''}}">
 						</li>
 					</div>
 					<div class="col-lg-4 applicationColumn">
 						<li class="step1">
-							<label class=""><input type="checkbox" class="meetingCheckbox" {% if application.phase.phase_id > 1 %} checked="checked"{% endif %}>Met with Applicant</label>
+							<label class=""><input type="checkbox" class="meetingCheckbox" data-application_id="{{application.application_id}}" {% if application.phase.phase_id > 1 %} checked="checked"{% endif %}>Met with Applicant</label>
 						</li>
 						<li class="editableLi step3">
 							<label>Date of Deadline:</label>
-							<input class="editable date" id="date_of_deadline" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="date" value="{{application.date_of_deadline|date:'Y-m-d'}}">
+							<input class="editable date" id="date_of_deadline" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="date" value="{{application.date_of_deadline|date:'Y-m-d'|default_if_none:''}}">
 						</li>
 						<li class="editableLi step3">
 							<label>DSS Contact Address:</label>
-							<input class="editable" id="dss_contact_address" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="text" value="{{application.dss_contact_address}}">
+							<input class="editable" id="dss_contact_address" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="text" value="{{application.dss_contact_address|default_if_none:''}}">
 						</li>
 						<li class="editableLi step3">
 							<label>DSS Contact Phone:</label>
-							<input class="editable" id="dss_contact_phone" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="text" value="{{application.dss_contact_phone}}">
+							<input class="editable" id="dss_contact_phone" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="text" value="{{application.dss_contact_phone|default_if_none:''}}">
 						</li>
 						<li class="editableLi step3">
 							<label>DSS Contact Email:</label>
-							<input class="editable" id="dss_contact_email" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="text" value="{{application.dss_contact_email}}">
+							<input class="editable" id="dss_contact_email" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="text" value="{{application.dss_contact_email|default_if_none:''}}">
 						</li>
 						<li class="editableLi step3">
 							<label>DSS Contact Fax:</label>
-							<input class="editable" id="dss_contact_fax" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="text" value="{{application.dss_contact_fax}}">
+							<input class="editable" id="dss_contact_fax" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="text" value="{{application.dss_contact_fax|default_if_none:''}}">
 						</li>
 					</div>
 				</div>
@@ -280,77 +317,11 @@
 			</ul>
 		</div>
 	</section>
-	<section class="" id="deniedSection">
-		<h4 class="collapsibleSection" onclick="collapseSection(this)">Denial Info:</h4>
-		<ul>
-			<div class="row">
-				<div class="col-lg-4 applicationColumn">
-					<li class="editableLi">
-						<label>Denial Notice Date:</label>
-						<input class="editable date" id="denial_notice_date" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="date" value="{{application.denial_notice_date|date:'Y-m-d'}}">
-					</li>
-					<li class="step4">
-						<form class="fileInputLi" id="denial" method="post" enctype="multipart/form-data">
-							{% csrf_token %}
-							<label>Upload Denial Here:</label>
-							<input type="file" name="denial" value="{{application.denial}}" accept="image/jpeg
-							,image/png,application/pdf" required>
-							<input type="hidden" name="resident_id" value="{{resident.resident_id}}">
-							<input type="hidden" name="file_type" value="denial">
-							<button type="submit" class="uploadBtn">Upload</button>
-						</form>
-					</li>
-
-				</div>
-				<div class="col-lg-4 applicationColumn">
-					<li class="editableLi">
-						<label>Denial Start Date:</label>
-						<input class="editable date" id="denial_start_date" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="date" value="{{application.denial_start_date|date:'Y-m-d'}}">
-					</li>
-					<li class="editableLi">
-						<label>Denial End Date:</label>
-						<input class="editable date" id="denial_end_date" data-table="application" data-application_id="{{application.application_id}}" data-alert_id="" type="date" value="{{application.denial_end_date|date:'Y-m-d'}}">
-					</li>
-					<li class="editableLi">
-						<label>Number of NAMI's</label>
-						<input class="editable" type="number" value="{{application.county}}">
-					</li>
-
-				</div>
-				<div class="col-lg-4">
-					<li class="editableLi">
-						<label>Fair Hearing Required?</label>
-						<select name="fair_hearing_required" id="fair_hearing_required" data-table="application" data-application_id="{{application.application_id}}">
-							<option value="">Select one:</option>
-							<option value="yes">Yes</option>
-							<option value="no">No</option>
-						</select>
-						<span class="invisible DBinfo" id="DBspousal_refusal">{{application.spousal_refusal}}</span>
-					</li>
-					<li class="editableLi">
-						<label>Date of Medicaid Recertification:</label>
-						<input class="editable date" type="date" value="{{application.date_of_medicaid_recertification|date:'Y-m-d'}}">
-					</li>
-				</div>
-			</div>
-		</ul>
-	</section>
 </div><!-- end of applicationDiv-->
 {% endfor %} <!-- end of for application in applications loop -->
 </div>
+</div>
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -360,12 +331,14 @@
 <script src="{% static 'js/show.js' %}"></script>
 <script type="text/javascript">
 // Submission behavior, including generating new HTML based on Medicaid response(s):
+const residentId = document.querySelector('#residentId').innerHTML;
 const applicationDiv = document.querySelector('#applicationDiv');
 const date_of_application_submission = document.querySelector('#date_of_application_submission');
 const initial_response = document.querySelector('#initial_response');
 let numberOfNAMIs;
 let html = "";
 let numberOfApprovals = 0;
+
 
 date_of_application_submission.addEventListener('blur', (e) => {
 	if(date_of_application_submission.value) {
@@ -379,8 +352,7 @@ date_of_application_submission.addEventListener('blur', (e) => {
 
 $(document).ready(()=>{
 
-
-		if(date_of_application_submission.value) {
+	if(date_of_application_submission.value) {
 		$('.step4').css('display', 'block');
 	}
 
@@ -389,28 +361,6 @@ $(document).ready(()=>{
 	} else if(initial_response.value == 'denied') {
 		$('#deniedSection').css('display', 'block');
 	}
-
-
-// 	const coll = document.getElementsByClassName("collapsibleSection");
-// for (let i = 0; i < coll.length; i++) {
-// 	let h4 = coll[i];
-//   h4.addEventListener("click", function() {
-//   	console.log(this)
-//     this.classList.toggle("activeSection");
-//     let content = h4.nextElementSibling;
-//     // console.log(content)
-//     // console.log(content.style.maxHeight);
-//     if (content.style.maxHeight != "0px"){
-//       content.style.maxHeight = "0px";
-//       content.parentNode.style.maxWidth = "300px";
-//       content.parentNode.style.marginBottom = "60px";
-//     } else {
-//       content.style.maxHeight = content.scrollHeight + "0px";
-//       content.parentNode.style.maxWidth = "100%";
-//       content.parentNode.style.marginBottom = "20px";
-//     }
-//   });
-// }
 
 {% for rfi in rfis %}
   var rfiAppId = {{rfi.response.application.application_id}}
@@ -514,6 +464,60 @@ $(document).ready(()=>{
 		`
 	{% endfor %}
 
+	{% for denial in denials %}
+	html += `
+		<section class="">
+				<h4 class="numberOfRFIs collapsibleSection responseH4" onclick="collapseSection(this)">Denial</h4>
+				<ul class="collapsibleContent" id="">
+					<div class="row">
+						<div class="col-lg-3 firstColumn applicationColumn">
+							<li class="">
+								<form class="fileInputLi denialFileUpload" method="post" enctype="multipart/form-data">
+									{% csrf_token %}
+									<label>Upload Denial Here:</label>
+									<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
+									<input type="hidden" name="resident_id" value="{{denial.response.application.resident.resident_id}}">
+									<input type="hidden" name="file_type" value="denial">
+									<input type="hidden" name="application_id" value="{{denial.response.application.application_id}}">
+									<input type="hidden" name="denial_id" value="{{denial.denial_id}}">
+									<button type="submit" class="uploadBtn">Upload</button>
+								</form>
+							</li>
+						</div>
+						<div class="col-lg-3 applicationColumn">
+							<li class="editableLi ">
+								<label>Denial Notice Date:</label>
+								<input class="editable date  due_date" id="denial_notice_date" data-table="denial" data-alert_id="" data-application_id="{{denial.response.application.application_id}}" data-denial_id="{{denial.denial_id}}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+							</li>
+							<li class="editableLi">
+								<label>Fair Hearing Requested?</label>
+								<select name="denial_fair_hearing_request" id="denial_fair_hearing_request" data-table="denial" data-application_id="{{denial.response.application.application_id}}" data-denial_id="{{denial.denial_id}}" onchange="sendInputInfoToDB(this); fairHearingRequested(this, {{denial.response.application.application_id}}, {{denial.denial_id}})">
+									<option value="no">No</option>
+									<option value="yes">Yes</option>
+								</select>
+								<span class="invisible DBinfo" id="DBdenial_fair_hearing_request">{{denial.denial_fair_hearing_request}}</span>
+							</li>
+						</div>
+						<div class="col-lg-3 applicationColumn">
+							<li class="">
+								<label><input type="checkbox" class="documentationSubmittedCheckbox " id="denial_documentation_submitted" data-table="denial" data-application_id="{{denial.response.application.application_id}}" data-denial_id="{{denial.denial_id}}">Documentation Submitted</label>
+							</li>
+							<li class="editableLi step5 ">
+								<label>Submission Date:</label>
+								<input class="editable date " id="denial_documentation_submitted_date" data-table="denial" data-alert_id="" data-application_id="{{denial.response.application.application_id}}" data-denial_id="{{denial.denial_id}}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+							</li>
+						</div>
+						<div class="col-lg-3 applicationColumn">
+							<li>
+								<button type="button" class="btn btn-primary" id="createNewApp" onclick="createNewApp()">Create New Application</button>
+							</li>
+						</div>
+					</div>
+				</ul>
+			</section>
+	`
+	{% endfor %}
+
 	{% for approval in approvals %}
 		var approvalAppId = {{approval.response.application.application_id}}
 	  var sectionDiv = document.querySelector("[data-application_id='{{approval.response.application.application_id}}']");
@@ -606,18 +610,18 @@ $(document).ready(()=>{
 					        </button>
 									<h6 class="namiH6">NAMI ${numberOfNAMIs}:</h6>
 									<div class="col-lg-4 col-sm-12 namiColumn">
-									<li>
-										<label>NAMI End Date:</label>
-											<input class="editable date" id="nami_end_date" data-table="nami" data-nami_id="{{nami.nami_id}}" type="date" value="{{nami.nami_end_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-										</li>
-
-										</div>
-						<div class="col-lg-4 col-sm-12 namiColumn">
-									<li>
-									<label>NAMI Start Date:</label>
+										<li>
+											<label>NAMI Start Date:</label>
 											<input class="editable date" id="nami_start_date" data-table="nami" data-nami_id="{{nami.nami_id}}" type="date" value="{{nami.nami_start_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
 										</li>
-										</div>
+								</div>
+								<div class="col-lg-4 col-sm-12 namiColumn">
+									<li>
+										<label>NAMI End Date:</label>
+										<input class="editable date" id="nami_end_date" data-table="nami" data-nami_id="{{nami.nami_id}}" type="date" value="{{nami.nami_end_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+									</li>
+									
+								</div>
 						<div class="col-lg-4 col-sm-12 namiColumn">
 
 										<li>
@@ -656,7 +660,7 @@ $(document).ready(()=>{
 						<div class="col-lg-4">
 							<li class="editableLi step6">
 								<label>Satisfied with approval?</label>
-								<select name="satisfied_with_approval" id="satisfied_with_approval" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this)">
+								<select name="satisfied_with_approval" id="satisfied_with_approval" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this); satisfiedWithApproval(this)">
 									<option value="">Select one:</option>
 									<option value="yes">Yes</option>
 									<option value="no">No</option>
@@ -665,7 +669,7 @@ $(document).ready(()=>{
 							</li>
 						</div>
 						<div class="col-lg-4">
-							<li class="editableLi step6">
+							<li class="editableLi notSatisfied">
 								<label>Contacted DSS?</label>
 								<select name="contacted_dss" id="contacted_dss" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this)">
 									<option value="">Select one:</option>
@@ -676,7 +680,7 @@ $(document).ready(()=>{
 							</li>
 						</div>
 						<div class="col-lg-4">
-							<li class="editableLi step6">
+							<li class="editableLi notSatisfied">
 								<label>Resolved through DSS?</label>
 								<select name="resolved_through_dss" id="resolved_through_dss" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this)">
 									<option value="">Select one:</option>
@@ -711,7 +715,10 @@ $(document).ready(()=>{
 		};
 	};
 
-
+	const satisfied_with_approval = document.querySelector('#satisfied_with_approval');
+	if (satisfied_with_approval && satisfied_with_approval.value != "no") {
+			$('.notSatisfied').css('display', 'none')
+		}
 
 }) // end document.ready
 
@@ -733,7 +740,6 @@ const collapseSection = (h4) => {
 
 class ResponseRowHTML {
 	constructor (applicationId,responseId) {
-		const residentId = document.querySelector('#residentId').innerHTML;
 		this.rfiRowHtml = `
 			<section class="">
 				<h4 class="numberOfRFIs collapsibleSection responseH4" onclick="collapseSection(this)">RFI #${numberOfRFIs}</h4>
@@ -854,19 +860,78 @@ class ResponseRowHTML {
 						  </div>
 						</div>
 					`
-		this.approvedRowHtml += `</div>
-						<div class="col-lg-3 applicationColumn">
+		this.approvedRowHtml += `
+					</div>
+					<div class="col-lg-3 applicationColumn">
 						<li>
 							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#namiModal${responseId}" id="namiModalBtn">View/Add NAMIs</button>	
 						</li>
-							<li class="editableLi step6">
-								<label>Satisfied with approval?</label>
-								<select name="satisfied_with_approval" id="satisfied_with_approval" data-table="approval" data-approval_id="${responseId}"  onchange="sendInputInfoToDB(this)">
-									<option value="">Select one:</option>
-									<option value="yes">Yes</option>
+						<li class="editableLi step6">
+							<label>Satisfied with approval?</label>
+							<select name="satisfied_with_approval" id="satisfied_with_approval" data-table="approval" data-approval_id="${responseId}"  onchange="sendInputInfoToDB(this)">
+								<option value="">Select one:</option>
+								<option value="yes">Yes</option>
+								<option value="no">No</option>
+							</select>
+							<span class="invisible DBinfo" id="DBsatisfied_with_approval">{{approval.satisfied_with_approval}}</span>
+						</li>
+					</div>
+				</div>
+			</ul>
+		</section>
+	`
+		this.deniedRowHtml = `
+			<section class="">
+				<h4 class="numberOfRFIs collapsibleSection responseH4" onclick="collapseSection(this)">Denial</h4>
+				<ul class="collapsibleContent" id="">
+					<div class="row">
+						<div class="col-lg-3 firstColumn applicationColumn">
+							<li class="">
+								<form class="fileInputLi denialFileUpload" method="post" enctype="multipart/form-data">
+									{% csrf_token %}
+									<label>Upload Denial Here:</label>
+									<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
+									<input type="hidden" name="resident_id" value="${residentId}">
+									<input type="hidden" name="file_type" value="denial">
+									<input type="hidden" name="application_id" value="${applicationId}">
+									<input type="hidden" name="denial_id" value="${responseId}">
+									<button type="submit" class="uploadBtn">Upload</button>
+								</form>
+							</li>
+						</div>
+						<div class="col-lg-3 applicationColumn">
+							<li class="editableLi ">
+								<label>Denial Notice Date:</label>
+								<input class="editable date  due_date" id="denial_notice_date" data-table="denial" data-alert_id="" data-application_id="${applicationId}" data-denial_id="${responseId}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+							</li>
+							<li class="editableLi">
+								<label>Fair Hearing Requested?</label>
+								<select name="denial_fair_hearing_request" id="denial_fair_hearing_request" data-table="denial" data-application_id="${applicationId}" data-denial_id="${responseId}" onchange="sendInputInfoToDB(this); fairHearingRequested(this, ${applicationId}, ${responseId})">
 									<option value="no">No</option>
+									<option value="yes">Yes</option>
 								</select>
-								<span class="invisible DBinfo" id="DBsatisfied_with_approval">{{approval.satisfied_with_approval}}</span>
+								<span class="invisible DBinfo" id="DBdenial_fair_hearing_request">{{denial.denial_fair_hearing_request}}</span>
+							</li>
+						</div>
+						<div class="col-lg-3 applicationColumn">
+							<li class="">
+								<label><input type="checkbox" class="documentationSubmittedCheckbox " id="denial_documentation_submitted" data-table="denial" data-application_id="${applicationId}" data-denial_id="${responseId}">Documentation Submitted</label>
+							</li>
+							<li class="editableLi step5 ">
+								<label>Submission Date:</label>
+								<input class="editable date " id="denial_documentation_submitted_date" data-table="denial" data-alert_id="" data-application_id="${applicationId}" data-denial_id="${responseId}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+							</li>
+						</div>
+						<div class="col-lg-3 applicationColumn">
+							<li class="editableLi step5 ">
+								<label>Response:</label>
+								<select name="response_select" class=" responseSelect" id="denial_response" data-table="denial" data-application_id="${applicationId}" data-denial_id="${responseId}" onchange="createResponseRow(${applicationId}, this); sendInputInfoToDB(this)">
+									<option value="not_recieved">Not recieved</option>
+									<option value="denial">denial</option>
+									<option value="approved">Approved</option>
+									<option value="denied">Denied</option>
+								</select>
+								<span class="invisible DBinfo" id="DBdenial_response">{{denial.denial_response}}</span>
 							</li>
 						</div>
 					</div>
@@ -987,6 +1052,28 @@ const checkIfEnterKey = (input,event) => {
 		input.blur();
 	}
 }
-// addEventListenerToResponse(document.querySelector('#initial_response'))
+
+const satisfiedWithApproval = (selectField) => {
+	if (selectField.value == "no") {
+		$('.notSatisfied').fadeIn();
+	} else {
+		$('.notSatisfied').css('display', 'none');
+	}
+}
+
+const createNewApp = () => {
+	const ajaxCall = $.ajax(
+		{
+			type:"GET",
+			url: `/application/ajax/create_application`,
+			data: {
+				resident_id: residentId
+			},
+			success: function(appId) {
+				location.reload();
+				console.log(` Your new app's id is: ${appId}`)
+			}
+		});
+}
 </script>
 {% endblock %}

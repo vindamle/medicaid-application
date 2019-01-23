@@ -15,8 +15,8 @@ class PendingView(View):
 
     #Returns Applcations with status of track set to True
     def get(self, request, *args, **kwargs):
-        application = Application.objects.filter(tracking_status = True)
-        return render(request,self.template_name, {'list':application})
+        applications = Application.objects.filter(tracking_status = True)
+        return render(request,self.template_name, {'applications':applications})
 
 # ActivityView
 # Shows Lists of all residents that have not been tracked or untracked
@@ -51,7 +51,7 @@ class PendingAlertsView(View):
             for alert in alerts:
                 self.list.append(alert)
 
-        return render(request,self.template_name, {'list':self.list,"form":self.form_class})
+        return render(request,self.template_name, {'alerts':self.list,"form":self.form_class})
 
     def post(self, request, *args, **kwargs):
 
@@ -69,13 +69,15 @@ class ShowView(View):
         '''if GET  '''
 
         resident_id= int(request.GET["resident_id"])
+        resident = Resident.objects.get(resident_id = resident_id)
         applications = Application.objects.filter(resident = Resident.objects.get(resident_id = resident_id))
 
 
-        # resident_alerts = Alert.objects.filter(resident_id = resident_id, application_id = application_alerts.tracking_id, alert_status = False)
+        resident_alerts = Alert.objects.filter(resident = Resident.objects.get(resident_id = resident_id), alert_status = False)
 
         # documents = Document.objects.filter(resident_id = resident_id)
         rfis = RFI.objects.filter(response__application__resident__resident_id = resident_id).order_by('response__application__application_id','rfi_id')
+        denials = Denial.objects.filter(response__application__resident__resident_id = resident_id).order_by('response__application__application_id','denial_id')
         approvals = Approval.objects.filter(response__application__resident__resident_id = resident_id).order_by('response__application__application_id','approval_id')
         namis = NAMI.objects.filter(approval__response__application__resident__resident_id = resident_id).order_by('approval__approval_id', 'nami_id')
         # medicaid_application_documents = Document.objects.filter(resident_id = resident_id, description = "medicaid_application")
@@ -83,7 +85,7 @@ class ShowView(View):
         # applications = results
         # print(application)
         # return render(request,self.template_name, {'rfis':rfis,'documents':documents,'resident':resident,'applications':applications,"resident_alerts":resident_alerts, 'medicaid_application_documents': medicaid_application_documents, "rfi_documents":rfi_documents, "form":self.form_class})
-        return render(request, self.template_name, {'applications':applications, 'rfis':rfis, 'approvals': approvals, 'namis': namis})
+        return render(request, self.template_name, {'resident': resident, 'applications':applications, 'rfis':rfis, 'denials': denials, 'approvals': approvals, 'namis': namis, 'resident_alerts': resident_alerts})
     def post(self, request, *args, **kwargs):
 
 

@@ -19,14 +19,14 @@
       </tr>
     </thead>
       <tbody>
-        {% for obj in list%}
-        <tr id="{{obj.resident_id}}">
-          <td>{{obj.resident.first_name}}</td>
-          <td>{{obj.resident.last_name}}</td>
-          <!-- <td>{{obj.facility}}</td> -->
-          <td>{{obj.medicaid_pickup_date|date:"F d, Y"}}</td>
-          <td>{{obj.phase.phase_name}}</td>
-          <td><a href="/show?resident_id={{obj.resident_id}}" class="alertByButton"><button class="btn-tracked">Show</button></a></td>
+        {% for application in applications%}
+        <tr id="{{application.application_id}}">
+          <td>{{application.resident.first_name}}</td>
+          <td>{{application.resident.last_name}}</td>
+          <!-- <td>{{application.facility}}</td> -->
+          <td>{{application.medicaid_pickup_date|date:"F d, Y"}}</td>
+          <td>{{application.phase.phase_name}}</td>
+          <td><a href="/show?resident_id={{application.resident_id}}" class="alertByButton"><button class="btn-tracked">Show</button></a></td>
           <td><button class="btn-ignore">Don't Track</button></td>
         </tr>
         {% endfor %}
@@ -108,10 +108,10 @@
                 </tr>
             </thead>
             <tbody>
-              {% for obj in list%}
+              {% for application in list%}
                 <tr>
-                    <td>{{obj.first_name}} {{obj.last_name}}</td>
-                    <td>{{obj.type}}</td>
+                    <td>{{application.first_name}} {{application.last_name}}</td>
+                    <td>{{application.type}}</td>
                     <td>27</td>
                     <td>2011/01/25</td>
                     <td>$112,000</td>
@@ -158,9 +158,9 @@
           </tr>
       </thead>
       <tbody>
-        {% for obj in list%}
+        {% for application in list%}
           <tr>
-              <td>{{obj.first_name}} {{obj.last_name}}</td>
+              <td>{{application.first_name}} {{application.last_name}}</td>
               <td>New York</td>
               <td>27</td>
               <td>2011/01/25</td>

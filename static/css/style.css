@@ -150,7 +150,7 @@ nav li.grayText {
 }
 
 h2, h3, h4 {
-	margin: 50px 0 20px 0;
+	margin-top: 50px;
 	text-align: center;
 }
 
@@ -341,7 +341,7 @@ table button {
 	padding: 5px 10px 8px 10px;
 }
 .show h4 {
-	background: steelblue !important;
+	background: steelblue;
 	color: white !important;
 	border-radius: 50px;
 
@@ -366,7 +366,7 @@ table button {
 	text-align: center;
 	background-color: rgba(180,0,0,.8);
 	width: 350px;
-	margin: auto;
+	margin: 10px auto;
 	padding: 5px;
 	border-radius: 25px;
 }
@@ -401,6 +401,47 @@ table button {
 
 .residentInfoDiv h4.responseH4 {
 	width: 220px;
+}
+
+.notesModalBtnDiv {
+	text-align: center;
+}
+
+#notesModalBtn {
+	margin: 10px;
+	background: #3040A6;
+	color: white;
+}
+
+@media(min-width: 998px) {
+	#notesModalBtn {
+		position: absolute;
+		top: 130px;
+		right: 200px;
+	}
+}
+
+.residentInfoDiv .nav-tabs {
+	justify-content: flex-start;
+}
+
+.residentInfoDiv .nav-tabs a {
+	border-radius: 5px 5px 0 0;
+	display: inline-block;
+	padding: 5px 10px;
+	color: #aaa;
+}
+.residentInfoDiv a.active.show {
+	color: #3040A6;
+	font-weight: bold;
+	margin-bottom: -1px;
+}
+
+@media(min-width: 998px) {
+	.residentInfoDiv a.active.show {
+		border: 1px solid #ddd;
+		border-bottom: 1px solid white;
+	}
 }
 
 .collapsibleSection {
@@ -487,7 +528,6 @@ table button {
 	overflow: hidden;
 	/*border-radius: 25px 0 25px 0;*/
 	border-radius: 5px;
-	margin-top: 30px;
 	/*height: 250px;*/
 	/*background: white;*/
 	border: 2px solid #eee;
@@ -498,6 +538,7 @@ table button {
 
 @media(min-width: 768px) {
 	.residentInfoDiv section {
+		margin-top: 30px;
 		padding: 15px 25px 0 25px;
 	}
 }
@@ -687,7 +728,7 @@ input[type=date]::-webkit-inner-spin-button {
 		top: 70px;
 	}
 	.alert {
-		width: 450px;
+		width: 500px;
 	}
 }
 
