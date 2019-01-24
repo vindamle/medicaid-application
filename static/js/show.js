@@ -13,8 +13,10 @@ const phaseChange = (element, phaseId) => {
 		success: function(response) 
 		{
 			console.log(successMessage);
-			const status = document.querySelector('#showStatus');
+			const status = document.querySelector(`#app${dataObject.application_id}showStatus`);
 			status.innerHTML = `Status: ${response}`;
+			const tab = document.querySelector(`#app${dataObject.application_id}TabPhaseName`);
+			tab.innerHTML = response;
 		}
 	});
 	return(ajaxCall);
@@ -72,11 +74,11 @@ const sendInputInfoToDB = input => {
 	}
 };
 
-const addSelectEventListener = selectField => {
-	selectField.addEventListener('change', () => {
-		sendInputInfoToDB(selectField);
-	});
-};
+// const addSelectEventListener = selectField => {
+// 	selectField.addEventListener('change', () => {
+// 		sendInputInfoToDB(selectField);
+// 	});
+// };
 
 const alertDiv = document.querySelector('.alertDiv');
 alertDiv.addEventListener('click', (e) => {
@@ -92,44 +94,15 @@ alertDiv.addEventListener('click', (e) => {
 	}
 });
 
-const meetingCheckbox = document.querySelector('.meetingCheckbox');
-$(document).ready(()=>{
-	if(meetingCheckbox.checked) {
-		$('.step2').css('display', 'block');
-	}
-})
-
-const pickup_date = document.querySelector('#medicaid_pickup_date');
-$(document).ready(()=>{
-	if(pickup_date.value != "") {
-		$('.step3').css('display', 'block');
-	}
-})
-
-meetingCheckbox.addEventListener('change', () => {
-	if(meetingCheckbox.checked) {
-		if(!$('#appointment_date').val()){
-			alert("Please enter a meeting date")
-			meetingCheckbox.checked = false;
-			return;
-		} 
-			$('.step2').fadeIn();
-			 phaseChange(meetingCheckbox, 2);
-	} else {
-		$('.step2').css('display', 'none');
-		$('.step3').css('display', 'none');
-		 phaseChange(meetingCheckbox, 1);
-	}
-})
 
 // Add eventListeners for select fields to send their info to DB via AJAX: 
-const selectFields = document.querySelectorAll('SELECT');
-for (let i = 0; i < selectFields.length; i++) {
-	const selectField = selectFields[i];
-	if (selectField.id != 'response1_select') {
-		addSelectEventListener(selectField);
-	};
-};
+// const selectFields = document.querySelectorAll('SELECT');
+// for (let i = 0; i < selectFields.length; i++) {
+// 	const selectField = selectFields[i];
+// 	if (selectField.id != 'response1_select') {
+// 		addSelectEventListener(selectField);
+// 	};
+// };
 
 // Add eventListeners for inputs to focus them and send their info to DB via AJAX: 
 const editableInputs = document.querySelectorAll('INPUT.editable');
