@@ -9,10 +9,10 @@ from .models import *
 from .additionalInfo import AdditionalInfo
 
 
-def update_application_tracking(request):
+def application_tracking(request):
     application = requests.GET["application_id"]
 
-def update_list(request):
+def track_untrack_resident(request):
     requested_resident_id = request.GET['resident_id']
     track = request.GET['tracking']
 

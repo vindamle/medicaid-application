@@ -3,6 +3,7 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+{% if user.is_authenticated%}
 <div class="tableContainer">
   <h3>Medicaid Pending (<span class="countSpan" id="medicaidPendingTableCount"></span>)</h3>
     <!-- <div class="tbodyContainer"> -->
@@ -34,7 +35,10 @@
   </table>
     <!-- </div> -->
 </div>
-
+{% else %}
+  <p>You are not logged in</p>
+  <a href="{% url 'login' %}">login</a>
+{% endif %}
 {% endblock %}
 {% load static %}
 {% block scripts %}

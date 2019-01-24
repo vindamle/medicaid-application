@@ -8,28 +8,36 @@ from datetime import datetime
 import os
 from pathlib import Path
 
+from django.contrib.auth.models import Permission
+
 # Pending View
 # Shows List of All Currently Tracked Applications
 class PendingView(View):
     template_name = "pending.html"
-
     #Returns Applcations with status of track set to True
     def get(self, request, *args, **kwargs):
-        applications = Application.objects.filter(tracking_status = True)
+        applications = Application.objects.filter(tracking_status = True, resident__tracking_status = True)
         return render(request,self.template_name, {'applications':applications})
 
 # ActivityView
 # Shows Lists of all residents that have not been tracked or untracked
 class ActivityView(View):
+
     template_name = "activity.html"
 
     #Returns Residents with new activitys that have not been tracked/not tracked
     def get(self, request, *args, **kwargs):
-        new_admission = Resident.objects.filter(tracking_status = None, activity_type = 'A')
-        payor_change = Resident.objects.filter(activity_type = 'P', dismiss = False)
-        discharge= Resident.objects.filter(tracking_status = None, activity_type = 'D')
+        # if request.user.is_authenticated:
+        permissions = Permission.objects.filter(user = request.user)
+        for permission in permissions:
+            print(permission.codename)
+            new_admission = Resident.objects.filter(facility_name =permission.codename, tracking_status = None, activity_type = 'A')
+            payor_change = Resident.objects.filter(facility_name =permission.codename,activity_type = 'P', dismiss = False)
+            discharge= Resident.objects.filter(facility_name =permission.codename,tracking_status = None, activity_type = 'D')
 
         return render(request,self.template_name, {'discharge':discharge,'admission':new_admission,'payor_change':payor_change})
+        # else:
+            # return render(request,"registration/login.html")
 
 
 
@@ -121,7 +129,7 @@ class ShowView(View):
         elif type == 'rfi':
             rfi = RFI.objects.get(rfi_id = int(request.POST.get('rfi_id')))
             rfi.document_id = new_document.document_id
-            rfi.save()        
+            rfi.save()
         elif type == 'approval':
             approval = Approval.objects.get(approval_id = int(request.POST.get('approval_id')))
             approval.document_id = new_document.document_id

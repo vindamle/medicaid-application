@@ -50,7 +50,7 @@ const trackOrIgnore = (row, trueOrFalse) => {
 			application_id: row.id,
 			tracking: trueOrFalse
 		},
-		success: function() 
+		success: function()
 		{
 			const table = row.parentNode;
 			$(row).remove();
@@ -61,7 +61,7 @@ const trackOrIgnore = (row, trueOrFalse) => {
 	});
 	return(ajaxCall);
 }
-  
+
 $('.btn-track').click(function(){
     const row = this.parentNode.parentNode;
     trackOrIgnore(row, true);
