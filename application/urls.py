@@ -8,6 +8,7 @@ urlpatterns = [
     path('ajax/approval_verified/', views.approval_verified, name = 'approval_verified'),
     path('ajax/update_resident/', views.update_resident, name = 'update_resident'),
     path('ajax/update_application/', views.update_application, name = 'update_application'),
+    path('ajax/update_confirmation/', views.update_confirmation, name = 'update_confirmation'),
     path('ajax/update_alert/', views.update_alert, name = 'update_alert'),
     path('ajax/phase_change/', views.phase_change, name = 'phase_change'),
     path('ajax/update_rfi/', views.update_rfi, name = 'update_rfi'),
@@ -18,6 +19,7 @@ urlpatterns = [
     path('ajax/update_nami/', views.update_nami, name = 'update_nami'),
     path('ajax/delete_nami/', views.delete_nami, name = 'delete_nami'),
     path('ajax/create_application/', views.create_application, name = 'create_application'),
+    # path('ajax/delete_document/', views.delete_document, name = 'delete_document'),
 
 
 

@@ -126,6 +126,10 @@ class ShowView(View):
             approval = Approval.objects.get(approval_id = int(request.POST.get('approval_id')))
             approval.document_id = new_document.document_id
             approval.save()
+        elif type == 'denial':
+            denial = Denial.objects.get(denial_id = int(request.POST.get('denial_id')))
+            denial.document_id = new_document.document_id
+            denial.save()
         elif type == 'application_confirmation':
             confirmation = Confirmation.objects.create(confirmation_document = new_document, description = type)
             application = Application.objects.get(application_id = int(application_id))
