@@ -16,8 +16,19 @@ class PendingView(View):
     template_name = "pending.html"
     #Returns Applcations with status of track set to True
     def get(self, request, *args, **kwargs):
-        applications = Application.objects.filter(tracking_status = True, resident__tracking_status = True)
-        return render(request,self.template_name, {'applications':applications})
+        applications  = list()
+        if request.user.is_authenticated:
+            permissions = Permission.objects.filter(user = request.user)
+            for permission in permissions:
+
+                apps = Application.objects.filter(tracking_status = True, resident__tracking_status = True,resident__facility_name =permission.codename)
+                for app in apps:
+                    applications.append(app)
+
+            return render(request,self.template_name, {'applications':applications})
+        else:
+            return redirect('login')
+
 
 # ActivityView
 # Shows Lists of all residents that have not been tracked or untracked
@@ -27,17 +38,32 @@ class ActivityView(View):
 
     #Returns Residents with new activitys that have not been tracked/not tracked
     def get(self, request, *args, **kwargs):
-        # if request.user.is_authenticated:
-        permissions = Permission.objects.filter(user = request.user)
-        for permission in permissions:
-            print(permission.codename)
-            new_admission = Resident.objects.filter(facility_name =permission.codename, tracking_status = None, activity_type = 'A')
-            payor_change = Resident.objects.filter(facility_name =permission.codename,activity_type = 'P', dismiss = False)
-            discharge= Resident.objects.filter(facility_name =permission.codename,tracking_status = None, activity_type = 'D')
 
-        return render(request,self.template_name, {'discharge':discharge,'admission':new_admission,'payor_change':payor_change})
-        # else:
-            # return render(request,"registration/login.html")
+        new_admission = []
+        payor_change = []
+        discharge = []
+
+        if request.user.is_authenticated:
+            permissions = Permission.objects.filter(user = request.user)
+
+            for permission in permissions:
+                print(permission)
+
+                new_admits = Resident.objects.filter(facility_name =permission.codename, tracking_status = None, activity_type = 'A')
+                for new_admit in new_admits:
+                    new_admission.append(new_admit)
+
+                new_payor_changes = Resident.objects.filter(facility_name =permission.codename,activity_type = 'P', dismiss = False)
+                for new_payor_change in new_payor_changes:
+                    payor_change.append(new_payor_change)
+
+                new_discharges= Resident.objects.filter(facility_name =permission.codename,tracking_status = None, activity_type = 'D')
+                for new_discharge in new_discharges:
+                    discharge.append(new_discharge)
+                print(len(new_admission))
+            return render(request,self.template_name, {'discharge':discharge,'admission':new_admission,'payor_change':payor_change})
+        else:
+            return redirect('login')
 
 
 
@@ -49,21 +75,24 @@ class PendingAlertsView(View):
 
 
     def get(self, request, *args, **kwargs):
-        '''if GET  '''
-        residents = Resident.objects.filter(tracking_status = True)
-        self.list = list()
-        for resident in residents:
 
-            alerts = Alert.objects.filter(resident = resident , alert_status = False)
 
-            for alert in alerts:
-                self.list.append(alert)
+        if request.user.is_authenticated:
+            permissions = Permission.objects.filter(user = request.user)
+            for permission in permissions:
+                residents = Resident.objects.filter(facility_name =permission.codename, tracking_status = True)
+                self.list = list()
+                for resident in residents:
 
-        return render(request,self.template_name, {'alerts':self.list,"form":self.form_class})
+                    alerts = Alert.objects.filter(resident = resident , alert_status = False)
 
-    def post(self, request, *args, **kwargs):
+                    for alert in alerts:
+                        self.list.append(alert)
 
-        pass
+                return render(request,self.template_name, {'alerts':self.list,"form":self.form_class})
+        else:
+            return redirect('login')
+
 
 
 class ShowView(View):
@@ -152,13 +181,17 @@ class ApprovalsView(View):
 
     def get(self, request, *args, **kwargs):
         '''if GET  '''
+        if request.user.is_authenticated:
+            permissions = Permission.objects.filter(user = request.user)
+            for permission in permissions:
+                results = Resident.objects.filter(tracking_status = True,facility_name =permission.codename)
+                self.list = list()
 
-        results = Resident.objects.filter(tracking_status = True)
-        self.list = list()
-
-        for result in results:
-            self.list.append(result)
-        return render(request,self.template_name, {'list':self.list,"form":self.form_class})
+                for result in results:
+                    self.list.append(result)
+                return render(request,self.template_name, {'list':self.list,"form":self.form_class})
+        else:
+            return redirect('login')
 
     def post(self, request, *args, **kwargs):
 

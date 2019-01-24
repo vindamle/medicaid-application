@@ -386,6 +386,7 @@ class Employee(models.Model):
         permissions = (
             ("Beth Abraham", "Can View Beth Abraham Center Residents"),
             ("Boro Park", "Can View Boro Park Center Residents"),
+            ("Steuben","Can View Steuben Center Residents" )
         )
 
 # class Snowden(models.Models):

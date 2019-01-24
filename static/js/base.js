@@ -47,7 +47,7 @@ const trackOrIgnore = (row, trueOrFalse) => {
 		type:"GET",
 		url: "/application/ajax/track_or_ignore",
 		data:{
-			application_id: row.id,
+			resident_id: row.id,
 			tracking: trueOrFalse
 		},
 		success: function()
