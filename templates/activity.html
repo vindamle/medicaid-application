@@ -3,6 +3,7 @@
 {% block title %}Activity{% endblock %}
 
 {% block content %}
+{% if user.is_authenticated %}
 <div class="tableContainer" id="activityContainer">
   <h3>Activity (<span id="totalActivityCount"></span>)</h3>
   <ul class="nav nav-tabs nav-justified">
@@ -116,5 +117,8 @@
     </div>
   </div>
 </div>
-
+{% else %}
+  <p>You are not logged in</p>
+  <a href="{% url 'login' %}">login</a>
+{% endif %}
 {% endblock %}

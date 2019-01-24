@@ -4,6 +4,7 @@
 
 {% block content %}
 {% load static %}
+{% if user.is_authenticated%}
 
 <div class="alertDiv">
 	{% for alert in resident_alerts %}
@@ -356,7 +357,7 @@
 									<option value="yes">Yes</option>
 								</select>
 								<span class="invisible DBinfo" id="DBrfi_extension_request">{{rfi.rfi_extension_request}}</span>
-							</li>			
+							</li>
 							<li class="editableLi {% if rfi.rfi_extension_request != 'yes' %} invisible {% endif %}">
 								<label>Extension Granted?</label>
 								<select name="rfi_extension_response" id="rfi_extension_response" data-table="rfi" data-application_id="{{rfi.response.application.application_id}}" data-rfi_id="{{rfi.rfi_id}}" onchange="sendInputInfoToDB(this); newRfiDueDatePrompt(this)">
@@ -496,7 +497,7 @@
 							</select>
 							<span class="invisible DBinfo" id="DBspousal_refusal">{{approval.fair_hearing_required}}</span>
 						</li>
-						<!-- Button trigger modal -->		
+						<!-- Button trigger modal -->
 							<div class="modal fade bd-example-modal-lg" id="namiModal{{approval.approval_id}}" tabindex="-1" role="dialog" aria-labelledby="namiModalTitle" aria-hidden="true">
 							  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 							    <div class="modal-content">
@@ -595,6 +596,10 @@
 {% endfor %} <!-- end of for application in applications loop -->
 </div>
 </div>
+{% else %}
+  <p>You are not logged in</p>
+  <a href="{% url 'login' %}">login</a>
+{% endif %}
 {% endblock %}
 
 
@@ -647,7 +652,7 @@ $(document).ready(()=>{
 					alert("Please enter a meeting date")
 					meetingCheckbox.checked = false;
 					return;
-				} 
+				}
 				$(`#${applicationDiv.id} .step2`).fadeIn();
 				 phaseChange(meetingCheckbox, 2);
 			} else {
@@ -679,7 +684,7 @@ $(document).ready(()=>{
 		};
 	};
 
-	
+
 
 }) // end document.ready
 
@@ -799,7 +804,7 @@ class ResponseRowHTML {
 						</li>
 					`
 						// numberOfNAMIs = 1;
-						 this.approvedRowHtml += `			
+						 this.approvedRowHtml += `
 							<div class="modal fade bd-example-modal-lg" id="namiModal${responseId}" tabindex="-1" role="dialog" aria-labelledby="namiModalTitle" aria-hidden="true">
 							  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 							    <div class="modal-content">
@@ -825,7 +830,7 @@ class ResponseRowHTML {
 					</div>
 					<div class="col-lg-3 applicationColumn">
 						<li>
-							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#namiModal${responseId}" id="namiModalBtn">View/Add NAMIs</button>	
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#namiModal${responseId}" id="namiModalBtn">View/Add NAMIs</button>
 						</li>
 						<li class="editableLi step6">
 							<label>Satisfied with approval?</label>
@@ -909,19 +914,19 @@ const addNAMIRowHTML = (addNamiBtn, approvalId) => {
 						<button type="button" class="close" onclick="removeNAMIRow(this, ${namiId})">
 		          <span >&times;</span>
 		        </button>
-						<h6 class="namiH6">NAMI:</h6>			
+						<h6 class="namiH6">NAMI:</h6>
 						<div class="col-lg-4 col-sm-12 namiColumn">
-						<label>NAMI Start Date:</label>					
+						<label>NAMI Start Date:</label>
 							<input class="editable date" id="nami_start_date" data-table="nami" data-nami_id="${namiId}" type="date" value="{{nami.nami_start_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
 						</div>
 						<div class="col-lg-4 col-sm-12 namiColumn">
 						<label>NAMI End Date:</label>
-						
+
 							<input class="editable date" id="nami_end_date" data-table="nami" data-nami_id="${namiId}" type="date" value="{{nami.nami_end_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
 						</div>
 						<div class="col-lg-4 col-sm-12 namiColumn">
 						<label>Amount:</label>
-						
+
 							$<input type="number" class="editable" id="nami_amount" data-table="nami" data-nami_id="${namiId}" value="{{nami.nami_amount|floatformat:2}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
 						</div>
 					</div>

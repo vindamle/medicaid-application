@@ -18,6 +18,8 @@ from django.urls import path, include
 from .views import PendingView, ActivityView, PendingAlertsView,ShowView,ApprovalsView, NotTrackingView
 
 urlpatterns = [
+
+    path('', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
     path('pending/', PendingView.as_view(), name='pending'),
     path('', ActivityView.as_view(), name = 'home'),
@@ -26,6 +28,6 @@ urlpatterns = [
     path('show/', ShowView.as_view(), name = 'show'),
     path('approvals/', ApprovalsView.as_view(), name = 'approvals'),
     path('application/', include('application.urls')),
-    path('application/', include('django.contrib.auth.urls')),
+
 
 ]
