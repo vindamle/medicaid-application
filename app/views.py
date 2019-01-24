@@ -15,7 +15,7 @@ class PendingView(View):
 
     #Returns Applcations with status of track set to True
     def get(self, request, *args, **kwargs):
-        applications = Application.objects.filter(tracking_status = True)
+        applications = Application.objects.filter(tracking_status = True, resident__tracking_status = True)
         return render(request,self.template_name, {'applications':applications})
 
 # ActivityView
@@ -121,7 +121,7 @@ class ShowView(View):
         elif type == 'rfi':
             rfi = RFI.objects.get(rfi_id = int(request.POST.get('rfi_id')))
             rfi.document_id = new_document.document_id
-            rfi.save()        
+            rfi.save()
         elif type == 'approval':
             approval = Approval.objects.get(approval_id = int(request.POST.get('approval_id')))
             approval.document_id = new_document.document_id

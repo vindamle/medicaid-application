@@ -4,7 +4,8 @@ from . import views
 urlpatterns = [
 
     # path('create/', views.create.as_view(), name = 'create'),
-    path('ajax/track_or_ignore/' ,views.update_list , name = "update_list"),
+    path('ajax/track_or_ignore/' ,views.track_untrack_resident , name = "track_untrack_resident"),
+    path('ajax/application_tracking/', views.application_tracking, name = 'application_tracking'),
     path('ajax/approval_verified/', views.approval_verified, name = 'approval_verified'),
     path('ajax/update_resident/', views.update_resident, name = 'update_resident'),
     path('ajax/update_application/', views.update_application, name = 'update_application'),
@@ -18,6 +19,7 @@ urlpatterns = [
     path('ajax/update_nami/', views.update_nami, name = 'update_nami'),
     path('ajax/delete_nami/', views.delete_nami, name = 'delete_nami'),
     path('ajax/create_application/', views.create_application, name = 'create_application'),
+
 
 
 

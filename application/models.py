@@ -349,6 +349,22 @@ class Alert(models.Model):
         verbose_name = 'Alerts'
         verbose_name_plural = 'Alerts'
 
+class FairHearing(models.Model):
+    fair_hearing_id = models.AutoField(primary_key = True)
+
+    application = models.ForeignKey(
+        Application,
+        on_delete = models.CASCADE,
+        null = True,
+    )
+
+    fair_hearing_date = models.DateField(null = True, blank = True)
+    fair_hearing_time =  models.TimeField(null = True, blank = True)
+    fair_hearing_address = models.CharField(max_length = 50,  null = True, blank=True)
+    fair_hearing_outcome = models.CharField(max_length = 50,  null = True, blank=True)
+    fair_hearing_appeal = models.CharField(max_length = 50,  null = True, blank=True)
+
+
 
 # class Snowden(models.Models):
 #     log_id = models.BigAutoField(primary_key = True)\
