@@ -13,7 +13,7 @@ def application_tracking(request):
     application = requests.GET["application_id"]
 
 def track_untrack_resident(request):
-    requested_resident_id = request.GET['resident_id']
+    requested_resident_id = request.GET['row_id']
     track = request.GET['tracking']
 
     requested_resident_id = int(requested_resident_id)

@@ -193,7 +193,7 @@ tbody {
 }
 
 tbody tr:nth-of-type(even) {
-	background: #ddd !important;
+	background: #dedede !important;
 }
 
 tbody tr:nth-of-type(odd) {
@@ -282,10 +282,10 @@ table button {
 	margin: 20px auto;
 }
 
-.dataTables_filter input {
+.dataTables_filter input[type="search"] {
 	margin-left: 5px;
 	width: 250px;
-	border-radius: 5px;
+	border-radius: 25px;
 	padding: 2px 10px;
 }
 
@@ -344,6 +344,15 @@ table button {
 	font-size: 20px;
 	padding: 5px 10px 8px 10px;
 }
+
+.navTabLink:hover {
+	text-decoration: none;
+}
+
+.navTabLink:hover h4 {
+	color: darkorange;
+}
+
 .show h4 {
 	background: steelblue;
 	color: white !important;
@@ -954,6 +963,8 @@ input[type=date]::-webkit-inner-spin-button {
 
 .countSpan {
 	/*color: maroon;*/
+	/*font-size: 16px;*/
+	/*font-weight: bold;*/
 }
 
 /*_________________approvals.html_________________*/
