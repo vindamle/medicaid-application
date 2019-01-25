@@ -3,22 +3,23 @@
 {% block title %}Activity{% endblock %}
 
 {% block content %}
+{% if user.is_authenticated %}
 <div class="tableContainer" id="activityContainer">
   <h3>Activity (<span id="totalActivityCount"></span>)</h3>
   <ul class="nav nav-tabs nav-justified">
     <li>
-      <a data-toggle="tab" href="#home" class="active show">
-        <h4>New Admissions (<span class="countSpan" id="newAdmissionsTableCount"></span>)</h4>
+      <a data-toggle="tab" href="#home" class="navTabLink active show">
+        <h4>New Admissions <span class="countSpan" id="newAdmissionsTableCount"></span></h4>
       </a>
     </li>
     <li>
-      <a data-toggle="tab" href="#menu1">
-        <h4>Payor Changes (<span class="countSpan" id="payorChangesTableCount"></span>)</h4>
+      <a data-toggle="tab" class="navTabLink" href="#menu1">
+        <h4>Payor Changes <span class="countSpan" id="payorChangesTableCount"></span></h4>
       </a>
     </li>
       <li>
-        <a data-toggle="tab" href="#menu2">
-      <h4>Discharges (<span class="countSpan" id="dischargesTableCount"></span>)</h4>
+        <a data-toggle="tab" class="navTabLink" href="#menu2">
+      <h4>Discharges <span class="countSpan" id="dischargesTableCount"></span></h4>
       </a>
     </li>
   </ul>
@@ -39,7 +40,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for obj in list %}
+          {% for obj in admission %}
           <tr id="{{obj.resident_id}}">
             <td>{{obj.first_name}}</td>
             <td>{{obj.last_name}}</td>
@@ -116,76 +117,8 @@
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-<!-- 
-// $(document).ready(function() {
-
-//        Dtable1 =$('#example').DataTable({
-
-
-
-//          "scrollY":$('#example').closest('.container-fluid').height()+ "px",
-//          "scrollCollapse": true,
-//          "paging":         false,
-//          "columnDefs": [ {
-//             "targets": -1,
-//             "data": null,
-//             "defaultContent": '<button class="getData"type="button">Track</button>  <button class = "ignore" type="button">Ignore</button> '
-//         } ]});
-//        Dtable2 = $('#example2').DataTable({
-//          "scrollY":        "300px",
-//          "scrollCollapse": true,
-//          "paging":         false,
-//          "columnDefs": [ {
-//             "targets": -1,
-//             "data": null,
-//             "defaultContent": '<button class="undo">Undo</button>'
-//         } ]});
-//        var counter = 0;
-
-//     $('#example').on( 'click', '.getData', function () {
-//         var data= Dtable1.row( $(this).parents('tr') ).data();
-//         Dtable1.row( $(this).parents('tr') ).remove().draw();
-//         Dtable2.row.add( [
-//             data[0],
-//             data[0],
-//             data[0],
-//             data[0],
-//             data[0],
-//         ] ).draw( false );
-//         counter++;
-//     } );
-
-//     $('#example').on( 'click', '.ignore', function () {
-//         Dtable1.row( $(this).parents('tr') ).remove().draw();
-
-//     } );
-
-//     $('#example2 tbody').on( 'click', '.undo', function () {
-//       var data= Dtable2.row( $(this).parents('tr') ).data();
-//       Dtable2.row( $(this).parents('tr') ).remove().draw();
-//       Dtable1.row.add( [
-//           data[0],
-//           data[0],
-//           data[0],
-//           data[0],
-//           data[0],
-//       ] ).draw( false );
-
-
-
-//     } );
-// } );
-
-</script> -->
-
+{% else %}
+  <p>You are not logged in</p>
+  <a href="{% url 'login' %}">login</a>
+{% endif %}
 {% endblock %}
-

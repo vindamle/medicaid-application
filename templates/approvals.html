@@ -3,6 +3,7 @@
 {% block title %}Approvals{% endblock %}
 
 {% block content %}
+{% if user.is_authenticated%}
 <div class="tableContainer">
   <h3>Approvals (<span class="countSpan" id="approvalsTableCount"></span>):</h3>
   <table id="approvalsTable">
@@ -40,7 +41,10 @@
     </tbody>
   </table>
 </div>
-
+{% else %}
+  <p>You are not logged in</p>
+  <a href="{% url 'login' %}">login</a>
+{% endif %}
 {% endblock %}
 {% load static %}
 {% block scripts %}

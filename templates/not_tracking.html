@@ -3,6 +3,7 @@
 {% block title %}Approvals{% endblock %}
 
 {% block content %}
+{% if user.is_authenticated %}
 <div class="tableContainer">
   <h3>Not Tracking (<span class="countSpan" id="notTrackingTableCount"></span>):</h3>
   <table id="notTrackingTable">
@@ -33,5 +34,8 @@
   </table>
 </div>
 <!-- <script type="text/javascript" src="js/pending.js"></script> -->
-
+{% else %}
+  <p>You are not logged in</p>
+  <a href="{% url 'login' %}">login</a>
+{% endif %}
 {% endblock %}

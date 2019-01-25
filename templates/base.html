@@ -23,18 +23,20 @@
     <a href="{% url 'home' %}">
       <img src='{% static "img/medicaidTrackerLogo3d4.png" %}' class="logo navbar-brand">
       <!-- <h1 class="title">Medicaid Tracker</h1> -->
-    </a>   
+    </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      {% if user.is_authenticated%}
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link newAlerts" href="{% url 'activity' %}">Activity<!-- <p id="activityCount">{{list|length}}</p> --></a>
+          <a class="nav-link newAlerts" href="{% url 'home' %}">Activity<!-- <p id="activityCount">{{list|length}}</p> --></a>
         </li>
         <li class="grayText">|</li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'home' %}">Medicaid Pending</a>
+          <a class="nav-link" href="{% url 'pending' %}">Medicaid Pending</a>
         </li>
         <li class="grayText">|</li>
         <li class="nav-item">
@@ -47,23 +49,29 @@
         <li class="grayText">|</li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            David Klaver
+            {{ user.first_name }} {{user.last_name}}
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="#">Account</a>
             <a class="dropdown-item" href="#">Settings</a>
             <a class="dropdown-item" href="{% url 'not_tracking' %}">Not Tracking</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/application/login">Log Out</a>
+            <a class="dropdown-item" href="{%url 'logout'%}">Log Out</a>
           </div>
         </li>
       </ul>
+      {% else %}
+          <p>LOGIN</p>
+      {% endif %}
     </nav>
+
     <div class="content">
         {% block content %}
 
         {% endblock %}
+
     </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script> -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

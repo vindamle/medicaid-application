@@ -6,10 +6,8 @@ import pytz
 class Pickupdate:
     def __init__(self):
 
-
-
         self.user = 'postgres'
-        self.password = 'Aug.2018'
+        self.password = 'Oct2018!'
         self.database_name = 'medicaid'
 
         self.database_url = 'postgresql://{user}:{password}@localhost/{database_name}'.format(
@@ -22,7 +20,7 @@ class Pickupdate:
 
     def check_alert_test(self, days, alert_priority, alert_id):
 
-        sql = """SELECT * FROM application_applicationtracking;"""
+        sql = """SELECT * FROM application_application;"""
         sql2 = """SELECT * FROM application_resident;"""
         sql3 = """SELECT * FROM application_alerttype;"""
 
@@ -31,6 +29,7 @@ class Pickupdate:
         df3 = pd.read_sql(sql3, con=self.engine)
 
         # remove after implemented
+
         shift= pd.TimedeltaIndex(90+(df['medicaid_pickup_date'] + pd.DateOffset(days = 90)).dt.daysinmonth-(df['medicaid_pickup_date'] + pd.DateOffset(days = 90)).dt.day, unit = "D")
         df["medicaid_pickup_deadline"]=df['medicaid_pickup_date']+ shift
 
@@ -41,7 +40,7 @@ class Pickupdate:
         alert_table["alert_status"] = False
 
         alert_table= alert_table.rename(index = str , columns = {'tracking_id':'application_id'})
-        cols = {"a":"alert_priority","b":"alert_status","c":"alert_message","d":"alert_type_id","e":"application_id","f":"resident_id"}
+        cols = {"a":"alert_priority","b":"alert_status","d":"alert_type_id","e":"application_id","f":"resident_id"}
         for i in range(0,100):
 
             alert_table["daysLeft"] = (alert_table["medicaid_pickup_deadline"]-pd.to_datetime(pytz.utc.localize(datetime.now()+ timedelta(days=i)))).dt.days
@@ -57,6 +56,7 @@ class Pickupdate:
                 alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_type_id"]] = alert_id
                 alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_message"]] = "Application Overdue"
                 alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days) ,["alert_priority"]] = alert_priority
+
             alert_table.loc[(alert_table.phase_id == 3)&(alert_table.daysLeft == days),(cols.values())].\
             to_sql("application_alert",self.engine,if_exists = 'append', index = False)
 

@@ -3,6 +3,7 @@
 {% block title %}Activity{% endblock %}
 
 {% block content %}
+{% if user.is_authenticated %}
 <div class="tableContainer" id="activityContainer">
   <h3>Alerts  (<span class="countSpan" id="allPendingAlertsTableCount"></span>)</h3>
   <ul class="nav nav-tabs nav-justified">
@@ -30,27 +31,19 @@
           <tr>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Facility</th>
-            <th>Primary Payor</th>
-            <th>Secondary Payor</th>
             <th>Alert Type</th>
-            <th>Alert Date</th>
-            <th>County</th>
+            <th>Alert Priority</th>
             <th class="invisible">Show</th>
           </tr>
         </thead>
         <tbody>
-          {% for obj in list%}
+          {% for alert in alerts%}
           <tr>
-            <td>{{obj.resident.first_name}}</td>
-            <td>{{obj.resident.last_name}}</td>
-            <td>{{obj.resident.facility}}</td>
-            <td>{{obj.primary_payor}}</td>
-            <td>{{obj.secondary_payor}}</td>
-            <td>{{obj.alert_message}}</td>
-            <td>{{obj.alert_priority}}</td>
-            <td>{{obj.county}}</td>
-            <td><a href="/show?resident_id={{obj.resident_id}}" class=""><button class="btn-alert">Show</button></a></td>
+            <td>{{alert.resident.first_name}}</td>
+            <td>{{alert.resident.last_name}}</td>
+            <td>{{alert.alert_type.alert_name}}</td>
+            <td>{{alert.alert_priority}}</td>
+            <td><a href="/show?resident_id={{alert.resident_id}}" class=""><button class="btn-alert">Show</button></a></td>
           </tr>
           {% endfor %}
 
@@ -63,27 +56,19 @@
           <tr>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Facility</th>
-            <th>Primary Payor</th>
-            <th>Secondary Payor</th>
             <th>Alert Type</th>
-            <th>Alert Date</th>
-            <th>County</th>
+            <th>Alert Priority</th>
             <th class="invisible">Show</th>
           </tr>
         </thead>
         <tbody>
-          {% for obj in list%}
+          {% for alert in alerts%}
           <tr>
-            <td>{{obj.first_name}}</td>
-            <td>{{obj.last_name}}</td>
-            <td>{{obj.facility}}</td>
-            <td>{{obj.primary_payor}}</td>
-            <td>{{obj.secondary_payor}}</td>
-            <td>RFI Due in 10 Days</td>
-            <td>{{obj.activity_date}}</td>
-            <td>{{obj.county}}</td>
-            <td><a href="/show?resident_id={{obj.resident_id}}" class=""><button class="btn-alert">Show</button></a></td>
+            <td>{{alert.resident.first_name}}</td>
+            <td>{{alert.resident.last_name}}</td>
+            <td>{{alert.alert_type.alert_name}}</td>
+            <td>{{alert.alert_priority}}</td>
+            <td><a href="/show?resident_id={{alert.resident_id}}" class=""><button class="btn-alert">Show</button></a></td>
           </tr>
           {% endfor %}
 
@@ -96,27 +81,19 @@
           <tr>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Facility</th>
-            <th>Primary Payor</th>
-            <th>Secondary Payor</th>
             <th>Alert Type</th>
-            <th>Alert Date</th>
-            <th>County</th>
+            <th>Alert Priority</th>
             <th class="invisible">Show</th>
           </tr>
         </thead>
         <tbody>
-          {% for obj in list%}
+          {% for alert in alerts%}
           <tr>
-            <td>{{obj.first_name}}</td>
-            <td>{{obj.last_name}}</td>
-            <td>{{obj.facility}}</td>
-            <td>{{obj.primary_payor}}</td>
-            <td>{{obj.secondary_payor}}</td>
-            <td>NCS Discrepancy</td>
-            <td>{{obj.activity_date}}</td>
-            <td>{{obj.county}}</td>
-            <td><a href="/show?resident_id={{obj.resident_id}}" class=""><button class="btn-alert">Show</button></a></td>
+            <td>{{alert.resident.first_name}}</td>
+            <td>{{alert.resident.last_name}}</td>
+            <td>{{alert.alert_type.alert_name}}</td>
+            <td>{{alert.alert_priority}}</td>
+            <td><a href="/show?resident_id={{alert.resident_id}}" class=""><button class="btn-alert">Show</button></a></td>
           </tr>
           {% endfor %}
 
@@ -138,14 +115,14 @@
 </tr>
 </thead>
 <tbody>
-{% for obj in discharge %}
-<tr id="{{obj.resident_id}}">
-<td>{{obj.first_name}}</td>
-<td>{{obj.last_name}}</td>
-<td>{{obj.facility}}</td>
-<td>{{obj.primary_payor}}</td>
-<td>{{obj.secondary_payor}}</td>
-<td>{{obj.activity_date}}</td>
+{% for alert in discharge %}
+<tr id="{{alert.resident_id}}">
+<td>{{alert.first_name}}</td>
+<td>{{alert.last_name}}</td>
+<td>{{alert.facility}}</td>
+<td>{{alert.primary_payor}}</td>
+<td>{{alert.secondary_payor}}</td>
+<td>{{alert.activity_date}}</td>
 <td class="trackBtnCell"><button class="btn-track">Track</button></td>
 <td><button class="btn-ignore">Don't Track</button></td>
 </tr>
@@ -225,7 +202,10 @@
 // } );
 
 </script> -->
-
+{% else %}
+  <p>You are not logged in</p>
+  <a href="{% url 'login' %}">login</a>
+{% endif %}
 {% endblock %}
 
 {% load static %}
