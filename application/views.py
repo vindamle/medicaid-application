@@ -13,7 +13,7 @@ def application_tracking(request):
     application = requests.GET["application_id"]
 
 def track_untrack_resident(request):
-    requested_resident_id = request.GET['resident_id']
+    requested_resident_id = request.GET['row_id']
     track = request.GET['tracking']
 
     requested_resident_id = int(requested_resident_id)
@@ -64,15 +64,26 @@ def update_resident(request):
     return HttpResponse("200")
 
 def update_application(request):
-    # resident_id =int(request.GET['resident_id'])
-    application_id =int(request.GET['application_id'])
+    application_id =int(request.GET['row_id'])
     column =request.GET['column']
     new_value =request.GET['new_value']
-    # resident = Resident.objects.get(resident_id = resident_id)
+    if new_value == '':
+        new_value = None
     application = Application.objects.get(application_id = application_id)
-
     field = setattr(application,column,new_value)
     application.save()
+    return HttpResponse("200")
+
+def update_confirmation(request):
+    confirmation_id =int(request.GET['row_id'])
+    column =request.GET['column']
+    new_value =request.GET['new_value']
+    if new_value == '':
+        new_value = None
+    confirmation = Confirmation.objects.get(confirmation_id = confirmation_id)
+
+    field = setattr(confirmation,column,new_value)
+    confirmation.save()
 
     return HttpResponse("200")
 
@@ -96,7 +107,6 @@ def phase_change(request):
     return HttpResponse(str(phase.phase_name))
 
 def create_response(request):
-
     application_id = int(request.GET['application_id'])
     response_type = request.GET['response_type']
     response = Response.objects.create(application_id = application_id, response_type = ResponseType.objects.get(response_type = response_type))
@@ -113,9 +123,11 @@ def create_response(request):
 
 
 def update_rfi(request):
-    rfi_id = int(request.GET['rfi_id'])
+    rfi_id = int(request.GET['row_id'])
     column =request.GET['column']
     new_value =request.GET['new_value']
+    if new_value == '':
+        new_value = None
     rfi = RFI.objects.get(rfi_id = rfi_id)
     field = setattr(rfi, column,new_value)
     rfi.save()
@@ -123,18 +135,22 @@ def update_rfi(request):
 
 
 def update_denial(request):
-    # rfi_id = int(request.GET['rfi_id'])
-    # column =request.GET['column']
-    # new_value =request.GET['new_value']
-    # rfi = RFI.objects.get(rfi_id = rfi_id)
-    # field = setattr(rfi, column,new_value)
-    # rfi.save()
+    denial_id = int(request.GET['row_id'])
+    column =request.GET['column']
+    new_value =request.GET['new_value']
+    if new_value == '':
+        new_value = None
+    denial = Denial.objects.get(denial_id = denial_id)
+    field = setattr(denial, column,new_value)
+    denial.save()
     return HttpResponse("200")
 
 def update_approval(request):
-    approval_id = int(request.GET['approval_id'])
+    approval_id = int(request.GET['row_id'])
     column =request.GET['column']
     new_value =request.GET['new_value']
+    if new_value == '':
+        new_value = None
     approval = Approval.objects.get(approval_id = approval_id)
     field = setattr(approval, column,new_value)
     approval.save()
@@ -146,7 +162,7 @@ def create_nami(request):
     return HttpResponse(int(nami.nami_id))
 
 def update_nami(request):
-    nami_id = int(request.GET['nami_id'])
+    nami_id = int(request.GET['row_id'])
     column =request.GET['column']
     new_value =request.GET['new_value']
     nami = NAMI.objects.get(nami_id = nami_id)
@@ -164,3 +180,15 @@ def create_application(request):
     resident_id = int(request.GET['resident_id'])
     application = Application.objects.create(resident = Resident.objects.get(resident_id = resident_id), phase = Phase.objects.get(phase_id = 1))
     return HttpResponse(int(application.application_id))
+
+# def delete_document(request):
+#     table = request.GET['table']
+#     if
+#     approval_id = int(request.GET['approval_id'])
+#     column =request.GET['column']
+#     new_value =request.GET['new_value']
+#     approval = Approval.objects.get(approval_id = approval_id)
+#     field = setattr(approval, column, null)
+#     approval.save()
+#     return HttpResponse("200")
+

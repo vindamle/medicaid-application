@@ -35,27 +35,19 @@ const updateDB = (table, dataObject, successMessage) => {
 	});
 	return(ajaxCall);
 };
+
 const sendInputInfoToDB = input => {
-	if(input.type == 'date' && parseInt(input.value) < 2010 || parseInt(input.value) > 2020) {
+	if(input.type == 'date' && (parseInt(input.value) < 2010 || parseInt(input.value) > 2020)) {
 		alert("Sorry - that year is out of range.")
 	} else if (input.value) {
 		const table = input.getAttribute('data-table');
+		const rowId = input.getAttribute(`data-${table}_id`)
 		let dataObject = {
 			resident_id: document.querySelector("#residentId").innerHTML,
 			column: input.id,
-			new_value: input.value
+			new_value: input.value,
+			row_id: rowId
 		};
-		if (table == "application") {
-		 dataObject.application_id = input.getAttribute('data-application_id')
-		} else if (table == "rfi") {
-		 dataObject.rfi_id = input.getAttribute('data-rfi_id')	
-		} else if (table == "approval") {
-		 dataObject.approval_id = input.getAttribute('data-approval_id')	
-		} else if (table == "denial") {
-		 dataObject.denial_id = input.getAttribute('data-denial_id')	
-		} else if (table == "nami") {
-		 dataObject.nami_id = input.getAttribute('data-nami_id')
-		}
 		let successMessage = `Value of ${dataObject.column} in the ${table} table set to ${dataObject.new_value}`;
 		updateDB(table, dataObject, successMessage);
 		// If field affects alerts, update Alerts table:

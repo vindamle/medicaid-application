@@ -77,6 +77,10 @@ nav li.grayText {
 	}
 }
 
+sup {
+	font-size: 8px;
+}
+
 .downArrow {
 	font-size: 16px;
 }
@@ -189,7 +193,7 @@ tbody {
 }
 
 tbody tr:nth-of-type(even) {
-	background: #ddd !important;
+	background: #dedede !important;
 }
 
 tbody tr:nth-of-type(odd) {
@@ -278,10 +282,10 @@ table button {
 	margin: 20px auto;
 }
 
-.dataTables_filter input {
+.dataTables_filter input[type="search"] {
 	margin-left: 5px;
 	width: 250px;
-	border-radius: 5px;
+	border-radius: 25px;
 	padding: 2px 10px;
 }
 
@@ -340,6 +344,15 @@ table button {
 	font-size: 20px;
 	padding: 5px 10px 8px 10px;
 }
+
+.navTabLink:hover {
+	text-decoration: none;
+}
+
+.navTabLink:hover h4 {
+	color: darkorange;
+}
+
 .show h4 {
 	background: steelblue;
 	color: white !important;
@@ -407,17 +420,23 @@ table button {
 	text-align: center;
 }
 
-#notesModalBtn {
+#notesModalBtn, #miscDocsModalBtn {
 	margin: 10px;
 	background: #3040A6;
 	color: white;
 }
 
-@media(min-width: 998px) {
-	#notesModalBtn {
+@media(min-width: 1200px) {
+	#notesModalBtn,	#miscDocsModalBtn {
 		position: absolute;
-		top: 130px;
 		right: 200px;
+	}
+
+	#notesModalBtn {
+		top: 130px;
+	}
+	#miscDocsModalBtn {
+		top: 200px;
 	}
 }
 
@@ -557,7 +576,7 @@ table button {
 	}
 }
 
-@media(min-width: 1200px) {
+@media(min-width: 1400px) {
 	.residentInfoDiv {
 		font-size: 18px;
 	}
@@ -603,6 +622,12 @@ table button {
 
 .residentInfoDiv label {
 	/*margin-bottom: 0;*/
+}
+
+.dragNDropText {
+	color: darkblue;
+	font-size: 16px;
+	font-weight: bold;
 }
 
 .residentInfoDiv span {
@@ -750,6 +775,15 @@ input[type=date]::-webkit-inner-spin-button {
 	font-size: 16px;
 }
 
+.deleteDocBtn {
+	margin-left: 5px;
+	background: darkred;
+	color: white;
+	padding: 2px;
+	line-height: .85;
+	border-radius: 5px;
+}
+
 .approveBtnDiv {
 	width: 100%;
 	/*text-align: center;*/
@@ -829,7 +863,7 @@ input[type=date]::-webkit-inner-spin-button {
 
 .residentInfoDiv .modal-title {
 	margin-top: 20px !important;
-	width: 150px !important;
+	width: 250px !important;
 }
 
 	.modal-lg {
@@ -929,6 +963,8 @@ input[type=date]::-webkit-inner-spin-button {
 
 .countSpan {
 	/*color: maroon;*/
+	/*font-size: 16px;*/
+	/*font-weight: bold;*/
 }
 
 /*_________________approvals.html_________________*/

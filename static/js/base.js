@@ -1,14 +1,33 @@
 
-// Call Datatables with parameters
 $(document).ready( () => {
+// Call Datatables with parameters
   $('table').dataTable({
 	  "paging": false,
 	  "info": false
 	});
 	$('.content').fadeIn();
-});
 
-$(document).ready(function () {
+	//datatable search fields styling
+	const filters = document.querySelectorAll('.dataTables_filter')
+	for (var i = 0; i < filters.length; i++) {
+		let filter = filters[i]
+		let input = filter.firstElementChild.firstElementChild
+		input.style.border = "2px solid #eee"
+		// input.style.boxShadow = "1px 1px 1px #aaa"
+		// input.style.backgroundColor = "#eee"
+		input.style.padding = "5px 15px"
+		input.style.textAlign = "center"
+		$(input).focus(() => {
+			input.style.outline = "none"
+		// input.style.boxShadow = "inset 1px 1px 1px #aaa"
+		})
+		// input.addClass('fdsa')
+		// $('.asdf').css('background-color', 'red')
+		input.setAttribute('placeholder', 'Search This Table')
+		filter.removeChild(filter.firstElementChild)
+		filter.appendChild(input)
+	}
+
   var url = window.location.pathname;
   $('a[href="'+ url +'"]').addClass('currentPage');
 });
@@ -35,7 +54,9 @@ const showTotalActivityCount = () => {
   for (var i = 0; i < countSpans.length; i++) {
 	  total += parseInt(countSpans[i].textContent);
 	};
-	totalActivityCountSpan.innerHTML = total;
+	if (totalActivityCountSpan) {
+		totalActivityCountSpan.innerHTML = total;
+	}
 };
 if (totalActivityCountSpan) {
 	showTotalActivityCount();
@@ -47,7 +68,7 @@ const trackOrIgnore = (row, trueOrFalse) => {
 		type:"GET",
 		url: "/application/ajax/track_or_ignore",
 		data:{
-			resident_id: row.id,
+			row_id: row.id,
 			tracking: trueOrFalse
 		},
 		success: function()
