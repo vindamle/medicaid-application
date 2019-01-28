@@ -1,0 +1,9 @@
+alert_type_id,alert_name
+8,No Medicaid Response in 30 Days
+1,Medicaid Application Due in 90 Days
+2,Medicaid Application Due in 60 Days
+3,Medicaid Application Due in 45 Days
+4,Medicaid Application Due in 30 Days
+5,Medicaid Application Due in 15 Days
+6,Medicaid Application Due Today
+7,Medicaid Application Past Due
