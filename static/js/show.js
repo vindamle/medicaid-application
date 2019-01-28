@@ -37,8 +37,8 @@ const updateDB = (table, dataObject, successMessage) => {
 };
 
 const sendInputInfoToDB = input => {
-	if(input.type == 'date' && (parseInt(input.value) < 2010 || parseInt(input.value) > 2020)) {
-		alert("Sorry - that year is out of range.")
+	if(input.type == 'date' && (parseInt(input.value) < 2010 || parseInt(input.value) > 2100)) {
+		alert("Sorry - that year is out of range. Please enter a year after 2010 and before, ya know, doomsday.")
 	} else if (input.value) {
 		const table = input.getAttribute('data-table');
 		const rowId = input.getAttribute(`data-${table}_id`)
@@ -66,12 +66,6 @@ const sendInputInfoToDB = input => {
 	}
 };
 
-// const addSelectEventListener = selectField => {
-// 	selectField.addEventListener('change', () => {
-// 		sendInputInfoToDB(selectField);
-// 	});
-// };
-
 const alertDiv = document.querySelector('.alertDiv');
 alertDiv.addEventListener('click', (e) => {
 	if (e.target.classList.contains('dismissBtn')) {
@@ -85,16 +79,6 @@ alertDiv.addEventListener('click', (e) => {
 		$(alert).css('display', 'none');
 	}
 });
-
-
-// Add eventListeners for select fields to send their info to DB via AJAX: 
-// const selectFields = document.querySelectorAll('SELECT');
-// for (let i = 0; i < selectFields.length; i++) {
-// 	const selectField = selectFields[i];
-// 	if (selectField.id != 'response1_select') {
-// 		addSelectEventListener(selectField);
-// 	};
-// };
 
 // Add eventListeners for inputs to focus them and send their info to DB via AJAX: 
 const editableInputs = document.querySelectorAll('INPUT.editable');
@@ -116,42 +100,7 @@ for (var i = 0; i < editableInputs.length; i++) {
   	if (input.id == "medicaid_pickup_date" && input.value != "") {
   		$('.step3').fadeIn();
   		 phaseChange(input, 3);
-  		// console.log(phaseName)
-  		// document.querySelector('#showStatus').innerHTML = phaseName;
-
   	};
 		sendInputInfoToDB(input);
 	});
 };
-
-// Approve Button toggles display of Approval Information Section
-// const approveBtn = document.querySelector('#approveBtn');
-// approveBtn.addEventListener('click', () => {
-// 	if(approveBtn.innerHTML == 'Approve') {
-// 		approveBtn.innerHTML = 'Approved &check;';
-// 		$('#approvedSection').css('display', 'block');
-// 	} else {
-// 		approveBtn.innerHTML = 'Approve';
-// 		$('#approvedSection').css('display', 'none');
-// 	}
-// })
-
-// const collapsibleDiv = document.querySelector('.collapsible');
-// collapsibleDiv.addEventListener('click', (e) => {
-// 	const section = e.target.parentNode;
-// 	const ul = e.target.nextElementSibling;
-// 	$(ul).fadeOut(200, () => {
-// 		section.style.height = "50px";
-// 		section.style.width = "350px";
-// 	});
-	// section.classList.add('disappear');
-	// const stuff = section.querySelectorAll('*:not(h4)')
-	
-	// section.style.overflow = "hidden";
-	// for (var i = 0; i < stuff.length; i++) {
-	// 	thingy = stuff[i];
-	// 	thingy.style.display = "none";
-	// }
-// })
-
-

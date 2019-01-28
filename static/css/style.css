@@ -361,6 +361,50 @@ table button {
 }
 
 /*_____________show page_____________*/
+
+.overlay {
+	display: none;
+	position: absolute;
+	z-index: 1000000;
+	top: 0;
+	left: 0;
+	background: rgba(255,255,255,.8);
+}
+
+.overlay img {
+	width: 100vw;
+	/*position: absolute;*/
+}
+
+/* The animation code */
+@keyframes changeSize {
+  from {font-size: 100px;}
+  to {font-size: 200px;}
+}
+
+@media(max-width: 767px) {
+		/* The animation code */
+	@keyframes changeSize {
+	  from {font-size: 30px;}
+	  to {font-size: 70px;}
+	}
+}
+
+.overlay h1 {
+	display: none;
+	position: absolute;
+	margin-top: 30vh;
+	margin-left: 20vw;
+	text-align: center;
+	color: blue;
+	transform: rotate(-15deg);
+	animation-name: changeSize;
+  animation-duration: .8s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate-reverse;
+  animation-timing-function: linear;
+}
+
 @media (min-width: 768px) {
 	.residentInfoDiv {
 		margin: 20px auto;
@@ -784,6 +828,17 @@ input[type=date]::-webkit-inner-spin-button {
 	border-radius: 5px;
 }
 
+.deleteResponseBtn {
+	float: right;
+	margin-right: 5px;
+	background: #ddd;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	line-height: .85;
+
+	padding: 2px;
+}
+
 .approveBtnDiv {
 	width: 100%;
 	/*text-align: center;*/
@@ -806,7 +861,7 @@ input[type=date]::-webkit-inner-spin-button {
 }
 
 /* Hide fields irrelevant to current step in process: */
-.step2, .step3, .step4 {
+.step2, .step3, .step4, .notSatisfied {
 	display: none;
 }
 

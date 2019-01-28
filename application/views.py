@@ -109,18 +109,20 @@ def phase_change(request):
 def create_response(request):
     application_id = int(request.GET['application_id'])
     response_type = request.GET['response_type']
-    response = Response.objects.create(application_id = application_id, response_type = ResponseType.objects.get(response_type = response_type))
-    if response_type == 'rfi':
-        rfi = RFI.objects.create(response = response)
-        return_info = rfi.rfi_id
-    elif response_type == 'approved':
-        approval = Approval.objects.create(response = response)
-        return_info = approval.approval_id
-    elif response_type == 'denied':
-        denial = Denial.objects.create(response = response)
-        return_info = denial.denial_id
-    return HttpResponse(return_info)
-
+    if response_type != "not_received":
+        response = Response.objects.create(application_id = application_id, response_type = ResponseType.objects.get(response_type = response_type))
+        if response_type == 'rfi':
+            rfi = RFI.objects.create(response = response)
+            return_info = rfi.rfi_id
+        elif response_type == 'approved':
+            approval = Approval.objects.create(response = response)
+            return_info = approval.approval_id
+        elif response_type == 'denied':
+            denial = Denial.objects.create(response = response)
+            return_info = denial.denial_id
+        return HttpResponse(return_info)
+    else:
+        return HttpResponse('no response created for not_received')
 
 def update_rfi(request):
     rfi_id = int(request.GET['row_id'])
@@ -181,14 +183,17 @@ def create_application(request):
     application = Application.objects.create(resident = Resident.objects.get(resident_id = resident_id), phase = Phase.objects.get(phase_id = 1))
     return HttpResponse(int(application.application_id))
 
-# def delete_document(request):
-#     table = request.GET['table']
-#     if
-#     approval_id = int(request.GET['approval_id'])
-#     column =request.GET['column']
-#     new_value =request.GET['new_value']
-#     approval = Approval.objects.get(approval_id = approval_id)
-#     field = setattr(approval, column, null)
-#     approval.save()
-#     return HttpResponse("200")
+def delete_response(request):
+    response_type = request.GET['response_type']
+    response_id = int(request.GET['response_id'])
+    if response_type == "rfi":
+        rfi = RFI.objects.get(rfi_id = response_id)
+        rfi.delete()
+    elif response_type == "denial":
+        denial = Denial.objects.get(denial_id = response_id)
+        denial.delete()
+    elif response_type == "approval":
+        approval = Approval.objects.get(approval_id = response_id)
+        approval.delete()
+    return HttpResponse("200")
 
