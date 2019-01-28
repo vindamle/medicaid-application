@@ -20,7 +20,7 @@ urlpatterns = [
     path('ajax/update_nami/', views.update_nami, name = 'update_nami'),
     path('ajax/delete_nami/', views.delete_nami, name = 'delete_nami'),
     path('ajax/create_application/', views.create_application, name = 'create_application'),
-    # path('ajax/delete_document/', views.delete_document, name = 'delete_document'),
+    path('ajax/delete_response/', views.delete_response, name = 'delete_response'),
 
 
 
