@@ -135,7 +135,6 @@ def update_rfi(request):
     rfi.save()
     return HttpResponse("200")
 
-
 def update_denial(request):
     denial_id = int(request.GET['row_id'])
     column =request.GET['column']
@@ -173,7 +172,7 @@ def update_nami(request):
     return HttpResponse("200")
 
 def delete_nami(request):
-    nami_id = int(request.GET['nami_id'])
+    nami_id = int(request.GET['row_id'])
     nami = NAMI.objects.get(nami_id = nami_id)
     nami.delete()
     return HttpResponse("200")
@@ -195,5 +194,25 @@ def delete_response(request):
     elif response_type == "approval":
         approval = Approval.objects.get(approval_id = response_id)
         approval.delete()
+    return HttpResponse("200")
+
+def create_fair_hearing(request):
+    response_id = int(request.GET['response_id'])
+    fair_hearing = FairHearing.objects.create(response = Response.objects.get(response_id = response_id))
+    return HttpResponse(int(fair_hearing.fair_hearing_id))
+
+def update_fair_hearing(request):
+    fair_hearing_id = int(request.GET['row_id'])
+    column =request.GET['column']
+    new_value =request.GET['new_value']
+    fair_hearing = FairHearing.objects.get(fair_hearing_id = fair_hearing_id)
+    field = setattr(fair_hearing, column,new_value)
+    fair_hearing.save()
+    return HttpResponse("200")
+
+def delete_fair_hearing(request):
+    fair_hearing_id = int(request.GET['row_id'])
+    fair_hearing = FairHearing.objects.get(fair_hearing_id = fair_hearing_id)
+    fair_hearing.delete()
     return HttpResponse("200")
 

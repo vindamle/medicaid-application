@@ -33,7 +33,6 @@ const updateDB = (table, dataObject, successMessage) => {
 			console.log(successMessage)
 		}
 	});
-	return(ajaxCall);
 };
 
 const sendInputInfoToDB = input => {
@@ -80,7 +79,7 @@ alertDiv.addEventListener('click', (e) => {
 	}
 });
 
-// Add eventListeners for inputs to focus them and send their info to DB via AJAX: 
+// Add eventListeners for inputs to focus them: 
 const editableInputs = document.querySelectorAll('INPUT.editable');
 for (var i = 0; i < editableInputs.length; i++) {
 	const input = editableInputs[i]
@@ -101,6 +100,6 @@ for (var i = 0; i < editableInputs.length; i++) {
   		$('.step3').fadeIn();
   		 phaseChange(input, 3);
   	};
-		sendInputInfoToDB(input);
+  	sendInputInfoToDB(input);
 	});
 };

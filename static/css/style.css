@@ -137,7 +137,8 @@ sup {
 }*/
 
 .currentPage {
-	color: #000055 !important;
+	color: #220055 !important;
+	/*font-weight: bold;*/
 }
 
 .content {
@@ -235,32 +236,34 @@ table a {
 
 table button {
 	border-radius: 5px;
-	padding: 5px 10px;
+	/*padding: 5px 10px;*/
 }
 
 .btn-track {
 	/*background: #ee7000;*/
 	background: #009900;
 	color: white;
+	padding: 5px 10px;
 }
 
 .btn-tracked, #trackSelectedBtn {
 	background: #009900;
 	border: 1px solid #ccc;
 	color: white;
+	padding: 5px 10px;
 }
 
 .btn-ignore {
 	background: #aa0000;
 	color: white;
-	min-width: 90px;
-	padding: 2px 0;
+	/*min-width: 90px;*/
+	padding: 4px;
 }
 
 @media(min-width: 768px) {
 	.btn-ignore {
-		min-width: 110px;
-		padding: 6px;
+		/*min-width: 110px;*/
+		padding: 4px 10px;
 	}
 }
 
@@ -316,6 +319,22 @@ table button {
 
 
 /*____________Activity Page____________*/
+
+.nav-tabs h4 {
+	color: #ee7000;
+}
+
+.nav-tabs a.active.show h4 {
+	color: #220055;
+	font-weight: bold;
+}
+
+.countSpan {
+	/*color: maroon;*/
+	/*font-size: 16px;*/
+	/*font-weight: bold;*/
+}
+
 .tableContainer {
 	display: block;
 	text-align: center;
@@ -342,21 +361,21 @@ table button {
 .nav-tabs h4 {
 	margin-top: 0;
 	font-size: 20px;
-	padding: 5px 10px 8px 10px;
+	padding: 5px 10px 0 10px;
 }
 
 .navTabLink:hover {
 	text-decoration: none;
 }
 
-.navTabLink:hover h4 {
-	color: darkorange;
+.nav-tabs a:hover h4 {
+	/*color: darkorange;*/
 }
 
 .show h4 {
-	background: steelblue;
-	color: white !important;
-	border-radius: 50px;
+	/*background: steelblue;*/
+	/*color: white !important;*/
+	/*border-radius: 50px;*/
 
 }
 
@@ -488,20 +507,21 @@ table button {
 	justify-content: flex-start;
 }
 
-.residentInfoDiv .nav-tabs a {
+.nav-tabs a {
 	border-radius: 5px 5px 0 0;
 	display: inline-block;
 	padding: 5px 10px;
 	color: #aaa;
 }
-.residentInfoDiv a.active.show {
+
+.nav-tabs a.active.show {
 	color: #3040A6;
 	font-weight: bold;
 	margin-bottom: -1px;
 }
 
 @media(min-width: 998px) {
-	.residentInfoDiv a.active.show {
+/*	.residentInfoDiv*/ .nav-tabs a.active.show {
 		border: 1px solid #ddd;
 		border-bottom: 1px solid white;
 	}
@@ -1012,14 +1032,7 @@ input[type=date]::-webkit-inner-spin-button {
 .btn-alert {
 	background: #ee7000;
 	color: white;
-}
-
-/*_________________activity.html_________________*/
-
-.countSpan {
-	/*color: maroon;*/
-	/*font-size: 16px;*/
-	/*font-weight: bold;*/
+	padding: 5px 10px;
 }
 
 /*_________________approvals.html_________________*/
