@@ -295,6 +295,10 @@ class Denial(models.Model):
         null = True,
     )
 
+    denial_notice_date = models.DateTimeField(null = True, blank = True)
+    denial_fair_hearing_request = models.CharField(max_length = 50,  null = True, blank=True)
+    denial_documentation_submitted_date  = models.DateTimeField(null = True, blank = True)
+
     class Meta:
         verbose_name = 'Denials'
         verbose_name_plural = 'Denials'
@@ -348,8 +352,8 @@ class Alert(models.Model):
 class FairHearing(models.Model):
     fair_hearing_id = models.AutoField(primary_key = True)
 
-    application = models.ForeignKey(
-        Application,
+    response = models.ForeignKey(
+        Response,
         on_delete = models.CASCADE,
         null = True,
     )
@@ -359,6 +363,8 @@ class FairHearing(models.Model):
         on_delete = models.CASCADE,
         null = True,
     )
+
+
 
     fair_hearing_date = models.DateField(null = True, blank = True)
     fair_hearing_time =  models.TimeField(null = True, blank = True)
@@ -403,10 +409,7 @@ class Snowden(models.Model):
         on_delete = models.CASCADE,
     )
 
-    application = models.ForeignKey(
-        Application,
-        on_delete = models.CASCADE,
-    )
+    row_id = models.IntegerField()
 
     table_name = models.CharField(max_length = 50)
     column_name = models.CharField(max_length = 50)

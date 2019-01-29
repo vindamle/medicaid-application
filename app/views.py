@@ -139,7 +139,6 @@ class ShowView(View):
             path.mkdir(parents=True, exist_ok = True)
 
         try:
-
             new_document = Document.objects.create(
                 resident = Resident.objects.get(resident_id = request.POST.get('resident_id')),
                 application_id = application_id,
@@ -153,29 +152,45 @@ class ShowView(View):
 
         if type  == 'medicaid_application':
             application = Application.objects.get(application_id = int(application_id))
+            snowden_update(request,application, application.application_id,"application_document_id",new_document.document_id)
             application.application_document = new_document
             application.save()
         elif type == 'rfi':
             rfi = RFI.objects.get(rfi_id = int(request.POST.get('rfi_id')))
+            snowden_update(request,rfi, rfi.rfi_id,"document_id",new_document.document_id)
             rfi.document_id = new_document.document_id
             rfi.save()
         elif type == 'approval':
             approval = Approval.objects.get(approval_id = int(request.POST.get('approval_id')))
+            snowden_update(request,approval, approval.approval_id,"document_id",new_document.document_id)
             approval.document_id = new_document.document_id
             approval.save()
         elif type == 'denial':
             denial = Denial.objects.get(denial_id = int(request.POST.get('denial_id')))
+            snowden_update(request,denial, denial.denial_id,"document_id",new_document.document_id)
             denial.document_id = new_document.document_id
             denial.save()
         elif type == 'application_confirmation':
             confirmation = Confirmation.objects.create(confirmation_document = new_document, description = type)
             application = Application.objects.get(application_id = int(application_id))
+            snowden_update(request,application, application.application_id,"application_confirmation_id",confirmation.confirmation_id)
             application.application_confirmation = confirmation
             application.save()
 
         return redirect('/show/?resident_id={}'.format(str(resident_id)))
 
-
+def snowden_update(request,table_name, row_id, column, new_value):
+    # Audit Log
+    Snowden.objects.create(
+        user = request.user,
+        table_name = table_name._meta.verbose_name,
+        row_id = row_id,
+        column_name = column,
+        old_value = getattr(table_name,column) if getattr(table_name,column) is not None else "None",
+        new_value = new_value,
+        log_ip = request.META.get('REMOTE_ADDR'),
+        date = datetime.now()
+    )
 
 class ApprovalsView(View):
     form_class = ApplicationForm
