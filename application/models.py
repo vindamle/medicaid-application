@@ -380,7 +380,6 @@ class FairHearing(models.Model):
 
     fair_hearing_satisfied = models.CharField(max_length = 10,  null = True, blank=True)
     fair_hearing_outcome_date = models.DateField(null = True, blank = True)
-    fair_hearing_appeal = models.CharField(max_length = 10,  null = True, blank=True)
 
     class Meta:
         verbose_name = 'Fair Hearings'
