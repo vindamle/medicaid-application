@@ -403,11 +403,7 @@ class Snowden(models.Model):
         on_delete = models.CASCADE,
     )
 
-    application = models.ForeignKey(
-        Application,
-        on_delete = models.CASCADE,
-    )
-
+    row_id = models.IntegerField()
     table_name = models.CharField(max_length = 50)
     column_name = models.CharField(max_length = 50)
     old_value  = models.CharField(max_length = 250)
