@@ -274,8 +274,10 @@ class Approval(models.Model):
     approval_end_date = models.DateTimeField(null = True, blank = True)
     approval_recertification_date = models.DateTimeField(null = True, blank = True)
     approval_notice_date  = models.DateTimeField(null = True, blank = True)
-    satisfied_with_approval = models.CharField(max_length = 50,  null = True, blank=True)
-    fair_hearing_required = models.CharField(max_length = 50,  null = True, blank=True)
+    approval_satisfied = models.CharField(max_length = 50,  null = True, blank=True)
+    approval_contacted_dss =  models.CharField(max_length = 50,  null = True, blank=True)
+    approval_resolved_through_dss =  models.CharField(max_length = 50,  null = True, blank=True)
+    approval_fair_hearing_required = models.CharField(max_length = 50,  null = True, blank=True)
 
     class Meta:
         verbose_name = 'Approvals'
@@ -289,11 +291,17 @@ class Denial(models.Model):
         on_delete = models.CASCADE,
     )
 
-    document = models.ForeignKey(
+    denial_document = models.ForeignKey(
         Document,
         on_delete = models.CASCADE,
         null = True,
     )
+
+    denial_notice_date = models.DateTimeField(null = True, blank = True)
+    denial_fair_hearing_requested = models.CharField(max_length = 50, null = True, blank = True)
+    denial_documentation_submitted = models.CharField(max_length = 50, null = True, blank = True)
+    denial_contacted_dss =  models.CharField(max_length = 50,  null = True, blank=True)
+    denial_resolved_through_dss =  models.CharField(max_length = 50,  null = True, blank=True)
 
     class Meta:
         verbose_name = 'Denials'
