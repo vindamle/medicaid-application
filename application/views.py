@@ -47,17 +47,19 @@ def track_untrack_resident(request):
         resident.save()
 
     elif track == "false":
+
         # Audit Log
         Snowden.objects.create(user = request.user,table_name = resident._meta.verbose_name,row_id = resident.resident_id,column_name = "tracking_status",old_value = getattr(resident,"tracking_status") if getattr(resident,"tracking_status") is not None else "None",new_value = "False",log_ip = request.META.get('REMOTE_ADDR'),date = datetime.now())
         resident.tracking_status = False
 
         # Audit Log
         Snowden.objects.create(user = request.user,table_name = resident._meta.verbose_name,row_id = resident.resident_id,column_name = "dismiss",old_value = getattr(resident,"dismiss") if getattr(resident,"dismiss") is not None else "None",new_value = "True",log_ip = request.META.get('REMOTE_ADDR'),date = datetime.now())
+
         resident.dismiss = True
         resident.save()
     return HttpResponse("200")
 
-
+'''REASON FOR ANNOYING ERROR'''
 def approval_verified(request):
     if request.method == 'GET':
         resident_id =int(request.GET['resident_id'])
@@ -184,18 +186,29 @@ def create_response(request):
     response_type = request.GET['response_type']
     if response_type != "not_received":
         response = Response.objects.create(application_id = application_id, response_type = ResponseType.objects.get(response_type = response_type))
+
+        # Audit Log
+        Snowden.objects.create(user = request.user,table_name = response._meta.verbose_name,row_id = response.response_id,column_name = "Object Created",old_value = "None",new_value = "None",log_ip = request.META.get('REMOTE_ADDR'),date = datetime.now())
+
         if response_type == 'rfi':
-            rfi = RFI.objects.create(response = response)
-            return_info = rfi.rfi_id
+            action = RFI.objects.create(response = response)
+            return_info = action.rfi_id
         elif response_type == 'approved':
-            approval = Approval.objects.create(response = response)
-            return_info = approval.approval_id
+            action = Approval.objects.create(response = response)
+            return_info = action.approval_id
         elif response_type == 'denied':
-            denial = Denial.objects.create(response = response)
-            return_info = denial.denial_id
+            action = Denial.objects.create(response = response)
+            return_info = action.denial_id
+
+        # Audit Log
+        Snowden.objects.create(user = request.user,table_name = action._meta.verbose_name,row_id = action.response_id,column_name = "Object Created",old_value = "None",new_value = "None",log_ip = request.META.get('REMOTE_ADDR'),date = datetime.now())
+
         return HttpResponse(return_info)
     else:
+        #Audit Log
+        Snowden.objects.create(user = request.user,table_name = "None",row_id = application_id ,column_name = "Switched to Not Recieved",old_value = "None",new_value = "None",log_ip = request.META.get('REMOTE_ADDR'),date = datetime.now())
         return HttpResponse('no response created for not_received')
+
 
 def update_rfi(request):
     rfi_id = int(request.GET['row_id'])
@@ -270,6 +283,17 @@ def update_approval(request):
 def create_nami(request):
     approval_id = int(request.GET['approval_id'])
     nami = NAMI.objects.create(approval = Approval.objects.get(approval_id = approval_id))
+    # Audit Log
+    Snowden.objects.create(
+        user = request.user,
+        table_name = nami._meta.verbose_name,
+        row_id = nami.nami_id,
+        column_name = 'Object Created',
+        old_value = "None",
+        new_value = approval_id,
+        log_ip = request.META.get('REMOTE_ADDR'),
+        date = datetime.now()
+    )
     return HttpResponse(int(nami.nami_id))
 
 def update_nami(request):
@@ -295,26 +319,61 @@ def update_nami(request):
 def delete_nami(request):
     nami_id = int(request.GET['row_id'])
     nami = NAMI.objects.get(nami_id = nami_id)
+    # Audit Log
+    Snowden.objects.create(
+        user = request.user,
+        table_name = nami._meta.verbose_name,
+        row_id = nami.nami_id,
+        column_name = "Object Deleted",
+        old_value = nami.nami_id,
+        new_value = "None",
+        log_ip = request.META.get('REMOTE_ADDR'),
+        date = datetime.now()
+    )
     nami.delete()
     return HttpResponse("200")
 
 def create_application(request):
     resident_id = int(request.GET['resident_id'])
     application = Application.objects.create(resident = Resident.objects.get(resident_id = resident_id), phase = Phase.objects.get(phase_id = 1))
+
+    # Audit Log
+    Snowden.objects.create(
+        user = request.user,
+        table_name = application._meta.verbose_name,
+        row_id = application.application_id,
+        column_name = "Object Created",
+        old_value = "None",
+        new_value = application.application_id,
+        log_ip = request.META.get('REMOTE_ADDR'),
+        date = datetime.now()
+    )
     return HttpResponse(int(application.application_id))
 
 def delete_response(request):
     response_type = request.GET['response_type']
     response_id = int(request.GET['response_id'])
     if response_type == "rfi":
-        rfi = RFI.objects.get(rfi_id = response_id)
-        rfi.delete()
+        object = RFI.objects.get(rfi_id = response_id)
+        object.delete()
     elif response_type == "denial":
-        denial = Denial.objects.get(denial_id = response_id)
-        denial.delete()
+        object = Denial.objects.get(denial_id = response_id)
+        object.delete()
     elif response_type == "approval":
-        approval = Approval.objects.get(approval_id = response_id)
-        approval.delete()
+        object = Approval.objects.get(approval_id = response_id)
+        object.delete()
+        
+    # Audit Log
+    Snowden.objects.create(
+        user = request.user,
+        table_name = object._meta.verbose_name,
+        row_id = response_id,
+        column_name = "Object Deleted",
+        old_value = "DELETED",
+        new_value = "DELETED",
+        log_ip = request.META.get('REMOTE_ADDR'),
+        date = datetime.now()
+    )
     return HttpResponse("200")
 
 def create_fair_hearing(request):
