@@ -6,7 +6,7 @@
 {% load static %}
 {% if user.is_authenticated%}
 <div class="overlay" onclick="this.style.display = 'none'">
-	<h1>WOOHOO!</h1>
+	<!-- <h1>WOOHOO!</h1> -->
 	<img src='{% static "img/confetti.gif" %}'>
 </div>
 <div class="alertDiv">
@@ -618,12 +618,12 @@
 							</li>
 							<li class="editableLi step6">
 								<label>Satisfied with approval?</label>
-								<select name="satisfied_with_approval" id="satisfied_with_approval" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this); revealNextNotSatisfiedStep(this, 1)">
+								<select name="approval_satisfied" id="approval_satisfied" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this); revealNextNotSatisfiedStep(this, 1)">
 									<option value="">Select one:</option>
 									<option value="yes">Yes</option>
 									<option value="no">No</option>
 								</select>
-								<span class="invisible DBinfo" id="DBsatisfied_with_approval">{{approval.satisfied_with_approval}}</span>
+								<span class="invisible DBinfo" id="DBapproval_satisfied">{{approval.approval_satisfied}}</span>
 							</li>
 						</div>
 					</div>
@@ -632,23 +632,23 @@
 						<div class="col-lg-4">
 							<li class="editableLi notSatisfied notSatisfied1">
 								<label>Contacted DSS?</label>
-								<select name="contacted_dss" id="contacted_dss" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this);revealNextNotSatisfiedStep(this, 2)">
+								<select name="approval_contacted_dss" id="approval_contacted_dss" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this);revealNextNotSatisfiedStep(this, 2)">
 									<option value="">Select one:</option>
 									<option value="yes">Yes</option>
 									<option value="no">No</option>
 								</select>
-								<span class="invisible DBinfo" id="DBcontacted_dss">{{approval.contacted_dss}}</span>
+								<span class="invisible DBinfo" id="DBapproval_contacted_dss">{{approval.approval_contacted_dss}}</span>
 							</li>
 						</div>
 						<div class="col-lg-4">
 							<li class="editableLi notSatisfied notSatisfied2">
 								<label>Resolved through DSS?</label>
-								<select name="resolved_through_dss" id="resolved_through_dss" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this);revealNextNotSatisfiedStep(this, 3)">
+								<select name="approval_resolved_through_dss" id="approval_resolved_through_dss" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this);revealNextNotSatisfiedStep(this, 3)">
 									<option value="">Select one:</option>
 									<option value="yes">Yes</option>
 									<option value="no">No</option>
 								</select>
-								<span class="invisible DBinfo" id="DBresolved_through_dss">{{approval.resolved_through_dss}}</span>
+								<span class="invisible DBinfo" id="DBapproval_resolved_through_dss">{{approval.approval_resolved_through_dss}}</span>
 							</li>
 						</div>
 						<div class="col-lg-4">
@@ -776,8 +776,8 @@ $(document).ready(()=>{
 			$(`#${applicationDiv.id} .step4`).css('display', 'block');
 		}
 
-		var satisfied_with_approval = applicationDiv.querySelector('#satisfied_with_approval');
-		if (satisfied_with_approval && satisfied_with_approval.value != "no") {
+		var approval_satisfied = applicationDiv.querySelector('#approval_satisfied');
+		if (approval_satisfied && approval_satisfied.value != "no") {
 			$(`#${applicationDiv.id} .notSatisfied`).css('display', 'none')
 		} 
 
@@ -812,7 +812,7 @@ $(document).ready(()=>{
 
 	{% for approval in approvals %}
 		var approvalSection = document.querySelector('#approval{{approval.approval_id}}')
-		var satisfied = approvalSection.querySelector('#DBsatisfied_with_approval')
+		var satisfied = approvalSection.querySelector('#DBapproval_satisfied')
 		if (satisfied.innerHTML == 'no') {
 			$('#approval{{approval.approval_id}} .notSatisfied').css('display', 'block');
 		}
@@ -1007,7 +1007,7 @@ class ResponseRowHTML {
 				</li>
 				<li class="editableLi step6">
 						<label>Satisfied with approval?</label>
-						<select name="satisfied_with_approval" id="satisfied_with_approval" data-table="approval" data-approval_id="${responseId}" onchange="sendInputInfoToDB(this); revealNextNotSatisfiedStep(this, 1)">
+						<select name="approval_satisfied" id="approval_satisfied" data-table="approval" data-approval_id="${responseId}" onchange="sendInputInfoToDB(this); revealNextNotSatisfiedStep(this, 1)">
 							<option value="">Select one:</option>
 							<option value="yes">Yes</option>
 							<option value="no">No</option>
@@ -1019,7 +1019,7 @@ class ResponseRowHTML {
 				<div class="col-lg-4">
 					<li class="editableLi notSatisfied notSatisfied1">
 						<label>Contacted DSS?</label>
-						<select name="contacted_dss" id="contacted_dss" data-table="approval" data-approval_id="${responseId}" onchange="sendInputInfoToDB(this);revealNextNotSatisfiedStep(this, 2)">
+						<select name="approval_contacted_dss" id="approval_contacted_dss" data-table="approval" data-approval_id="${responseId}" onchange="sendInputInfoToDB(this);revealNextNotSatisfiedStep(this, 2)">
 							<option value="">Select one:</option>
 							<option value="yes">Yes</option>
 							<option value="no">No</option>
@@ -1029,7 +1029,7 @@ class ResponseRowHTML {
 				<div class="col-lg-4">
 					<li class="editableLi notSatisfied notSatisfied2">
 						<label>Resolved through DSS?</label>
-						<select name="resolved_through_dss" id="resolved_through_dss" data-table="approval" data-approval_id="${responseId}" onchange="sendInputInfoToDB(this);revealNextNotSatisfiedStep(this, 3)">
+						<select name="approval_resolved_through_dss" id="approval_resolved_through_dss" data-table="approval" data-approval_id="${responseId}" onchange="sendInputInfoToDB(this);revealNextNotSatisfiedStep(this, 3)">
 							<option value="">Select one:</option>
 							<option value="yes">Yes</option>
 							<option value="no">No</option>
@@ -1250,7 +1250,7 @@ const checkIfEnterKey = (input,event) => {
 }
 
 const revealNextNotSatisfiedStep = (selectField, stepToReveal) => {
-	if(selectField.id != 'contacted_dss') {
+	if(selectField.id != 'approval_contacted_dss') {
 		if (selectField.value == "no") {
 			const ul = selectField.parentNode.parentNode.parentNode.parentNode;
 			const element = ul.querySelector(`.notSatisfied${stepToReveal}`)
