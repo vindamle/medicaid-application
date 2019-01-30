@@ -207,13 +207,12 @@
 							<select name="application_type" id="application_type" data-table="application" data-application_id="{{application.application_id}}" onchange="sendInputInfoToDB(this)">
 								<option value="">Select one:</option>
 								<option value="new_application">New Application</option>
+								<option value="recertification">Recertification</option>
 								<option value="conversion">Conversion</option>
 								<option value="payor_change">Payor Change</option>
 							</select>
 							<span class="invisible DBinfo" id="DBapplication_type">{{application.application_type}}</span>
 						</li>
-					</div>
-					<div class="col-lg-4 applicationColumn">
 						<li class="step3">
 							<label>Spousal/Single:</label>
 							<select name="spousal" id="spousal" data-table="application" data-application_id="{{application.application_id}}" onchange="sendInputInfoToDB(this)">
@@ -223,6 +222,8 @@
 							</select>
 							<span class="invisible DBinfo" id="DBspousal">{{application.spousal}}</span>
 						</li>					
+					</div>
+					<div class="col-lg-4 applicationColumn">
 						<li class="editableLi step3">
 							<label>Short-term/Long-Term Care:</label>
 							<select name="ltc" id="ltc" data-table="application" data-application_id="{{application.application_id}}" onchange="sendInputInfoToDB(this)">

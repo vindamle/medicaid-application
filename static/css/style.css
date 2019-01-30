@@ -773,13 +773,9 @@ input[type=date]::-webkit-inner-spin-button {
 	position: absolute;
 }
 
-#editBtn {
-	background: steelblue;
-	color: white;
-	width: 100px;
-	top: 100px;
-	right: 250px;
-	display: none;
+input#secondary_pays_copay {
+	width: 65px;
+	text-align: right;
 }
 
 .alertDiv {
