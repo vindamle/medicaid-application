@@ -172,6 +172,7 @@ class ShowView(View):
             denial.save()
         elif type == 'application_confirmation':
             confirmation = Confirmation.objects.create(confirmation_document = new_document, description = type)
+            snowden_update(request,confirmation, confirmation.confirmation_id,"confirmation_document_id",confirmation.confirmation_document_id)
             application = Application.objects.get(application_id = int(application_id))
             snowden_update(request,application, application.application_id,"application_confirmation_id",confirmation.confirmation_id)
             application.application_confirmation = confirmation
