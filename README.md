@@ -4,4 +4,4 @@
 * PostgreSQL 10 or Higher.
 * Python 3.5 or Higher.
 
-Create Virtual Environment and run: '''pip install -r requirements.txt'''  in your terminal.
+Create Virtual Environment and run: ''' pip install -r requirements.txt '''  in your terminal.
