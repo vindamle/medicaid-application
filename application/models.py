@@ -1,7 +1,7 @@
 from django.db import models
 from pathlib import Path
 from django.contrib.auth.models import User
-
+from pgcrypto_expressions.fields import EncryptedCharField
 # Create your models here.
 
 class Facility(models.Model):
@@ -24,7 +24,7 @@ class Resident(models.Model):
     #Patient Info
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
-    ssn = models.CharField(max_length=255, null=True, blank=True)
+    ssn = EncryptedCharField(max_length=50, null=True, blank=True)
     dob = models.DateTimeField(null=True, blank=True)
     sex= models.CharField(max_length=2, null=True, blank=True)
     address = models.CharField(max_length = 100, null = True, blank = True)
@@ -373,13 +373,9 @@ class FairHearing(models.Model):
     fair_hearing_address = models.CharField(max_length = 50,  null = True, blank=True)
     fair_hearing_outcome = models.CharField(max_length = 50,  null = True, blank=True)
 
-    fair_hearing_attorney_first_name = models.CharField(max_length = 50,  null = True, blank=True)
-    fair_hearing_attorney_last_name = models.CharField(max_length = 50,  null = True, blank=True)
-    fair_hearing_regional_first_name = models.CharField(max_length = 50,  null = True, blank=True)
-    fair_hearing_regional_last_name = models.CharField(max_length = 50,  null = True, blank=True)
-    fair_hearing_coordinator_first_name = models.CharField(max_length = 50,  null = True, blank=True)
-    fair_hearing_coordinator_last_name = models.CharField(max_length = 50,  null = True, blank=True)
-
+    fair_hearing_representative_type = models.CharField(max_length = 50,  null = True, blank=True)
+    fair_hearing_representative_name = models.CharField(max_length = 100,  null = True, blank=True)
+    
     fair_hearing_satisfied = models.CharField(max_length = 10,  null = True, blank=True)
     fair_hearing_outcome_date = models.DateField(null = True, blank = True)
 

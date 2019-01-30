@@ -8,7 +8,27 @@ from datetime import datetime
 import os
 from pathlib import Path
 
+
+from django.contrib.auth import authenticate,login
 from django.contrib.auth.models import Permission
+
+class LoginView(View):
+    template_name = "registration/login.html"
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+    def post(self, request, *args, **kwargs):
+
+        login_data = authenticate(username = request.POST.get("username"), password = request.POST.get("password"))
+
+        if login_data:
+
+            request.session.set_expiry(600)
+            login(request, login_data)
+            return redirect('home')
+
+        return redirect('login')
+
+
 
 # Pending View
 # Shows List of All Currently Tracked Applications
