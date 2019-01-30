@@ -90,7 +90,7 @@ python manage.py runserver
 
 The application should start up on 127.0.0.1:8000, the application should be 'live' and setup is complete.
 
-## Recieving Resident Data
+## Receiving Resident Data
 You've probably noticed that there is no actual resident data and the application consists of empty tables, after unzipping env.zip, and populate your database credentials into the proper fields, you will be able to run the following:
 
 ```bash
