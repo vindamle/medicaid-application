@@ -348,8 +348,8 @@ class Alert(models.Model):
 class FairHearing(models.Model):
     fair_hearing_id = models.AutoField(primary_key = True)
 
-    application = models.ForeignKey(
-        Application,
+    response = models.ForeignKey(
+        Response,
         on_delete = models.CASCADE,
         null = True,
     )
@@ -374,8 +374,10 @@ class FairHearing(models.Model):
 
     fair_hearing_satisfied = models.CharField(max_length = 10,  null = True, blank=True)
     fair_hearing_outcome_date = models.DateField(null = True, blank = True)
-    fair_hearing_appeal = models.CharField(max_length = 10,  null = True, blank=True)
 
+    class Meta:
+        verbose_name = 'Fair Hearings'
+        verbose_name_plural = 'Fair Hearings'
 
 class Employee(models.Model):
     user = models.OneToOneField(
@@ -386,23 +388,28 @@ class Employee(models.Model):
         permissions = (
             ("Beth Abraham", "Can View Beth Abraham Center Residents"),
             ("Boro Park", "Can View Boro Park Center Residents"),
+            ("Steuben","Can View Steuben Center Residents" )
         )
 
-# class Snowden(models.Models):
-#     log_id = models.BigAutoField(primary_key = True)\
+        verbose_name = 'Employees'
+        verbose_name_plural = 'Employees'
 
-#     user = models.ForeignKey(
-#         Employee,
-#         on_delete = models.CASCADE,
-#     )
+class Snowden(models.Model):
+    log_id = models.BigAutoField(primary_key = True)
 
-#     application = models.ForeignKey(
-#         Application,
-#         on_delete = models.CASCADE,
-#     )
-#     table_name = models.CharField(max_length = 50)
-#     column_name = models.CharField(max_lenth = 50)
-#     old_value  = models.CharField(max_lenth = 250)
-#     new_value  = models.CharField(max_lenth = 250)
-#     log_ip = models.CharField(max_length = 15)
-#     date = models.DateTimeField(auto_now_add = True)
+    user = models.ForeignKey(
+        User,
+        on_delete = models.CASCADE,
+    )
+
+    row_id = models.IntegerField()
+    table_name = models.CharField(max_length = 50)
+    column_name = models.CharField(max_length = 50)
+    old_value  = models.CharField(max_length = 250)
+    new_value  = models.CharField(max_length = 250)
+    log_ip = models.GenericIPAddressField()
+    date = models.DateTimeField(auto_now_add = True)
+
+    class Meta:
+        verbose_name = 'Edward Snowden'
+        verbose_name_plural = 'Edward Snowden'

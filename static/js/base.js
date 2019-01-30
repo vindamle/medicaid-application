@@ -7,7 +7,7 @@ $(document).ready( () => {
 	});
 	$('.content').fadeIn();
 
-	//datatable search fields styling	
+	//datatable search fields styling
 	const filters = document.querySelectorAll('.dataTables_filter')
 	for (var i = 0; i < filters.length; i++) {
 		let filter = filters[i]
@@ -19,7 +19,7 @@ $(document).ready( () => {
 		input.style.textAlign = "center"
 		$(input).focus(() => {
 			input.style.outline = "none"
-		// input.style.boxShadow = "inset 1px 1px 1px #aaa"			
+		// input.style.boxShadow = "inset 1px 1px 1px #aaa"
 		})
 		// input.addClass('fdsa')
 		// $('.asdf').css('background-color', 'red')
@@ -96,4 +96,3 @@ $('.btn-ignore').click(function(){
     trackOrIgnore(row, false);
    };
 });
-

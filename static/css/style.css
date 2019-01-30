@@ -383,45 +383,21 @@ table button {
 
 .overlay {
 	display: none;
-	position: absolute;
+	position: fixed;
+	height: 100vh;
+	width: 100vw;
 	z-index: 1000000;
 	top: 0;
 	left: 0;
-	background: rgba(255,255,255,.8);
+	background: rgba(255,255,255,.5);
 }
 
 .overlay img {
-	width: 100vw;
-	/*position: absolute;*/
-}
-
-/* The animation code */
-@keyframes changeSize {
-  from {font-size: 100px;}
-  to {font-size: 200px;}
-}
-
-@media(max-width: 767px) {
-		/* The animation code */
-	@keyframes changeSize {
-	  from {font-size: 30px;}
-	  to {font-size: 70px;}
-	}
-}
-
-.overlay h1 {
-	display: none;
-	position: absolute;
-	margin-top: 30vh;
-	margin-left: 20vw;
-	text-align: center;
-	color: blue;
-	transform: rotate(-15deg);
-	animation-name: changeSize;
-  animation-duration: .8s;
-  animation-iteration-count: infinite;
-  animation-direction: alternate-reverse;
-  animation-timing-function: linear;
+	min-width: 100vw;
+	min-height: 100vh;
+	position: fixed;
+	top: 0;
+	left: 0;
 }
 
 @media (min-width: 768px) {
@@ -540,7 +516,7 @@ table button {
   background-color: #3040A6;
 }
 
-.addNamiBtn {
+.addModalRowBtn {
 	border-radius: 25px;
 	background: #3040A6;
 	color: white;
@@ -550,7 +526,7 @@ table button {
 
 }
 
-.addNamiBtn:hover {
+.addModalRowBtn:hover {
 	background: steelblue;
 }
 
@@ -660,11 +636,11 @@ table button {
 	.residentInfoDiv .firstColumn {
 		margin-top: 45px;
 	}
+	.residentInfoDiv .applicationColumn {
+		padding-top: 10px;
+	}
 }
 
-.residentInfoDiv .applicationColumn {
-	padding-top: 10px;
-}
 
 .residentInfoDiv li {
 	/*margin: 10px 0 10px 20px;*/
@@ -773,7 +749,13 @@ input[type=date]::-webkit-inner-spin-button {
 }
 
 .fileInputLi {
+		margin-bottom: 10px;
+}
+
+@media(min-width: 998px) {
+	.fileInputLi {
 		margin-bottom: 30px;
+	}
 }
 
 .fileInputLi label {
@@ -885,30 +867,43 @@ input[type=date]::-webkit-inner-spin-button {
 	display: none;
 }
 
-.NAMIrow {
+.modalRow {
 	padding: 10px;
 	margin: 0 0 2px 0;
-	border: 2px solid #eee;
+	/*border: 2px solid #eee;*/
 }
 
-.namiColumn label {
+.modalRowDiv {
+	border: 2px solid #eee;
+	margin-bottom: 5px;
+}
+
+.modalRowColumn label {
 	display: inline-block;
 }
 @media(min-width: 768px) {
-	.namiColumn {
+	.modalRowColumn {
 		display: inline-block;
 		padding: 0;
 		margin: 0;
 		width: 30%;
 		text-align: center;
 	}
-	.namiColumn label {
-	display: block;
+	.modalRowColumn label {
+		/*display: block;*/
+	}
 }
-}
-.namiColumn li {
+.modalRowColumn li {
 	padding: 0;
 	margin: 0;
+}
+
+.fairHearingsModal .modalRowColumn li {
+	text-align: left;
+}
+
+#fairHearingsModalBtn {
+	margin-left: 40px;
 }
 
 .addNamiBtnLi {
@@ -919,6 +914,14 @@ input[type=date]::-webkit-inner-spin-button {
 
 #namiModalBtn {
 	margin: 15px 25px;
+}
+
+.fairHearingsModal label {
+	margin-bottom: 0;
+}
+
+.fairHearingsModal input.editable {
+	margin-bottom: 15px;
 }
 
 .residentInfoDiv .namiH6 {

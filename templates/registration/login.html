@@ -5,6 +5,9 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
+{% if user.is_authenticated  %}
+	<!-- Redirect User back to Home page -->
+{% else %}
 	<div class="formDiv">
 		<h1>Please log in below:</h1>
 		<form method="post">
@@ -16,4 +19,6 @@
         <a href="{% url 'password_reset' %}">Forgot Password</a>
     </form>
 	</div>
+
+{% endif%}
 {% endblock %}
