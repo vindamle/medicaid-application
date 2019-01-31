@@ -40,7 +40,7 @@ def track_untrack_resident(request):
                 row_id = application.application_id,
                 column_name = "Object Created",
                 old_value = "None",
-                new_value = "None",
+                new_value = resident.resident_id,
                 log_ip = request.META.get('REMOTE_ADDR'),
                 date = datetime.now()
             )
@@ -189,7 +189,7 @@ def create_response(request):
         response = Response.objects.create(application_id = application_id, response_type = ResponseType.objects.get(response_type = response_type))
 
         # Audit Log
-        Snowden.objects.create(user = request.user,table_name = response._meta.verbose_name,row_id = response.response_id,column_name = "Object Created",old_value = "None",new_value = "None",log_ip = request.META.get('REMOTE_ADDR'),date = datetime.now())
+        Snowden.objects.create(user = request.user,table_name = response._meta.verbose_name,row_id = response.response_id,column_name = "Object Created",old_value = "None",new_value = application_id,log_ip = request.META.get('REMOTE_ADDR'),date = datetime.now())
 
         if response_type == 'rfi':
             action = RFI.objects.create(response = response)
@@ -202,7 +202,7 @@ def create_response(request):
             return_info = action.denial_id
 
         # Audit Log
-        Snowden.objects.create(user = request.user,table_name = action._meta.verbose_name,row_id = action.response_id,column_name = "Object Created",old_value = "None",new_value = "None",log_ip = request.META.get('REMOTE_ADDR'),date = datetime.now())
+        Snowden.objects.create(user = request.user,table_name = action._meta.verbose_name,row_id = action.response_id,column_name = "Object Created",old_value = "None",new_value = response.response_id,log_ip = request.META.get('REMOTE_ADDR'),date = datetime.now())
 
         # return HttpResponse({"return_info":return_info, "response_id":response.response_id})
         return JsonResponse([response.response_id, return_info], safe=False)
@@ -346,7 +346,7 @@ def create_application(request):
         row_id = application.application_id,
         column_name = "Object Created",
         old_value = "None",
-        new_value = application.application_id,
+        new_value = resident_id,
         log_ip = request.META.get('REMOTE_ADDR'),
         date = datetime.now()
     )
@@ -364,7 +364,7 @@ def delete_response(request):
     elif response_type == "approval":
         object = Approval.objects.get(approval_id = response_id)
         object.delete()
-        
+
     # Audit Log
     Snowden.objects.create(
         user = request.user,
@@ -380,8 +380,21 @@ def delete_response(request):
 
 def create_fair_hearing(request):
     response_id = int(request.GET['response_id'])
-    print(response_id)
     fair_hearing = FairHearing.objects.create(response = Response.objects.get(response_id = response_id))
+
+
+    # Audit Log
+    Snowden.objects.create(
+        user = request.user,
+        table_name = fair_hearing._meta.verbose_name,
+        row_id = fair_hearing.fair_hearing_id,
+        column_name = "Object Created",
+        old_value = "None",
+        new_value = response_id,
+        log_ip = request.META.get('REMOTE_ADDR'),
+        date = datetime.now()
+    )
+
     return HttpResponse(int(fair_hearing.fair_hearing_id))
 
 def update_fair_hearing(request):
@@ -389,6 +402,19 @@ def update_fair_hearing(request):
     column =request.GET['column']
     new_value =request.GET['new_value']
     fair_hearing = FairHearing.objects.get(fair_hearing_id = fair_hearing_id)
+
+    # Audit Log
+    Snowden.objects.create(
+        user = request.user,
+        table_name = fair_hearing._meta.verbose_name,
+        row_id = fair_hearing_id,
+        column_name = column,
+        old_value = getattr(fair_hearing,column) if getattr(fair_hearing,column) is not None else "None",
+        new_value = new_value,
+        log_ip = request.META.get('REMOTE_ADDR'),
+        date = datetime.now()
+    )
+
     field = setattr(fair_hearing, column,new_value)
     fair_hearing.save()
     return HttpResponse("200")
@@ -396,5 +422,16 @@ def update_fair_hearing(request):
 def delete_fair_hearing(request):
     fair_hearing_id = int(request.GET['row_id'])
     fair_hearing = FairHearing.objects.get(fair_hearing_id = fair_hearing_id)
+    # Audit Log
+    Snowden.objects.create(
+        user = request.user,
+        table_name = fair_hearing._meta.verbose_name,
+        row_id = fair_hearing_id,
+        column_name = "Object Deleted",
+        old_value = "DELETED",
+        new_value = "DELETED",
+        log_ip = request.META.get('REMOTE_ADDR'),
+        date = datetime.now()
+    )
     fair_hearing.delete()
     return HttpResponse("200")

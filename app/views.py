@@ -146,8 +146,20 @@ class ShowView(View):
 
         file = request.FILES.getlist('document')
         type = request.POST.get('file_type')
-        application_id = request.POST.get('application_id')
+
         resident_id = request.POST.get('resident_id')
+        print(type)
+        if type == "fair_hearing_outcome_document" or type == "fair_hearing_confirmation":
+
+            resident_id = request.POST.get('resident_id')
+            fair_hearing_id = request.POST.get('fair_hearing_id')
+            application_id = FairHearing.objects.get(fair_hearing_id = fair_hearing_id).response.application.application_id
+        else:
+
+            print("*"*20)
+            print("wrong")
+            print("*"*20)
+            application_id = request.POST.get('application_id')
 
 
         ROOT = Path.cwd()
@@ -195,6 +207,21 @@ class ShowView(View):
             snowden_update(request,application, application.application_id,"application_confirmation_id",confirmation.confirmation_id)
             application.application_confirmation = confirmation
             application.save()
+
+        elif type == "fair_hearing_confirmation":
+            confirmation = Confirmation.objects.create(confirmation_document = new_document, description = type)
+            snowden_update(request,confirmation, confirmation.confirmation_id,"confirmation_document_id",confirmation.confirmation_document_id)
+            fair_hearing = FairHearing.objects.get(fair_hearing_id = int(fair_hearing_id))
+            snowden_update(request,fair_hearing, fair_hearing.fair_hearing_id,"fair_hearing_confirmation_id",confirmation.confirmation_id)
+            fair_hearing.fair_hearing_confirmation = confirmation
+            fair_hearing.save()
+
+        elif type == "fair_hearing_outcome_document":
+            fair_hearing = FairHearing.objects.get(fair_hearing_id = int(fair_hearing_id))
+            snowden_update(request,fair_hearing, fair_hearing.fair_hearing_id,"fair_hearing_outcome_document_id",new_document.document_id)
+            fair_hearing.fair_hearing_outcome_document_id = new_document.document_id
+            fair_hearing.save()
+
 
         return redirect('/show/?resident_id={}'.format(str(resident_id)))
 
