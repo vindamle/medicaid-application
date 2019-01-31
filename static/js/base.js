@@ -5,7 +5,7 @@ $(document).ready( () => {
 	  "paging": false,
 	  "info": false
 	});
-	$('.content').fadeIn();
+	$('.content').fadeIn(200);
 
 	//datatable search fields styling
 	const filters = document.querySelectorAll('.dataTables_filter')
