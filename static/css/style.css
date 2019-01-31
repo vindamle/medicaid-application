@@ -244,6 +244,13 @@ table button {
 	/*padding: 5px 10px;*/
 }
 
+.btn-primary {
+	background: #324EBC !important;
+	border: 1px solid darkblue;
+	box-shadow: 1px 1px 2px black;
+	margin-bottom: 5px;
+}
+
 .btn-track {
 	/*background: #ee7000;*/
 	background: #009900;

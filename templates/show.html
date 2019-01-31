@@ -442,11 +442,18 @@
 		      </button>
 					<div class="row">
 						<div class="col-lg-3 firstColumn applicationColumn">
+							<li class="editableLi ">
+								<label>Denial Notice Date:</label>
+								<input class="editable date  due_date" id="denial_notice_date" data-table="denial"  data-application_id="{{denial.response.application_id}}" data-denial_id="{{denial.denial_id}}" type="date" onkeyup="checkIfEnterKey(this, event)" value="{{denial.denial_notice_date|date:'Y-m-d'}}">
+							</li>
+							
+						</div>
+						<div class="col-lg-3 applicationColumn">
 							<li>
-							{% if denial.document_id %}
+							{% if denial.denial_document %}
 								<p>Document Uploaded:</p>
-								<a href="/{{ denial.document.file }}" target = "_blank">{{denial.document.file_name}}</a>
-								<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('denial',{{denial.denial_id}},'document')">
+								<a href="/{{ denial.denial_document.file }}" target = "_blank">{{denial.denial_document.file_name}}</a>
+								<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('denial',{{denial.denial_id}},'denial_document')">
 				          <span aria-hidden="true">&times;</span>
 				        </button>
 							{% else %}
@@ -461,12 +468,6 @@
 									<button type="submit" class="uploadBtn">Upload</button>
 								</form>
 							{% endif %}
-							</li>
-						</div>
-						<div class="col-lg-3 applicationColumn">
-							<li class="editableLi ">
-								<label>Denial Notice Date:</label>
-								<input class="editable date  due_date" id="denial_notice_date" data-table="denial"  data-application_id="{{denial.response.application_id}}" data-denial_id="{{denial.denial_id}}" type="date" onkeyup="checkIfEnterKey(this, event)">
 							</li>
 							<li class="editableLi">
 								<label>Fair Hearing Requested?</label>
@@ -722,7 +723,7 @@
 															{% if fair_hearing.fair_hearing_outcome_document %}
 																<p>Document Uploaded:</p>
 																<a href="/{{ fair_hearing.fair_hearing_outcome_document.file }}" target = "_blank">{{fair_hearing.fair_hearing_outcome_document.file_name}}</a>
-																<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('fair_hearing',{{fair_hearing.fair_hearing_id}},'document')">
+																<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('fair_hearing',{{fair_hearing.fair_hearing_id}},'fair_hearing_outcome_document')">
 												          <span aria-hidden="true">&times;</span>
 												        </button>
 															{% else %}
@@ -870,12 +871,14 @@ $(document).ready(()=>{
 const collapseSection = (h4) => {
 	h4.classList.toggle("activeSection");
   let content = h4.nextElementSibling;
-  if (content.style.maxHeight != "0px"){
-    content.style.maxHeight = "0px";
-    content.parentNode.style.maxWidth = "100px";
+  if (content.style.display != "none"){
+    content.style.display = "none";
+    content.parentNode.style.maxHeight = "50px";
+    content.parentNode.style.maxWidth = "200px";
     content.parentNode.style.marginBottom = "30px";
   } else {
-    content.style.maxHeight = content.scrollHeight + "0px";
+    content.style.display = 'initial';
+    content.parentNode.style.maxHeight = "initial";
     content.parentNode.style.maxWidth = "100%";
     content.parentNode.style.marginBottom = "20px";
   }

@@ -401,6 +401,8 @@ def update_fair_hearing(request):
     fair_hearing_id = int(request.GET['row_id'])
     column =request.GET['column']
     new_value =request.GET['new_value']
+    if new_value == '':
+        new_value = None
     fair_hearing = FairHearing.objects.get(fair_hearing_id = fair_hearing_id)
 
     # Audit Log
@@ -410,7 +412,7 @@ def update_fair_hearing(request):
         row_id = fair_hearing_id,
         column_name = column,
         old_value = getattr(fair_hearing,column) if getattr(fair_hearing,column) is not None else "None",
-        new_value = new_value,
+        new_value = new_value if new_value is not None else "None",
         log_ip = request.META.get('REMOTE_ADDR'),
         date = datetime.now()
     )
