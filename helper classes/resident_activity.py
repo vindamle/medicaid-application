@@ -19,7 +19,7 @@ class Alerts:
         ''' Get MSSQl Connection'''
         sqlServer = ConnectSqlServer()
         self.conn = sqlServer.connect_sql_server()
-
+     
         ''' Get PSQL Connection'''
         db = Db()
         connection = db.connect_postgres()
@@ -87,3 +87,4 @@ class Alerts:
 alert = Alerts()
 results = alert.get_alerts(1,None)
 alert.import_fields(results)
+

@@ -119,9 +119,6 @@ class ShowView(View):
     form_class = UploadFileForm
     template_name = "show.html"
 
-
-
-
     def get(self, request, *args, **kwargs):
         '''if GET  '''
 
@@ -137,12 +134,13 @@ class ShowView(View):
         denials = Denial.objects.filter(response__application__resident__resident_id = resident_id).order_by('response__application__application_id','denial_id')
         approvals = Approval.objects.filter(response__application__resident__resident_id = resident_id).order_by('response__application__application_id','approval_id')
         namis = NAMI.objects.filter(approval__response__application__resident__resident_id = resident_id).order_by('approval__approval_id', 'nami_id')
+        fair_hearings = FairHearing.objects.filter(response__application__resident__resident_id = resident_id).order_by('response__response_id', 'fair_hearing_id')
         # medicaid_application_documents = Document.objects.filter(resident_id = resident_id, description = "medicaid_application")
         # rfi_documents = Document.objects.filter(resident_id = resident_id, description = "rfi").order_by('rfi_id')
         # applications = results
         # print(application)
         # return render(request,self.template_name, {'rfis':rfis,'documents':documents,'resident':resident,'applications':applications,"resident_alerts":resident_alerts, 'medicaid_application_documents': medicaid_application_documents, "rfi_documents":rfi_documents, "form":self.form_class})
-        return render(request, self.template_name, {'resident': resident, 'applications':applications, 'rfis':rfis, 'denials': denials, 'approvals': approvals, 'namis': namis, 'resident_alerts': resident_alerts})
+        return render(request, self.template_name, {'resident': resident, 'applications':applications, 'rfis':rfis, 'denials': denials, 'approvals': approvals, 'namis': namis, 'fair_hearings': fair_hearings, 'resident_alerts': resident_alerts})
     def post(self, request, *args, **kwargs):
 
 
