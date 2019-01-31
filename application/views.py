@@ -8,6 +8,7 @@ from django.shortcuts import render
 from .models import *
 from .additionalInfo import AdditionalInfo
 from datetime import datetime
+from django.http import JsonResponse
 
 
 def application_tracking(request):
@@ -116,7 +117,7 @@ def update_application(request):
         row_id = application_id,
         column_name = column,
         old_value = getattr(application,column) if getattr(application,column) is not None else "None",
-        new_value = new_value,
+        new_value = new_value if new_value is not None else "None",
         log_ip = request.META.get('REMOTE_ADDR'),
         date = datetime.now()
     )
@@ -139,7 +140,7 @@ def update_confirmation(request):
         row_id = confirmation_id,
         column_name = column,
         old_value = getattr(confirmation,column) if getattr(confirmation,column) is not None else "None",
-        new_value = new_value,
+        new_value = new_value if new_value is not None else "None",
         log_ip = request.META.get('REMOTE_ADDR'),
         date = datetime.now()
     )
@@ -203,7 +204,8 @@ def create_response(request):
         # Audit Log
         Snowden.objects.create(user = request.user,table_name = action._meta.verbose_name,row_id = action.response_id,column_name = "Object Created",old_value = "None",new_value = "None",log_ip = request.META.get('REMOTE_ADDR'),date = datetime.now())
 
-        return HttpResponse(return_info)
+        # return HttpResponse({"return_info":return_info, "response_id":response.response_id})
+        return JsonResponse([response.response_id, return_info], safe=False)
     else:
         #Audit Log
         Snowden.objects.create(user = request.user,table_name = "None",row_id = application_id ,column_name = "Switched to Not Recieved",old_value = "None",new_value = "None",log_ip = request.META.get('REMOTE_ADDR'),date = datetime.now())
@@ -225,7 +227,7 @@ def update_rfi(request):
         row_id = rfi_id,
         column_name = column,
         old_value = getattr(rfi,column) if getattr(rfi,column) is not None else "None",
-        new_value = new_value,
+        new_value = new_value if new_value is not None else "None",
         log_ip = request.META.get('REMOTE_ADDR'),
         date = datetime.now()
     )
@@ -249,7 +251,7 @@ def update_denial(request):
         row_id = denial_id,
         column_name = column,
         old_value = getattr(denial,column) if getattr(denial,column) is not None else "None",
-        new_value = new_value,
+        new_value = new_value if new_value is not None else "None",
         log_ip = request.META.get('REMOTE_ADDR'),
         date = datetime.now()
     )
@@ -272,7 +274,7 @@ def update_approval(request):
         row_id = approval_id,
         column_name = column,
         old_value = getattr(approval,column) if getattr(approval,column) is not None else "None",
-        new_value = new_value,
+        new_value = new_value if new_value is not None else "None",
         log_ip = request.META.get('REMOTE_ADDR'),
         date = datetime.now()
     )
@@ -308,7 +310,7 @@ def update_nami(request):
         row_id = nami_id,
         column_name = column,
         old_value = getattr(nami,column) if getattr(nami,column) is not None else "None",
-        new_value = new_value,
+        new_value = new_value if new_value is not None else "None",
         log_ip = request.META.get('REMOTE_ADDR'),
         date = datetime.now()
     )

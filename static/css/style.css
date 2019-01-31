@@ -155,8 +155,13 @@ sup {
 }
 
 h2, h3, h4 {
-	margin-top: 50px;
 	text-align: center;
+}
+
+@media(min-width: 1400px) {
+	h2,h3,h4 {
+		margin-top: 50px;
+	}
 }
 
 h3 {
@@ -731,11 +736,12 @@ input[type=date]::-webkit-inner-spin-button {
 
 .residentInfoDiv select {
 	text-align: center;
-	padding: 2px;
+	/*padding: 2px;*/
 	border: none;
 	background: white;
 	color: darkblue;
 	font-weight: bold;
+	margin-bottom: 10px;
 }
 
 .residentInfoDiv select:focus {
@@ -871,7 +877,7 @@ input#secondary_pays_copay {
 
 .modalRowDiv {
 	border: 2px solid #eee;
-	margin-bottom: 5px;
+	margin-bottom: 20px;
 }
 
 .modalRowColumn label {
@@ -945,10 +951,10 @@ input#secondary_pays_copay {
 		width: 90vw !important;
 		margin-left: 5vw !important;
 	}
-@media(min-width: 998px) {
+@media(min-width: 1400px) {
 	.modal-lg {
-		max-width: 800px !important;
-		width: 800px !important;
+		max-width: 1350px !important;
+		width: 1350px !important;
 		margin: auto !important;
 	}
 }
