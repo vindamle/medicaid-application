@@ -327,6 +327,7 @@ class NAMI(models.Model):
 class AlertType(models.Model):
     alert_type_id = models.AutoField(primary_key = True)
     alert_name = models.CharField(max_length = 50,  null = False, blank=False)
+    alert_priority = models.IntegerField(null=False,blank=False)
 
 class Alert(models.Model):
     alert_id = models.AutoField(primary_key = True)
@@ -345,8 +346,6 @@ class Alert(models.Model):
         AlertType,
         on_delete = models.CASCADE,
     )
-
-    alert_priority = models.IntegerField(null=False,blank=False)
     alert_status =models.BooleanField(default = False)
 
     class Meta:

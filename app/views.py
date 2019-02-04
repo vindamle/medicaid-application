@@ -22,7 +22,7 @@ class LoginView(View):
 
         if login_data:
 
-            request.session.set_expiry(600)
+            request.session.set_expiry(300)
             login(request, login_data)
             return redirect('home')
 
@@ -67,7 +67,6 @@ class ActivityView(View):
             permissions = Permission.objects.filter(user = request.user)
 
             for permission in permissions:
-                print(permission)
 
                 new_admits = Resident.objects.filter(facility_name =permission.codename, tracking_status = None, activity_type = 'A')
                 for new_admit in new_admits:
@@ -80,7 +79,7 @@ class ActivityView(View):
                 new_discharges= Resident.objects.filter(facility_name =permission.codename,tracking_status = None, activity_type = 'D')
                 for new_discharge in new_discharges:
                     discharge.append(new_discharge)
-                print(len(new_admission))
+                
             return render(request,self.template_name, {'discharge':discharge,'admission':new_admission,'payor_change':payor_change})
         else:
             return redirect('login')
@@ -98,10 +97,15 @@ class PendingAlertsView(View):
 
 
         if request.user.is_authenticated:
+
             permissions = Permission.objects.filter(user = request.user)
+
+            self.list = list()
             for permission in permissions:
+
                 residents = Resident.objects.filter(facility_name =permission.codename, tracking_status = True)
-                self.list = list()
+
+
                 for resident in residents:
 
                     alerts = Alert.objects.filter(resident = resident , alert_status = False)
@@ -109,7 +113,7 @@ class PendingAlertsView(View):
                     for alert in alerts:
                         self.list.append(alert)
 
-                return render(request,self.template_name, {'alerts':self.list,"form":self.form_class})
+            return render(request,self.template_name, {'alerts':self.list,"form":self.form_class})
         else:
             return redirect('login')
 
@@ -254,7 +258,7 @@ class ApprovalsView(View):
 
                 for result in results:
                     self.list.append(result)
-                return render(request,self.template_name, {'list':self.list,"form":self.form_class})
+            return render(request,self.template_name, {'list':self.list,"form":self.form_class})
         else:
             return redirect('login')
 

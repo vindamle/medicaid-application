@@ -20,7 +20,7 @@ class ImportAlerts:
         try:
             return dict(
                 alert_id = int(result["alert_id"]),
-                alert_priority= result["alert_priority"],
+
                 alert_status= result["alert_status"],
                 alert_type_id= result["alert_type_id"],
                 application_id= result["application_id"],
@@ -28,7 +28,7 @@ class ImportAlerts:
             )
         except:
             return dict(
-                alert_priority= result["alert_priority"],
+                
                 alert_status= result["alert_status"],
                 alert_type_id= result["alert_type_id"],
                 application_id= result["application_id"],
