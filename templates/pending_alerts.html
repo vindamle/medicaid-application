@@ -42,7 +42,7 @@
             <td>{{alert.resident.first_name}}</td>
             <td>{{alert.resident.last_name}}</td>
             <td>{{alert.alert_type.alert_name}}</td>
-            <td>{{alert.alert_priority}}</td>
+            <td>{{alert.alert_type.alert_priority}}</td>
             <td><a href="/show?resident_id={{alert.resident_id}}" class=""><button class="btn-alert">Show</button></a></td>
           </tr>
           {% endfor %}

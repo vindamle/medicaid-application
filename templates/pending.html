@@ -28,7 +28,7 @@
           <td>{{application.medicaid_pickup_date|date:'F d, Y'}}</td>
           <td>{{application.phase.phase_name}}</td>
           <td><a href="/show?resident_id={{application.resident_id}}" class="alertByButton"><button class="btn-tracked">Show</button></a></td>
-          <td><button class="btn-ignore">Stop Tracking</button></td>
+          <td><button class="btn-ignore">&times;</button></td>
         </tr>
         {% endfor %}
       </tbody>
