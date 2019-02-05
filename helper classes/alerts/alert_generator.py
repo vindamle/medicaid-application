@@ -27,7 +27,7 @@ class Generate_Alert:
         # Remove Loop For CRON JOB
         # Remove timedelta(days = i) For CRON JOB
 
-        for i in range(30,90):
+        for i in range(30,60):
 
                 data["daysLeft"] = (data["medicaid_pickup_deadline"]-pd.to_datetime(pytz.utc.localize(datetime.now()+ timedelta(days=i)))).dt.days
                 alerts = pd.merge(data,alert_data, how = 'left', on = 'resident_id',suffixes = ('','_y'))
