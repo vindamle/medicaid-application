@@ -33,7 +33,9 @@ def track_untrack_resident(request):
         resident.dismiss = True
 
         if not Application.objects.filter(resident_id = requested_resident_id).exists():
+            # AdditionalInfo().get_Info(facility_Skey,resident_id,SSN))
             application = Application.objects.create(resident = resident, phase = Phase.objects.get(phase_id = 1),tracking_status = True)
+
             # Audit Log
             Snowden.objects.create(
                 user = request.user,
@@ -130,7 +132,7 @@ def update_application(request):
         pick_up_date = datetime.strptime(application.medicaid_pickup_date, '%Y-%m-%d')
         application_due_date = monthrange((pick_up_date + timedelta(days = 90)).year,(pick_up_date + timedelta(days = 90)).month)[1]
         date = pick_up_date+timedelta(days =(90 +application_due_date-(pick_up_date+timedelta(days = 90)).day))
-        
+
         Snowden.objects.create(
             user = request.user,
             table_name = application._meta.verbose_name,

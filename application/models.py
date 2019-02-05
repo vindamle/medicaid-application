@@ -328,6 +328,7 @@ class AlertType(models.Model):
     alert_type_id = models.AutoField(primary_key = True)
     alert_name = models.CharField(max_length = 50,  null = False, blank=False)
     alert_priority = models.IntegerField(null=False,blank=False)
+    alert_class = models.CharField(max_length = 15,  null = True, blank=False)
 
 class Alert(models.Model):
     alert_id = models.AutoField(primary_key = True)
