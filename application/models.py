@@ -1,7 +1,7 @@
 from django.db import models
 from pathlib import Path
 from django.contrib.auth.models import User
-
+from pgcrypto_expressions.fields import EncryptedCharField
 # Create your models here.
 
 class Facility(models.Model):
@@ -24,7 +24,7 @@ class Resident(models.Model):
     #Patient Info
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
-    ssn = models.CharField(max_length=255, null=True, blank=True)
+    ssn = EncryptedCharField(max_length=50, null=True, blank=True)
     dob = models.DateTimeField(null=True, blank=True)
     sex= models.CharField(max_length=2, null=True, blank=True)
     address = models.CharField(max_length = 100, null = True, blank = True)
@@ -274,8 +274,10 @@ class Approval(models.Model):
     approval_end_date = models.DateTimeField(null = True, blank = True)
     approval_recertification_date = models.DateTimeField(null = True, blank = True)
     approval_notice_date  = models.DateTimeField(null = True, blank = True)
-    satisfied_with_approval = models.CharField(max_length = 50,  null = True, blank=True)
-    fair_hearing_required = models.CharField(max_length = 50,  null = True, blank=True)
+    approval_satisfied = models.CharField(max_length = 50,  null = True, blank=True)
+    approval_contacted_dss =  models.CharField(max_length = 50,  null = True, blank=True)
+    approval_resolved_through_dss =  models.CharField(max_length = 50,  null = True, blank=True)
+    approval_fair_hearing_required = models.CharField(max_length = 50,  null = True, blank=True)
 
     class Meta:
         verbose_name = 'Approvals'
@@ -289,11 +291,17 @@ class Denial(models.Model):
         on_delete = models.CASCADE,
     )
 
-    document = models.ForeignKey(
+    denial_document = models.ForeignKey(
         Document,
         on_delete = models.CASCADE,
         null = True,
     )
+
+    denial_notice_date = models.DateTimeField(null = True, blank = True)
+    denial_fair_hearing_requested = models.CharField(max_length = 50, null = True, blank = True)
+    denial_documentation_submitted = models.CharField(max_length = 50, null = True, blank = True)
+    denial_contacted_dss =  models.CharField(max_length = 50,  null = True, blank=True)
+    denial_resolved_through_dss =  models.CharField(max_length = 50,  null = True, blank=True)
 
     class Meta:
         verbose_name = 'Denials'
@@ -319,6 +327,8 @@ class NAMI(models.Model):
 class AlertType(models.Model):
     alert_type_id = models.AutoField(primary_key = True)
     alert_name = models.CharField(max_length = 50,  null = False, blank=False)
+    alert_priority = models.IntegerField(null=False,blank=False)
+    alert_class = models.CharField(max_length = 15,  null = True, blank=False)
 
 class Alert(models.Model):
     alert_id = models.AutoField(primary_key = True)
@@ -337,8 +347,6 @@ class Alert(models.Model):
         AlertType,
         on_delete = models.CASCADE,
     )
-
-    alert_priority = models.IntegerField(null=False,blank=False)
     alert_status =models.BooleanField(default = False)
 
     class Meta:
@@ -348,8 +356,8 @@ class Alert(models.Model):
 class FairHearing(models.Model):
     fair_hearing_id = models.AutoField(primary_key = True)
 
-    application = models.ForeignKey(
-        Application,
+    response = models.ForeignKey(
+        Response,
         on_delete = models.CASCADE,
         null = True,
     )
@@ -360,21 +368,22 @@ class FairHearing(models.Model):
         null = True,
     )
 
+    fair_hearing_confirmation = models.ForeignKey(
+        Confirmation,
+        on_delete = models.CASCADE,
+        null = True,
+    )
+
     fair_hearing_date = models.DateField(null = True, blank = True)
     fair_hearing_time =  models.TimeField(null = True, blank = True)
     fair_hearing_address = models.CharField(max_length = 50,  null = True, blank=True)
     fair_hearing_outcome = models.CharField(max_length = 50,  null = True, blank=True)
 
-    fair_hearing_attorney_first_name = models.CharField(max_length = 50,  null = True, blank=True)
-    fair_hearing_attorney_last_name = models.CharField(max_length = 50,  null = True, blank=True)
-    fair_hearing_regional_first_name = models.CharField(max_length = 50,  null = True, blank=True)
-    fair_hearing_regional_last_name = models.CharField(max_length = 50,  null = True, blank=True)
-    fair_hearing_coordinator_first_name = models.CharField(max_length = 50,  null = True, blank=True)
-    fair_hearing_coordinator_last_name = models.CharField(max_length = 50,  null = True, blank=True)
+    fair_hearing_representative_type = models.CharField(max_length = 50,  null = True, blank=True)
+    fair_hearing_representative_name = models.CharField(max_length = 100,  null = True, blank=True)
 
     fair_hearing_satisfied = models.CharField(max_length = 10,  null = True, blank=True)
     fair_hearing_outcome_date = models.DateField(null = True, blank = True)
-    fair_hearing_appeal = models.CharField(max_length = 10,  null = True, blank=True)
 
     class Meta:
         verbose_name = 'Fair Hearings'
@@ -387,9 +396,90 @@ class Employee(models.Model):
     )
     class Meta:
         permissions = (
-            ("Beth Abraham", "Can View Beth Abraham Center Residents"),
-            ("Boro Park", "Can View Boro Park Center Residents"),
-            ("Steuben","Can View Steuben Center Residents" )
+            ("Boro Park","Can view and edit residents from Boro Park"),
+            ("Brooklyn","Can view and edit residents from Brooklyn"),
+            ("Bushwick","Can view and edit residents from Bushwick"),
+            ("Washington","Can view and edit residents from Washington"),
+            ("Corning","Can view and edit residents from Corning"),
+            ("Argyle Center","Can view and edit residents from Argyle Center"),
+            ("Bronx","Can view and edit residents from Bronx"),
+            ("Warren","Can view and edit residents from Warren"),
+            ("Deptford","Can view and edit residents from Deptford"),
+            ("Oak Hill","Can view and edit residents from Oak Hill"),
+            ("Beth Abraham","Can view and edit residents from Beth Abraham"),
+            ("Essex","Can view and edit residents from Essex"),
+            ("Far Rockaway","Can view and edit residents from Far Rockaway"),
+            ("Fulton","Can view and edit residents from Fulton"),
+            ("Carthage","Can view and edit residents from Carthage"),
+            ("Hammonton","Can view and edit residents from Hammonton"),
+            ("Holliswood","Can view and edit residents from Holliswood"),
+            ("Hope Center","Can view and edit residents from Hope Center"),
+            ("WC - Elm Manor","Can view and edit residents from WC - Elm Manor"),
+            ("Mount Laurel","Can view and edit residents from Mount Laurel"),
+            ("N. Manor","Can view and edit residents from Northern Manor"),
+            ("Ellicott","Can view and edit residents from Ellicott Center"),
+            ("N. Metropolitan","Can view and edit residents from N. Metropolitan"),
+            ("Glens Falls","Can view and edit residents from Glens Falls"),
+            ("N. Riverview","Can view and edit residents from N. Riverview"),
+            ("New Paltz","Can view and edit residents from New Paltz"),
+            ("Ontario Center","Can view and edit residents from Ontario Center"),
+            ("Ontario County","Can view and edit residents from Ontario County"),
+            ("STBN County","Can view and edit residents from STBN County"),
+            ("Onondaga","Can view and edit residents from Onondaga"),
+            ("PG - Quality Care","Can view and edit residents from Quality Care"),
+            ("PG - Stamford Residence","Can view and edit residents from Stamford Residence"),
+            ("PG - Walnut Hills","Can view and edit residents from Walnut Hills"),
+            ("PG - Westview Manor","Can view and edit residents from Westview Manor"),
+            ("Claremont ALP","Can view and edit residents from Claremont"),
+            ("Steuben","Can view and edit residents from Steuben"),
+            ("Suffolk","Can view and edit residents from Suffolk"),
+            ("University","Can view and edit residents from University"),
+            ("Williamsbridge","Can view and edit residents from Williamsbridge"),
+            ("Bannister","Can view and edit residents from Bannister"),
+            ("Buffalo","Can view and edit residents from Buffalo"),
+            ("Park View","Can view and edit residents from Park View"),
+            ("Schenectady","Can view and edit residents from Schenectady"),
+            ("Slate Valley","Can view and edit residents from Slate Valley"),
+            ("Triboro (ALP)","Can view and edit residents from Alpine Triboro Center"),
+            ("Triboro Center","Can view and edit residents from Triboro Center"),
+            ("Troy","Can view and edit residents from Troy"),
+            ("Centers for Care","Can view and edit residents from Centers for Care"),
+            ("Brookside - MA","Can view and edit residents from Brookside"),
+            ("Granville","Can view and edit residents from Granville"),
+            ("Evolve","Can view and edit residents from Evolve"),
+            ("Kingston","Can view and edit residents from Kingston"),
+            ("New Boston","Can view and edit residents from New Boston"),
+            ("WC - Wedgewood","Can view and edit residents from Wedgewood"),
+            ("Cooperstown","Can view and edit residents from Cooperstown"),
+            ("Martine","Can view and edit residents from Martine"),
+            ("Focus - Otsego - Charts","Can view and edit residents from Otsego"),
+            ("Focus - Utica - Charts","Can view and edit residents from Utica"),
+            ("EC - Midwest","Can view and edit residents from Midwest"),
+            ("EC - Southwest","Can view and edit residents from Southwest Center"),
+            ("Mills Pond","Can view and edit residents from Mills Pond"),
+            ("Sayville","Can view and edit residents from Sayville"),
+            ("Birchwood - VT","Can view and edit residents from Birchwood"),
+            ("WC - Folts ADC","Can view and edit residents from Folts ADC"),
+            ("EC - Tulsa","Can view and edit residents from Tulsa"),
+            ("EC - Claremore","Can view and edit residents from Claremore"),
+            ("EC - Memory Care","Can view and edit residents from Memory Care"),
+            ("Castle Senior Living","Can view and edit residents from Castle Senior Living"),
+            ("Focus Senior Living","Can view and edit residents from Focus Senior Living"),
+            ("Richmond (Staten Island)","Can view and edit residents from Richmond Center"),
+            ("WC - Folts Home","Can view and edit residents from Folts Home"),
+            ("Creekview","Can view and edit residents from Creekview"),
+            ("EC - Crystal","Can view and edit residents from Crystal Center"),
+            ("EC - Pikeville","Can view and edit residents from Pikeville"),
+            ("Kansas City ALF","Can view and edit residents from Kansas City ALF"),
+            ("Overland Park ALF","Can view and edit residents from Overland Park ALF"),
+            ("Oneida Center","Can view and edit residents from Oneida Center"),
+            ("Butler Center","Can view and edit residents from Butler Center"),
+            ("Kansas City","Can view and edit residents from Kansas City"),
+            ("Overland Park","Can view and edit residents from Overland Park"),
+            ("Ten Broeck","Can view and edit residents from Ten Broeck"),
+            ("Topeka Center","Can view and edit residents from Topeka Center"),
+            ("Wichita Center","Can view and edit residents from Wichita Center"),
+
         )
 
         verbose_name = 'Employees'
@@ -399,15 +489,11 @@ class Snowden(models.Model):
     log_id = models.BigAutoField(primary_key = True)
 
     user = models.ForeignKey(
-        Employee,
+        User,
         on_delete = models.CASCADE,
     )
 
-    application = models.ForeignKey(
-        Application,
-        on_delete = models.CASCADE,
-    )
-
+    row_id = models.IntegerField()
     table_name = models.CharField(max_length = 50)
     column_name = models.CharField(max_length = 50)
     old_value  = models.CharField(max_length = 250)

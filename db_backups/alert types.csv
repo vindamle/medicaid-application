@@ -1,0 +1,12 @@
+alert_type_id,alert_name,alert_priority,alert_class
+1,Application Due in 90 Days,1,pickup date
+2,Application Due in 60 Days,1,pickup date
+3,Application Due in 45 Days,2,pickup date
+4,Application Due in 30 Days,3,pickup date
+5,Application Due in 15 Days,4,pickup date
+6,Application Due Today,5,pickup date
+7,Application Overdue,5,pickup date
+8,No Medicaid Response in 30 Days,3,no response
+9,RFI Due in 10 Days,3,rfi
+10,RFI Due Today,5,rfi
+11,RFI Overdue,5,rfi

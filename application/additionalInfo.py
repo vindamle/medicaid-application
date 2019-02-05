@@ -10,7 +10,7 @@ class AdditionalInfo:
         sqlServer = ConnectSqlServer()
         self.conn = sqlServer.connect_sql_server()
 
-    def get_Info(self, resident_id, facility_Skey, SSN):
+    def get_info(self, resident_id, facility_Skey, SSN):
 
         cursor = self.conn.cursor()
         try:
