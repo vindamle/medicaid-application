@@ -255,7 +255,7 @@
 								<option value="spousal">Spousal</option>
 							</select>
 							<span class="invisible DBinfo" id="DBspousal">{{application.spousal}}</span>
-						</li>					
+						</li>
 					</div>
 					<div class="col-lg-4 applicationColumn">
 						<li class="editableLi step3">
@@ -294,7 +294,7 @@
 					<div class="col-lg-4 applicationColumn">
 						<li class="editableLi step3">
 							<label>Date of Deadline:</label>
-							<input class="editable date" id="date_of_deadline" data-table="application" data-application_id="{{application.application_id}}"  type="date" value="{{application.date_of_deadline|date:'Y-m-d'|default_if_none:''}}">
+							<input class="editable date" id="date_of_application_submission_deadline" data-table="application" data-application_id="{{application.application_id}}"  type="date" value="{{application.date_of_application_submission_deadline|date:'Y-m-d'|default_if_none:''}}">
 						</li>
 						<li class="editableLi step3">
 							<label>DSS Contact Address:</label>
@@ -750,7 +750,7 @@
 																	<button type="submit" class="uploadBtn">Upload</button>
 																</form>
 																{% endif %}
-															</li>					
+															</li>
 														</div>
 														<div class="col-lg-6 col-sm-12 modalRowColumn">
 															<li>
@@ -824,15 +824,15 @@ $(document).ready(()=>{
 	let numberOfApprovals = 0;
 
 	{% for application in applications %}
-		
+
 		var applicationDiv = document.querySelector('#application{{application.application_id}}');
 		var initial_response = applicationDiv.querySelector('#initial_response');
 		var date_of_application_submission = applicationDiv.querySelector('#date_of_application_submission');
-		
+
 		if(date_of_application_submission.value) {
 			$(`#${applicationDiv.id} .step4`).css('display', 'block');
 		}
-		
+
 		date_of_application_submission.addEventListener('blur', (e) => {
 			if(date_of_application_submission.value && parseInt(date_of_application_submission.value) > 2010 && parseInt(date_of_application_submission.value) < 2100) {
 				$(`#${applicationDiv.id} .step4`).fadeIn();
@@ -846,7 +846,7 @@ $(document).ready(()=>{
 		var approval_satisfied = applicationDiv.querySelector('#approval_satisfied');
 		if (approval_satisfied && approval_satisfied.value != "no") {
 			$(`#${applicationDiv.id} .notSatisfied`).css('display', 'none')
-		} 
+		}
 
 		var meetingCheckbox = applicationDiv.querySelector('.meetingCheckbox');
 
@@ -919,7 +919,7 @@ const collapseSection = (h4) => {
 }
 
 class ResponseRowHTML {
-	constructor (applicationId, responseId, rfiOrDenialOrApprovalId) { 
+	constructor (applicationId, responseId, rfiOrDenialOrApprovalId) {
 		this.rfiRowHtml = `
 			<section id="rfi${rfiOrDenialOrApprovalId}">
 				<h4 class="numberOfRFIs collapsibleSection responseH4" onclick="collapseSection(this)">RFI #${numberOfRFIs}</h4>
@@ -1121,7 +1121,7 @@ class ResponseRowHTML {
 			        <h5 class="modal-title" id="exampleModalLongTitle">Fair Hearings</h5>
 			      </div>
 			      <div class="modal-body">
-						
+
 							</div>
 						<div class="modal-footer">
 				      <div class="editableLi addNamiBtnLi">
@@ -1294,7 +1294,7 @@ const addFairHearingRowHTML = (addFairHearingBtn, responseId) => {
 													<input type="hidden" name="fair_hearing_id" value="${fairHearingId}">
 													<button type="submit" class="uploadBtn">Upload</button>
 												</form>
-											</li>					
+											</li>
 										</div>
 										<div class="col-lg-6 col-sm-12 modalRowColumn">
 											<li>
@@ -1377,7 +1377,7 @@ const createResponseRow = (applicationId, responseField) => {
 					newResponseRowHTML = new ResponseRowHTML(applicationId, responseId, rfiOrDenialOrApprovalId)
 					const applicationDiv = document.querySelector(`#application${applicationId}`)
 					applicationDiv.insertAdjacentHTML("beforeend", newResponseRowHTML[`${responseField.value}RowHtml`]);
-				}	
+				}
 			}
 		});
 	if (responseField.value == "rfi") {
@@ -1435,9 +1435,9 @@ const deleteDoc = (table,tableRowId,docField) => {
 			column: docField,
 			new_value: null
 		};
-		updateDB(table, dataObject, successMessage) 
-		location.reload();		
-	}		
+		updateDB(table, dataObject, successMessage)
+		location.reload();
+	}
 }
 
 const deleteResponse = (responseType,responseId) => {

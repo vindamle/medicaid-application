@@ -7,8 +7,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from .models import *
 from .additionalInfo import AdditionalInfo
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.http import JsonResponse
+from calendar import monthrange
 
 
 def application_tracking(request):
@@ -32,7 +33,9 @@ def track_untrack_resident(request):
         resident.dismiss = True
 
         if not Application.objects.filter(resident_id = requested_resident_id).exists():
+            # AdditionalInfo().get_Info(facility_Skey,resident_id,SSN))
             application = Application.objects.create(resident = resident, phase = Phase.objects.get(phase_id = 1),tracking_status = True)
+
             # Audit Log
             Snowden.objects.create(
                 user = request.user,
@@ -122,8 +125,30 @@ def update_application(request):
         date = datetime.now()
     )
     field = setattr(application,column,new_value)
-    application.save()
-    return HttpResponse("200")
+
+
+    if column == "medicaid_pickup_date":
+
+        pick_up_date = datetime.strptime(application.medicaid_pickup_date, '%Y-%m-%d')
+        application_due_date = monthrange((pick_up_date + timedelta(days = 90)).year,(pick_up_date + timedelta(days = 90)).month)[1]
+        date = pick_up_date+timedelta(days =(90 +application_due_date-(pick_up_date+timedelta(days = 90)).day))
+
+        Snowden.objects.create(
+            user = request.user,
+            table_name = application._meta.verbose_name,
+            row_id = application_id,
+            column_name = "date_of_application_submission_deadline",
+            old_value = getattr(application,"date_of_application_submission_deadline") if getattr(application,"date_of_application_submission_deadline") is not None else "None",
+            new_value = date.strftime("%Y-%m-%d"),
+            log_ip = request.META.get('REMOTE_ADDR'),
+            date = datetime.now()
+        )
+        application.date_of_application_submission_deadline = date.strftime("%Y-%m-%d")
+        application.save()
+        return HttpResponse(date.strftime("%Y-%m-%d"))
+    else:
+        application.save()
+        return HttpResponse("200")
 
 def update_confirmation(request):
     confirmation_id =int(request.GET['row_id'])
