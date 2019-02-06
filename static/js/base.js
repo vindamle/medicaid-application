@@ -1,7 +1,7 @@
 
 $(document).ready( () => {
 // Call Datatables with parameters
-  $('table').dataTable({
+  $('table:not(.miscDocsTable)').dataTable({
 	  "paging": false,
 	  "info": false
 	});
@@ -37,7 +37,9 @@ const showTableCount = table => {
   const countSpanId = table.parentNode.id + "Count";
   const countSpan = document.getElementById(countSpanId);
   const count =table.children.length;
-  countSpan.innerHTML = count;
+  if(countSpan) {
+  	countSpan.innerHTML = count;
+  }
 };
 
 const tables = document.getElementsByTagName('tbody')
@@ -91,7 +93,7 @@ $('.btn-track').click(function(){
 $('.btn-ignore').click(function(){
   button = this;
   // console.log(button);
-  if (confirm("Are you sure you want stop tracking this resident?")) {
+  if (confirm("Are you sure you want stop tracking this resident? (They'll still be available in 'Not Tracking' if you change your mind.)")) {
     const row = this.parentNode.parentNode;
     trackOrIgnore(row, false);
    };

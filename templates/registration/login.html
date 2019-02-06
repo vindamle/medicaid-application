@@ -3,11 +3,13 @@
 {% extends 'base.html' %}
 
 {% block title %}Login{% endblock %}
+{% load static %}
 
 {% block content %}
 {% if user.is_authenticated  %}
 	<!-- Redirect User back to Home page -->
 {% else %}
+	<img src='{% static "img/pc_guy.png" %}' class="pcGuy">
 	<div class="formDiv">
 		<h1>Please log in below:</h1>
 		<form method="post">

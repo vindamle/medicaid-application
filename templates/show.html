@@ -65,11 +65,11 @@
 
 	<!-- Trigger for Misc Documents Modal -->
 	<div class="notesModalBtnDiv">
-		<button type="button" class="btn" data-toggle="modal" data-target="#miscDocsModal{{application.application_id}}" id="miscDocsModalBtn">&#128221; Misc. Documents</button>
+		<button type="button" class="btn" data-toggle="modal" data-target="#miscDocsModal{{application.application_id}}" id="miscDocsModalBtn">Misc. Documents</button>
 	</div>
 	<!-- Misc Documents Modal -->
-	<div class="modal fade bd-example-modal-lg" id="miscDocsModal{{application.application_id}}" tabindex="-1" role="dialog" aria-labelledby="miscDocsModal{{application.application_id}}Title" aria-hidden="true">
-	  <div class="modal-dialog modal-lg modal-dialog-centered " role="document">
+	<div class="modal fade bd-example-modal" id="miscDocsModal{{application.application_id}}" tabindex="-1" role="dialog" aria-labelledby="miscDocsModal{{application.application_id}}Title" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered " role="document">
 	    <div class="modal-content">
 	      <div>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -78,7 +78,41 @@
 	        <h5 class="modal-title" id="">Misc. Documents</h5>
 	      </div>
 	      <div class="modal-body">
-	        ...Coming Soon!
+	  			<table class="miscDocsTable">
+	  				<thead>
+	  					<tr>
+	  						<th>Document Name:</th>
+	  						<th>Date Uploaded:</th>
+	  						<th></th>
+	  					</tr>
+	  				</thead>
+	  				<tbody>
+	      	{% for misc_doc in misc_docs %}
+	      		{% if misc_doc.application_id == application.application_id %}
+	      					<tr>
+	      						<td><a href="/{{ misc_doc.file }}" target = "_blank">{{misc_doc.file_name}}</a></td>
+	      						<td>{{ misc_doc.date_uploaded|date:'d/m/y' }}</td>
+	      						<td>
+	      							<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('document',{{misc_doc.document_id}},'application_id')">
+			         					<span aria-hidden="true">&times;</span>
+			       				 	</button>
+	      						</td>
+	      					</tr>
+	      		{% endif %}
+	      	{% endfor %}
+    				</tbody>
+    			</table>
+	      	<br>
+	      	<br>
+	        <form class="fileInputLi" id="misc_doc" method="post" enctype="multipart/form-data">
+							{% csrf_token %}
+							<label>To upload a new document, choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> a document here and click 'Upload':</label>
+							<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
+							<input type="hidden" name="resident_id" value="{{application.resident.resident_id}}">
+							<input type="hidden" name="file_type" value="misc_doc">
+							<input type="hidden" name="application_id" value="{{application.application_id}}">
+							<button type="submit" class="uploadBtn">Upload</button>
+						</form>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -1191,7 +1225,6 @@ const addNAMIRowHTML = (addNamiBtn, approvalId) => {
 					</div>
 				`
 				const modalBody = addNamiBtn.parentNode.parentNode.parentNode.querySelector('.modal-body');
-				console.log(modalBody)
 				modalBody.insertAdjacentHTML('beforeend', html)
 				// numberOfNAMIs += 1;
 			}
@@ -1338,7 +1371,6 @@ const createResponseRow = (applicationId, responseField) => {
 				response_type: responseField.value
 			},
 			success: function(idArray) {
-				console.log(idArray[0])
 				if (idArray != 'no response created for not_received') {
 					const responseId = idArray[0]
 					rfiOrDenialOrApprovalId = idArray[1]
@@ -1381,7 +1413,7 @@ const revealNextNotSatisfiedStep = (selectField, stepToReveal) => {
 	}
 }
 
-const createNewApp = () => {
+const createNewApp = thisAppId => {
 	const ajaxCall = $.ajax(
 		{
 			type:"GET",
@@ -1389,9 +1421,8 @@ const createNewApp = () => {
 			data: {
 				resident_id: residentId
 			},
-			success: function(appId) {
+			success: function(newAppId) {
 				location.reload();
-				console.log(` Your new app's id is: ${appId}`)
 			}
 		});
 }
