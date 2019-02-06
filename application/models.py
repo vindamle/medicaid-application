@@ -167,6 +167,8 @@ class Application(models.Model):
         on_delete = models.CASCADE,
         null = True,
     )
+
+    application_creation_date = models.DateTimeField(auto_now_add = True)
     # date_of_medicaid_approval  = models.DateTimeField(null = True, blank = True)
     # date_of_medicaid_recertification  = models.DateTimeField(null = True, blank = True)
 
