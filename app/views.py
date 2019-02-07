@@ -21,7 +21,7 @@ class LoginView(View):
         login_data = authenticate(username = request.POST.get("username"), password = request.POST.get("password"))
 
         if login_data:
-            request.session.set_expiry(1200)
+            request.session.set_expiry(0)
             login(request, login_data)
             return redirect('home')
 
@@ -253,16 +253,17 @@ class ApprovalsView(View):
     tracklist = []
 
     def get(self, request, *args, **kwargs):
-        '''if GET  '''
+        self.list = []
         if request.user.is_authenticated:
             permissions = Permission.objects.filter(user = request.user)
             for permission in permissions:
-                results = Resident.objects.filter(tracking_status = True,facility_name =permission.codename)
-                self.list = list()
+                results = Application.objects.filter(tracking_status = True,resident__facility_name =permission.codename)
+          
 
                 for result in results:
                     self.list.append(result)
-            return render(request,self.template_name, {'list':self.list,"form":self.form_class})
+
+            return render(request,self.template_name, {'applications':self.list,"form":self.form_class})
         else:
             return redirect('login')
 

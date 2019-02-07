@@ -483,7 +483,7 @@ table button {
 	color: white;
 }
 
-@media(min-width: 1200px) {
+@media(min-width: 1600px) {
 	#notesModalBtn,	#miscDocsModalBtn {
 		position: absolute;
 		right: 200px;
@@ -1028,7 +1028,7 @@ input#secondary_pays_copay {
 
 .formDiv {
 	text-align: center;
-	margin: 100px auto;
+	margin: 130px auto;
 }
 .formDiv form {
 	/*width: 480px;*/
@@ -1037,7 +1037,8 @@ input#secondary_pays_copay {
 }
 
 .formDiv h1 {
-	color: #004477;
+	/*color: #004477;*/
+	color: #310F92;
 	margin-bottom: 40px;
 }
 

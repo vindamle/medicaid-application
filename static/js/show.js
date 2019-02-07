@@ -81,8 +81,7 @@ alertDiv.addEventListener('click', (e) => {
 
 // Add eventListeners for inputs to focus them: 
 const editableInputs = document.querySelectorAll('INPUT.editable');
-for (var i = 0; i < editableInputs.length; i++) {
-	const input = editableInputs[i]
+editableInputs.forEach( input => {
 	//add autofocus on clicking an input:
 	input.addEventListener('click', () => {
 		input.select();
@@ -102,4 +101,4 @@ for (var i = 0; i < editableInputs.length; i++) {
   	};
   	sendInputInfoToDB(input);
 	});
-};
+});
