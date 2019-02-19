@@ -24,4 +24,5 @@ urlpatterns = [
     path('ajax/create_fair_hearing/', views.create_fair_hearing, name = 'create_fair_hearing'),
     path('ajax/update_fair_hearing/', views.update_fair_hearing, name = 'update_fair_hearing'),
     path('ajax/delete_fair_hearing/', views.delete_fair_hearing, name = 'delete_fair_hearing'),
+    path('ajax/update_document/', views.update_document, name = 'update_document'),
 ]

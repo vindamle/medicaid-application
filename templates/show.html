@@ -28,7 +28,7 @@
 	{% for application in applications %}
     <li {% if application == applications.last %} class="active"{% endif %}>
       <a data-toggle="tab" href="#application{{application.application_id}}" {% if application == applications.last %} class="active show"{% endif %}>
-        App #{{ forloop.counter }}: <span id="app{{application.application_id}}TabPhaseName">{{application.phase.phase_name}}</span>
+        App #{{ forloop.counter }}: <span id="app{{application.application_id}}TabPhaseName">{{application.phase.phase_name}} - <span id="app{{application.application_id}}TabPhaseName">{{application.application_creation_date|date:'m/d/y'}}</span>
       </a>
     </li>
 	{% endfor %}
@@ -65,11 +65,11 @@
 
 	<!-- Trigger for Misc Documents Modal -->
 	<div class="notesModalBtnDiv">
-		<button type="button" class="btn" data-toggle="modal" data-target="#miscDocsModal{{application.application_id}}" id="miscDocsModalBtn">&#128221; Misc. Documents</button>
+		<button type="button" class="btn" data-toggle="modal" data-target="#miscDocsModal{{application.application_id}}" id="miscDocsModalBtn">Misc. Documents</button>
 	</div>
 	<!-- Misc Documents Modal -->
-	<div class="modal fade bd-example-modal-lg" id="miscDocsModal{{application.application_id}}" tabindex="-1" role="dialog" aria-labelledby="miscDocsModal{{application.application_id}}Title" aria-hidden="true">
-	  <div class="modal-dialog modal-lg modal-dialog-centered " role="document">
+	<div class="modal fade bd-example-modal" id="miscDocsModal{{application.application_id}}" tabindex="-1" role="dialog" aria-labelledby="miscDocsModal{{application.application_id}}Title" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered " role="document">
 	    <div class="modal-content">
 	      <div>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -78,7 +78,41 @@
 	        <h5 class="modal-title" id="">Misc. Documents</h5>
 	      </div>
 	      <div class="modal-body">
-	        ...Coming Soon!
+	  			<table class="miscDocsTable">
+	  				<thead>
+	  					<tr>
+	  						<th>Document Name:</th>
+	  						<th>Date Uploaded:</th>
+	  						<th></th>
+	  					</tr>
+	  				</thead>
+	  				<tbody>
+	      	{% for misc_doc in misc_docs %}
+	      		{% if misc_doc.application_id == application.application_id %}
+	      					<tr>
+	      						<td><a href="/{{ misc_doc.file }}" target = "_blank">{{misc_doc.file_name}}</a></td>
+	      						<td>{{ misc_doc.date_uploaded|date:'d/m/y' }}</td>
+	      						<td>
+	      							<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('document',{{misc_doc.document_id}},'application_id')">
+			         					<span aria-hidden="true">&times;</span>
+			       				 	</button>
+	      						</td>
+	      					</tr>
+	      		{% endif %}
+	      	{% endfor %}
+    				</tbody>
+    			</table>
+	      	<br>
+	      	<br>
+	        <form class="fileInputLi" id="misc_doc" method="post" enctype="multipart/form-data">
+							{% csrf_token %}
+							<label>To upload a new document, choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> a document here and click 'Upload':</label>
+							<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
+							<input type="hidden" name="resident_id" value="{{application.resident.resident_id}}">
+							<input type="hidden" name="file_type" value="misc_doc">
+							<input type="hidden" name="application_id" value="{{application.application_id}}">
+							<button type="submit" class="uploadBtn">Upload</button>
+						</form>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -442,11 +476,18 @@
 		      </button>
 					<div class="row">
 						<div class="col-lg-3 firstColumn applicationColumn">
+							<li class="editableLi ">
+								<label>Denial Notice Date:</label>
+								<input class="editable date  due_date" id="denial_notice_date" data-table="denial"  data-application_id="{{denial.response.application_id}}" data-denial_id="{{denial.denial_id}}" type="date" onkeyup="checkIfEnterKey(this, event)" value="{{denial.denial_notice_date|date:'Y-m-d'}}">
+							</li>
+							
+						</div>
+						<div class="col-lg-5 applicationColumn">
 							<li>
-							{% if denial.document_id %}
+							{% if denial.denial_document %}
 								<p>Document Uploaded:</p>
-								<a href="/{{ denial.document.file }}" target = "_blank">{{denial.document.file_name}}</a>
-								<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('denial',{{denial.denial_id}},'document')">
+								<a href="/{{ denial.denial_document.file }}" target = "_blank">{{denial.denial_document.file_name}}</a>
+								<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('denial',{{denial.denial_id}},'denial_document')">
 				          <span aria-hidden="true">&times;</span>
 				        </button>
 							{% else %}
@@ -463,21 +504,7 @@
 							{% endif %}
 							</li>
 						</div>
-						<div class="col-lg-3 applicationColumn">
-							<li class="editableLi ">
-								<label>Denial Notice Date:</label>
-								<input class="editable date  due_date" id="denial_notice_date" data-table="denial"  data-application_id="{{denial.response.application_id}}" data-denial_id="{{denial.denial_id}}" type="date" onkeyup="checkIfEnterKey(this, event)">
-							</li>
-							<li class="editableLi">
-								<label>Fair Hearing Requested?</label>
-								<select name="denial_fair_hearing_request" id="denial_fair_hearing_request" data-table="denial" data-application_id="{{denial.response.application_id}}" data-denial_id="{{denial.denial_id}}" onchange="sendInputInfoToDB(this); fairHearingRequested(this, {{denial.response.application_id}}, {{denial.denial_id}})">
-									<option value="no">No</option>
-									<option value="yes">Yes</option>
-								</select>
-								<span class="invisible DBinfo" id="DBdenial_fair_hearing_request">{{denial.denial_fair_hearing_request}}</span>
-							</li>
-						</div>
-						<div class="col-lg-3 applicationColumn">
+						<div class="col-lg-4 applicationColumn">
 							<li>
 								<label><input type="checkbox" class="documentationSubmittedCheckbox " id="denial_documentation_submitted" data-table="denial" data-application_id="{{denial.response.application_id}}" data-denial_id="{{denial.denial_id}}">Documentation Submitted</label>
 							</li>
@@ -486,12 +513,159 @@
 								<input class="editable date " id="denial_documentation_submitted_date" data-table="denial"  data-application_id="{{denial.response.application_id}}" data-denial_id="{{denial.denial_id}}" type="date" onkeyup="checkIfEnterKey(this, event)">
 							</li>
 						</div>
-						<div class="col-lg-3 applicationColumn">
+						
+					</div>
+
+
+					<div class="row ">
+						<div class="col-lg-3">
+							<li class="editableLi  ">
+								<label>Contacted DSS?</label>
+								<select name="denial_contacted_dss" id="denial_contacted_dss" data-table="denial" data-denial_id="{{denial.denial_id}}"  onchange="sendInputInfoToDB(this)">
+									<option value="">Select one:</option>
+									<option value="yes">Yes</option>
+									<option value="no">No</option>
+								</select>
+								<span class="invisible DBinfo" id="DBdenial_contacted_dss">{{denial.denial_contacted_dss}}</span>
+							</li>
+						</div>
+						<div class="col-lg-3">
+							<li class="editableLi  ">
+								<label>Resolved through DSS?</label>
+								<select name="denial_resolved_through_dss" id="denial_resolved_through_dss" data-table="denial" data-denial_id="{{denial.denial_id}}"  onchange="sendInputInfoToDB(this)">
+									<option value="">Select one:</option>
+									<option value="yes">Yes</option>
+									<option value="no">No</option>
+								</select>
+								<span class="invisible DBinfo" id="DBdenial_resolved_through_dss">{{denial.denial_resolved_through_dss}}</span>
+							</li>
+						</div>
+						<div class="col-lg-3">
+							<!-- Button trigger modal -->
+								<button type="button" class="btn btn-primary  " data-toggle="modal" data-target="#fairHearingsModal{{denial.denial_id}}" id="fairHearingsModalBtn">View/Add Fair Hearing Info</button>
+						</div>
+
+							<div class="modal fade bd-example-modal-lg fairHearingsModal" id="fairHearingsModal{{denial.denial_id}}" tabindex="-1" role="dialog" aria-labelledby="fairHearingsModalTitle" aria-hidden="true">
+							  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+							    <div class="modal-content">
+							      <div>
+							        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							          <span aria-hidden="true">&times;</span>
+							        </button>
+							        <h5 class="modal-title" id="exampleModalLongTitle">Fair Hearings</h5>
+							      </div>
+							      <div class="modal-body">
+										{% for fair_hearing in fair_hearings %}
+											{% if fair_hearing.response.response_id == denial.response.response_id %}
+												<div class="modalRowDiv">
+													<button type="button" class="close" onclick="removeModalRow(this, {{fair_hearing.fair_hearing_id}}, 'fair_hearing')">
+									          <span >&times;</span>
+									        </button>
+													<h6 class="fairHearingH6">Fair Hearing</h6>
+													<div class="row modalRow">
+														<div class="col-lg-4 col-md-6 col-sm-12 modalRowColumn">
+															<li>
+																<label>Date:</label>
+																<input class="editable date" id="fair_hearing_date" data-table="fair_hearing" data-fair_hearing_id="{{fair_hearing.fair_hearing_id}}" type="date" value="{{fair_hearing.fair_hearing_date|date:'Y-m-d'}}" onkeyup="checkIfEnterKey(this, event)" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+															<li>
+																<label>Time:</label>
+																<input class="editable time" id="fair_hearing_time" data-table="fair_hearing" data-fair_hearing_id="{{fair_hearing.fair_hearing_id}}" type="time" value="{{fair_hearing.fair_hearing_time|time:'H:i'}}" onkeyup="checkIfEnterKey(this, event)" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+														</div>
+														<div class="col-lg-4 col-md-6 col-sm-12 modalRowColumn">
+															<li>
+																<label>Address:</label>
+																<input type="text" class="editable" id="fair_hearing_address" data-table="fair_hearing" data-fair_hearing_id="{{fair_hearing.fair_hearing_id}}" value="{{fair_hearing.fair_hearing_address}}" onkeyup="checkIfEnterKey(this, event)" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+															<li>
+																<label>Outcome:</label>
+																<input type="text" class="editable" id="fair_hearing_outcome" data-table="fair_hearing" data-fair_hearing_id="{{fair_hearing.fair_hearing_id}}" value="{{fair_hearing.fair_hearing_outcome}}" onkeyup="checkIfEnterKey(this, event)" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+														</div>
+														<div class="col-lg-4 col-md-6 col-sm-12 modalRowColumn">
+															<li>
+																<label>Facility Representative:</label>
+																<select name="fair_hearing_representative_type" id="fair_hearing_representative_type" data-table="fair_hearing" data-fair_hearing_id="{{fair_hearing.fair_hearing_id}}" onchange="sendInputInfoToDB(this)">
+																	<option value="">Select one:</option>
+																	<option value="regional_coordinator">Regional Coordinator</option>
+																	<option value="facility_coordinator">Facility Coordinator</option>
+																	<option value="attorney">Attorney</option>
+																</select>
+																<span class="invisible DBinfo" id="DBfair_hearing_representative_type">{{fair_hearing.fair_hearing_representative_type}}</span>
+															</li>
+															<li>
+																<label>Representative's Name:</label>
+																<input type="text" class="editable" id="fair_hearing_representative_name" data-table="fair_hearing" data-fair_hearing_id="{{fair_hearing.fair_hearing_id}}" value="{{fair_hearing.fair_hearing_representative_name}}" onkeyup="checkIfEnterKey(this, event)" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+														</div>
+														<div class="col-lg-6 col-sm-12 modalRowColumn">
+															<li>
+																{% if fair_hearing.fair_hearing_confirmation %}
+																<p>Document Uploaded:</p>
+																<a href="/{{ fair_hearing.fair_hearing_confirmation.confirmation_document.file }}" target = "_blank">{{fair_hearing.fair_hearing_confirmation.confirmation_document.file_name}}</a>
+																<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('fair_hearing',{{fair_hearing.fair_hearing_id}},'fair_hearing_confirmation')">
+												          <span aria-hidden="true">&times;</span>
+												        </button>
+																{% else %}
+																<form class="fileInputLi" id="fair_hearing_confirmation" method="post" enctype="multipart/form-data">
+																	{% csrf_token %}
+																	<label>Choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> Fair Hearing Notice here and click 'Upload':</label>
+																	<input type="file" name="document" value="" accept="image/jpeg,image/png,fair_hearing/pdf" required>
+																	<input type="hidden" name="resident_id" value="{{fair_hearing.response.application.resident.resident_id}}">
+																	<input type="hidden" name="file_type" value="fair_hearing_confirmation">
+																	<input type="hidden" name="fair_hearing_id" value="{{fair_hearing.fair_hearing_id}}">
+																	<button type="submit" class="uploadBtn">Upload</button>
+																</form>
+																{% endif %}
+															</li>
+														</div>
+														<div class="col-lg-6 col-sm-12 modalRowColumn">
+															<li>
+															{% if fair_hearing.fair_hearing_outcome_document %}
+																<p>Document Uploaded:</p>
+																<a href="/{{ fair_hearing.fair_hearing_outcome_document.file }}" target = "_blank">{{fair_hearing.fair_hearing_outcome_document.file_name}}</a>
+																<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('fair_hearing',{{fair_hearing.fair_hearing_id}},'fair_hearing_outcome_document')">
+												          <span aria-hidden="true">&times;</span>
+												        </button>
+															{% else %}
+																<form class="fileInputLi" id="fair_hearing_outcome_document" method="post" enctype="multipart/form-data">
+													  			{% csrf_token %}
+																	<label>Choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> Fair Hearing Decision here and click 'Upload':</label>
+																	<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
+																	<input type="hidden" name="resident_id" value="{{fair_hearing.response.application.resident.resident_id}}">
+																	<!-- <input type="hidden" name="application_id" value="{{fair_hearing.response.application_id}}"> -->
+																	<input type="hidden" name="fair_hearing_id" value="{{fair_hearing.fair_hearing_id}}">
+																	<input type="hidden" name="file_type" value="fair_hearing_outcome_document">
+																	<button type="submit" class="uploadBtn">Upload</button>
+																</form>
+															{% endif %}
+															</li>
+														</div>
+													</div>
+												</div>
+											{%endif%}
+										{% endfor %}
+     								</div>
+      							<div class="modal-footer">
+								      <div class="editableLi addNamiBtnLi">
+												<button class="addModalRowBtn" onclick="addFairHearingRowHTML(this, {{denial.response.response_id}})">Add Fair Hearing &#x271A; </button>
+											</div>
+       								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+     								</div>
+   								</div>
+							  </div>
+							</div>
+							<div class="col-lg-3">
 							<li>
 								<button type="button" class="btn btn-primary" id="createNewApp" onclick="createNewApp()">Create New Application</button>
 							</li>
 						</div>
+							
 					</div>
+
+
+
 				</ul>
 			</section>
 		{%endif%}
@@ -722,7 +896,7 @@
 															{% if fair_hearing.fair_hearing_outcome_document %}
 																<p>Document Uploaded:</p>
 																<a href="/{{ fair_hearing.fair_hearing_outcome_document.file }}" target = "_blank">{{fair_hearing.fair_hearing_outcome_document.file_name}}</a>
-																<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('fair_hearing',{{fair_hearing.fair_hearing_id}},'document')">
+																<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('fair_hearing',{{fair_hearing.fair_hearing_id}},'fair_hearing_outcome_document')">
 												          <span aria-hidden="true">&times;</span>
 												        </button>
 															{% else %}
@@ -852,30 +1026,30 @@ $(document).ready(()=>{
 
 	// Make select fields default to value in database (if there is one):
 	const selectFields = document.querySelectorAll('SELECT');
-	for (let i = 0; i < selectFields.length; i++) {
-		const selectField = selectFields[i];
+	selectFields.forEach( selectField => {
 		const selectFieldParent = selectField.parentNode;
 		const DBinfo = selectFieldParent.querySelector('.DBinfo').innerHTML;
 		const options = selectField.querySelectorAll('OPTION');
-		for (let x = 0; x < options.length; x++) {
-			const option = options[x];
+		options.forEach(option => {
 			if (option.value == DBinfo) {
 				option.setAttribute("selected", "selected");
 			};
-		};
-	};
+		});
+	});
 
 }) // end document.ready
 
 const collapseSection = (h4) => {
 	h4.classList.toggle("activeSection");
   let content = h4.nextElementSibling;
-  if (content.style.maxHeight != "0px"){
-    content.style.maxHeight = "0px";
-    content.parentNode.style.maxWidth = "100px";
+  if (content.style.display != "none"){
+    content.style.display = "none";
+    content.parentNode.style.maxHeight = "50px";
+    content.parentNode.style.maxWidth = "200px";
     content.parentNode.style.marginBottom = "30px";
   } else {
-    content.style.maxHeight = content.scrollHeight + "0px";
+    content.style.display = 'initial';
+    content.parentNode.style.maxHeight = "initial";
     content.parentNode.style.maxWidth = "100%";
     content.parentNode.style.marginBottom = "20px";
   }
@@ -1101,19 +1275,26 @@ class ResponseRowHTML {
 `
 		this.deniedRowHtml = `
 			<section id="denial${rfiOrDenialOrApprovalId}">
-				<h4 class="numberOfDenials collapsibleSection responseH4" onclick="collapseSection(this)">Denial</h4>
+				<h4 class="numberOfRFIs collapsibleSection responseH4" onclick="collapseSection(this)">Denial</h4>
 				<ul class="collapsibleContent" id="">
 					<button type="button" class="deleteResponseBtn" aria-label="Close" onclick="deleteResponse('denial',${rfiOrDenialOrApprovalId})">
 		        <span aria-hidden="true">&times;</span>
 		      </button>
 					<div class="row">
 						<div class="col-lg-3 firstColumn applicationColumn">
+							<li class="editableLi ">
+								<label>Denial Notice Date:</label>
+								<input class="editable date  due_date" id="denial_notice_date" data-table="denial"  data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}" type="date" onkeyup="checkIfEnterKey(this, event)" value="{{denial.denial_notice_date|date:'Y-m-d'}}">
+							</li>
+							
+						</div>
+						<div class="col-lg-5 applicationColumn">
 							<li>
 								<form class="fileInputLi denialFileUpload" method="post" enctype="multipart/form-data">
 									{% csrf_token %}
 									<label>Choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> Denial here and click 'Upload':</label>
 									<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
-									<input type="hidden" name="resident_id" value="${residentId}">
+									<input type="hidden" name="resident_id" value="{{denial.response.application.resident.resident_id}}">
 									<input type="hidden" name="file_type" value="denial">
 									<input type="hidden" name="application_id" value="${applicationId}">
 									<input type="hidden" name="denial_id" value="${rfiOrDenialOrApprovalId}">
@@ -1121,34 +1302,78 @@ class ResponseRowHTML {
 								</form>
 							</li>
 						</div>
-						<div class="col-lg-3 applicationColumn">
-							<li class="editableLi ">
-								<label>Denial Notice Date:</label>
-								<input class="editable date  due_date" id="denial_notice_date" data-table="denial"  data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-							</li>
-							<li class="editableLi">
-								<label>Fair Hearing Requested?</label>
-								<select name="denial_fair_hearing_request" id="denial_fair_hearing_request" data-table="denial" data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this); fairHearingRequested(this, ${applicationId}, ${rfiOrDenialOrApprovalId})">
-									<option value="no">No</option>
-									<option value="yes">Yes</option>
-								</select>
-							</li>
-						</div>
-						<div class="col-lg-3 applicationColumn">
+						<div class="col-lg-4 applicationColumn">
 							<li>
 								<label><input type="checkbox" class="documentationSubmittedCheckbox " id="denial_documentation_submitted" data-table="denial" data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}">Documentation Submitted</label>
 							</li>
 							<li class="editableLi step5 ">
 								<label>Submission Date:</label>
-								<input class="editable date " id="denial_documentation_submitted_date" data-table="denial"  data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+								<input class="editable date " id="denial_documentation_submitted_date" data-table="denial"  data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}" type="date" onkeyup="checkIfEnterKey(this, event)">
 							</li>
 						</div>
-						<div class="col-lg-3 applicationColumn">
+						
+					</div>
+
+
+					<div class="row ">
+						<div class="col-lg-3">
+							<li class="editableLi  ">
+								<label>Contacted DSS?</label>
+								<select name="denial_contacted_dss" id="denial_contacted_dss" data-table="denial" data-denial_id="${rfiOrDenialOrApprovalId}"  onchange="sendInputInfoToDB(this)">
+									<option value="">Select one:</option>
+									<option value="yes">Yes</option>
+									<option value="no">No</option>
+								</select>
+								<span class="invisible DBinfo" id="DBdenial_contacted_dss">{{denial.denial_contacted_dss}}</span>
+							</li>
+						</div>
+						<div class="col-lg-3">
+							<li class="editableLi  ">
+								<label>Resolved through DSS?</label>
+								<select name="denial_resolved_through_dss" id="denial_resolved_through_dss" data-table="denial" data-denial_id="${rfiOrDenialOrApprovalId}"  onchange="sendInputInfoToDB(this)">
+									<option value="">Select one:</option>
+									<option value="yes">Yes</option>
+									<option value="no">No</option>
+								</select>
+								<span class="invisible DBinfo" id="DBdenial_resolved_through_dss">{{denial.denial_resolved_through_dss}}</span>
+							</li>
+						</div>
+						<div class="col-lg-3">
+							<!-- Button trigger modal -->
+								<button type="button" class="btn btn-primary  " data-toggle="modal" data-target="#fairHearingsModal${rfiOrDenialOrApprovalId}" id="fairHearingsModalBtn">View/Add Fair Hearing Info</button>
+						</div>
+
+							<div class="modal fade bd-example-modal-lg fairHearingsModal" id="fairHearingsModal${rfiOrDenialOrApprovalId}" tabindex="-1" role="dialog" aria-labelledby="fairHearingsModalTitle" aria-hidden="true">
+							  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+							    <div class="modal-content">
+							      <div>
+							        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							          <span aria-hidden="true">&times;</span>
+							        </button>
+							        <h5 class="modal-title" id="exampleModalLongTitle">Fair Hearings</h5>
+							      </div>
+							      <div class="modal-body">
+										
+     								</div>
+      							<div class="modal-footer">
+								      <div class="editableLi addNamiBtnLi">
+												<button class="addModalRowBtn" onclick="addFairHearingRowHTML(this, ${responseId})">Add Fair Hearing &#x271A; </button>
+											</div>
+       								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+     								</div>
+   								</div>
+							  </div>
+							</div>
+							<div class="col-lg-3">
 							<li>
 								<button type="button" class="btn btn-primary" id="createNewApp" onclick="createNewApp()">Create New Application</button>
 							</li>
 						</div>
+							
 					</div>
+
+
+
 				</ul>
 			</section>
 		`
@@ -1188,7 +1413,6 @@ const addNAMIRowHTML = (addNamiBtn, approvalId) => {
 					</div>
 				`
 				const modalBody = addNamiBtn.parentNode.parentNode.parentNode.querySelector('.modal-body');
-				console.log(modalBody)
 				modalBody.insertAdjacentHTML('beforeend', html)
 				// numberOfNAMIs += 1;
 			}
@@ -1335,7 +1559,6 @@ const createResponseRow = (applicationId, responseField) => {
 				response_type: responseField.value
 			},
 			success: function(idArray) {
-				console.log(idArray[0])
 				if (idArray != 'no response created for not_received') {
 					const responseId = idArray[0]
 					rfiOrDenialOrApprovalId = idArray[1]
@@ -1378,7 +1601,7 @@ const revealNextNotSatisfiedStep = (selectField, stepToReveal) => {
 	}
 }
 
-const createNewApp = () => {
+const createNewApp = thisAppId => {
 	const ajaxCall = $.ajax(
 		{
 			type:"GET",
@@ -1386,9 +1609,8 @@ const createNewApp = () => {
 			data: {
 				resident_id: residentId
 			},
-			success: function(appId) {
+			success: function(newAppId) {
 				location.reload();
-				console.log(` Your new app's id is: ${appId}`)
 			}
 		});
 }

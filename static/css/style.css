@@ -92,7 +92,9 @@ sup {
 	left: 0;
 	width: 180px;
 }
-
+.logo_lg {
+	width: 250px;
+}
 .title {
 	text-transform: uppercase;
 	font-size: 28px;
@@ -110,6 +112,10 @@ sup {
 		position: relative;
 		width: 100px;
 	}
+	.logo_lg {
+	width: 50vw;
+	margin-left: 18vw;
+}
 	.title {
 		text-align: left;
 		font-size: 18px;
@@ -184,7 +190,7 @@ table {
 }
 
 @media(max-width: 1399px) {
-	table {
+	table:not(.miscDocsTable) {
 		width: 90vw;
 		margin-left: 4vw;
 		
@@ -242,6 +248,13 @@ table a {
 table button {
 	border-radius: 5px;
 	/*padding: 5px 10px;*/
+}
+
+.btn-primary {
+	background: #324EBC !important;
+	border: 1px solid darkblue;
+	box-shadow: 1px 1px 2px black;
+	margin-bottom: 5px;
 }
 
 .btn-track {
@@ -470,7 +483,7 @@ table button {
 	color: white;
 }
 
-@media(min-width: 1200px) {
+@media(min-width: 1600px) {
 	#notesModalBtn,	#miscDocsModalBtn {
 		position: absolute;
 		right: 200px;
@@ -959,6 +972,14 @@ input#secondary_pays_copay {
 	}
 }
 
+.miscDocsTable {
+	width: 100%;
+}
+
+.miscDocsTable td,th {
+	padding: 10px 5px;
+}
+
 /*___________index.html___________*/
 
 .btn-remove {
@@ -996,24 +1017,46 @@ input#secondary_pays_copay {
 
 
 /*________________Form Pages________________*/
+.pcGuy {
+	position: absolute;
+	bottom: 30px;
+	right: 50px;
+	width: 30vw;
+	max-width: 500px;
+	min-width: 250px;
+}
+
 .formDiv {
 	text-align: center;
-	margin: 100px auto;
+	margin: 130px auto;
 }
 .formDiv form {
 	/*width: 480px;*/
-	margin: 50px auto;
+	/*margin: 100px auto;*/
 	/*text-align: right;*/
 }
 
 .formDiv h1 {
-	color: #004477;
+	/*color: #004477;*/
+	color: #310F92;
 	margin-bottom: 40px;
 }
 
 @media(max-width: 479px) {
+
+	.formDiv {
+		margin: 50px auto;
+	}
+
 	.formDiv h1 {
 		font-size: 28px;
+	}
+
+	.pcGuy {
+		width: 80vw;
+		left: 10vw;
+		max-width: initial;
+		max-height: initial;
 	}
 }
 

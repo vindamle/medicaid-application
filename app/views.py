@@ -21,7 +21,6 @@ class LoginView(View):
         login_data = authenticate(username = request.POST.get("username"), password = request.POST.get("password"))
 
         if login_data:
-
             request.session.set_expiry(0)
             login(request, login_data)
             return redirect('home')
@@ -43,6 +42,8 @@ class PendingView(View):
 
                 apps = Application.objects.filter(tracking_status = True, resident__tracking_status = True,resident__facility_name =permission.codename)
                 for app in apps:
+                    print("*" * 50)
+                    print(app.resident.first_name)
                     applications.append(app)
 
             return render(request,self.template_name, {'applications':applications})
@@ -56,7 +57,7 @@ class ActivityView(View):
 
     template_name = "activity.html"
 
-    #Returns Residents with new activitys that have not been tracked/not tracked
+    #Returns Residents with new activities that have not been tracked/not tracked
     def get(self, request, *args, **kwargs):
 
         new_admission = []
@@ -135,6 +136,7 @@ class ShowView(View):
 
         # documents = Document.objects.filter(resident_id = resident_id)
         rfis = RFI.objects.filter(response__application__resident__resident_id = resident_id).order_by('response__application__application_id','rfi_id')
+        misc_docs = Document.objects.filter(resident_id = resident_id, description = 'misc_doc').order_by('application_id')
         denials = Denial.objects.filter(response__application__resident__resident_id = resident_id).order_by('response__application__application_id','denial_id')
         approvals = Approval.objects.filter(response__application__resident__resident_id = resident_id).order_by('response__application__application_id','approval_id')
         namis = NAMI.objects.filter(approval__response__application__resident__resident_id = resident_id).order_by('approval__approval_id', 'nami_id')
@@ -142,9 +144,11 @@ class ShowView(View):
         # medicaid_application_documents = Document.objects.filter(resident_id = resident_id, description = "medicaid_application")
         # rfi_documents = Document.objects.filter(resident_id = resident_id, description = "rfi").order_by('rfi_id')
         # applications = results
-        # print(application)
+        print('*'*50)
+        print(denials)
+        print('*'*50)
         # return render(request,self.template_name, {'rfis':rfis,'documents':documents,'resident':resident,'applications':applications,"resident_alerts":resident_alerts, 'medicaid_application_documents': medicaid_application_documents, "rfi_documents":rfi_documents, "form":self.form_class})
-        return render(request, self.template_name, {'resident': resident, 'applications':applications, 'rfis':rfis, 'denials': denials, 'approvals': approvals, 'namis': namis, 'fair_hearings': fair_hearings, 'resident_alerts': resident_alerts})
+        return render(request, self.template_name, {'resident': resident, 'applications':applications, 'rfis':rfis, 'denials': denials, 'approvals': approvals, 'namis': namis, 'fair_hearings': fair_hearings, 'resident_alerts': resident_alerts, 'misc_docs': misc_docs})
     def post(self, request, *args, **kwargs):
 
 
@@ -201,8 +205,8 @@ class ShowView(View):
             approval.save()
         elif type == 'denial':
             denial = Denial.objects.get(denial_id = int(request.POST.get('denial_id')))
-            snowden_update(request,denial, denial.denial_id,"document_id",new_document.document_id)
-            denial.document_id = new_document.document_id
+            snowden_update(request,denial, denial.denial_id,"denial_document_id",new_document.document_id)
+            denial.denial_document_id = new_document.document_id
             denial.save()
         elif type == 'application_confirmation':
             confirmation = Confirmation.objects.create(confirmation_document = new_document, description = type)
@@ -249,16 +253,17 @@ class ApprovalsView(View):
     tracklist = []
 
     def get(self, request, *args, **kwargs):
-        '''if GET  '''
+        self.list = []
         if request.user.is_authenticated:
             permissions = Permission.objects.filter(user = request.user)
             for permission in permissions:
-                results = Resident.objects.filter(tracking_status = True,facility_name =permission.codename)
-                self.list = list()
+                results = Application.objects.filter(tracking_status = True,resident__facility_name =permission.codename)
+
 
                 for result in results:
                     self.list.append(result)
-            return render(request,self.template_name, {'list':self.list,"form":self.form_class})
+
+            return render(request,self.template_name, {'applications':self.list,"form":self.form_class})
         else:
             return redirect('login')
 

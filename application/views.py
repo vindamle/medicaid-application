@@ -362,7 +362,7 @@ def delete_nami(request):
 
 def create_application(request):
     resident_id = int(request.GET['resident_id'])
-    application = Application.objects.create(resident = Resident.objects.get(resident_id = resident_id), phase = Phase.objects.get(phase_id = 1))
+    application = Application.objects.create(resident = Resident.objects.get(resident_id = resident_id), phase = Phase.objects.get(phase_id = 1), tracking_status = True)
 
     # Audit Log
     Snowden.objects.create(
@@ -426,6 +426,8 @@ def update_fair_hearing(request):
     fair_hearing_id = int(request.GET['row_id'])
     column =request.GET['column']
     new_value =request.GET['new_value']
+    if new_value == '':
+        new_value = None
     fair_hearing = FairHearing.objects.get(fair_hearing_id = fair_hearing_id)
 
     # Audit Log
@@ -435,7 +437,7 @@ def update_fair_hearing(request):
         row_id = fair_hearing_id,
         column_name = column,
         old_value = getattr(fair_hearing,column) if getattr(fair_hearing,column) is not None else "None",
-        new_value = new_value,
+        new_value = new_value if new_value is not None else "None",
         log_ip = request.META.get('REMOTE_ADDR'),
         date = datetime.now()
     )
@@ -459,4 +461,26 @@ def delete_fair_hearing(request):
         date = datetime.now()
     )
     fair_hearing.delete()
+    return HttpResponse("200")
+
+def update_document(request):
+    document_id = int(request.GET['row_id'])
+    column =request.GET['column']
+    new_value =request.GET['new_value']
+    if new_value == '':
+        new_value = None
+    document = Document.objects.get(document_id = document_id)
+    # Audit Log
+    Snowden.objects.create(
+        user = request.user,
+        table_name = document._meta.verbose_name,
+        row_id = document_id,
+        column_name = column,
+        old_value = getattr(document,column) if getattr(document,column) is not None else "None",
+        new_value = new_value if new_value is not None else "None",
+        log_ip = request.META.get('REMOTE_ADDR'),
+        date = datetime.now()
+    )
+    field = setattr(document, column,new_value)
+    document.save()
     return HttpResponse("200")
