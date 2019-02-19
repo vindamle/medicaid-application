@@ -51,7 +51,7 @@ const showTotalActivityCount = () => {
 	  total += parseInt(countSpans[i].textContent);
 	};
 	if (totalActivityCountSpan) {
-		totalActivityCountSpan.innerHTML = total;
+		totalActivityCountSpan.innerHTML = `(${total})`;
 	}
 };
 if (totalActivityCountSpan) {

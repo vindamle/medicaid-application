@@ -43,8 +43,8 @@
 		<button type="button" class="btn" data-toggle="modal" data-target="#notesModal{{application.application_id}}" id="notesModalBtn">&#128221; Notes</button>
 	</div>
 	<!-- Notes Modal -->
-	<div class="modal fade bd-example-modal-lg" id="notesModal{{application.application_id}}" tabindex="-1" role="dialog" aria-labelledby="notesModal{{application.application_id}}Title" aria-hidden="true">
-	  <div class="modal-dialog modal-lg modal-dialog-centered " role="document">
+	<div class="modal fade bd-example-modal" id="notesModal{{application.application_id}}" tabindex="-1" role="dialog" aria-labelledby="notesModal{{application.application_id}}Title" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered " role="document">
 	    <div class="modal-content">
 	      <div>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -106,7 +106,7 @@
 	      	<br>
 	        <form class="fileInputLi" id="misc_doc" method="post" enctype="multipart/form-data">
 							{% csrf_token %}
-							<label>To upload a new document, choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> a document here and click 'Upload':</label>
+							<label>To upload a new document, choose or <span class="dragNDropText">Drag n' Drop&trade;</span> a document here and click 'Upload':</label>
 							<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
 							<input type="hidden" name="resident_id" value="{{application.resident.resident_id}}">
 							<input type="hidden" name="file_type" value="misc_doc">
@@ -337,7 +337,7 @@
 						{% else %}
 						<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
 							{% csrf_token %}
-							<label>Choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> Application here and click 'Upload':</label>
+							<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Application here and click 'Upload':</label>
 							<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
 							<input type="hidden" name="resident_id" value="{{application.resident.resident_id}}">
 							<input type="hidden" name="file_type" value="medicaid_application">
@@ -358,7 +358,7 @@
 							{% else %}
 							<form class="fileInputLi" id="application_confirmation" method="post" enctype="multipart/form-data">
 								{% csrf_token %}
-								<label>Choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> Medicaid Confirmation here and click 'Upload':</label>
+								<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Medicaid Confirmation here and click 'Upload':</label>
 								<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
 								<input type="hidden" name="resident_id" value="{{application.resident.resident_id}}">
 								<input type="hidden" name="file_type" value="application_confirmation">
@@ -407,7 +407,7 @@
 							{% else %}
 								<form class="fileInputLi rfiFileUpload" method="post" enctype="multipart/form-data">
 									{% csrf_token %}
-									<label>Choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> RFI here and click 'Upload':</label>
+									<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> RFI here and click 'Upload':</label>
 									<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
 									<input type="hidden" name="resident_id" value="{{rfi.response.application.resident.resident_id}}">
 									<input type="hidden" name="file_type" value="rfi">
@@ -493,7 +493,7 @@
 							{% else %}
 								<form class="fileInputLi denialFileUpload" method="post" enctype="multipart/form-data">
 									{% csrf_token %}
-									<label>Choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> Denial here and click 'Upload':</label>
+									<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Denial here and click 'Upload':</label>
 									<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
 									<input type="hidden" name="resident_id" value="{{denial.response.application.resident.resident_id}}">
 									<input type="hidden" name="file_type" value="denial">
@@ -610,7 +610,7 @@
 																{% else %}
 																<form class="fileInputLi" id="fair_hearing_confirmation" method="post" enctype="multipart/form-data">
 																	{% csrf_token %}
-																	<label>Choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> Fair Hearing Notice here and click 'Upload':</label>
+																	<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Notice here and click 'Upload':</label>
 																	<input type="file" name="document" value="" accept="image/jpeg,image/png,fair_hearing/pdf" required>
 																	<input type="hidden" name="resident_id" value="{{fair_hearing.response.application.resident.resident_id}}">
 																	<input type="hidden" name="file_type" value="fair_hearing_confirmation">
@@ -631,7 +631,7 @@
 															{% else %}
 																<form class="fileInputLi" id="fair_hearing_outcome_document" method="post" enctype="multipart/form-data">
 													  			{% csrf_token %}
-																	<label>Choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> Fair Hearing Decision here and click 'Upload':</label>
+																	<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Decision here and click 'Upload':</label>
 																	<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
 																	<input type="hidden" name="resident_id" value="{{fair_hearing.response.application.resident.resident_id}}">
 																	<!-- <input type="hidden" name="application_id" value="{{fair_hearing.response.application_id}}"> -->
@@ -679,13 +679,13 @@
 	        <span aria-hidden="true">&times;</span>
 	      </button>
 				<div class="row">
-					<div class=" col-lg-2 applicationColumn firstColumn">
+					<div class=" col-lg-2 col-sm-12 applicationColumn firstColumn">
 						<li class="editableLi">
 							<label>Approval Notice Date:</label>
 							 <input class="editable date" id="approval_notice_date" data-table="approval" data-approval_id="{{approval.approval_id}}"  type="date" value="{{approval.approval_notice_date|date:'Y-m-d'}}">
 						</li>
 					</div>
-					<div class=" col-lg-3 applicationColumn">
+					<div class=" col-lg-3 col-sm-12 applicationColumn">
 						<li class="editableLi">
 							<label>Approval Start Date:</label>
 							 <input class="editable date" id="approval_start_date" data-table="approval" data-approval_id="{{approval.approval_id}}"  type="date" value="{{approval.approval_start_date|date:'Y-m-d'}}">
@@ -699,7 +699,7 @@
 							<input class="editable date" type="date" id="approval_recertification_date" value="{{approval.approval_recertification_date|date:'Y-m-d'}}" data-table="approval" data-approval_id="{{approval.approval_id}}">
 						</li>
 					</div>
-					<div class="col-lg-4 applicationColumn">
+					<div class="col-lg-4 col-sm-12 applicationColumn">
 						<li>
 						{% if approval.document_id %}
 							<p>Document Uploaded:</p>
@@ -710,7 +710,7 @@
 						{% else %}
 							<form class="fileInputLi" id="approval" method="post" enctype="multipart/form-data">
 				  			{% csrf_token %}
-								<label>Choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> Approval here and click 'Upload':</label>
+								<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Approval here and click 'Upload':</label>
 								<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
 								<input type="hidden" name="resident_id" value="{{approval.response.application.resident.resident_id}}">
 								<input type="hidden" name="application_id" value="{{approval.response.application_id}}">
@@ -771,7 +771,7 @@
 							  </div>
 							</div>
 						</div>
-						<div class="col-lg-3 applicationColumn">
+						<div class="col-lg-3 col-sm-12 applicationColumn">
 							<li>
 						<!-- Button trigger modal -->
 								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#namiModal{{approval.approval_id}}" id="namiModalBtn">View/Add NAMIs</button>
@@ -881,7 +881,7 @@
 																{% else %}
 																<form class="fileInputLi" id="fair_hearing_confirmation" method="post" enctype="multipart/form-data">
 																	{% csrf_token %}
-																	<label>Choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> Fair Hearing Notice here and click 'Upload':</label>
+																	<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Notice here and click 'Upload':</label>
 																	<input type="file" name="document" value="" accept="image/jpeg,image/png,fair_hearing/pdf" required>
 																	<input type="hidden" name="resident_id" value="{{fair_hearing.response.application.resident.resident_id}}">
 																	<input type="hidden" name="file_type" value="fair_hearing_confirmation">
@@ -902,7 +902,7 @@
 															{% else %}
 																<form class="fileInputLi" id="fair_hearing_outcome_document" method="post" enctype="multipart/form-data">
 													  			{% csrf_token %}
-																	<label>Choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> Fair Hearing Decision here and click 'Upload':</label>
+																	<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Decision here and click 'Upload':</label>
 																	<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
 																	<input type="hidden" name="resident_id" value="{{fair_hearing.response.application.resident.resident_id}}">
 																	<!-- <input type="hidden" name="application_id" value="{{fair_hearing.response.application_id}}"> -->
@@ -939,7 +939,7 @@
 </div>
 </div>
 {% else %}
-  <p>You are not logged in</p>
+  <h1>You are not logged in</h1>
   <a href="{% url 'login' %}">login</a>
 {% endif %}
 {% endblock %}
@@ -1069,7 +1069,7 @@ class ResponseRowHTML {
 							<li>
 								<form class="fileInputLi rfiFileUpload" method="post" enctype="multipart/form-data">
 									{% csrf_token %}
-									<label>Choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> RFI here and click 'Upload':</label>
+									<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> RFI here and click 'Upload':</label>
 									<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
 									<input type="hidden" name="resident_id" value="${residentId}">
 									<input type="hidden" name="file_type" value="rfi">
@@ -1149,7 +1149,7 @@ class ResponseRowHTML {
 						<li>
 							<form class="fileInputLi" id="approval" method="post" enctype="multipart/form-data">
 				  			{% csrf_token %}
-								<label>Choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> Approval here and click 'Upload':</label>
+								<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Approval here and click 'Upload':</label>
 								<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
 								<input type="hidden" name="resident_id" value="${residentId}">
 								<input type="hidden" name="application_id" value="${applicationId}">
@@ -1292,7 +1292,7 @@ class ResponseRowHTML {
 							<li>
 								<form class="fileInputLi denialFileUpload" method="post" enctype="multipart/form-data">
 									{% csrf_token %}
-									<label>Choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> Denial here and click 'Upload':</label>
+									<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Denial here and click 'Upload':</label>
 									<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
 									<input type="hidden" name="resident_id" value="{{denial.response.application.resident.resident_id}}">
 									<input type="hidden" name="file_type" value="denial">
@@ -1474,7 +1474,7 @@ const addFairHearingRowHTML = (addFairHearingBtn, responseId) => {
 											<li>
 												<form class="fileInputLi" id="fair_hearing_confirmation" method="post" enctype="multipart/form-data">
 													{% csrf_token %}
-													<label>Choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> Fair Hearing Notice here and click 'Upload':</label>
+													<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Notice here and click 'Upload':</label>
 													<input type="file" name="document" value="" accept="image/jpeg,image/png,fair_hearing/pdf" required>
 													<input type="hidden" name="file_type" value="fair_hearing_confirmation">
 													<input type="hidden" name="resident_id" value="${residentId}">
@@ -1488,7 +1488,7 @@ const addFairHearingRowHTML = (addFairHearingBtn, responseId) => {
 											<li>
 												<form class="fileInputLi" id="fair_hearing_outcome_document" method="post" enctype="multipart/form-data">
 									  			{% csrf_token %}
-													<label>Choose or <span class="dragNDropText">Drag n' Drop<sup>TM</sup></span> Fair Hearing Decision here and click 'Upload':</label>
+													<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Decision here and click 'Upload':</label>
 													<input type="file" name="document" accept="image/jpeg,image/png,application/pdf" required>
 													<input type="hidden" name="resident_id" value="${residentId}">
 													<input type="hidden" name="response_id" value="${responseId}">

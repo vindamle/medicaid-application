@@ -9,6 +9,14 @@
 {% if user.is_authenticated  %}
 	<!-- Redirect User back to Home page -->
 {% else %}
+	{% for message in messages %}
+		<div class="alert alert-danger alert-dismissible fade show loginAlert" role="alert">
+		  {{message}}
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		    <span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+	{% endfor %}
 	<img src='{% static "img/pc_guy.png" %}' class="pcGuy">
 	<div class="formDiv">
 		<h1>Please log in below:</h1>

@@ -5,21 +5,21 @@
 {% block content %}
 {% if user.is_authenticated %}
 <div class="tableContainer" id="activityContainer">
-  <h3>Activity (<span id="totalActivityCount"></span>)</h3>
+  <h3>Activity <span id="totalActivityCount"></span></h3>
   <ul class="nav nav-tabs nav-justified">
     <li>
       <a data-toggle="tab" href="#home" class="navTabLink active show">
-        <h4>New Admissions <span class="countSpan" id="newAdmissionsTableCount"></span></h4>
+        <h4>New Admissions<sup class="countSpan" id="newAdmissionsTableCount"></sup></h4>
       </a>
     </li>
     <li>
       <a data-toggle="tab" class="navTabLink" href="#menu1">
-        <h4>Payor Changes <span class="countSpan" id="payorChangesTableCount"></span></h4>
+        <h4>Payor Changes<sup class="countSpan" id="payorChangesTableCount"></sup></h4>
       </a>
     </li>
       <li>
         <a data-toggle="tab" class="navTabLink" href="#menu2">
-      <h4>Discharges <span class="countSpan" id="dischargesTableCount"></span></h4>
+      <h4>Discharges<sup class="countSpan" id="dischargesTableCount"></sup></h4>
       </a>
     </li>
   </ul>
@@ -29,8 +29,9 @@
       <table id="newAdmissionsTable">
         <thead>
           <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
+            <th class="mobileShow">Name</th>
+            <th class="desktopShow">First Name</th>
+            <th class="desktopShow">Last Name</th>
             <!-- <th>Facility</th> -->
             <th>Primary Payor</th>
             <th>Secondary Payor</th>
@@ -42,8 +43,9 @@
         <tbody>
           {% for obj in admission %}
           <tr id="{{obj.resident_id}}">
-            <td>{{obj.first_name}}</td>
-            <td>{{obj.last_name}}</td>
+            <td class="mobileShow">{{obj.last_name}}, {{obj.first_name}}</td>
+            <td class="desktopShow">{{obj.first_name}}</td>
+            <td class="desktopShow">{{obj.last_name}}</td>
             <!-- <td>{{obj.facility}}</td> -->
             <td>{{obj.primary_payor}}</td>
             <td>{{obj.secondary_payor}}</td>
@@ -59,8 +61,9 @@
       <table id="payorChangesTable">
         <thead>
           <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
+            <th class="mobileShow">Name</th>
+            <th class="desktopShow">First Name</th>
+            <th class="desktopShow">Last Name</th>
             <!-- <th>Facility</th> -->
             <th>Primary Payor</th>
             <th>Secondary Payor</th>
@@ -72,8 +75,9 @@
         <tbody>
           {% for obj in payor_change %}
           <tr id="{{obj.resident_id}}">
-            <td>{{obj.first_name}}</td>
-            <td>{{obj.last_name}}</td>
+            <td class="mobileShow">{{obj.last_name}}, {{obj.first_name}}</td>
+            <td class="desktopShow">{{obj.first_name}}</td>
+            <td class="desktopShow">{{obj.last_name}}</td>
             <!-- <td>{{obj.facility}}</td> -->
             <td>{{obj.primary_payor}}</td>
             <td>{{obj.secondary_payor}}</td>
@@ -89,8 +93,9 @@
       <table id="dischargesTable">
         <thead>
           <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
+            <th class="mobileShow">Name</th>
+            <th class="desktopShow">First Name</th>
+            <th class="desktopShow">Last Name</th>
             <!-- <th>Facility</th> -->
             <th>Primary Payor</th>
             <th>Secondary Payor</th>
@@ -102,8 +107,9 @@
         <tbody>
           {% for obj in discharge %}
           <tr id="{{obj.resident_id}}">
-            <td>{{obj.first_name}}</td>
-            <td>{{obj.last_name}}</td>
+            <td class="mobileShow">{{obj.last_name}}, {{obj.first_name}}</td>
+            <td class="desktopShow">{{obj.first_name}}</td>
+            <td class="desktopShow">{{obj.last_name}}</td>
             <!-- <td>{{obj.facility}}</td> -->
             <td>{{obj.primary_payor}}</td>
             <td>{{obj.secondary_payor}}</td>
@@ -118,7 +124,7 @@
   </div>
 </div>
 {% else %}
-  <p>You are not logged in</p>
+  <h1>You are not logged in</h1>
   <a href="{% url 'login' %}">login</a>
 {% endif %}
 {% endblock %}

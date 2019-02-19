@@ -7,6 +7,7 @@ import pandas as pd
 from datetime import datetime
 import os
 from pathlib import Path
+from django.contrib import messages
 
 
 from django.contrib.auth import authenticate,login
@@ -25,6 +26,7 @@ class LoginView(View):
             login(request, login_data)
             return redirect('home')
 
+        messages.error(request, 'Oops! Wrong username or password. Please try again.')
         return redirect('login')
 
 

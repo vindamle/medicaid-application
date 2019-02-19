@@ -9,8 +9,9 @@
   <table id="approvalsTable">
     <thead>
       <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
+        <th class="mobileShow">Name</th>
+        <th class="desktopShow">First Name</th>
+        <th class="desktopShow">Last Name</th>
         <!-- <th>Facility</th> -->
         <th>Approval Date Range</th>
         <!-- <th>Fair Hearing Required?</th> -->
@@ -22,13 +23,14 @@
     <tbody>
       {% for application in applications %}
       <tr id="{{application.application_id}}">
-        <td>{{application.resident.first_name}}</td>
-        <td>{{application.resident.last_name}}</td>
+        <td class="mobileShow">{{application.resident.last_name}}, {{application.resident.first_name}}</td>
+        <td class="desktopShow">{{application.resident.first_name}}</td>
+        <td class="desktopShow">{{application.resident.last_name}}</td>
         <!-- <td>{{application.facility}}</td> -->
         <td>{{application.approval_start_date|date:"F d, Y"}} - {{application.approval_end_date|date:"F d, Y"}}</td>
         <!-- <td>?</td> -->
         <td class="verifyBtnTd">
-          {% if application.approval_verified == True %}
+          {% if application.approval_verified %}
             <button class="verifyBtn verified">Verified &check;</button>
           {% else %}
             <button class="verifyBtn">Not Verified</button>
@@ -42,7 +44,7 @@
   </table>
 </div>
 {% else %}
-  <p>You are not logged in</p>
+  <h1>You are not logged in</h1>
   <a href="{% url 'login' %}">login</a>
 {% endif %}
 {% endblock %}

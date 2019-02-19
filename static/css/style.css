@@ -17,9 +17,12 @@ nav {
 
 nav li, nav li a {
 	color: #ee7000 !important;
+	transition: all .5s;
 }
 nav li a:hover {
-	color: purple !important;
+	/*color: purple !important;*/
+	color: #390077 !important;
+	transform: scale(1.05);
 }
 nav ul {
 	background: white;
@@ -78,7 +81,10 @@ nav li.grayText {
 }
 
 sup {
-	font-size: 8px;
+	/*background: #eee;*/
+	border-radius: 15px;
+	padding: 2px;
+	color: darkblue;
 }
 
 .downArrow {
@@ -143,7 +149,8 @@ sup {
 }*/
 
 .currentPage {
-	color: #220055 !important;
+	color: #390077 !important;
+	/*color: purple !important*/
 	/*font-weight: bold;*/
 }
 
@@ -178,6 +185,7 @@ h3 {
 h4 {
 	color: #335588;
 }
+
 table {
 	border-bottom: none !important;
 	margin: auto;
@@ -189,13 +197,13 @@ table {
 	
 }
 
-@media(max-width: 1399px) {
+/*@media(max-width: 1399px) {
 	table:not(.miscDocsTable) {
 		width: 90vw;
 		margin-left: 4vw;
 		
 	}
-}
+}*/
 
 tbody {
 	/*display: inline-block;*/
@@ -294,6 +302,19 @@ table button {
 	text-align: center;
 }
 
+@media(min-width: 768px) {
+	.mobileShow {
+		display: none;
+	}
+}
+
+@media(max-width: 767px) {
+	.desktopShow {
+		display: none;
+	}
+}
+
+
 /*______________DataTables Styling______________*/
 .nav-tabs {
 	justify-content: center;
@@ -347,6 +368,7 @@ table button {
 	font-weight: bold;
 }
 
+
 .countSpan {
 	/*color: maroon;*/
 	/*font-size: 16px;*/
@@ -376,17 +398,27 @@ table button {
 	border-radius: 50%;
 }
 
+#totalActivityCount {
+	font-size: 36px;
+}
+
 .nav-tabs h4 {
 	margin-top: 0;
 	font-size: 20px;
 	padding: 5px 10px 0 10px;
 }
 
+.navTabLink, .nav-tabs a h4 {
+	transition: all .5s;
+}
+
 .navTabLink:hover {
 	text-decoration: none;
+	transform: scale(1.05);
 }
 
 .nav-tabs a:hover h4 {
+	/*color: #dd3400 !important;*/
 	/*color: darkorange;*/
 }
 
@@ -432,13 +464,20 @@ table button {
 }
 
 .residentInfoDiv h5 {
+	width: 90vw;
+	margin-left: 5vw;
 	color: white;
 	text-align: center;
 	background-color: rgba(180,0,0,.8);
-	width: 350px;
 	margin: 10px auto;
 	padding: 5px;
 	border-radius: 25px;
+}
+
+@media(min-width: 480px) {
+	.residentInfoDiv h5 {
+		width: 350px;
+	}
 }
 
 .residentInfoDiv h4 {
@@ -613,7 +652,7 @@ table button {
 	margin-bottom: 20px;
 }
 
-@media(min-width: 768px) {
+@media(min-width: 998px) {
 	.residentInfoDiv section {
 		margin-top: 30px;
 		padding: 15px 25px 0 25px;
@@ -800,7 +839,7 @@ input#secondary_pays_copay {
 .alertDiv {
 	/*display: inline-block;*/
 }
-.alert {
+.alertDiv .alert {
 	text-align: right;
 	/*display: inline-block;*/
 	/*position: fixed;*/
@@ -813,7 +852,7 @@ input#secondary_pays_copay {
 		left: 10px;
 		top: 70px;
 	}
-	.alert {
+	.alertDiv .alert {
 		width: 500px;
 	}
 }
@@ -927,8 +966,10 @@ input#secondary_pays_copay {
 	/*margin-top: 10px;*/
 }
 
-#namiModalBtn {
-	margin: 15px 25px;
+@media(min-width: 480px) {
+	#namiModalBtn {
+		margin: 15px 25px;
+	}
 }
 
 .fairHearingsModal label {
@@ -1017,6 +1058,22 @@ input#secondary_pays_copay {
 
 
 /*________________Form Pages________________*/
+.loginAlert {
+	position: absolute;
+	width: 90vw;
+	top: 100px;
+	left: 5vw;
+}
+
+@media(min-width: 768px) {
+	.loginAlert {
+		width: 500px;
+		left: calc(50vw - 250px);
+		/*position: relative;*/
+		margin: auto;
+	}
+}
+
 .pcGuy {
 	position: absolute;
 	bottom: 30px;
@@ -1090,6 +1147,7 @@ input#secondary_pays_copay {
 	width: 110px;
 	margin-left: 10%;
 	color: white;
+	padding: 5px 10px;
 }
 
 .verified {
