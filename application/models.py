@@ -178,7 +178,7 @@ class Application(models.Model):
 
 
 
-    # approval_verified  = models.BooleanField(null = True, blank = True)
+    approval_verified  = models.BooleanField(null = True, blank = True)
     # fair_hearing_required  = models.CharField(max_length = 50,null = True, blank = True)
     # fair_hearing_notice_date = models.DateTimeField(null = True, blank = True)
 

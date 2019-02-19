@@ -82,7 +82,7 @@ class ActivityView(View):
                 new_discharges= Resident.objects.filter(facility_name =permission.codename,tracking_status = None, activity_type = 'D')
                 for new_discharge in new_discharges:
                     discharge.append(new_discharge)
-                
+
             return render(request,self.template_name, {'discharge':discharge,'admission':new_admission,'payor_change':payor_change})
         else:
             return redirect('login')
@@ -260,7 +260,7 @@ class ApprovalsView(View):
             permissions = Permission.objects.filter(user = request.user)
             for permission in permissions:
                 results = Application.objects.filter(tracking_status = True,resident__facility_name =permission.codename)
-          
+
 
                 for result in results:
                     self.list.append(result)
