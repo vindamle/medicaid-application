@@ -78,7 +78,7 @@
 	        <h5 class="modal-title" id="">Misc. Documents</h5>
 	      </div>
 	      <div class="modal-body">
-	  			<table class="miscDocsTable">
+	  			<table class="miscDocsTable" id="">
 	  				<thead>
 	  					<tr>
 	  						<th>Document Name:</th>
@@ -93,9 +93,23 @@
 	      						<td><a href="/{{ misc_doc.file }}" target = "_blank">{{misc_doc.file_name}}</a></td>
 	      						<td>{{ misc_doc.date_uploaded|date:'d/m/y' }}</td>
 	      						<td>
-	      							<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('document',{{misc_doc.document_id}},'application_id')">
-			         					<span aria-hidden="true">&times;</span>
-			       				 	</button>
+	      							<button 
+												type="button" 
+												class="deleteDocBtn" 
+												aria-label="Close" 
+												onclick="
+													deleteDoc(
+														this,
+														{{application.application_id}},
+														{{ misc_doc.document_id }},
+														'document',
+														{{ misc_doc.document_id }},
+														'application_id'
+													)
+												"
+											>
+							          <span aria-hidden="true">&times;</span>
+							        </button>
 	      						</td>
 	      					</tr>
 	      		{% endif %}
@@ -103,16 +117,21 @@
     				</tbody>
     			</table>
 	      	<br>
-	      	<br>
-	        <form class="fileInputLi" id="misc_doc" method="post" enctype="multipart/form-data">
-							{% csrf_token %}
-							<label>To upload a new document, choose or <span class="dragNDropText">Drag n' Drop&trade;</span> a document here and click 'Upload':</label>
-							<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
-							<input type="hidden" name="resident_id" value="{{application.resident.resident_id}}">
-							<input type="hidden" name="file_type" value="misc_doc">
-							<input type="hidden" name="application_id" value="{{application.application_id}}">
-							<button type="submit" class="uploadBtn">Upload</button>
-						</form>
+						<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> a document here:</label>
+						<br>
+	        <input 
+						type="file" 
+						accept="image/jpeg,image/png,application/pdf" 
+						onchange="
+							uploadDoc(
+								this, 
+								{{application.application_id}},
+								'document',
+								{{application.application_id}},
+								'misc_doc'
+							)
+						"
+					>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -328,43 +347,82 @@
 					</div>
 					<div class="col-lg-3">
 						<li class="step3">
+							<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Application here:</label>
+							<br>
 						{% if application.application_document %}
-						<p>Document Uploaded:</p>
-						<a href="/{{ application.application_document.file }}" target = "_blank">{{application.application_document.file_name}}</a>
-						<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('application',{{application.application_id}},'application_document')">
-		          <span aria-hidden="true">&times;</span>
-		        </button>
+							<a href="/{{ application.application_document.file }}" target = "_blank">{{application.application_document.file_name}}</a>
+							<!-- deleteBtn,appId,table,tableRowId,docFieldToEmptyOnDelete -->
+							<button 
+								type="button" 
+								class="deleteDocBtn" 
+								aria-label="Close" 
+								onclick="
+									deleteDoc(
+										this,
+										{{application.application_id}},
+										{{application.application_document.document_id}},
+										'application',
+										{{application.application_id}},
+										'application_document'
+									)
+								"
+							>
+			          <span aria-hidden="true">&times;</span>
+			        </button>
 						{% else %}
-						<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
-							{% csrf_token %}
-							<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Application here and click 'Upload':</label>
-							<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
-							<input type="hidden" name="resident_id" value="{{application.resident.resident_id}}">
-							<input type="hidden" name="file_type" value="medicaid_application">
-							<input type="hidden" name="application_id" value="{{application.application_id}}">
-							<button type="submit" class="uploadBtn">Upload</button>
-						</form>
+							<input 
+								type="file" 
+								accept="image/jpeg,image/png,application/pdf" 
+								onchange="
+									uploadDoc(
+										this,
+										{{application.application_id}},
+										'application',
+										{{application.application_id}},
+										'medicaid_application'
+									)
+								"
+							>
 						{% endif %}
 					</li>
 					</div>
 					<div class="col-lg-3">
 						<li class="step4">
+							<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Medicaid Confirmation here:</label>
+							<br>
 							{% if application.application_confirmation %}
-							<p>Document Uploaded:</p>
 							<a href="/{{ application.application_confirmation.confirmation_document.file }}" target = "_blank">{{application.application_confirmation.confirmation_document.file_name}}</a>
-							<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('application',{{application.application_id}},'application_confirmation')">
+							<button 
+								type="button" 
+								class="deleteDocBtn" 
+								aria-label="Close" 
+								onclick="
+									deleteDoc(
+										this,
+										{{application.application_id}},
+										{{application.application_confirmation.confirmation_document.document_id}},
+										'application',
+										{{application.application_id}},
+										'application_confirmation'
+									)
+								"
+							>
 			          <span aria-hidden="true">&times;</span>
 			        </button>
-							{% else %}
-							<form class="fileInputLi" id="application_confirmation" method="post" enctype="multipart/form-data">
-								{% csrf_token %}
-								<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Medicaid Confirmation here and click 'Upload':</label>
-								<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
-								<input type="hidden" name="resident_id" value="{{application.resident.resident_id}}">
-								<input type="hidden" name="file_type" value="application_confirmation">
-								<input type="hidden" name="application_id" value="{{application.application_id}}">
-								<button type="submit" class="uploadBtn">Upload</button>
-							</form>
+						{% else %}
+							<input 
+								type="file" 
+								accept="image/jpeg,image/png,application/pdf" 
+								onchange="
+									uploadDoc(
+										this, 
+										{{application.application_id}},
+										'application',
+										{{application.application_id}},
+										'application_confirmation'
+									)
+								"
+							>
 							{% endif %}
 						</li>
 					</div>
@@ -398,23 +456,42 @@
 							<li class="invisible applicationId">
 							</li>
 							<li>
+								<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> RFI here:</label>
+								<br>
 							{% if rfi.document_id %}
-								<p>Document Uploaded:</p>
 								<a href="/{{ rfi.document.file }}" target = "_blank">{{rfi.document.file_name}}</a>
-								<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('rfi',{{rfi.rfi_id}},'document')">
+								<!-- uploadDoc = (input, appId, fileType) -->
+								<button 
+									type="button" 
+									class="deleteDocBtn" 
+									aria-label="Close" 
+									onclick="
+										deleteDoc(
+											this,
+											{{application.application_id}},
+											{{rfi.document.document_id}},
+											'rfi',
+											{{rfi.rfi_id}},
+											'document'
+										)
+									"
+								>
 				          <span aria-hidden="true">&times;</span>
 				        </button>
 							{% else %}
-								<form class="fileInputLi rfiFileUpload" method="post" enctype="multipart/form-data">
-									{% csrf_token %}
-									<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> RFI here and click 'Upload':</label>
-									<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
-									<input type="hidden" name="resident_id" value="{{rfi.response.application.resident.resident_id}}">
-									<input type="hidden" name="file_type" value="rfi">
-									<input type="hidden" name="application_id" value="{{rfi.response.application.application_id}}">
-									<input type="hidden" name="rfi_id" value="{{rfi.rfi_id}}">
-									<button type="submit" class="uploadBtn">Upload</button>
-								</form>
+								<input 
+									type="file" 
+									accept="image/jpeg,image/png,application/pdf" 
+									onchange="
+										uploadDoc(
+											this, 
+											{{application.application_id}},
+											'rfi',
+											{{rfi.rfi_id}},
+											'rfi'
+										)
+									"
+								>
 							{% endif %}
 							</li>
 						</div>
@@ -482,25 +559,44 @@
 							</li>
 							
 						</div>
-						<div class="col-lg-5 applicationColumn">
+						<div class="col-lg-3 applicationColumn">
 							<li>
-							{% if denial.denial_document %}
-								<p>Document Uploaded:</p>
-								<a href="/{{ denial.denial_document.file }}" target = "_blank">{{denial.denial_document.file_name}}</a>
-								<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('denial',{{denial.denial_id}},'denial_document')">
+								<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Denial here:</label>
+								<br>
+							{% if denial.document_id %}
+								<a href="/{{ denial.document.file }}" target = "_blank">{{denial.document.file_name}}</a>
+								<button 
+									type="button" 
+									class="deleteDocBtn" 
+									aria-label="Close" 
+									onclick="
+										deleteDoc(
+											this,
+											{{application.application_id}},
+											{{ denial.document.document_id }},
+											'denial',
+											{{denial.denial_id}},
+											'document'
+										)
+									"
+								>
 				          <span aria-hidden="true">&times;</span>
 				        </button>
 							{% else %}
-								<form class="fileInputLi denialFileUpload" method="post" enctype="multipart/form-data">
-									{% csrf_token %}
-									<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Denial here and click 'Upload':</label>
-									<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
-									<input type="hidden" name="resident_id" value="{{denial.response.application.resident.resident_id}}">
-									<input type="hidden" name="file_type" value="denial">
-									<input type="hidden" name="application_id" value="{{denial.response.application_id}}">
-									<input type="hidden" name="denial_id" value="{{denial.denial_id}}">
-									<button type="submit" class="uploadBtn">Upload</button>
-								</form>
+								<input 
+									type="file" 
+									accept="image/jpeg,image/png,application/pdf" 
+									onchange="
+										uploadDoc(
+											this, 
+											{{application.application_id}},
+											'denial',
+											{{denial.denial_id}},
+											'denial'
+										)
+									"
+								>
+
 							{% endif %}
 							</li>
 						</div>
@@ -513,9 +609,7 @@
 								<input class="editable date " id="denial_documentation_submitted_date" data-table="denial"  data-application_id="{{denial.response.application_id}}" data-denial_id="{{denial.denial_id}}" type="date" onkeyup="checkIfEnterKey(this, event)">
 							</li>
 						</div>
-						
 					</div>
-
 
 					<div class="row ">
 						<div class="col-lg-3">
@@ -601,44 +695,81 @@
 														</div>
 														<div class="col-lg-6 col-sm-12 modalRowColumn">
 															<li>
-																{% if fair_hearing.fair_hearing_confirmation %}
-																<p>Document Uploaded:</p>
+																<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Notice here:</label>
+																<br>
+															{% if fair_hearing.fair_hearing_confirmation %}
 																<a href="/{{ fair_hearing.fair_hearing_confirmation.confirmation_document.file }}" target = "_blank">{{fair_hearing.fair_hearing_confirmation.confirmation_document.file_name}}</a>
-																<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('fair_hearing',{{fair_hearing.fair_hearing_id}},'fair_hearing_confirmation')">
+																<button 
+																	type="button" 
+																	class="deleteDocBtn" 
+																	aria-label="Close" 
+																	onclick="
+																		deleteDoc(
+																			this,
+																			{{application.application_id}},
+																			{{ fair_hearing.fair_hearing_confirmation.confirmation_document.document_id }},
+																			'fair_hearing',
+																			{{fair_hearing.fair_hearing_id}},
+																			'fair_hearing_confirmation'
+																		)
+																	"
+																>
 												          <span aria-hidden="true">&times;</span>
 												        </button>
-																{% else %}
-																<form class="fileInputLi" id="fair_hearing_confirmation" method="post" enctype="multipart/form-data">
-																	{% csrf_token %}
-																	<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Notice here and click 'Upload':</label>
-																	<input type="file" name="document" value="" accept="image/jpeg,image/png,fair_hearing/pdf" required>
-																	<input type="hidden" name="resident_id" value="{{fair_hearing.response.application.resident.resident_id}}">
-																	<input type="hidden" name="file_type" value="fair_hearing_confirmation">
-																	<input type="hidden" name="fair_hearing_id" value="{{fair_hearing.fair_hearing_id}}">
-																	<button type="submit" class="uploadBtn">Upload</button>
-																</form>
-																{% endif %}
+															{% else %}
+																<input 
+																	type="file" 
+																	accept="image/jpeg,image/png,application/pdf" 
+																	onchange="
+																		uploadDoc(
+																			this, 
+																			{{application.application_id}},
+																			'fair_hearing',
+																			{{fair_hearing.fair_hearing_id}},
+																			'fair_hearing_confirmation'
+																		)
+																	"
+																>
+															{% endif %}
 															</li>
 														</div>
 														<div class="col-lg-6 col-sm-12 modalRowColumn">
 															<li>
+																<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Decision here:</label>
+																<br>
 															{% if fair_hearing.fair_hearing_outcome_document %}
-																<p>Document Uploaded:</p>
 																<a href="/{{ fair_hearing.fair_hearing_outcome_document.file }}" target = "_blank">{{fair_hearing.fair_hearing_outcome_document.file_name}}</a>
-																<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('fair_hearing',{{fair_hearing.fair_hearing_id}},'fair_hearing_outcome_document')">
+																<button 
+																	type="button" 
+																	class="deleteDocBtn" 
+																	aria-label="Close" 
+																	onclick="
+																		deleteDoc(
+																			this,
+																			{{application.application_id}},
+																			{{ fair_hearing.fair_hearing_outcome_document.document_id }},
+																			'fair_hearing',
+																			{{fair_hearing.fair_hearing_id}},
+																			'fair_hearing_outcome_document'
+																		)
+																	"
+																>
 												          <span aria-hidden="true">&times;</span>
 												        </button>
 															{% else %}
-																<form class="fileInputLi" id="fair_hearing_outcome_document" method="post" enctype="multipart/form-data">
-													  			{% csrf_token %}
-																	<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Decision here and click 'Upload':</label>
-																	<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
-																	<input type="hidden" name="resident_id" value="{{fair_hearing.response.application.resident.resident_id}}">
-																	<!-- <input type="hidden" name="application_id" value="{{fair_hearing.response.application_id}}"> -->
-																	<input type="hidden" name="fair_hearing_id" value="{{fair_hearing.fair_hearing_id}}">
-																	<input type="hidden" name="file_type" value="fair_hearing_outcome_document">
-																	<button type="submit" class="uploadBtn">Upload</button>
-																</form>
+																<input 
+																	type="file" 
+																	accept="image/jpeg,image/png,application/pdf" 
+																	onchange="
+																		uploadDoc(
+																			this, 
+																			{{application.application_id}},
+																			'fair_hearing',
+																			{{fair_hearing.fair_hearing_id}},
+																			'fair_hearing_outcome_document'
+																		)
+																	"
+																>
 															{% endif %}
 															</li>
 														</div>
@@ -701,25 +832,43 @@
 					</div>
 					<div class="col-lg-4 col-sm-12 applicationColumn">
 						<li>
-						{% if approval.document_id %}
-							<p>Document Uploaded:</p>
-							<a href="/{{ approval.document.file }}" target = "_blank">{{approval.document.file_name}}</a>
-							<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('approval',{{approval.approval_id}},'document')">
-			          <span aria-hidden="true">&times;</span>
-			        </button>
-						{% else %}
-							<form class="fileInputLi" id="approval" method="post" enctype="multipart/form-data">
-				  			{% csrf_token %}
-								<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Approval here and click 'Upload':</label>
-								<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
-								<input type="hidden" name="resident_id" value="{{approval.response.application.resident.resident_id}}">
-								<input type="hidden" name="application_id" value="{{approval.response.application_id}}">
-								<input type="hidden" name="approval_id" value="{{approval.approval_id}}">
-								<input type="hidden" name="file_type" value="approval">
-								<button type="submit" class="uploadBtn">Upload</button>
-							</form>
-						{% endif %}
-						</li>
+								<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Approval here:</label>
+								<br>
+							{% if approval.document_id %}
+								<a href="/{{ approval.document.file }}" target = "_blank">{{approval.document.file_name}}</a>
+								<button 
+									type="button" 
+									class="deleteDocBtn" 
+									aria-label="Close" 
+									onclick="
+										deleteDoc(
+											this,
+											{{application.application_id}},
+											{{ approval.document.document_id }},
+											'approval',
+											{{approval.approval_id}},
+											'document'
+										)
+									"
+								>
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+							{% else %}
+								<input 
+									type="file" 
+									accept="image/jpeg,image/png,application/pdf" 
+									onchange="
+										uploadDoc(
+											this, 
+											{{application.application_id}},
+											'approval',
+											{{approval.approval_id}},
+											'approval'
+										)
+									"
+								>
+							{% endif %}
+							</li>
 							<div class="modal fade bd-example-modal-lg" id="namiModal{{approval.approval_id}}" tabindex="-1" role="dialog" aria-labelledby="namiModalTitle" aria-hidden="true">
 							  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 							    <div class="modal-content">
@@ -872,44 +1021,81 @@
 														</div>
 														<div class="col-lg-6 col-sm-12 modalRowColumn">
 															<li>
-																{% if fair_hearing.fair_hearing_confirmation %}
-																<p>Document Uploaded:</p>
+																<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Notice here:</label>
+																<br>
+															{% if fair_hearing.fair_hearing_confirmation %}
 																<a href="/{{ fair_hearing.fair_hearing_confirmation.confirmation_document.file }}" target = "_blank">{{fair_hearing.fair_hearing_confirmation.confirmation_document.file_name}}</a>
-																<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('fair_hearing',{{fair_hearing.fair_hearing_id}},'fair_hearing_confirmation')">
+																<button 
+																	type="button" 
+																	class="deleteDocBtn" 
+																	aria-label="Close" 
+																	onclick="
+																		deleteDoc(
+																			this,
+																			{{application.application_id}},
+																			{{ fair_hearing.fair_hearing_confirmation.confirmation_document.document_id }},
+																			'fair_hearing',
+																			{{fair_hearing.fair_hearing_id}},
+																			'fair_hearing_confirmation'
+																		)
+																	"
+																>
 												          <span aria-hidden="true">&times;</span>
 												        </button>
-																{% else %}
-																<form class="fileInputLi" id="fair_hearing_confirmation" method="post" enctype="multipart/form-data">
-																	{% csrf_token %}
-																	<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Notice here and click 'Upload':</label>
-																	<input type="file" name="document" value="" accept="image/jpeg,image/png,fair_hearing/pdf" required>
-																	<input type="hidden" name="resident_id" value="{{fair_hearing.response.application.resident.resident_id}}">
-																	<input type="hidden" name="file_type" value="fair_hearing_confirmation">
-																	<input type="hidden" name="fair_hearing_id" value="{{fair_hearing.fair_hearing_id}}">
-																	<button type="submit" class="uploadBtn">Upload</button>
-																</form>
-																{% endif %}
+															{% else %}
+																<input 
+																	type="file" 
+																	accept="image/jpeg,image/png,application/pdf" 
+																	onchange="
+																		uploadDoc(
+																			this, 
+																			{{application.application_id}},
+																			'fair_hearing',
+																			{{fair_hearing.fair_hearing_id}},
+																			'fair_hearing_confirmation'
+																		)
+																	"
+																>
+															{% endif %}
 															</li>
 														</div>
 														<div class="col-lg-6 col-sm-12 modalRowColumn">
 															<li>
+																<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Decision here:</label>
+																<br>
 															{% if fair_hearing.fair_hearing_outcome_document %}
-																<p>Document Uploaded:</p>
 																<a href="/{{ fair_hearing.fair_hearing_outcome_document.file }}" target = "_blank">{{fair_hearing.fair_hearing_outcome_document.file_name}}</a>
-																<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc('fair_hearing',{{fair_hearing.fair_hearing_id}},'fair_hearing_outcome_document')">
+																<button 
+																	type="button" 
+																	class="deleteDocBtn" 
+																	aria-label="Close" 
+																	onclick="
+																		deleteDoc(
+																			this,
+																			{{application.application_id}},
+																			{{ fair_hearing.fair_hearing_outcome_document.document_id }},
+																			'fair_hearing',
+																			{{fair_hearing.fair_hearing_id}},
+																			'fair_hearing_outcome_document'
+																		)
+																	"
+																>
 												          <span aria-hidden="true">&times;</span>
 												        </button>
 															{% else %}
-																<form class="fileInputLi" id="fair_hearing_outcome_document" method="post" enctype="multipart/form-data">
-													  			{% csrf_token %}
-																	<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Decision here and click 'Upload':</label>
-																	<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
-																	<input type="hidden" name="resident_id" value="{{fair_hearing.response.application.resident.resident_id}}">
-																	<!-- <input type="hidden" name="application_id" value="{{fair_hearing.response.application_id}}"> -->
-																	<input type="hidden" name="fair_hearing_id" value="{{fair_hearing.fair_hearing_id}}">
-																	<input type="hidden" name="file_type" value="fair_hearing_outcome_document">
-																	<button type="submit" class="uploadBtn">Upload</button>
-																</form>
+																<input 
+																	type="file" 
+																	accept="image/jpeg,image/png,application/pdf" 
+																	onchange="
+																		uploadDoc(
+																			this, 
+																			{{application.application_id}},
+																			'fair_hearing',
+																			{{fair_hearing.fair_hearing_id}},
+																			'fair_hearing_outcome_document'
+																		)
+																	"
+																>
 															{% endif %}
 															</li>
 														</div>
@@ -1067,16 +1253,21 @@ class ResponseRowHTML {
 					<div class="row">
 						<div class="col-lg-3 firstColumn applicationColumn">
 							<li>
-								<form class="fileInputLi rfiFileUpload" method="post" enctype="multipart/form-data">
-									{% csrf_token %}
-									<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> RFI here and click 'Upload':</label>
-									<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
-									<input type="hidden" name="resident_id" value="${residentId}">
-									<input type="hidden" name="file_type" value="rfi">
-									<input type="hidden" name="application_id" value="${applicationId}">
-									<input type="hidden" name="rfi_id" value="${rfiOrDenialOrApprovalId}">
-									<button type="submit" class="uploadBtn">Upload</button>
-								</form>
+								<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> RFI here:</label>
+								<br>
+								<input 
+									type="file" 
+									accept="image/jpeg,image/png,application/pdf" 
+									onchange="
+										uploadDoc(
+											this, 
+											${applicationId},
+											'rfi',
+											${rfiOrDenialOrApprovalId},
+											'rfi'
+										)
+									"
+								>
 							</li>
 						</div>
 						<div class="col-lg-3 applicationColumn">
@@ -1147,16 +1338,21 @@ class ResponseRowHTML {
 					</div>
 					<div class="col-lg-4 applicationColumn">
 						<li>
-							<form class="fileInputLi" id="approval" method="post" enctype="multipart/form-data">
-				  			{% csrf_token %}
-								<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Approval here and click 'Upload':</label>
-								<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
-								<input type="hidden" name="resident_id" value="${residentId}">
-								<input type="hidden" name="application_id" value="${applicationId}">
-								<input type="hidden" name="approval_id" value="${rfiOrDenialOrApprovalId}">
-								<input type="hidden" name="file_type" value="approval">
-								<button type="submit" class="uploadBtn">Upload</button>
-							</form>
+							<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Approval here:</label>
+							<br>
+							<input 
+									type="file" 
+									accept="image/jpeg,image/png,application/pdf" 
+									onchange="
+										uploadDoc(
+											this, 
+											${applicationId},
+											'approval',
+											${rfiOrDenialOrApprovalId},
+											'approval'
+										)
+									"
+								>
 						</li>
 					`
 						// numberOfNAMIs = 1;
@@ -1290,16 +1486,21 @@ class ResponseRowHTML {
 						</div>
 						<div class="col-lg-5 applicationColumn">
 							<li>
-								<form class="fileInputLi denialFileUpload" method="post" enctype="multipart/form-data">
-									{% csrf_token %}
-									<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Denial here and click 'Upload':</label>
-									<input type="file" name="document" value="" accept="image/jpeg,image/png,application/pdf" required>
-									<input type="hidden" name="resident_id" value="{{denial.response.application.resident.resident_id}}">
-									<input type="hidden" name="file_type" value="denial">
-									<input type="hidden" name="application_id" value="${applicationId}">
-									<input type="hidden" name="denial_id" value="${rfiOrDenialOrApprovalId}">
-									<button type="submit" class="uploadBtn">Upload</button>
-								</form>
+							<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Denial here:</label>
+							<br>
+								<input 
+									type="file" 
+									accept="image/jpeg,image/png,application/pdf" 
+									onchange="
+										uploadDoc(
+											this, 
+											${applicationId},
+											'denial',
+											${rfiOrDenialOrApprovalId},
+											'denial'
+										)
+									"
+								>
 							</li>
 						</div>
 						<div class="col-lg-4 applicationColumn">
@@ -1472,30 +1673,40 @@ const addFairHearingRowHTML = (addFairHearingBtn, responseId) => {
 										</div>
 										<div class="col-lg-6 col-sm-12 modalRowColumn">
 											<li>
-												<form class="fileInputLi" id="fair_hearing_confirmation" method="post" enctype="multipart/form-data">
-													{% csrf_token %}
-													<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Notice here and click 'Upload':</label>
-													<input type="file" name="document" value="" accept="image/jpeg,image/png,fair_hearing/pdf" required>
-													<input type="hidden" name="file_type" value="fair_hearing_confirmation">
-													<input type="hidden" name="resident_id" value="${residentId}">
-													<input type="hidden" name="response_id" value="${responseId}">
-													<input type="hidden" name="fair_hearing_id" value="${fairHearingId}">
-													<button type="submit" class="uploadBtn">Upload</button>
-												</form>
+												<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Notice here:</label>
+												<br>
+												<input 
+													type="file" 
+													accept="image/jpeg,image/png,application/pdf" 
+													onchange="
+														uploadDoc(
+															this, 
+															${responseId},
+															'fair_hearing',
+															${fairHearingId},
+															'fair_hearing_confirmation'
+														)
+													"
+												>
 											</li>
 										</div>
 										<div class="col-lg-6 col-sm-12 modalRowColumn">
 											<li>
-												<form class="fileInputLi" id="fair_hearing_outcome_document" method="post" enctype="multipart/form-data">
-									  			{% csrf_token %}
-													<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Decision here and click 'Upload':</label>
-													<input type="file" name="document" accept="image/jpeg,image/png,application/pdf" required>
-													<input type="hidden" name="resident_id" value="${residentId}">
-													<input type="hidden" name="response_id" value="${responseId}">
-													<input type="hidden" name="fair_hearing_id" value="${fairHearingId}">
-													<input type="hidden" name="file_type" value="fair_hearing_outcome_document">
-													<button type="submit" class="uploadBtn">Upload</button>
-												</form>
+												<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Decision here:</label>
+												<br>
+												<input 
+													type="file" 
+													accept="image/jpeg,image/png,application/pdf" 
+													onchange="
+														uploadDoc(
+															this, 
+															${responseId},
+															'fair_hearing',
+															${fairHearingId},
+															'fair_hearing_outcome_document'
+														)
+													"
+												>
 											</li>
 										</div>
 									</div>
@@ -1615,16 +1826,108 @@ const createNewApp = thisAppId => {
 		});
 }
 
-const deleteDoc = (table,tableRowId,docField) => {
+const uploadDoc = (input, appId, table, rowId, docType) => {
+	let docFieldToEmptyOnDelete;
+	const file_data = $(input).prop("files")[0];
+	const formData = new FormData();
+	formData.append("csrfmiddlewaretoken", '{{ csrf_token }}')                 
+	formData.append("resident_id", '{{ resident.resident_id }}')
+	formData.append("application_id", appId)             
+	formData.append("row_id", rowId)             
+	formData.append("file", file_data)              
+	formData.append("file_type", docType)              
+	const ajaxCall = $.ajax(
+		{
+	    url: '/show/?resident_id={{resident.resident_id}}',
+      type: 'POST',
+      cache: false,
+      contentType: false,
+      processData: false,
+      data: formData,
+      success: function (docArray) {
+      	const docUrl = docArray[0]
+      	const docName = docArray[1]
+      	const docId = docArray[2]
+      	const docDateUploaded = docArray[3]
+      	if (docType == 'medicaid_application') {
+      		docType = 'application_document'
+      	}
+      	if(docType == 'application_document' || docType == 'application_confirmation' || docType == 'fair_hearing_confirmation' || docType == 'fair_hearing_outcome_document') {
+      		docFieldToEmptyOnDelete = docType
+      	} else if (docType == 'misc_doc') {
+      		docFieldToEmptyOnDelete = 'application_id'
+      	} else {
+      		docFieldToEmptyOnDelete = 'document'
+      	}
+
+      	if (docType == 'misc_doc') {
+      		const html = `
+      			<tr>
+							<td><a href="/${docUrl}" target = "_blank">${docName}</a></td>
+							<td>${docDateUploaded}</td>
+							<td>
+								<button 
+									type="button" 
+									class="deleteDocBtn" 
+									aria-label="Close" 
+									onclick="
+										deleteDoc(
+											this,
+											${appId},
+											${docId},
+											'document',
+											${docId},
+											'application_id'
+										)
+									"
+								>
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+							</td>
+						</tr>
+      		`
+	      	const tbody = document.querySelector(`#application${appId} .miscDocsTable tbody`);
+	      	tbody.insertAdjacentHTML('beforeend', html)
+
+      	} else {
+      		const html = `
+	        	<a href="/${docUrl}" target = "_blank">${docName}</a>
+						<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc(this, ${appId}, ${docId},'${table}',${rowId},'${docFieldToEmptyOnDelete}')">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+	       	`
+        	$(input).replaceWith(html)
+	      }
+        
+      }
+	  }
+  )
+}
+
+const deleteDoc = (deleteBtn, appId, docId, table, tableRowId, docFieldToEmptyOnDelete) => {
 	if (confirm("Remove this document?")) {
-		const successMessage = `${docField} field in ${table} table set to null`;
+		const successMessage = `${docFieldToEmptyOnDelete} field in ${table} table set to null`;
 		const dataObject =  {
+			document_id: docId,
 			row_id: tableRowId,
-			column: docField,
+			column: docFieldToEmptyOnDelete,
 			new_value: null
-		};
+		}
 		updateDB(table, dataObject, successMessage)
-		location.reload();
+		if (docFieldToEmptyOnDelete == 'application_document') {
+			docFieldToEmptyOnDelete = 'medicaid_application'
+		}
+		// if it's a misc doc:
+		if (table == 'document' && docFieldToEmptyOnDelete == 'application_id') {
+			const row = deleteBtn.parentNode.parentNode;
+			$(row).fadeOut()
+		} else {
+			const html = `
+			<input type="file" accept="image/jpeg,image/png,application/pdf" onchange="uploadDoc(this, ${appId}, '${table}', ${tableRowId}, '${docFieldToEmptyOnDelete}')">
+			`
+			$(deleteBtn).prev().remove()
+			$(deleteBtn).replaceWith(html);
+		}		
 	}
 }
 
