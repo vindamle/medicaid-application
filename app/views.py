@@ -156,10 +156,10 @@ class ShowView(View):
         type = request.POST.get('file_type')
 
         resident_id = request.POST.get('resident_id')
-        print(type)
+
         if type == "fair_hearing_outcome_document" or type == "fair_hearing_confirmation":
 
-            resident_id = request.POST.get('resident_id')
+            
             fair_hearing_id = request.POST.get('fair_hearing_id')
             application_id = FairHearing.objects.get(fair_hearing_id = fair_hearing_id).response.application.application_id
         else:
