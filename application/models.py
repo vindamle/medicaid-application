@@ -293,7 +293,7 @@ class Denial(models.Model):
         on_delete = models.CASCADE,
     )
 
-    denial_document = models.ForeignKey(
+    document = models.ForeignKey(
         Document,
         on_delete = models.CASCADE,
         null = True,

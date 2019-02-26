@@ -66,9 +66,9 @@ def track_untrack_resident(request):
 '''REASON FOR ANNOYING ERROR'''
 def approval_verified(request):
     if request.method == 'GET':
-        resident_id =int(request.GET['resident_id'])
+        application_id =int(request.GET['application_id'])
 
-        application = Application.objects.get(resident = resident_id)
+        application = Application.objects.get(application_id = application_id)
 
         if request.GET['approval_verified'] == "true":
             application.approval_verified = True

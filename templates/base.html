@@ -24,7 +24,7 @@
       <img src='{% static "img/medicaidTrackerLogo3d4.png" %}' class="logo navbar-brand{% if not user.is_authenticated%} logo_lg{% endif %}">
       <!-- <h1 class="title">Medicaid Tracker</h1> -->
     </a>
-      {% if user.is_authenticated%}
+      {% if user.is_authenticated %}
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -52,8 +52,8 @@
                 {{ user.first_name }} {{user.last_name}}
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Account</a>
-                <a class="dropdown-item" href="#">Settings</a>
+                <!-- <a class="dropdown-item" href="#">Account</a> -->
+                <!-- <a class="dropdown-item" href="#">Settings</a> -->
                 <a class="dropdown-item" href="{% url 'not_tracking' %}">Not Tracking</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{%url 'logout'%}">Log Out</a>
