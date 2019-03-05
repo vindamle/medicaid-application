@@ -3,431 +3,1952 @@
 {% block title %}Patient Show Page{% endblock %}
 
 {% block content %}
+{% load static %}
+{% if user.is_authenticated%}
+<div class="overlay" onclick="this.style.display = 'none'">
+	<!-- <h1>WOOHOO!</h1> -->
+	<img src='{% static "img/confetti.gif" %}'>
+</div>
 <div class="alertDiv">
-	<div class="alert alert-danger alert-dismissible fade show" role="alert">
-		<strong>Alert:</strong> RFI due within 10 days
-		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-		</button>
-	</div>
-	<div class="alert alert-danger alert-dismissible fade show" role="alert">
-		<strong>Alert:</strong> NCS Discrepancy
-		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-		</button>
-	</div>
+	{% for alert in resident_alerts %}
+			<div class="alert alert-danger alert-dismissible fade show" role="alert">
+				<strong>Alert:</strong> {{alert.alert_type.alert_name}} <!-- <button class="btn dismissBtn">Dismiss</button> -->
+				<span class="invisible alertId">{{alert.alert_id}}</span>
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+	{% endfor %}
 </div>
 
-<div class="container-fluid residentInfoDiv">
-	<h1 class="">{{alert.first_name}} {{alert.last_name}}</h1>
-	<!-- <p class="centered">Click any field to edit.</p> -->
-	<!-- <button class="btn" id="editBtn">Edit</button> -->
-<!-- 	<section id="demo">
-		<h4>Demo of JS-Populated Personal Information:</h4>
-		
-	</section> -->
+<div class="container-fluid residentInfoDiv applicationPage" data-application_id="{{application.application_id}}">
+	<h1>{{resident.first_name}} {{resident.last_name}}</h1>
+	<span class="invisible absolute" id="residentId" type="text">{{resident.resident_id}}</span>
+	<ul class="nav nav-tabs">
+	{% for application in applications %}
+    <li {% if application == applications.last %} class="active"{% endif %}>
+      <a data-toggle="tab" href="#application{{application.application_id}}" {% if application == applications.last %} class="active show"{% endif %}>
+        App #{{ forloop.counter }}: <span id="app{{application.application_id}}TabPhaseName">{{application.phase.phase_name}} - <span id="app{{application.application_id}}TabPhaseName">{{application.application_creation_date|date:'m/d/y'}}</span>
+      </a>
+    </li>
+	{% endfor %}
+  </ul>
+<div class="tab-content">
+{% for application in applications %}
+<div id="application{{application.application_id}}" class="tab-pane {% if application == applications.last %} in active {% else %} fade {% endif %}">
+	<h5 id="app{{application.application_id}}showStatus">Status: {{application.phase.phase_name}}</h5>
+
+	<!-- Trigger for Notes Modal -->
+	<div class="notesModalBtnDiv">
+		<button type="button" class="btn" data-toggle="modal" data-target="#notesModal{{application.application_id}}" id="notesModalBtn">&#128221; Notes</button>
+	</div>
+	<!-- Notes Modal -->
+	<div class="modal fade bd-example-modal" id="notesModal{{application.application_id}}" tabindex="-1" role="dialog" aria-labelledby="notesModal{{application.application_id}}Title" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered " role="document">
+	    <div class="modal-content">
+	      <div>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	        <h5 class="modal-title" id="">Notes</h5>
+	      </div>
+	      <div class="modal-body">
+	        ...Coming Soon!
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+	        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- Trigger for Misc Documents Modal -->
+	<div class="notesModalBtnDiv">
+		<button type="button" class="btn" data-toggle="modal" data-target="#miscDocsModal{{application.application_id}}" id="miscDocsModalBtn">Misc. Documents</button>
+	</div>
+	<!-- Misc Documents Modal -->
+	<div class="modal fade bd-example-modal" id="miscDocsModal{{application.application_id}}" tabindex="-1" role="dialog" aria-labelledby="miscDocsModal{{application.application_id}}Title" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered " role="document">
+	    <div class="modal-content">
+	      <div>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	        <h5 class="modal-title" id="">Misc. Documents</h5>
+	      </div>
+	      <div class="modal-body">
+	  			<table class="miscDocsTable" id="">
+	  				<thead>
+	  					<tr>
+	  						<th>Document Name:</th>
+	  						<th>Date Uploaded:</th>
+	  						<th></th>
+	  					</tr>
+	  				</thead>
+	  				<tbody>
+	      	{% for misc_doc in misc_docs %}
+	      		{% if misc_doc.application_id == application.application_id %}
+	      					<tr>
+	      						<td><a href="/{{ misc_doc.file }}" target = "_blank">{{misc_doc.file_name}}</a></td>
+	      						<td>{{ misc_doc.date_uploaded|date:'d/m/y' }}</td>
+	      						<td>
+	      							<button 
+												type="button" 
+												class="deleteDocBtn" 
+												aria-label="Close" 
+												onclick="
+													deleteDoc(
+														this,
+														{{application.application_id}},
+														{{ misc_doc.document_id }},
+														'document',
+														{{ misc_doc.document_id }},
+														'application_id'
+													)
+												"
+											>
+							          <span aria-hidden="true">&times;</span>
+							        </button>
+	      						</td>
+	      					</tr>
+	      		{% endif %}
+	      	{% endfor %}
+    				</tbody>
+    			</table>
+	      	<br>
+						<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> a document here:</label>
+						<br>
+	        <input 
+						type="file" 
+						accept="image/jpeg,image/png,application/pdf" 
+						onchange="
+							uploadDoc(
+								this, 
+								{{application.application_id}},
+								'document',
+								{{application.application_id}},
+								'misc_doc'
+							)
+						"
+					>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
 	<section>
-		<h4>Personal Information:</h4>
-		<ul>
+		<h4 class="collapsibleSection" onclick="collapseSection(this)">Personal Info:</h4>
+		<ul class="collapsibleContent">
 			<div class="row">
-				<div class="col-lg-4">
+				<div class="col-lg-4 applicationColumn firstColumn">
 					<li>
 						<label>Resident Name:</label>
-						<span class="">{{alert.first_name}} {{alert.last_name}}</span>
+						<span>{{application.resident.first_name}} {{application.resident.last_name}}</span>
 					</li>
-					<!--
-					EXPERIMENTING WITH RADIO BUTTONS AND SELECT DROPDOWNS:
-					<li>
-						<label>Short-Term / Long-Term Care: </label>
-						<select name="LTC" id="LTC_select" data-table="application">
-							<option value="short_term">Short-Term</option>
-							<option value="long_term">Long-Term</option>
-						</select>
-					</li>
-					<li>
-						<label>Short-Term / Long-Term Care: </label><br>
-						<form class="radio_form" data-table="application">
-							<input type="radio" name="LTC" value="short_term"> Short-Term<br>
-  						<input type="radio" name="LTC" value="long_term"> Long-Term<br>
-  					</form>
-					</li>
-					<li>
-						<label>Spousal Refusal: </label><br>
-						<form class="radio_form"  data-table="application">
-							<input type="radio" name="LTC" value=true> Yes<br>
-  						<input type="radio" name="LTC" value=false> No<br>
-  					</form>
-					</li> -->
 					<li>
 						<label>Date of Birth:</label>
-						<span class="">{{alert.dob|date:"Y-m-d"}}</span>
-					</li>
-					<li class="editableLi">
-						<label>Address:</label>
-						<input class="editable" id="address" data-table="resident" data-alert_id="" type="text" value="{{alert.address}}">
-					</li>
-				</div>
-				<div class="col-lg-4">
-					<li class="editableLi">
-						<label>City:</label>
-						<input class="editable" id="city" data-table="resident" data-alert_id="" type="text" value="{{alert.city}}">
-					</li>
-					<li class="editableLi">
-						<label>State:</label>
-						<input class="editable" id="state" data-table="resident" data-alert_id="" type="text" value="{{alert.state}}">
-					</li>
-					<li class="editableLi">
-						<label>Zip:</label>
-						<input class="editable" id="zip" data-table="resident" data-alert_id="" type="text" value="{{alert.zip}}">
-					</li>
-				</div>
-				<div class="col-lg-4">
-					<li class="editableLi">
-						<label>County:</label>
-						<input class="editable" id="county" data-table="resident" data-alert_id="" type="text" value="{{alert.county}}">
-					</li>
-					<li class="editableLi">
-						<label>Marital Status:</label>
-						<input class="editable" id="marital_status" data-table="resident" data-alert_id="" type="text" value="{{alert.marital_status}}">
+						<span>{{application.resident.dob|date:"M d, Y"}}</span>
 					</li>
 					<li>
 						<label>Facility:</label>
-						<input class="" type="text" value="{{alert.facility}}">
+						<span>{{application.resident.facility_name}}</span>
 					</li>
-					<li class="invisible absolute" id="residentId" type="text">{{alert.resident_id}}</li>
-					<li class="invisible absolute" id="phase">{{alert.phase.phase_id}}</li>
+				</div>
+				<div class="col-lg-4 applicationColumn">
+					<li class="editableLi">
+						<label>Address:</label>
+						<input class="editable" id="address" data-table="resident"  type="text" value="{{application.resident.address|default_if_none:''}}">
+					</li>
+					<li class="editableLi">
+						<label>City:</label>
+						<input class="editable" id="city" data-table="resident"  type="text" value="{{application.resident.city|default_if_none:''}}">
+					</li>
+					<li class="editableLi">
+						<label>State:</label>
+						<input class="editable" id="state" data-table="resident"  type="text" value="{{application.resident.state|default_if_none:''}}">
+					</li>
+					<li class="editableLi">
+						<label>Zip:</label>
+						<input class="editable" id="zip" data-table="resident"  type="number" value="{{application.resident.zip|default_if_none:''}}">
+					</li>
+				</div>
+				<div class="col-lg-4 applicationColumn">
+					<li class="editableLi">
+						<label>County:</label>
+						<input class="editable" id="county" data-table="resident"  type="text" value="{{application.resident.county|default_if_none:''}}">
+					</li>
+					<li class="editableLi">
+						<label>Phone:</label>
+						<input class="editable" id="phone" data-table="resident"  type="tel" value="{{application.resident.phone|default_if_none:''}}">
+					</li>
+					<li class="editableLi">
+						<label>Marital Status:</label>
+						<input class="editable" id="marital_status" data-table="resident"  type="text" value="{{application.resident.marital_status|default_if_none:''}}">
+					</li>
+					<li class="invisible absolute applicationId" id="applicationId" type="text">{{application.application_id}}</li>
+					<li class="invisible absolute" id="phase">{{application.phase.phase_id}}</li>
 				</div>
 			</div>
 		</ul>
 	</section>
 	<section>
-		<h4>Insurance Information:</h4>
-		<ul>
+		<h4 class="collapsibleSection"  onclick="collapseSection(this)">Insurance Info:</h4>
+		<ul class="collapsibleContent">
 			<div class="row">
-				<div class="col-lg-4">
+				<div class="col-lg-4 applicationColumn firstColumn">
 					<li class="editableLi">
 						<label>Primary Payor:</label>
-						<input class="editable" id="primary_payor" data-table="resident" data-alert_id="" type="text" value="{{alert.primary_payor}}">
+						<input class="editable" id="primary_payor" data-table="resident"  type="text" value="{{application.resident.primary_payor|default_if_none:''}}">
 					</li>
 					<li class="editableLi">
 						<label>Secondary Payor:</label>
-						<input class="editable" id="secondary_payor" data-table="resident" data-alert_id="" type="text" value="{{alert.secondary_payor}}">
+						<input class="editable" id="secondary_payor" data-table="resident"  type="text" value="{{application.resident.secondary_payor|default_if_none:''}}">
 					</li>
 				</div>
-				<div class="col-lg-4">
+
+				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
 						<label>Copay:</label>
-						<input class="editable" id="copay" data-table="application" data-alert_id="" type="text" value="{{application.copay}}">
+						$<input class="editable" id="copay" data-table="application" data-application_id="{{application.application_id}}"  type="text" value="{{application.copay|default_if_none:''}}">
 					</li>
 					<li class="editableLi">
 						<label>Copay Start Date:</label>
-						<input class="editable date" id="copay_start_date" data-table="application" data-alert_id="" type="date" value="{{application.copay_start_date}}">
+						<input class="editable date" id="copay_start_date" data-table="application" data-application_id="{{application.application_id}}"  type="date" value="{{application.copay_start_date|date:'Y-m-d'|default_if_none:''}}">
 					</li>
 					<li class="editableLi">
 						<label>Secondary Insurance Copay Percentage:</label>
-						<input class="editable" id="secondary_pays_copay" data-table="application" data-alert_id="" type="text" value="{{application.secondary_pays_copay}}">
+						<input class="editable" id="secondary_pays_copay" data-table="application" data-application_id="{{application.application_id}}"  type="number" value="{{application.secondary_pays_copay|default_if_none:''}}" min="0" max="100"> %
 					</li>
 				</div>
-				<div class="col-lg-4">
+				<div class="col-lg-4 applicationColumn">
 					<li class="editableLi">
 						<label>Last Medicare Date:</label>
-						<input class="editable date" type="date" value="{{application.medicaid_pickup_date}}">
+						<input class="editable date" type="date" value="{{application.last_medicare_date|date:'Y-m-d'|default_if_none:''}}">
 					</li>
 					<li class="editableLi">
 						<label>Cut From Medicare/Insurance Date:</label>
-						<input class="editable date" type="date" value="{{application.medicaid_pickup_date}}">
+						<input class="editable date" type="date" value="{{application.cut_from_medicare_date|date:'Y-m-d'|default_if_none:''}}">
 					</li>
 				</div>
 			</div>
 		</ul>
 	</section>
-	
-	<section>
-		<h4>Medicaid Application Information:</h4>
-		<ul>
-			<div class="row">
-				<div class="col-lg-4">
-					<li class="editableLi step1">
-						<label>Applicant Meeting Date:</label>
-						<input class="editable date" id="appointment_date" data-table="application" data-alert_id="" type="date" value="{{application.appointment_date|date:'Y-m-d'}}">
-					</li>
-					<li class="editableLi step3">
-						<label>Is Medicaid Pending?</label>
-						<input class="editable" id="is_medicaid_pending" data-table="application" data-alert_id="" type="text" value="{{application.is_medicaid_pending}}">
-					</li>
-					<li class="editableLi step3">
-						<label>Date of Medicaid Submission:</label>
-						<input class="editable date" id="date_of_medicaid_submission" data-table="application" data-alert_id="" type="date" value="{{application.date_of_medicaid_submission}}">
-					</li>
-					<li class="editableLi step3">
-						<label>Application County:</label>
-						<input class="editable" id="application_county" data-table="application" data-alert_id="" type="text" value="{{application.application_county}}">
-					</li>
-					<li class="editableLi step3">
-						<label>Application State:</label>
-						<input class="editable" id="application_state" data-table="application" data-alert_id="" type="text" value="{{application.application_state}}">
-					</li>
-				</div>
-				<div class="col-lg-4">
-					<li class="step1">
-						<label class=""><input type="checkbox" class="meetingCheckbox" {% if alert.phase.phase_id > 1 %} checked="checked"{% endif %}>Met with Applicant</label>
-						<!-- <select name="spousal" id="spousal_select" data-table="application">
-							<option value="no">No</option>
-							<option value="yes">Yes</option>
-						</select> 
-						<input class="invisible DBinfo" id="DBspousal">{{application.spousal}}-->
-					</li>
-					<li class="step3">
-						<label>Application Type:</label> 
-						<select name="application_type" id="application_type_select" data-table="application">
-							<option value="">Please select one:</option>
-							<option value="new_application">New Application</option>
-							<option value="conversion">Conversion</option>
-							<option value="payor_change">Payor Change</option>
-						</select>
-						<span class="invisible DBinfo" id="DBapplication_type">{{application.application_type}}</span>
-						<!-- <input class="editable" id="application_type" data-table="application" data-alert_id="">{{application.application_type}} -->
-					</li>
-					<li class="step3">
-						<label>Spousal/Single:</label>
-						<select name="spousal" id="spousal_select" data-table="application">
-							<option value="">Please select one:</option>
-							<option value="single">Single</option>
-							<option value="spousal">Spousal</option>
-						</select>
-						<span class="invisible DBinfo" id="DBspousal">{{application.spousal}}</span>
-					</li>
-					<li class="editableLi step3">
-						<label>Short-term/Long-Term Care:</label>
-						<select name="LTC" id="LTC_select" data-table="application">
-							<option value="">Please select one:</option>
-							<option value="short_term">Short-Term</option>
-							<option value="long_term">Long-Term</option>
-						</select>
-			 			<span class="invisible DBinfo" id="DBLTC">{{application.LTC}}</span>
-					</li>
-					<li class="editableLi step3">
-						<label>Spousal Refusal:</label>
-						<select name="spousal_refusal" id="LTC_select" data-table="application">
-							<option value="">Please select one:</option>
-							<option value="yes">Yes</option>
-							<option value="no">No</option>
-						</select>
-						<span class="invisible DBinfo" id="DBspousal_refusal">{{application.spousal_refusal}}</span>
-					</li>
+		<div id="applicationDiv">
+	<section id="applicationInfoSection">
+		<span class="invisible applicationId">{{application.application_id}}</span>
+		<h4 class="collapsibleSection" onclick="collapseSection(this)">Application Info:</h4>
+			<ul class="collapsibleContent">
+				<div class="row">
+					<div class="col-lg-4 applicationColumn firstColumn">
+						<li class="editableLi step1">
+							<label>Applicant Meeting Date:</label>
+							<input class="editable date" id="appointment_date" data-table="application" data-application_id="{{application.application_id}}"  type="date" value="{{application.appointment_date|date:'Y-m-d'|default_if_none:''}}">
+						</li>
+						<li class="step1">
+							<label><input type="checkbox" class="meetingCheckbox" data-application_id="{{application.application_id}}" {% if application.phase.phase_id > 1 %} checked="checked"{% endif %}>Met with Applicant</label>
+						</li>
+						<li class="editableLi step2">
+							<label>Medicaid Pickup Date:</label>
+							<input class="editable date" id="medicaid_pickup_date" data-table="application" data-application_id="{{application.application_id}}" data-alert_id=5 type="date" value="{{application.medicaid_pickup_date|date:'Y-m-d'|default_if_none:''}}">
+						</li>
+						<li class="step3">
+							<label>Application Type:</label>
+							<select name="application_type" id="application_type" data-table="application" data-application_id="{{application.application_id}}" onchange="sendInputInfoToDB(this)">
+								<option value="">Select one:</option>
+								<option value="new_application">New Application</option>
+								<option value="recertification">Recertification</option>
+								<option value="conversion">Conversion</option>
+								<option value="payor_change">Payor Change</option>
+							</select>
+							<span class="invisible DBinfo" id="DBapplication_type">{{application.application_type}}</span>
+						</li>
+						<li class="step3">
+							<label>Spousal/Single:</label>
+							<select name="spousal" id="spousal" data-table="application" data-application_id="{{application.application_id}}" onchange="sendInputInfoToDB(this)">
+								<option value="">Select one:</option>
+								<option value="single">Single</option>
+								<option value="spousal">Spousal</option>
+							</select>
+							<span class="invisible DBinfo" id="DBspousal">{{application.spousal}}</span>
+						</li>
+					</div>
+					<div class="col-lg-4 applicationColumn">
 						<li class="editableLi step3">
-						<label>Estimated NAMI/Income Cont Amt:</label>
-						<input class="editable" id="estimated_nami" data-table="application" data-alert_id="" type="text" value="{{application.estimated_nami}}">
-					</li>
-					<li class="editableLi step3">
-						<label>Date of RFI:</label>
-						<input class="editable date" id="date_of_rfi" data-table="application" data-alert_id="" type="date" value="{{application.date_of_rfi|date:'Y-m-d'}}">
-					</li>
-				</div>
-				<div class="col-lg-4">
-					<li class="editableLi step2">
-						<label>Medicaid Pickup Date:</label>
-							<input class="editable date" id="medicaid_pickup_date" data-table="application" data-alert_id=5 type="date" value="{{application.medicaid_pickup_date|date:'Y-m-d'}}">	
-					</li>
-					<li class="editableLi step3">
-						<label>Date of Deadline:</label>
-						<input class="editable date" id="date_of_deadline" data-table="application" data-alert_id="" type="date" value="{{application.date_of_deadline|date:'Y-m-d'}}">
-					</li>
-					<li class="editableLi step3">
-						<label>DSS Contact Address:</label>
-						<input class="editable" id="dss_contact_address" data-table="application" data-alert_id="" type="text" value="{{application.dss_contact_address}}">
-					</li>
-					<li class="editableLi step3">
-						<label>DSS Contact Phone:</label>
-						<input class="editable" id="dss_contact_phone" data-table="application" data-alert_id="" type="text" value="{{application.dss_contact_phone}}">
-					</li>
-					<li class="editableLi step3">
-						<label>DSS Contact Email:</label>
-						<input class="editable" id="dss_contact_email" data-table="application" data-alert_id="" type="text" value="{{application.dss_contact_email}}">
-					</li>
-					<li class="editableLi step3">
-						<label>DSS Contact Fax:</label>
-						<input class="editable" id="dss_contact_fax" data-table="application" data-alert_id="" type="text" value="{{application.dss_contact_fax}}">
-					</li>
-				</div>
-			</div>
-		</ul>
-	</section>
+							<label>Short-term/Long-Term Care:</label>
+							<select name="ltc" id="ltc" data-table="application" data-application_id="{{application.application_id}}" onchange="sendInputInfoToDB(this)">
+								<option value="">Select one:</option>
+								<option value="short_term">Short-Term</option>
+								<option value="long_term">Long-Term</option>
+							</select>
+							<span class="invisible DBinfo" id="DBltc">{{application.ltc}}</span>
+						</li>
+						<li class="editableLi step3">
+							<label>Spousal Refusal:</label>
+							<select name="spousal_refusal" id="spousal_refusal" data-table="application" data-application_id="{{application.application_id}}" onchange="sendInputInfoToDB(this)">
+								<option value="">Select one:</option>
+								<option value="yes">Yes</option>
+								<option value="no">No</option>
+							</select>
+							<span class="invisible DBinfo" id="DBspousal_refusal">{{application.spousal_refusal}}</span>
+						</li>
+						<li class="editableLi step3">
+							<label>Application County:</label>
+							<input class="editable" id="application_county" data-table="application" data-application_id="{{application.application_id}}"  type="text" value="{{application.application_county|default_if_none:''}}">
+						</li>
+						<li class="editableLi step3">
+							<label>Application State:</label>
+							<input class="editable" id="application_state" data-table="application" data-application_id="{{application.application_id}}"  type="text" value="{{application.application_state|default_if_none:''}}">
+						</li>
 
-	<section class="step3">
-		<h4>Document Upload:</h4>
-		<ul>
-			<div class="row">
-				<div class="col-lg-4">
-					<form class="fileInputLi" id="medicaid_application" method="post" enctype="multipart/form-data">
-		  			{% csrf_token %}
-						<label>Upload Medicaid Application Here:</label>
-						<input type="file" name="medicaid_application" value="{{application.medicaid_application}}" accept="image/jpeg
-						,image/png,application/pdf" multiple>
-						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
-						<input type="hidden" name="file_type" value="medicaid_application">
-						<button type="submit" class="uploadBtn">Upload</button>
-					</form>
-					<form class="fileInputLi" id="medicaid_confirmation" method="post" enctype="multipart/form-data">
-			 			{% csrf_token %}
-						<label>Upload Medicaid Confirmation Here:</label>
-						<input type="file" name="medicaid_confirmation" value="{{application.medicaid_confirmation}}" accept="image/jpeg
-						,image/png,application/pdf" multiple>
-						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
-						<input type="hidden" name="file_type" value="medicaid_confirmation">
-						<button type="submit" class="uploadBtn">Upload</button>
-					</form>
+						<li class="editableLi step3">
+							<label>Estimated NAMI/Income Contribution Amount:</label>
+							<br>
+							$<input type="text" class="editable" id="estimated_nami" data-table="application" data-application_id="{{application.application_id}}" value="{{application.estimated_nami|floatformat:2|default_if_none:''}}">
+						</li>
+					</div>
+					<div class="col-lg-4 applicationColumn">
+						<li class="editableLi step3">
+							<label>Date of Deadline:</label>
+							<input class="editable date" id="date_of_application_submission_deadline" data-table="application" data-application_id="{{application.application_id}}"  type="date" value="{{application.date_of_application_submission_deadline|date:'Y-m-d'|default_if_none:''}}">
+						</li>
+						<li class="editableLi step3">
+							<label>DSS Contact Address:</label>
+							<input class="editable" id="dss_contact_address" data-table="application" data-application_id="{{application.application_id}}"  type="text" value="{{application.dss_contact_address|default_if_none:''}}">
+						</li>
+						<li class="editableLi step3">
+							<label>DSS Contact Phone:</label>
+							<input class="editable" id="dss_contact_phone" data-table="application" data-application_id="{{application.application_id}}"  type="text" value="{{application.dss_contact_phone|default_if_none:''}}">
+						</li>
+						<li class="editableLi step3">
+							<label>DSS Contact Email:</label>
+							<input class="editable" id="dss_contact_email" data-table="application" data-application_id="{{application.application_id}}"  type="email" value="{{application.dss_contact_email|default_if_none:''}}">
+						</li>
+						<li class="editableLi step3">
+							<label>DSS Contact Fax:</label>
+							<input class="editable" id="dss_contact_fax" data-table="application" data-application_id="{{application.application_id}}"  type="text" value="{{application.dss_contact_fax|default_if_none:''}}">
+						</li>
+					</div>
 				</div>
-				<div class="col-lg-4">
-					<form class="fileInputLi" id="rfi" method="post" enctype="multipart/form-data">
-			 			{% csrf_token %}
-						<label>Upload Medicaid RFI Here:</label>
-						<input type="file" name="rfi" value="{{application.rfi}}" accept="image/jpeg
-						,image/png,application/pdf" multiple>
-						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
-						<input type="hidden" name="file_type" value="rfi">
-						<button type="submit" class="uploadBtn">Upload</button>
-					</form>
-					<form class="fileInputLi" id="medicaid_approval" method="post" enctype="multipart/form-data">
-			 			{% csrf_token %}
-						<label>Upload Medicaid Approval Here:</label>
-						<input type="file" name="medicaid_approval" value="{{application.medicaid_approval}}" accept="image/jpeg
-						,image/png,application/pdf" multiple>
-						<input type="hidden" name="resident_id" value="{{alert.resident_id}}">
-						<input type="hidden" name="file_type" value="medicaid_approval">
-						<button type="submit" class="uploadBtn">Upload</button>
-					</form>
+			<hr class= step3">
+			<!-- <h6 class="step3" id=Heading">Submission #1</h6> -->
+				<div class="row">
+					<div class="col-lg-3">
+						<li class="step3">
+							<input type="checkbox" class="submittedCheckbox" id="submittedCheckbox1" {% if application.phase.phase_id > 3 %} checked="checked"{% endif %}><label for="submittedCheckbox1">Medicaid Application Submitted</label>
+						</li>
+						<li class="editableLi step3">
+							<label>Submission Date:</label>
+							<input class="editable date" id="date_of_application_submission" data-table="application" data-application_id="{{application.application_id}}"  type="date" value="{{application.date_of_application_submission|date:'Y-m-d'}}">
+						</li>
+					</div>
+					<div class="col-lg-3">
+						<li class="step3">
+							<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Application here:</label>
+							<br>
+						{% if application.application_document %}
+							<a href="/{{ application.application_document.file }}" target = "_blank">{{application.application_document.file_name}}</a>
+							<!-- deleteBtn,appId,table,tableRowId,docFieldToEmptyOnDelete -->
+							<button 
+								type="button" 
+								class="deleteDocBtn" 
+								aria-label="Close" 
+								onclick="
+									deleteDoc(
+										this,
+										{{application.application_id}},
+										{{application.application_document.document_id}},
+										'application',
+										{{application.application_id}},
+										'application_document'
+									)
+								"
+							>
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+						{% else %}
+							<input 
+								type="file" 
+								accept="image/jpeg,image/png,application/pdf" 
+								onchange="
+									uploadDoc(
+										this,
+										{{application.application_id}},
+										'application',
+										{{application.application_id}},
+										'medicaid_application'
+									)
+								"
+							>
+						{% endif %}
+					</li>
+					</div>
+					<div class="col-lg-3">
+						<li class="step4">
+							<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Medicaid Confirmation here:</label>
+							<br>
+							{% if application.application_confirmation %}
+							<a href="/{{ application.application_confirmation.confirmation_document.file }}" target = "_blank">{{application.application_confirmation.confirmation_document.file_name}}</a>
+							<button 
+								type="button" 
+								class="deleteDocBtn" 
+								aria-label="Close" 
+								onclick="
+									deleteDoc(
+										this,
+										{{application.application_id}},
+										{{application.application_confirmation.confirmation_document.document_id}},
+										'application',
+										{{application.application_id}},
+										'application_confirmation'
+									)
+								"
+							>
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+						{% else %}
+							<input 
+								type="file" 
+								accept="image/jpeg,image/png,application/pdf" 
+								onchange="
+									uploadDoc(
+										this, 
+										{{application.application_id}},
+										'application',
+										{{application.application_id}},
+										'application_confirmation'
+									)
+								"
+							>
+							{% endif %}
+						</li>
+					</div>
+					<div class="col-lg-3">
+						<li class="editableLi step4">
+							<label>Response:</label>
+							<select name="initial_response" id="initial_response" data-table="application" data-application_id="{{application.application_id}}" onchange="sendInputInfoToDB(this);createResponseRow({{application.application_id}}, this)">
+								<option value="not_received">Not Received</option>
+								<option value="rfi">RFI</option>
+								<option value="approved">Approved</option>
+								<option value="denied">Denied</option>
+							</select>
+							<span class="invisible DBinfo" id="DBinitial_response">{{application.initial_response}}</span>
+						</li>
+						<!-- <li class="invisible absolute" id="application_id">{{application.application_id}}</li> -->
+					</div>
 				</div>
-				<!-- <div class="col-lg-4"> -->
-
-				<!-- </div> -->
-			</div>
-		</ul>
+			</ul>
+		</div>
 	</section>
-	<!-- <div class="approveBtnDiv"> -->
-		<button class="btn btn-success centered step3" id="approveBtn">Approve</button>
-	<!-- </div> -->
-	<section class="step4" id="approvedSection">
-		<h4>Approval Information:</h4>
-		<ul>
-			<div class="row">
-				<div class="col-lg-4">
-					<li class="editableLi">
-						<label>Approval Notice Date:</label>
-						 <input class="editable date" id="approval_notice_date" data-table="application" data-alert_id="" type="date" value="{{application.approval_notice_date}}">
-					</li>
-					<li class="editableLi">
-						<label>Approval Start Date:</label>
-						 <input class="editable date" id="approval_start_date" data-table="application" data-alert_id="" type="date" value="{{application.approval_start_date}}">
-					</li>
-					<li class="editableLi">
-						<label>Approval End Date:</label>
-						 <input class="editable date" id="approval_end_date" data-table="application" data-alert_id="" type="date" value="{{application.approval_end_date}}">
-					</li>
-				</div>
-				<div class="col-lg-4">
-					<li class="editableLi">
-						<label>NAMI/Income Contribution Amount:</label> 
-			 			<input class="editable" type="text" value="{{application.county}}">
-					</li>
-					<li class="editableLi">
-						<label>Fair Hearing Required?</label>
-			 			<input class="editable" id="fair_hearing_required" type="text" value="{{application.fair_hearing_required}}">
-					</li>
-					<li class="editableLi">
-						<label>Date of Medicaid Recertification:</label>
-						<input class="editable date" type="date" value="{{application.date_of_medicaid_recertification}}">
-					</li>
-				</div>
-				<div class="col-lg-4">
+	{% for rfi in rfis %}
+		{% if rfi.response.application_id == application.application_id %}
+			<section id="rfi{{rfi.rfi_id}}" data-application_id="{{rfi.response.application_id}}">
+				<h4 class="numberOfRFIs collapsibleSection responseH4" onclick="collapseSection(this)">RFI</h4>
+				<ul class="collapsibleContent" id="">
+					<button type="button" class="deleteResponseBtn" aria-label="Close" onclick="deleteResponse('rfi',{{rfi.rfi_id}})">
+		        <span aria-hidden="true">&times;</span>
+		      </button>
+					<div class="row">
+						<div class="col-lg-3 firstColumn applicationColumn">
+							<li class="invisible applicationId">
+							</li>
+							<li>
+								<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> RFI here:</label>
+								<br>
+							{% if rfi.document_id %}
+								<a href="/{{ rfi.document.file }}" target = "_blank">{{rfi.document.file_name}}</a>
+								<!-- uploadDoc = (input, appId, fileType) -->
+								<button 
+									type="button" 
+									class="deleteDocBtn" 
+									aria-label="Close" 
+									onclick="
+										deleteDoc(
+											this,
+											{{application.application_id}},
+											{{rfi.document.document_id}},
+											'rfi',
+											{{rfi.rfi_id}},
+											'document'
+										)
+									"
+								>
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+							{% else %}
+								<input 
+									type="file" 
+									accept="image/jpeg,image/png,application/pdf" 
+									onchange="
+										uploadDoc(
+											this, 
+											{{application.application_id}},
+											'rfi',
+											{{rfi.rfi_id}},
+											'rfi'
+										)
+									"
+								>
+							{% endif %}
+							</li>
+						</div>
+						<div class="col-lg-3 applicationColumn">
+							<li class="editableLi ">
+								<label>RFI Due Date:</label>
+								<input class="editable date  due_date" id="rfi_due_date" data-table="rfi"  data-application_id="{{rfi.response.application.application_id}}" data-rfi_id="{{rfi.rfi_id}}" type="date" value="{{rfi.rfi_due_date|date:'Y-m-d'|default_if_none:''}}" onkeyup="checkIfEnterKey(this, event)">
+							</li>
+							<li class="editableLi">
+								<label>Extension Requested?</label>
+								<select name="rfi_extension_request" id="rfi_extension_request" data-table="rfi" data-application_id="{{rfi.response.application.application_id}}" data-rfi_id="{{rfi.rfi_id}}" onchange="sendInputInfoToDB(this); extensionRequested(this, {{rfi.response.application.application_id}}, {{rfi.rfi_id}})">
+									<option value="no">No</option>
+									<option value="yes">Yes</option>
+								</select>
+								<span class="invisible DBinfo" id="DBrfi_extension_request">{{rfi.rfi_extension_request}}</span>
+							</li>
+							<li class="editableLi {% if rfi.rfi_extension_request != 'yes' %} invisible {% endif %}">
+								<label>Extension Granted?</label>
+								<select name="rfi_extension_response" id="rfi_extension_response" data-table="rfi" data-application_id="{{rfi.response.application.application_id}}" data-rfi_id="{{rfi.rfi_id}}" onchange="sendInputInfoToDB(this); newRfiDueDatePrompt(this)">
+									<option value="no">No</option>
+									<option value="yes">Yes</option>
+								</select>
+								<span class="invisible DBinfo" id="DBrfi_extension_response">{{rfi.rfi_extension_response}}</span>
+							</li>
+						</div>
+						<div class="col-lg-3 applicationColumn">
+							<li>
+								<label><input type="checkbox" class="documentationSubmittedCheckbox " id="rfi_documentation_submitted" data-table="rfi" data-application_id="{{rfi.response.application.application_id}}" data-rfi_id="{{rfi.rfi_id}}" ${checked}>Documentation Submitted</label>
+							</li>
+							<li class="editableLi step5 ">
+								<label>Submission Date:</label>
+								<input class="editable date " id="rfi_documentation_submitted_date" data-table="rfi"  data-application_id="{{rfi.response.application.application_id}}" data-rfi_id="{{rfi.rfi_id}}" type="date" value="{{rfi.rfi_documentation_submitted_date|date:'Y-m-d'|default_if_none:''}}" onkeyup="checkIfEnterKey(this, event)">
+							</li>
+						</div>
+						<div class="col-lg-3 applicationColumn">
+							<li class="editableLi step5 ">
+								<label>Response:</label>
+								<select name="response_select" class=" responseSelect" id="rfi_response" data-table="rfi" data-application_id="{{rfi.response.application.application_id}}" data-rfi_id="{{rfi.rfi_id}}" onchange="sendInputInfoToDB(this); createResponseRow({{rfi.response.application.application_id}}, this)">
+									<option value="not_received">Not Received</option>
+									<option value="rfi">RFI</option>
+									<option value="approved">Approved</option>
+									<option value="denied">Denied</option>
+								</select>
+								<span class="invisible DBinfo" id="DBrfi_response">{{rfi.rfi_response}}</span>
+							</li>
+						</div>
+					</div>
+				</ul>
+			</section>
+		{%endif%}
+	{% endfor %} <!-- end of rfi for loop -->
+	{% for denial in denials %}
+		{% if denial.response.application_id == application.application_id %}
+			<section id="denial{{denial.denial_id}}">
+				<h4 class="numberOfRFIs collapsibleSection responseH4" onclick="collapseSection(this)">Denial</h4>
+				<ul class="collapsibleContent" id="">
+					<button type="button" class="deleteResponseBtn" aria-label="Close" onclick="deleteResponse('denial',{{denial.denial_id}})">
+		        <span aria-hidden="true">&times;</span>
+		      </button>
+					<div class="row">
+						<div class="col-lg-3 firstColumn applicationColumn">
+							<li class="editableLi ">
+								<label>Denial Notice Date:</label>
+								<input class="editable date  due_date" id="denial_notice_date" data-table="denial"  data-application_id="{{denial.response.application_id}}" data-denial_id="{{denial.denial_id}}" type="date" onkeyup="checkIfEnterKey(this, event)" value="{{denial.denial_notice_date|date:'Y-m-d'}}">
+							</li>
+							
+						</div>
+						<div class="col-lg-3 applicationColumn">
+							<li>
+								<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Denial here:</label>
+								<br>
+							{% if denial.document_id %}
+								<a href="/{{ denial.document.file }}" target = "_blank">{{denial.document.file_name}}</a>
+								<button 
+									type="button" 
+									class="deleteDocBtn" 
+									aria-label="Close" 
+									onclick="
+										deleteDoc(
+											this,
+											{{application.application_id}},
+											{{ denial.document.document_id }},
+											'denial',
+											{{denial.denial_id}},
+											'document'
+										)
+									"
+								>
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+							{% else %}
+								<input 
+									type="file" 
+									accept="image/jpeg,image/png,application/pdf" 
+									onchange="
+										uploadDoc(
+											this, 
+											{{application.application_id}},
+											'denial',
+											{{denial.denial_id}},
+											'denial'
+										)
+									"
+								>
 
-				</div>
-			</div>
-		</ul>
-	</section>
+							{% endif %}
+							</li>
+						</div>
+						<div class="col-lg-4 applicationColumn">
+							<li>
+								<label><input type="checkbox" class="documentationSubmittedCheckbox " id="denial_documentation_submitted" data-table="denial" data-application_id="{{denial.response.application_id}}" data-denial_id="{{denial.denial_id}}">Documentation Submitted</label>
+							</li>
+							<li class="editableLi step5 ">
+								<label>Submission Date:</label>
+								<input class="editable date " id="denial_documentation_submitted_date" data-table="denial"  data-application_id="{{denial.response.application_id}}" data-denial_id="{{denial.denial_id}}" type="date" onkeyup="checkIfEnterKey(this, event)">
+							</li>
+						</div>
+					</div>
+
+					<div class="row ">
+						<div class="col-lg-3">
+							<li class="editableLi  ">
+								<label>Contacted DSS?</label>
+								<select name="denial_contacted_dss" id="denial_contacted_dss" data-table="denial" data-denial_id="{{denial.denial_id}}"  onchange="sendInputInfoToDB(this)">
+									<option value="">Select one:</option>
+									<option value="yes">Yes</option>
+									<option value="no">No</option>
+								</select>
+								<span class="invisible DBinfo" id="DBdenial_contacted_dss">{{denial.denial_contacted_dss}}</span>
+							</li>
+						</div>
+						<div class="col-lg-3">
+							<li class="editableLi  ">
+								<label>Resolved through DSS?</label>
+								<select name="denial_resolved_through_dss" id="denial_resolved_through_dss" data-table="denial" data-denial_id="{{denial.denial_id}}"  onchange="sendInputInfoToDB(this)">
+									<option value="">Select one:</option>
+									<option value="yes">Yes</option>
+									<option value="no">No</option>
+								</select>
+								<span class="invisible DBinfo" id="DBdenial_resolved_through_dss">{{denial.denial_resolved_through_dss}}</span>
+							</li>
+						</div>
+						<div class="col-lg-3">
+							<!-- Button trigger modal -->
+								<button type="button" class="btn btn-primary  " data-toggle="modal" data-target="#fairHearingsModal{{denial.denial_id}}" id="fairHearingsModalBtn">View/Add Fair Hearing Info</button>
+						</div>
+
+							<div class="modal fade bd-example-modal-lg fairHearingsModal" id="fairHearingsModal{{denial.denial_id}}" tabindex="-1" role="dialog" aria-labelledby="fairHearingsModalTitle" aria-hidden="true">
+							  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+							    <div class="modal-content">
+							      <div>
+							        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							          <span aria-hidden="true">&times;</span>
+							        </button>
+							        <h5 class="modal-title" id="exampleModalLongTitle">Fair Hearings</h5>
+							      </div>
+							      <div class="modal-body">
+										{% for fair_hearing in fair_hearings %}
+											{% if fair_hearing.response.response_id == denial.response.response_id %}
+												<div class="modalRowDiv">
+													<button type="button" class="close" onclick="removeModalRow(this, {{fair_hearing.fair_hearing_id}}, 'fair_hearing')">
+									          <span >&times;</span>
+									        </button>
+													<h6 class="fairHearingH6">Fair Hearing</h6>
+													<div class="row modalRow">
+														<div class="col-lg-4 col-md-6 col-sm-12 modalRowColumn">
+															<li>
+																<label>Date:</label>
+																<input class="editable date" id="fair_hearing_date" data-table="fair_hearing" data-fair_hearing_id="{{fair_hearing.fair_hearing_id}}" type="date" value="{{fair_hearing.fair_hearing_date|date:'Y-m-d'}}" onkeyup="checkIfEnterKey(this, event)" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+															<li>
+																<label>Time:</label>
+																<input class="editable time" id="fair_hearing_time" data-table="fair_hearing" data-fair_hearing_id="{{fair_hearing.fair_hearing_id}}" type="time" value="{{fair_hearing.fair_hearing_time|time:'H:i'}}" onkeyup="checkIfEnterKey(this, event)" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+														</div>
+														<div class="col-lg-4 col-md-6 col-sm-12 modalRowColumn">
+															<li>
+																<label>Address:</label>
+																<input type="text" class="editable" id="fair_hearing_address" data-table="fair_hearing" data-fair_hearing_id="{{fair_hearing.fair_hearing_id}}" value="{{fair_hearing.fair_hearing_address}}" onkeyup="checkIfEnterKey(this, event)" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+															<li>
+																<label>Outcome:</label>
+																<input type="text" class="editable" id="fair_hearing_outcome" data-table="fair_hearing" data-fair_hearing_id="{{fair_hearing.fair_hearing_id}}" value="{{fair_hearing.fair_hearing_outcome}}" onkeyup="checkIfEnterKey(this, event)" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+														</div>
+														<div class="col-lg-4 col-md-6 col-sm-12 modalRowColumn">
+															<li>
+																<label>Facility Representative:</label>
+																<select name="fair_hearing_representative_type" id="fair_hearing_representative_type" data-table="fair_hearing" data-fair_hearing_id="{{fair_hearing.fair_hearing_id}}" onchange="sendInputInfoToDB(this)">
+																	<option value="">Select one:</option>
+																	<option value="regional_coordinator">Regional Coordinator</option>
+																	<option value="facility_coordinator">Facility Coordinator</option>
+																	<option value="attorney">Attorney</option>
+																</select>
+																<span class="invisible DBinfo" id="DBfair_hearing_representative_type">{{fair_hearing.fair_hearing_representative_type}}</span>
+															</li>
+															<li>
+																<label>Representative's Name:</label>
+																<input type="text" class="editable" id="fair_hearing_representative_name" data-table="fair_hearing" data-fair_hearing_id="{{fair_hearing.fair_hearing_id}}" value="{{fair_hearing.fair_hearing_representative_name}}" onkeyup="checkIfEnterKey(this, event)" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+														</div>
+														<div class="col-lg-6 col-sm-12 modalRowColumn">
+															<li>
+																<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Notice here:</label>
+																<br>
+															{% if fair_hearing.fair_hearing_confirmation %}
+																<a href="/{{ fair_hearing.fair_hearing_confirmation.confirmation_document.file }}" target = "_blank">{{fair_hearing.fair_hearing_confirmation.confirmation_document.file_name}}</a>
+																<button 
+																	type="button" 
+																	class="deleteDocBtn" 
+																	aria-label="Close" 
+																	onclick="
+																		deleteDoc(
+																			this,
+																			{{application.application_id}},
+																			{{ fair_hearing.fair_hearing_confirmation.confirmation_document.document_id }},
+																			'fair_hearing',
+																			{{fair_hearing.fair_hearing_id}},
+																			'fair_hearing_confirmation'
+																		)
+																	"
+																>
+												          <span aria-hidden="true">&times;</span>
+												        </button>
+															{% else %}
+																<input 
+																	type="file" 
+																	accept="image/jpeg,image/png,application/pdf" 
+																	onchange="
+																		uploadDoc(
+																			this, 
+																			{{application.application_id}},
+																			'fair_hearing',
+																			{{fair_hearing.fair_hearing_id}},
+																			'fair_hearing_confirmation'
+																		)
+																	"
+																>
+															{% endif %}
+															</li>
+														</div>
+														<div class="col-lg-6 col-sm-12 modalRowColumn">
+															<li>
+																<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Decision here:</label>
+																<br>
+															{% if fair_hearing.fair_hearing_outcome_document %}
+																<a href="/{{ fair_hearing.fair_hearing_outcome_document.file }}" target = "_blank">{{fair_hearing.fair_hearing_outcome_document.file_name}}</a>
+																<button 
+																	type="button" 
+																	class="deleteDocBtn" 
+																	aria-label="Close" 
+																	onclick="
+																		deleteDoc(
+																			this,
+																			{{application.application_id}},
+																			{{ fair_hearing.fair_hearing_outcome_document.document_id }},
+																			'fair_hearing',
+																			{{fair_hearing.fair_hearing_id}},
+																			'fair_hearing_outcome_document'
+																		)
+																	"
+																>
+												          <span aria-hidden="true">&times;</span>
+												        </button>
+															{% else %}
+																<input 
+																	type="file" 
+																	accept="image/jpeg,image/png,application/pdf" 
+																	onchange="
+																		uploadDoc(
+																			this, 
+																			{{application.application_id}},
+																			'fair_hearing',
+																			{{fair_hearing.fair_hearing_id}},
+																			'fair_hearing_outcome_document'
+																		)
+																	"
+																>
+															{% endif %}
+															</li>
+														</div>
+													</div>
+												</div>
+											{%endif%}
+										{% endfor %}
+     								</div>
+      							<div class="modal-footer">
+								      <div class="editableLi addNamiBtnLi">
+												<button class="addModalRowBtn" onclick="addFairHearingRowHTML(this, {{denial.response.response_id}})">Add Fair Hearing &#x271A; </button>
+											</div>
+       								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+     								</div>
+   								</div>
+							  </div>
+							</div>
+							<div class="col-lg-3">
+							<li>
+								<button type="button" class="btn btn-primary" id="createNewApp" onclick="createNewApp()">Create New Application</button>
+							</li>
+						</div>
+							
+					</div>
+
+
+
+				</ul>
+			</section>
+		{%endif%}
+	{% endfor %}<!-- end of denials loop -->
+	{% for approval in approvals %}
+		{% if approval.response.application_id == application.application_id %}
+			<section id="approval{{approval.approval_id}}">
+			<h4 class="collapsibleSection responseH4"  onclick="collapseSection(this)">Approval</h4>
+			<ul class="collapsibleContent">
+				<button type="button" class="deleteResponseBtn" aria-label="Close" onclick="deleteResponse('approval',{{approval.approval_id}})">
+	        <span aria-hidden="true">&times;</span>
+	      </button>
+				<div class="row">
+					<div class=" col-lg-2 col-sm-12 applicationColumn firstColumn">
+						<li class="editableLi">
+							<label>Approval Notice Date:</label>
+							 <input class="editable date" id="approval_notice_date" data-table="approval" data-approval_id="{{approval.approval_id}}"  type="date" value="{{approval.approval_notice_date|date:'Y-m-d'}}">
+						</li>
+					</div>
+					<div class=" col-lg-3 col-sm-12 applicationColumn">
+						<li class="editableLi">
+							<label>Approval Start Date:</label>
+							 <input class="editable date" id="approval_start_date" data-table="approval" data-approval_id="{{approval.approval_id}}"  type="date" value="{{approval.approval_start_date|date:'Y-m-d'}}">
+						</li>
+						<li class="editableLi">
+							<label>Approval End Date:</label>
+							 <input class="editable date" id="approval_end_date" data-table="approval" data-approval_id="{{approval.approval_id}}"  type="date" value="{{approval.approval_end_date|date:'Y-m-d'}}">
+						</li>
+						<li class="editableLi">
+							<label>Recertification Date:</label>
+							<input class="editable date" type="date" id="approval_recertification_date" value="{{approval.approval_recertification_date|date:'Y-m-d'}}" data-table="approval" data-approval_id="{{approval.approval_id}}">
+						</li>
+					</div>
+					<div class="col-lg-4 col-sm-12 applicationColumn">
+						<li>
+								<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Approval here:</label>
+								<br>
+							{% if approval.document_id %}
+								<a href="/{{ approval.document.file }}" target = "_blank">{{approval.document.file_name}}</a>
+								<button 
+									type="button" 
+									class="deleteDocBtn" 
+									aria-label="Close" 
+									onclick="
+										deleteDoc(
+											this,
+											{{application.application_id}},
+											{{ approval.document.document_id }},
+											'approval',
+											{{approval.approval_id}},
+											'document'
+										)
+									"
+								>
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+							{% else %}
+								<input 
+									type="file" 
+									accept="image/jpeg,image/png,application/pdf" 
+									onchange="
+										uploadDoc(
+											this, 
+											{{application.application_id}},
+											'approval',
+											{{approval.approval_id}},
+											'approval'
+										)
+									"
+								>
+							{% endif %}
+							</li>
+							<div class="modal fade bd-example-modal-lg" id="namiModal{{approval.approval_id}}" tabindex="-1" role="dialog" aria-labelledby="namiModalTitle" aria-hidden="true">
+							  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+							    <div class="modal-content">
+							      <div>
+							        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							          <span aria-hidden="true">&times;</span>
+							        </button>
+							        <h5 class="modal-title" id="exampleModalLongTitle">NAMIs</h5>
+							      </div>
+							      <div class="modal-body">
+										{% for nami in namis %}
+											{% if nami.approval.approval_id == approval.approval_id %}
+												<div class="modalRowDiv">
+													<button type="button" class="close" onclick="removeModalRow(this, {{nami.nami_id}}, 'nami')">
+									          <span >&times;</span>
+									        </button>
+													<h6 class="namiH6">NAMI</h6>
+													<div class="row modalRow">
+														<div class="col-lg-4 col-sm-12 modalRowColumn">
+															<li>
+																<label>NAMI Start Date:</label>
+																<input class="editable date" id="nami_start_date" data-table="nami" data-nami_id="{{nami.nami_id}}" type="date" value="{{nami.nami_start_date|date:'Y-m-d'}}" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+														</div>
+														<div class="col-lg-4 col-sm-12 modalRowColumn">
+															<li>
+																<label>NAMI End Date:</label>
+																<input class="editable date" id="nami_end_date" data-table="nami" data-nami_id="{{nami.nami_id}}" type="date" value="{{nami.nami_end_date|date:'Y-m-d'}}" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+														</div>
+														<div class="col-lg-4 col-sm-12 modalRowColumn">
+															<li>
+																<label>Amount:</label>
+																$<input type="number" class="editable" id="nami_amount" data-table="nami" data-nami_id="{{nami.nami_id}}" value="{{nami.nami_amount|floatformat:2}}" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+														</div>
+													</div>
+												</div>
+											{%endif%}
+										{% endfor %}
+     								</div>
+      							<div class="modal-footer">
+								      <div class="editableLi addNamiBtnLi">
+												<button class="addModalRowBtn" onclick="addNAMIRowHTML(this, {{approval.approval_id}})">Add NAMI &#x271A; </button>
+											</div>
+       								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+     								</div>
+   								</div>
+							  </div>
+							</div>
+						</div>
+						<div class="col-lg-3 col-sm-12 applicationColumn">
+							<li>
+						<!-- Button trigger modal -->
+								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#namiModal{{approval.approval_id}}" id="namiModalBtn">View/Add NAMIs</button>
+							</li>
+							<li class="editableLi step6">
+								<label>Satisfied with approval?</label>
+								<select name="approval_satisfied" id="approval_satisfied" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this); revealNextNotSatisfiedStep(this, 1)">
+									<option value="">Select one:</option>
+									<option value="yes">Yes</option>
+									<option value="no">No</option>
+								</select>
+								<span class="invisible DBinfo" id="DBapproval_satisfied">{{approval.approval_satisfied}}</span>
+							</li>
+						</div>
+					</div>
+					<hr class="notSatisfied">
+					<div class="row notSatisfiedRow">
+						<div class="col-lg-4">
+							<li class="editableLi notSatisfied notSatisfied1">
+								<label>Contacted DSS?</label>
+								<select name="approval_contacted_dss" id="approval_contacted_dss" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this);revealNextNotSatisfiedStep(this, 2)">
+									<option value="">Select one:</option>
+									<option value="yes">Yes</option>
+									<option value="no">No</option>
+								</select>
+								<span class="invisible DBinfo" id="DBapproval_contacted_dss">{{approval.approval_contacted_dss}}</span>
+							</li>
+						</div>
+						<div class="col-lg-4">
+							<li class="editableLi notSatisfied notSatisfied2">
+								<label>Resolved through DSS?</label>
+								<select name="approval_resolved_through_dss" id="approval_resolved_through_dss" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this);revealNextNotSatisfiedStep(this, 3)">
+									<option value="">Select one:</option>
+									<option value="yes">Yes</option>
+									<option value="no">No</option>
+								</select>
+								<span class="invisible DBinfo" id="DBapproval_resolved_through_dss">{{approval.approval_resolved_through_dss}}</span>
+							</li>
+						</div>
+						<div class="col-lg-4">
+							<!-- Button trigger modal -->
+								<button type="button" class="btn btn-primary notSatisfied notSatisfied3" data-toggle="modal" data-target="#fairHearingsModal{{approval.approval_id}}" id="fairHearingsModalBtn">View/Add Fair Hearing Info</button>
+						</div>
+
+							<div class="modal fade bd-example-modal-lg fairHearingsModal" id="fairHearingsModal{{approval.approval_id}}" tabindex="-1" role="dialog" aria-labelledby="fairHearingsModalTitle" aria-hidden="true">
+							  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+							    <div class="modal-content">
+							      <div>
+							        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							          <span aria-hidden="true">&times;</span>
+							        </button>
+							        <h5 class="modal-title" id="exampleModalLongTitle">Fair Hearings</h5>
+							      </div>
+							      <div class="modal-body">
+										{% for fair_hearing in fair_hearings %}
+											{% if fair_hearing.response.response_id == approval.response.response_id %}
+												<div class="modalRowDiv">
+													<button type="button" class="close" onclick="removeModalRow(this, {{fair_hearing.fair_hearing_id}}, 'fair_hearing')">
+									          <span >&times;</span>
+									        </button>
+													<h6 class="fairHearingH6">Fair Hearing</h6>
+													<div class="row modalRow">
+														<div class="col-lg-4 col-md-6 col-sm-12 modalRowColumn">
+															<li>
+																<label>Date:</label>
+																<input class="editable date" id="fair_hearing_date" data-table="fair_hearing" data-fair_hearing_id="{{fair_hearing.fair_hearing_id}}" type="date" value="{{fair_hearing.fair_hearing_date|date:'Y-m-d'}}" onkeyup="checkIfEnterKey(this, event)" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+															<li>
+																<label>Time:</label>
+																<input class="editable time" id="fair_hearing_time" data-table="fair_hearing" data-fair_hearing_id="{{fair_hearing.fair_hearing_id}}" type="time" value="{{fair_hearing.fair_hearing_time|time:'H:i'}}" onkeyup="checkIfEnterKey(this, event)" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+														</div>
+														<div class="col-lg-4 col-md-6 col-sm-12 modalRowColumn">
+															<li>
+																<label>Address:</label>
+																<input type="text" class="editable" id="fair_hearing_address" data-table="fair_hearing" data-fair_hearing_id="{{fair_hearing.fair_hearing_id}}" value="{{fair_hearing.fair_hearing_address}}" onkeyup="checkIfEnterKey(this, event)" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+															<li>
+																<label>Outcome:</label>
+																<input type="text" class="editable" id="fair_hearing_outcome" data-table="fair_hearing" data-fair_hearing_id="{{fair_hearing.fair_hearing_id}}" value="{{fair_hearing.fair_hearing_outcome}}" onkeyup="checkIfEnterKey(this, event)" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+														</div>
+														<div class="col-lg-4 col-md-6 col-sm-12 modalRowColumn">
+															<li>
+																<label>Facility Representative:</label>
+																<select name="fair_hearing_representative_type" id="fair_hearing_representative_type" data-table="fair_hearing" data-fair_hearing_id="{{fair_hearing.fair_hearing_id}}" onchange="sendInputInfoToDB(this)">
+																	<option value="">Select one:</option>
+																	<option value="regional_coordinator">Regional Coordinator</option>
+																	<option value="facility_coordinator">Facility Coordinator</option>
+																	<option value="attorney">Attorney</option>
+																</select>
+																<span class="invisible DBinfo" id="DBfair_hearing_representative_type">{{fair_hearing.fair_hearing_representative_type}}</span>
+															</li>
+															<li>
+																<label>Representative's Name:</label>
+																<input type="text" class="editable" id="fair_hearing_representative_name" data-table="fair_hearing" data-fair_hearing_id="{{fair_hearing.fair_hearing_id}}" value="{{fair_hearing.fair_hearing_representative_name}}" onkeyup="checkIfEnterKey(this, event)" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+														</div>
+														<div class="col-lg-6 col-sm-12 modalRowColumn">
+															<li>
+																<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Notice here:</label>
+																<br>
+															{% if fair_hearing.fair_hearing_confirmation %}
+																<a href="/{{ fair_hearing.fair_hearing_confirmation.confirmation_document.file }}" target = "_blank">{{fair_hearing.fair_hearing_confirmation.confirmation_document.file_name}}</a>
+																<button 
+																	type="button" 
+																	class="deleteDocBtn" 
+																	aria-label="Close" 
+																	onclick="
+																		deleteDoc(
+																			this,
+																			{{application.application_id}},
+																			{{ fair_hearing.fair_hearing_confirmation.confirmation_document.document_id }},
+																			'fair_hearing',
+																			{{fair_hearing.fair_hearing_id}},
+																			'fair_hearing_confirmation'
+																		)
+																	"
+																>
+												          <span aria-hidden="true">&times;</span>
+												        </button>
+															{% else %}
+																<input 
+																	type="file" 
+																	accept="image/jpeg,image/png,application/pdf" 
+																	onchange="
+																		uploadDoc(
+																			this, 
+																			{{application.application_id}},
+																			'fair_hearing',
+																			{{fair_hearing.fair_hearing_id}},
+																			'fair_hearing_confirmation'
+																		)
+																	"
+																>
+															{% endif %}
+															</li>
+														</div>
+														<div class="col-lg-6 col-sm-12 modalRowColumn">
+															<li>
+																<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Decision here:</label>
+																<br>
+															{% if fair_hearing.fair_hearing_outcome_document %}
+																<a href="/{{ fair_hearing.fair_hearing_outcome_document.file }}" target = "_blank">{{fair_hearing.fair_hearing_outcome_document.file_name}}</a>
+																<button 
+																	type="button" 
+																	class="deleteDocBtn" 
+																	aria-label="Close" 
+																	onclick="
+																		deleteDoc(
+																			this,
+																			{{application.application_id}},
+																			{{ fair_hearing.fair_hearing_outcome_document.document_id }},
+																			'fair_hearing',
+																			{{fair_hearing.fair_hearing_id}},
+																			'fair_hearing_outcome_document'
+																		)
+																	"
+																>
+												          <span aria-hidden="true">&times;</span>
+												        </button>
+															{% else %}
+																<input 
+																	type="file" 
+																	accept="image/jpeg,image/png,application/pdf" 
+																	onchange="
+																		uploadDoc(
+																			this, 
+																			{{application.application_id}},
+																			'fair_hearing',
+																			{{fair_hearing.fair_hearing_id}},
+																			'fair_hearing_outcome_document'
+																		)
+																	"
+																>
+															{% endif %}
+															</li>
+														</div>
+													</div>
+												</div>
+											{%endif%}
+										{% endfor %}
+     								</div>
+      							<div class="modal-footer">
+								      <div class="editableLi addNamiBtnLi">
+												<button class="addModalRowBtn" onclick="addFairHearingRowHTML(this, {{approval.response.response_id}})">Add Fair Hearing &#x271A; </button>
+											</div>
+       								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+     								</div>
+   								</div>
+							  </div>
+							</div>
+
+
+					</div>
+				</ul>
+			</section>
+		{% endif %}
+	{% endfor %} <!-- end of approvals for loop -->
+</div><!-- end of applicationDiv-->
+{% endfor %} <!-- end of for application in applications loop -->
 </div>
+</div>
+{% else %}
+  <h1>You are not logged in</h1>
+  <a href="{% url 'login' %}">login</a>
+{% endif %}
 {% endblock %}
-{% load static %}
+
+
+
+
+
+
+
+
+
+
 {% block scripts %}
+<script src="{% static 'js/show.js' %}"></script>
+<script type="text/javascript">
+const residentId = document.querySelector('#residentId').innerHTML;
+$(document).ready(()=>{
+	// let numberOfNAMIs;
+	let html = "";
+	let numberOfApprovals = 0;
 
-	<script src="{% static 'js/show.js' %}"></script>
+	{% for application in applications %}
 
-	<script type="text/javascript">
-		function NewLi(labelValue, spanValue) {
-			this.labelValue = labelValue;
-  		this.spanValue = spanValue;
-		};
+		var applicationDiv = document.querySelector('#application{{application.application_id}}');
+		var initial_response = applicationDiv.querySelector('#initial_response');
+		var date_of_application_submission = applicationDiv.querySelector('#date_of_application_submission');
 
-		const fields = [
-			['First Name','{{alert.first_name}}'],
-			['Last Name','{{alert.last_name}}'],
-			['Date of Birth','{{alert.dob}}'],
-		]
-
-		const newField = new NewLi('First Name','{{alert.first_name}}');
-
-		const demoSection = document.querySelector('#demo');
-		// const someText = "<span>Hello</span>"
-
-		for (var i = 0; i < fields.length; i++) {
-			const field = fields[i];
-			demoSection.innerHTML += `
-			<li class="editableLi">
-				<label>${field[0]}</label>
-				<span class="editable" id="first_name" data-table="alert" data-alert_id="">${field[1]}</span>
-			</li>
-			`
+		if(date_of_application_submission.value) {
+			$(`#${applicationDiv.id} .step4`).css('display', 'block');
 		}
 
-		// const fields = [
-		// 	{
-		// 		label: 'First Name',
-		// 		value: '{{alert.first_name}}'
-		// 	}
-		// ]
-		// console.log(fields);
+		date_of_application_submission.addEventListener('blur', (e) => {
+			if(date_of_application_submission.value && parseInt(date_of_application_submission.value) > 2010 && parseInt(date_of_application_submission.value) < 2100) {
+				$(`#${applicationDiv.id} .step4`).fadeIn();
+				phaseChange(date_of_application_submission, 4);
+			} else {
+				$(`#${applicationDiv.id} .step4`).css('display', 'none');
+				phaseChange(date_of_application_submission, 3);
+			}
+		})
 
-		// <li class="editableLi">
-		// 	<label>Copay:</label>
-		// 	<span class="editable" id="copay" data-table="application" data-alert_id="">{{application.copay}}</span>
-		// </li>
-		// <li class="editableLi">
-		// 	<label>Copay Start Date:</label>
-		// 	<span class="editable date" id="copay_start_date" data-table="application" data-alert_id="">{{application.copay_start_date}}</span>
-		// </li>
-	</script>
+		var approval_satisfied = applicationDiv.querySelector('#approval_satisfied');
+		if (approval_satisfied && approval_satisfied.value != "no") {
+			$(`#${applicationDiv.id} .notSatisfied`).css('display', 'none')
+		}
+
+		var meetingCheckbox = applicationDiv.querySelector('.meetingCheckbox');
+
+		if(meetingCheckbox.checked) {
+			$(`#${applicationDiv.id} .step2`).css('display', 'block');
+		}
+
+		meetingCheckbox.addEventListener('change', () => {
+			if(meetingCheckbox.checked) {
+				if (!$(`#${applicationDiv.id} #appointment_date`).val()){
+					alert("Please enter a meeting date")
+					meetingCheckbox.checked = false;
+					return;
+				}
+				$(`#${applicationDiv.id} .step2`).fadeIn();
+				 phaseChange(meetingCheckbox, 2);
+			} else {
+				$(`#${applicationDiv.id} .step2`).css('display', 'none');
+				$(`#${applicationDiv.id} .step3`).css('display', 'none');
+				 phaseChange(meetingCheckbox, 1);
+			}
+		})
+
+		var pickup_date = applicationDiv.querySelector('#medicaid_pickup_date');
+		if(pickup_date.value != "") {
+			$(`#${applicationDiv.id} .step3`).css('display', 'block');
+		}
+
+	{% endfor %}
+
+	{% for approval in approvals %}
+		var approvalSection = document.querySelector('#approval{{approval.approval_id}}')
+		var satisfied = approvalSection.querySelector('#DBapproval_satisfied')
+		if (satisfied.innerHTML == 'no') {
+			$('#approval{{approval.approval_id}} .notSatisfied').css('display', 'block');
+		}
+	{% endfor %}
+
+	// Make select fields default to value in database (if there is one):
+	const selectFields = document.querySelectorAll('SELECT');
+	selectFields.forEach( selectField => {
+		const selectFieldParent = selectField.parentNode;
+		const DBinfo = selectFieldParent.querySelector('.DBinfo').innerHTML;
+		const options = selectField.querySelectorAll('OPTION');
+		options.forEach(option => {
+			if (option.value == DBinfo) {
+				option.setAttribute("selected", "selected");
+			};
+		});
+	});
+
+}) // end document.ready
+
+const collapseSection = (h4) => {
+	h4.classList.toggle("activeSection");
+  let content = h4.nextElementSibling;
+  if (content.style.display != "none"){
+    content.style.display = "none";
+    content.parentNode.style.maxHeight = "50px";
+    content.parentNode.style.maxWidth = "200px";
+    content.parentNode.style.marginBottom = "30px";
+  } else {
+    content.style.display = 'initial';
+    content.parentNode.style.maxHeight = "initial";
+    content.parentNode.style.maxWidth = "100%";
+    content.parentNode.style.marginBottom = "20px";
+  }
+}
+
+class ResponseRowHTML {
+	constructor (applicationId, responseId, rfiOrDenialOrApprovalId) {
+		this.rfiRowHtml = `
+			<section id="rfi${rfiOrDenialOrApprovalId}">
+				<h4 class="numberOfRFIs collapsibleSection responseH4" onclick="collapseSection(this)">RFI #${numberOfRFIs}</h4>
+				<ul class="collapsibleContent" id="">
+					<button type="button" class="deleteResponseBtn" aria-label="Close" onclick="deleteResponse('rfi',${rfiOrDenialOrApprovalId})">
+		        <span aria-hidden="true">&times;</span>
+		      </button>
+					<div class="row">
+						<div class="col-lg-3 firstColumn applicationColumn">
+							<li>
+								<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> RFI here:</label>
+								<br>
+								<input 
+									type="file" 
+									accept="image/jpeg,image/png,application/pdf" 
+									onchange="
+										uploadDoc(
+											this, 
+											${applicationId},
+											'rfi',
+											${rfiOrDenialOrApprovalId},
+											'rfi'
+										)
+									"
+								>
+							</li>
+						</div>
+						<div class="col-lg-3 applicationColumn">
+							<li class="editableLi ">
+								<label>RFI Due Date:</label>
+								<input class="editable date  due_date" id="rfi_due_date" data-table="rfi"  data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+							</li>
+							<li class="editableLi">
+								<label>Extension Requested?</label>
+								<select name="rfi_extension_request" id="rfi_extension_request" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this); extensionRequested(this, ${applicationId}, ${rfiOrDenialOrApprovalId})">
+									<option value="no">No</option>
+									<option value="yes">Yes</option>
+								</select>
+							</li>
+						</div>
+						<div class="col-lg-3 applicationColumn">
+							<li>
+								<label><input type="checkbox" class="documentationSubmittedCheckbox " id="rfi_documentation_submitted" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}">Documentation Submitted</label>
+							</li>
+							<li class="editableLi step5 ">
+								<label>Submission Date:</label>
+								<input class="editable date " id="rfi_documentation_submitted_date" data-table="rfi"  data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+							</li>
+						</div>
+						<div class="col-lg-3 applicationColumn">
+							<li class="editableLi step5 ">
+								<label>Response:</label>
+								<select name="response_select" class=" responseSelect" id="rfi_response" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}" onchange="createResponseRow(${applicationId}, this); sendInputInfoToDB(this)">
+									<option value="not_received">Not Received</option>
+									<option value="rfi">RFI</option>
+									<option value="approved">Approved</option>
+									<option value="denied">Denied</option>
+								</select>
+							</li>
+						</div>
+					</div>
+				</ul>
+			</section>
+		`
+
+		this.approvedRowHtml = `
+			<section id="approval${rfiOrDenialOrApprovalId}">
+				<h4 class="numberOfApprovals collapsibleSection responseH4" onclick="collapseSection(this)">Approval</h4>
+				<ul class="collapsibleContent" id="">
+					<button type="button" class="deleteResponseBtn" aria-label="Close" onclick="deleteResponse('approval',${rfiOrDenialOrApprovalId})">
+		        <span aria-hidden="true">&times;</span>
+		      </button>
+					<div class="row">
+					<div class="col-lg-2 applicationColumn firstColumn">
+					<li class="editableLi">
+							<label>Approval Notice Date:</label>
+							 <input class="editable date" id="approval_notice_date" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}"  type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+						</li>
+					</div>
+					<div class="col-lg-3 applicationColumn">
+						<li class="editableLi">
+							<label>Approval Start Date:</label>
+							 <input class="editable date" id="approval_start_date" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}"  type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+						</li>
+						<li class="editableLi">
+							<label>Approval End Date:</label>
+							 <input class="editable date" id="approval_end_date" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}"  type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+						</li>
+						<li class="editableLi">
+							<label>Recertification Date:</label>
+							<input class="editable date" type="date" id="approval_recertification_date" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+						</li>
+					</div>
+					<div class="col-lg-4 applicationColumn">
+						<li>
+							<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Approval here:</label>
+							<br>
+							<input 
+									type="file" 
+									accept="image/jpeg,image/png,application/pdf" 
+									onchange="
+										uploadDoc(
+											this, 
+											${applicationId},
+											'approval',
+											${rfiOrDenialOrApprovalId},
+											'approval'
+										)
+									"
+								>
+						</li>
+					`
+						// numberOfNAMIs = 1;
+	  this.approvedRowHtml += `
+			<div class="modal fade bd-example-modal-lg" id="namiModal${rfiOrDenialOrApprovalId}" tabindex="-1" role="dialog" aria-labelledby="namiModalTitle" aria-hidden="true">
+			  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			    <div class="modal-content">
+			      <div>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			        <h5 class="modal-title" id="exampleModalLongTitle">NAMIs</h5>
+			      </div>
+			     <div class="modal-body">
+					</div>
+	      <div class="modal-footer">
+		      <div class="editableLi addNamiBtnLi">
+						<button class="addModalRowBtn" onclick="addNAMIRowHTML(this, ${rfiOrDenialOrApprovalId})">Add NAMI &#x271A; </button>
+					</div>
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	`
+
+		this.approvedRowHtml += `
+			<div class="modal fade bd-example-modal-lg fairHearingsModal" id="fairHearingsModal${rfiOrDenialOrApprovalId}" tabindex="-1" role="dialog" aria-labelledby="fairHearingsModalTitle" aria-hidden="true">
+							  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+							    <div class="modal-content">
+							      <div>
+							        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							          <span aria-hidden="true">&times;</span>
+							        </button>
+							        <h5 class="modal-title" id="exampleModalLongTitle">Fair Hearings</h5>
+							      </div>
+							      <div class="modal-body">
+										</div>
+      							<div class="modal-footer">
+								      <div class="editableLi addNamiBtnLi">
+												<button class="addModalRowBtn" onclick="addFairHearingRowHTML(this, ${responseId})">Add Fair Hearing &#x271A; </button>
+											</div>
+       								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+     								</div>
+   								</div>
+							  </div>
+							</div>
+		`
+
+		this.approvedRowHtml += `
+			</div>
+			<div class="col-lg-3 applicationColumn">
+				<li>
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#namiModal${rfiOrDenialOrApprovalId}" id="namiModalBtn">View/Add NAMIs</button>
+				</li>
+				<li class="editableLi step6">
+						<label>Satisfied with approval?</label>
+						<select name="approval_satisfied" id="approval_satisfied" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this); revealNextNotSatisfiedStep(this, 1)">
+							<option value="">Select one:</option>
+							<option value="yes">Yes</option>
+							<option value="no">No</option>
+						</select>
+					</li>
+			</div>
+		</div>
+		<div class="row satisfiedRow">
+				<div class="col-lg-4">
+					<li class="editableLi notSatisfied notSatisfied1">
+						<label>Contacted DSS?</label>
+						<select name="approval_contacted_dss" id="approval_contacted_dss" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this);revealNextNotSatisfiedStep(this, 2)">
+							<option value="">Select one:</option>
+							<option value="yes">Yes</option>
+							<option value="no">No</option>
+						</select>
+					</li>
+				</div>
+				<div class="col-lg-4">
+					<li class="editableLi notSatisfied notSatisfied2">
+						<label>Resolved through DSS?</label>
+						<select name="approval_resolved_through_dss" id="approval_resolved_through_dss" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this);revealNextNotSatisfiedStep(this, 3)">
+							<option value="">Select one:</option>
+							<option value="yes">Yes</option>
+							<option value="no">No</option>
+						</select>
+					</li>
+				</div>
+				<div class="col-lg-4">
+				<!-- Button trigger modal -->
+					<button type="button" class="btn btn-primary notSatisfied notSatisfied3" data-toggle="modal" data-target="#fairHearingsModal${rfiOrDenialOrApprovalId}" id="fairHearingsModalBtn">View/Add Fair Hearing Info</button>
+			</div>
+
+			<div class="modal fade bd-example-modal-lg fairHearingsModal" id="fairHearingsModal${rfiOrDenialOrApprovalId}" tabindex="-1" role="dialog" aria-labelledby="fairHearingsModalTitle" aria-hidden="true">
+			  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			    <div class="modal-content">
+			      <div>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			        <h5 class="modal-title" id="exampleModalLongTitle">Fair Hearings</h5>
+			      </div>
+			      <div class="modal-body">
+
+							</div>
+						<div class="modal-footer">
+				      <div class="editableLi addNamiBtnLi">
+								<button class="addModalRowBtn" onclick="addFairHearingRowHTML(this, {{approval.response.response_id}})">Add Fair Hearing &#x271A; </button>
+							</div>
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							</div>
+						</div>
+			  </div>
+			</div>
+		</div>
+	</ul>
+</section>
+`
+		this.deniedRowHtml = `
+			<section id="denial${rfiOrDenialOrApprovalId}">
+				<h4 class="numberOfRFIs collapsibleSection responseH4" onclick="collapseSection(this)">Denial</h4>
+				<ul class="collapsibleContent" id="">
+					<button type="button" class="deleteResponseBtn" aria-label="Close" onclick="deleteResponse('denial',${rfiOrDenialOrApprovalId})">
+		        <span aria-hidden="true">&times;</span>
+		      </button>
+					<div class="row">
+						<div class="col-lg-3 firstColumn applicationColumn">
+							<li class="editableLi ">
+								<label>Denial Notice Date:</label>
+								<input class="editable date  due_date" id="denial_notice_date" data-table="denial"  data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}" type="date" onkeyup="checkIfEnterKey(this, event)" value="{{denial.denial_notice_date|date:'Y-m-d'}}">
+							</li>
+							
+						</div>
+						<div class="col-lg-5 applicationColumn">
+							<li>
+							<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Denial here:</label>
+							<br>
+								<input 
+									type="file" 
+									accept="image/jpeg,image/png,application/pdf" 
+									onchange="
+										uploadDoc(
+											this, 
+											${applicationId},
+											'denial',
+											${rfiOrDenialOrApprovalId},
+											'denial'
+										)
+									"
+								>
+							</li>
+						</div>
+						<div class="col-lg-4 applicationColumn">
+							<li>
+								<label><input type="checkbox" class="documentationSubmittedCheckbox " id="denial_documentation_submitted" data-table="denial" data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}">Documentation Submitted</label>
+							</li>
+							<li class="editableLi step5 ">
+								<label>Submission Date:</label>
+								<input class="editable date " id="denial_documentation_submitted_date" data-table="denial"  data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}" type="date" onkeyup="checkIfEnterKey(this, event)">
+							</li>
+						</div>
+						
+					</div>
+
+
+					<div class="row ">
+						<div class="col-lg-3">
+							<li class="editableLi  ">
+								<label>Contacted DSS?</label>
+								<select name="denial_contacted_dss" id="denial_contacted_dss" data-table="denial" data-denial_id="${rfiOrDenialOrApprovalId}"  onchange="sendInputInfoToDB(this)">
+									<option value="">Select one:</option>
+									<option value="yes">Yes</option>
+									<option value="no">No</option>
+								</select>
+								<span class="invisible DBinfo" id="DBdenial_contacted_dss">{{denial.denial_contacted_dss}}</span>
+							</li>
+						</div>
+						<div class="col-lg-3">
+							<li class="editableLi  ">
+								<label>Resolved through DSS?</label>
+								<select name="denial_resolved_through_dss" id="denial_resolved_through_dss" data-table="denial" data-denial_id="${rfiOrDenialOrApprovalId}"  onchange="sendInputInfoToDB(this)">
+									<option value="">Select one:</option>
+									<option value="yes">Yes</option>
+									<option value="no">No</option>
+								</select>
+								<span class="invisible DBinfo" id="DBdenial_resolved_through_dss">{{denial.denial_resolved_through_dss}}</span>
+							</li>
+						</div>
+						<div class="col-lg-3">
+							<!-- Button trigger modal -->
+								<button type="button" class="btn btn-primary  " data-toggle="modal" data-target="#fairHearingsModal${rfiOrDenialOrApprovalId}" id="fairHearingsModalBtn">View/Add Fair Hearing Info</button>
+						</div>
+
+							<div class="modal fade bd-example-modal-lg fairHearingsModal" id="fairHearingsModal${rfiOrDenialOrApprovalId}" tabindex="-1" role="dialog" aria-labelledby="fairHearingsModalTitle" aria-hidden="true">
+							  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+							    <div class="modal-content">
+							      <div>
+							        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							          <span aria-hidden="true">&times;</span>
+							        </button>
+							        <h5 class="modal-title" id="exampleModalLongTitle">Fair Hearings</h5>
+							      </div>
+							      <div class="modal-body">
+										
+     								</div>
+      							<div class="modal-footer">
+								      <div class="editableLi addNamiBtnLi">
+												<button class="addModalRowBtn" onclick="addFairHearingRowHTML(this, ${responseId})">Add Fair Hearing &#x271A; </button>
+											</div>
+       								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+     								</div>
+   								</div>
+							  </div>
+							</div>
+							<div class="col-lg-3">
+							<li>
+								<button type="button" class="btn btn-primary" id="createNewApp" onclick="createNewApp()">Create New Application</button>
+							</li>
+						</div>
+							
+					</div>
+
+
+
+				</ul>
+			</section>
+		`
+	}
+}
+
+const addNAMIRowHTML = (addNamiBtn, approvalId) => {
+	const ajaxCall = $.ajax(
+		{
+			type:"GET",
+			url: `/application/ajax/create_nami`,
+			data: {
+				approval_id: approvalId
+			},
+			success: function(namiId) {
+				const html = `
+					<div class="modalRowDiv">
+						<button type="button" class="close" onclick="removeModalRow(this, ${namiId},'nami')">
+		          <span >&times;</span>
+		        </button>
+						<h6 class="namiH6">NAMI:</h6>
+						<div class="modalRow">
+							<div class="col-lg-4 col-sm-12 modalRowColumn">
+							<label>NAMI Start Date:</label>
+								<input class="editable date" id="nami_start_date" data-table="nami" data-nami_id="${namiId}" type="date" value="{{nami.nami_start_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+							</div>
+							<div class="col-lg-4 col-sm-12 modalRowColumn">
+							<label>NAMI End Date:</label>
+
+								<input class="editable date" id="nami_end_date" data-table="nami" data-nami_id="${namiId}" type="date" value="{{nami.nami_end_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+							</div>
+							<div class="col-lg-4 col-sm-12 modalRowColumn">
+							<label>Amount:</label>
+								$<input type="number" class="editable" id="nami_amount" data-table="nami" data-nami_id="${namiId}" value="{{nami.nami_amount|floatformat:2}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+							</div>
+						</div>
+					</div>
+				`
+				const modalBody = addNamiBtn.parentNode.parentNode.parentNode.querySelector('.modal-body');
+				modalBody.insertAdjacentHTML('beforeend', html)
+				// numberOfNAMIs += 1;
+			}
+		});
+}
+
+const addFairHearingRowHTML = (addFairHearingBtn, responseId) => {
+	const ajaxCall = $.ajax(
+		{
+			type:"GET",
+			url: `/application/ajax/create_fair_hearing`,
+			data: {
+				response_id: responseId
+			},
+			success: function(fairHearingId) {
+				const html = `
+								<div class="modalRowDiv">
+									<button type="button" class="close" onclick="removeModalRow(this, ${fairHearingId}, 'fair_hearing')">
+					          <span >&times;</span>
+					        </button>
+									<h6 class="fairHearingH6">Fair Hearing</h6>
+									<div class="row modalRow">
+										<div class="col-lg-4 col-md-6 col-sm-12 modalRowColumn">
+											<li>
+												<label>Date:</label>
+												<input class="editable date" id="fair_hearing_date" data-table="fair_hearing" data-fair_hearing_id="${fairHearingId}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+											</li>
+											<li>
+												<label>Time:</label>
+												<input class="editable time" id="fair_hearing_time" data-table="fair_hearing" data-fair_hearing_id="${fairHearingId}" type="time" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+											</li>
+										</div>
+										<div class="col-lg-4 col-md-6 col-sm-12 modalRowColumn">
+											<li>
+												<label>Address:</label>
+												<input type="text" class="editable" id="fair_hearing_address" data-table="fair_hearing" data-fair_hearing_id="${fairHearingId}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+											</li>
+											<li>
+												<label>Outcome:</label>
+												<input type="text" class="editable" id="fair_hearing_outcome" data-table="fair_hearing" data-fair_hearing_id="${fairHearingId}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+											</li>
+										</div>
+										<div class="col-lg-4 col-md-6 col-sm-12 modalRowColumn">
+											<li>
+												<label>Facility Representative:</label>
+												<select id="fair_hearing_representative_type" data-table="fair_hearing" data-fair_hearing_id="${fairHearingId}" onchange="sendInputInfoToDB(this)">
+													<option value="">Select one:</option>
+													<option value="regional_coordinator">Regional Coordinator</option>
+													<option value="facility_coordinator">Facility Coordinator</option>
+													<option value="attorney">Attorney</option>
+												</select>
+											</li>
+											<li>
+												<label>Representative's Name:</label>
+												<input type="text" class="editable" id="fair_hearing_representative_name" data-table="fair_hearing" data-fair_hearing_id="${fairHearingId}"  onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+											</li>
+										</div>
+										<div class="col-lg-6 col-sm-12 modalRowColumn">
+											<li>
+												<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Notice here:</label>
+												<br>
+												<input 
+													type="file" 
+													accept="image/jpeg,image/png,application/pdf" 
+													onchange="
+														uploadDoc(
+															this, 
+															${responseId},
+															'fair_hearing',
+															${fairHearingId},
+															'fair_hearing_confirmation'
+														)
+													"
+												>
+											</li>
+										</div>
+										<div class="col-lg-6 col-sm-12 modalRowColumn">
+											<li>
+												<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Fair Hearing Decision here:</label>
+												<br>
+												<input 
+													type="file" 
+													accept="image/jpeg,image/png,application/pdf" 
+													onchange="
+														uploadDoc(
+															this, 
+															${responseId},
+															'fair_hearing',
+															${fairHearingId},
+															'fair_hearing_outcome_document'
+														)
+													"
+												>
+											</li>
+										</div>
+									</div>
+								</div>
+				`
+				const modalBody = addFairHearingBtn.parentNode.parentNode.parentNode.querySelector('.modal-body');
+				modalBody.insertAdjacentHTML('beforeend', html)
+				// numberOfFairHearings += 1;
+			}
+		});
+}
+
+const removeModalRow = (removeModalRowBtn, modalRowId, rowType) => {
+	if(confirm("Delete this row?")) {
+		const ajaxCall = $.ajax(
+			{
+				type:"GET",
+				url: `/application/ajax/delete_${rowType}`,
+				data: {
+				row_id: modalRowId
+			},
+			success: function() {
+				console.log("Row deleted");
+				const modalRow = removeModalRowBtn.parentNode;
+				$(modalRow).fadeOut();
+			}
+		});
+	}
+}
+
+const extensionRequested = (extensionRequestedField,applicationId,rfiId) => {
+	const col = extensionRequestedField.parentNode.parentNode;
+	const html = `
+	<li class="editableLi">
+		<label>Extension Granted?</label>
+		<select name="rfi_extension_response" id="rfi_extension_response" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiId}" onchange="sendInputInfoToDB(this); newRfiDueDatePrompt(this)">
+			<option value="no">No</option>
+			<option value="yes">Yes</option>
+		</select>
+	</li>
+	`
+	col.insertAdjacentHTML("beforeend", html);
+}
+
+const newRfiDueDatePrompt = selectField => {
+	if (selectField.value == "yes") {
+		alert("Please enter a new RI Due Date");
+ 		const dueDateField = selectField.parentNode.parentNode.querySelector('#rfi_due_date');
+  	dueDateField.focus();
+	}
+}
+
+let numberOfRFIs = 0;
+const createResponseRow = (applicationId, responseField) => {
+	const ajaxCall = $.ajax(
+		{
+			type:"GET",
+			url: `/application/ajax/create_response`,
+			data: {
+				application_id: applicationId,
+				response_type: responseField.value
+			},
+			success: function(idArray) {
+				if (idArray != 'no response created for not_received') {
+					const responseId = idArray[0]
+					rfiOrDenialOrApprovalId = idArray[1]
+					newResponseRowHTML = new ResponseRowHTML(applicationId, responseId, rfiOrDenialOrApprovalId)
+					const applicationDiv = document.querySelector(`#application${applicationId}`)
+					applicationDiv.insertAdjacentHTML("beforeend", newResponseRowHTML[`${responseField.value}RowHtml`]);
+				}
+			}
+		});
+	if (responseField.value == "rfi") {
+		phaseChange(responseField, 5);
+		numberOfRFIs += 1;
+	} else if (responseField.value == 'approved'){
+		phaseChange(responseField, 6);
+	} else if (responseField.value == 'denied'){
+		phaseChange(responseField, 12);
+	};
+}
+const checkIfEnterKey = (input,event) => {
+	if (event.keyCode == 13) {
+		input.blur();
+	}
+}
+
+const revealNextNotSatisfiedStep = (selectField, stepToReveal) => {
+	if(selectField.id != 'approval_contacted_dss') {
+		if (selectField.value == "no") {
+			const ul = selectField.parentNode.parentNode.parentNode.parentNode;
+			const element = ul.querySelector(`.notSatisfied${stepToReveal}`)
+			$(element).fadeIn();
+		} else if (selectField.value == "yes") {
+			document.querySelector('.overlay').style.display = "block";
+		};
+	} else {
+		if (selectField.value == "yes") {
+			const ul = selectField.parentNode.parentNode.parentNode.parentNode;
+			const element = ul.querySelector(`.notSatisfied${stepToReveal}`)
+			$(element).fadeIn();
+		}
+	}
+}
+
+const createNewApp = thisAppId => {
+	const ajaxCall = $.ajax(
+		{
+			type:"GET",
+			url: `/application/ajax/create_application`,
+			data: {
+				resident_id: residentId
+			},
+			success: function(newAppId) {
+				location.reload();
+			}
+		});
+}
+
+const uploadDoc = (input, appId, table, rowId, docType) => {
+	let docFieldToEmptyOnDelete;
+	const file_data = $(input).prop("files")[0];
+	const formData = new FormData();
+	formData.append("csrfmiddlewaretoken", '{{ csrf_token }}')                 
+	formData.append("resident_id", '{{ resident.resident_id }}')
+	formData.append("application_id", appId)             
+	formData.append("row_id", rowId)             
+	formData.append("file", file_data)              
+	formData.append("file_type", docType)              
+	const ajaxCall = $.ajax(
+		{
+	    url: '/show/?resident_id={{resident.resident_id}}',
+      type: 'POST',
+      cache: false,
+      contentType: false,
+      processData: false,
+      data: formData,
+      success: function (docArray) {
+      	const docUrl = docArray[0]
+      	const docName = docArray[1]
+      	const docId = docArray[2]
+      	const docDateUploaded = docArray[3]
+      	if (docType == 'medicaid_application') {
+      		docType = 'application_document'
+      	}
+      	if(docType == 'application_document' || docType == 'application_confirmation' || docType == 'fair_hearing_confirmation' || docType == 'fair_hearing_outcome_document') {
+      		docFieldToEmptyOnDelete = docType
+      	} else if (docType == 'misc_doc') {
+      		docFieldToEmptyOnDelete = 'application_id'
+      	} else {
+      		docFieldToEmptyOnDelete = 'document'
+      	}
+
+      	if (docType == 'misc_doc') {
+      		const html = `
+      			<tr>
+							<td><a href="/${docUrl}" target = "_blank">${docName}</a></td>
+							<td>${docDateUploaded}</td>
+							<td>
+								<button 
+									type="button" 
+									class="deleteDocBtn" 
+									aria-label="Close" 
+									onclick="
+										deleteDoc(
+											this,
+											${appId},
+											${docId},
+											'document',
+											${docId},
+											'application_id'
+										)
+									"
+								>
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+							</td>
+						</tr>
+      		`
+	      	const tbody = document.querySelector(`#application${appId} .miscDocsTable tbody`);
+	      	tbody.insertAdjacentHTML('beforeend', html)
+
+      	} else {
+      		const html = `
+	        	<a href="/${docUrl}" target = "_blank">${docName}</a>
+						<button type="button" class="deleteDocBtn" aria-label="Close" onclick="deleteDoc(this, ${appId}, ${docId},'${table}',${rowId},'${docFieldToEmptyOnDelete}')">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+	       	`
+        	$(input).replaceWith(html)
+	      }
+        
+      }
+	  }
+  )
+}
+
+const deleteDoc = (deleteBtn, appId, docId, table, tableRowId, docFieldToEmptyOnDelete) => {
+	if (confirm("Remove this document?")) {
+		const successMessage = `${docFieldToEmptyOnDelete} field in ${table} table set to null`;
+		const dataObject =  {
+			document_id: docId,
+			row_id: tableRowId,
+			column: docFieldToEmptyOnDelete,
+			new_value: null
+		}
+		updateDB(table, dataObject, successMessage)
+		if (docFieldToEmptyOnDelete == 'application_document') {
+			docFieldToEmptyOnDelete = 'medicaid_application'
+		}
+		// if it's a misc doc:
+		if (table == 'document' && docFieldToEmptyOnDelete == 'application_id') {
+			const row = deleteBtn.parentNode.parentNode;
+			$(row).fadeOut()
+		} else {
+			const html = `
+			<input type="file" accept="image/jpeg,image/png,application/pdf" onchange="uploadDoc(this, ${appId}, '${table}', ${tableRowId}, '${docFieldToEmptyOnDelete}')">
+			`
+			$(deleteBtn).prev().remove()
+			$(deleteBtn).replaceWith(html);
+		}		
+	}
+}
+
+const deleteResponse = (responseType,responseId) => {
+	if (confirm("Delete this response and all its data?")) {
+		const ajaxCall = $.ajax(
+		{
+			type:"GET",
+			url: `/application/ajax/delete_response`,
+			data: {
+				response_type: responseType,
+				response_id: responseId
+			},
+			success: function() {
+				const section = document.querySelector(`#${responseType}${responseId}`)
+				$(section).fadeOut()
+				console.log("Response deleted")
+			}
+		});
+	}
+}
+
+</script>
 {% endblock %}
-
-<!--
-•	Any admission that is Medicaid (or MLTC) should have a page created. The page should have:
-o	Name of resident (preferably generated from NCS)
-o	Admission date (preferably generated from NCS)
-o	Medicaid Pickup Date (i.e. the date from which Medicaid is needed to cover)
-o	Application type (New application, conversion, recertification – single, spousal, SSI)
-o	County in which the application is being filed (specific to most states which have a county system)
-o	Applicant resource information
-o	Income and NAMI information (preferably generated from NCS)
-
-Application History
-The program should include the following fields for data entry
-•	Date of application submission
-o	Field to upload the Medicaid application (requirements will vary by state)
-o	Field to upload confirmation of receipt by the Medicaid office
-•	Date of RFI issued by the Medicaid Office
-o	Field to upload RFI
-•	Date of RFI deadline
-•	Items required for the RFI (have it become a checklist once typed in as we have in some other programs)
-•	Note section for correspondence with the Medicaid office
-If approved
-•	Date of Medicaid approval
-o	Field to upload Medicaid approval
-•	Date recertification is needed
-If denied
-•	Date of Medicaid Denial
-o	Field to upload Medicaid denial
-•	Date of fair hearing request
-o	Field to upload confirmation of fair hearing request
-•	Date of fair hearing
-o	Field to upload fair hearing notice
-•	Denial triggers the need for new application which should restart the process
--->
