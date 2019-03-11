@@ -6,7 +6,6 @@
 {% load static %}
 {% if user.is_authenticated%}
 <div class="overlay" onclick="this.style.display = 'none'">
-	<!-- <h1>WOOHOO!</h1> -->
 	<img src='{% static "img/confetti.gif" %}'>
 </div>
 <div class="alertDiv">
@@ -338,7 +337,8 @@
 				<div class="row">
 					<div class="col-lg-3">
 						<li class="step3">
-							<input type="checkbox" class="submittedCheckbox" id="submittedCheckbox1" {% if application.phase.phase_id > 3 %} checked="checked"{% endif %}><label for="submittedCheckbox1">Medicaid Application Submitted</label>
+
+							<input type="checkbox" class="submittedCheckbox" id="submittedCheckbox1" {% if application.phase.phase_id > 2 %} checked="checked"{% endif %}><label for="submittedCheckbox1">Medicaid Application Submitted</label>
 						</li>
 						<li class="editableLi step3">
 							<label>Submission Date:</label>
@@ -1152,20 +1152,46 @@ $(document).ready(()=>{
 
 		var applicationDiv = document.querySelector('#application{{application.application_id}}');
 		var initial_response = applicationDiv.querySelector('#initial_response');
+		var appointment_date = applicationDiv.querySelector('#appointment_date');
 		var date_of_application_submission = applicationDiv.querySelector('#date_of_application_submission');
-
+		var rfi_documentation_submitted_date = applicationDiv.querySelector('#rfi_documentation_submitted_date');
 		if(date_of_application_submission.value) {
 			$(`#${applicationDiv.id} .step4`).css('display', 'block');
 		}
+
+		appointment_date.addEventListener('blur', (e) => {
+			if(appointment_date.value && parseInt(appointment_date.value) > 2010 && parseInt(appointment_date.value) < 2100) {
+				const data = {
+					application_id: {{application.application_id}},
+					alert_class: "appointment"
+				}
+				updateDB("alert", data, "changed appointment alert status to true")
+			} 
+		})
 
 		date_of_application_submission.addEventListener('blur', (e) => {
 			if(date_of_application_submission.value && parseInt(date_of_application_submission.value) > 2010 && parseInt(date_of_application_submission.value) < 2100) {
 				$(`#${applicationDiv.id} .step4`).fadeIn();
 				phaseChange(date_of_application_submission, 4);
+				const data = {
+					application_id: {{application.application_id}},
+					alert_class: "pickup date"
+				}
+				updateDB("alert", data, "changed pickup date alert status to true")
 			} else {
 				$(`#${applicationDiv.id} .step4`).css('display', 'none');
 				phaseChange(date_of_application_submission, 3);
 			}
+		})
+
+		rfi_documentation_submitted_date.addEventListener('blur', (e) => {
+			if(rfi_documentation_submitted_date.value && parseInt(rfi_documentation_submitted_date.value) > 2010 && parseInt(rfi_documentation_submitted_date.value) < 2100) {
+				const data = {
+					application_id: {{application.application_id}},
+					alert_class: "rfi"
+				}
+				updateDB("alert", data, "changed rfi alert status to true")
+			} 
 		})
 
 		var approval_satisfied = applicationDiv.querySelector('#approval_satisfied');

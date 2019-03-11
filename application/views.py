@@ -176,10 +176,12 @@ def update_confirmation(request):
     return HttpResponse("200")
 
 def update_alert(request):
-    alert_id = int(request.GET['alert_id'])
-    alert = Alert.objects.get(alert_id = alert_id)
-    field = setattr(alert, "alert_status",True)
-    alert.save()
+    application_id = int(request.GET['application_id'])
+    alert_class = request.GET['alert_class']
+    alerts = Alert.objects.filter(application = Application.objects.get(application_id=application_id), alert_type__alert_class=alert_class)
+    for alert in alerts:
+        field = setattr(alert, "alert_status",True)
+        alert.save()
     # Sending an success response
     return HttpResponse("200")
 
