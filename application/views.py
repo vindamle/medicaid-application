@@ -190,7 +190,7 @@ def phase_change(request):
     # Sending an success response
     application_id =int(request.GET['application_id'])
     phase_id =int(request.GET['phase_id'])
-
+    print(phase_id, application_id)
     application = Application.objects.get(application_id = application_id)
     phase = Phase.objects.get(phase_id = phase_id)
 
@@ -206,9 +206,12 @@ def phase_change(request):
         log_ip = request.META.get('REMOTE_ADDR'),
         date = datetime.now()
     )
+    print(application.phase)
     application.phase = phase
+    print(application.phase.phase_id)
     application.save()
-    return HttpResponse(str(phase.phase_name))
+    print(application.resident)
+    return HttpResponse(str(application.phase.phase_name))
 
 def create_response(request):
     application_id = int(request.GET['application_id'])
