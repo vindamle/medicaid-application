@@ -49,19 +49,6 @@ const sendInputInfoToDB = input => {
 		};
 		let successMessage = `Value of ${dataObject.column} in the ${table} table set to ${dataObject.new_value}`;
 		updateDB(table, dataObject, successMessage);
-		// If field affects alerts, update Alerts table:
-		const alertId = input.getAttribute('data-alert_id');
-		if (alertId) {
-			 dataObject = {
-			 	alert_id: alertId,
-				addressed: true
-			 };
-			 if (table == "application") {
-			 	dataObject.application_id = input.getAttribute('data-application_id')
-			 }
-			 successMessage = `Value of 'addressed' for alert with id ${dataObject.alert_id} in the alert table set to ${dataObject.addressed}`;
-			 updateDB("alert", dataObject, successMessage);
-		}
 	}
 };
 

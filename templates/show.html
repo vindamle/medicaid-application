@@ -252,7 +252,7 @@
 						</li>
 						<li class="editableLi step2">
 							<label>Medicaid Pickup Date:</label>
-							<input class="editable date" id="medicaid_pickup_date" data-table="application" data-application_id="{{application.application_id}}" data-alert_id=5 type="date" value="{{application.medicaid_pickup_date|date:'Y-m-d'|default_if_none:''}}">
+							<input class="editable date" id="medicaid_pickup_date" data-table="application" data-application_id="{{application.application_id}}" data-alert_id=5 type="date" value="{{application.medicaid_pickup_date|date:'Y-m-d'|default_if_none:''}}" onblur="updatePickupDateAlert({{application.application_id}}, this)" onkeyup="checkIfEnterKey(this, event)">
 						</li>
 						<li class="step3">
 							<label>Application Type:</label>
@@ -1154,6 +1154,21 @@ const updateAlert = (appId, input, alertClass) => {
 	} 
 }
 
+const updatePickupDateAlert = (appId, input) => {
+	if(input.value && parseInt(input.value) > 2010 && parseInt(input.value) < 2100) {
+		$(`#${applicationDiv.id} .step4`).fadeIn();
+		phaseChange(input, 4);
+		const data = {
+			application_id: appId,
+			alert_class: "pickup date"
+		}
+		updateDB("alert", data, "changed pickup date alert status to true")
+	} else {
+		$(`#${applicationDiv.id} .step4`).css('display', 'none');
+		phaseChange(input, 3);
+	}
+}
+
 $(document).ready(()=>{
 	// let numberOfNAMIs;
 	let html = "";
@@ -1167,26 +1182,6 @@ $(document).ready(()=>{
 		if(date_of_application_submission.value) {
 			$(`#${applicationDiv.id} .step4`).css('display', 'block');
 		}
-
-		date_of_application_submission.addEventListener('blur', (e) => {
-			if(date_of_application_submission.value && parseInt(date_of_application_submission.value) > 2010 && parseInt(date_of_application_submission.value) < 2100) {
-				$(`#${applicationDiv.id} .step4`).fadeIn();
-				phaseChange(date_of_application_submission, 4);
-				const data = {
-					application_id: {{application.application_id}},
-					alert_class: "pickup date"
-				}
-				updateDB("alert", data, "changed pickup date alert status to true")
-			} else {
-				$(`#${applicationDiv.id} .step4`).css('display', 'none');
-				phaseChange(date_of_application_submission, 3);
-			}
-		})
-
-		
-		
-			
-
 
 		var approval_satisfied = applicationDiv.querySelector('#approval_satisfied');
 		if (approval_satisfied && approval_satisfied.value != "no") {
