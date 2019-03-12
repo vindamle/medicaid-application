@@ -9,8 +9,9 @@
   <table id="approvalsTable">
     <thead>
       <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
+        <th class="mobileShow">Name</th>
+        <th class="desktopShow">First Name</th>
+        <th class="desktopShow">Last Name</th>
         <!-- <th>Facility</th> -->
         <th>Approval Date Range</th>
         <!-- <th>Fair Hearing Required?</th> -->
@@ -20,21 +21,22 @@
       </tr>
     </thead>
     <tbody>
-      {% for obj in list %}
-      <tr id="{{obj.resident_id}}">
-        <td>{{obj.first_name}}</td>
-        <td>{{obj.last_name}}</td>
-        <!-- <td>{{obj.facility}}</td> -->
-        <td>{{obj.approval_start_date|date:"F d, Y"}} - {{obj.approval_end_date|date:"F d, Y"}}</td>
+      {% for application in applications %}
+      <tr id="{{application.application_id}}">
+        <td class="mobileShow">{{application.resident.last_name}}, {{application.resident.first_name}}</td>
+        <td class="desktopShow">{{application.resident.first_name}}</td>
+        <td class="desktopShow">{{application.resident.last_name}}</td>
+        <!-- <td>{{application.facility}}</td> -->
+        <td>{{application.approval_start_date|date:"F d, Y"}} - {{application.approval_end_date|date:"F d, Y"}}</td>
         <!-- <td>?</td> -->
         <td class="verifyBtnTd">
-          {% if obj.approval_verified == True %}
+          {% if application.approval_verified %}
             <button class="verifyBtn verified">Verified &check;</button>
           {% else %}
             <button class="verifyBtn">Not Verified</button>
           {% endif %}
         </td>
-        <td><a href="/show?resident_id={{obj.resident_id}}" class=""><button class="btn-tracked">Show</button></a></td>
+        <td><a href="/show?resident_id={{application.resident_id}}" class=""><button class="btn-tracked">Show</button></a></td>
         <td><button class="btn-ignore">Don't Track</button></td>
       </tr>
       {% endfor %}
@@ -42,7 +44,7 @@
   </table>
 </div>
 {% else %}
-  <p>You are not logged in</p>
+  <h1>You are not logged in</h1>
   <a href="{% url 'login' %}">login</a>
 {% endif %}
 {% endblock %}

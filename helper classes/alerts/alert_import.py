@@ -2,6 +2,7 @@
 from db import Db
 from sqlalchemy.dialects.postgresql import insert
 import pyodbc
+from datetime import datetime
 
 
 
@@ -25,14 +26,16 @@ class ImportAlerts:
                 alert_type_id= result["alert_type_id"],
                 application_id= result["application_id"],
                 resident_id= result['resident_id'],
+                trigger_date = datetime.now()
             )
         except:
             return dict(
-                
+
                 alert_status= result["alert_status"],
                 alert_type_id= result["alert_type_id"],
                 application_id= result["application_id"],
                 resident_id= result['resident_id'],
+                trigger_date = datetime.now()
             )
 
     def import_alerts(self, alerts):

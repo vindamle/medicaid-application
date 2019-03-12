@@ -1,32 +1,26 @@
 
 $(document).ready( () => {
 // Call Datatables with parameters
-  $('table').dataTable({
+  $('table:not(.miscDocsTable)').dataTable({
 	  "paging": false,
 	  "info": false
 	});
-	$('.content').fadeIn();
+	$('.content').fadeIn(200);
 
-	//datatable search fields styling
+	//datatable search fields styling - mostly undoing a lot of default styling
 	const filters = document.querySelectorAll('.dataTables_filter')
-	for (var i = 0; i < filters.length; i++) {
-		let filter = filters[i]
+	filters.forEach( filter => {
 		let input = filter.firstElementChild.firstElementChild
 		input.style.border = "2px solid #eee"
-		// input.style.boxShadow = "1px 1px 1px #aaa"
-		// input.style.backgroundColor = "#eee"
 		input.style.padding = "5px 15px"
 		input.style.textAlign = "center"
 		$(input).focus(() => {
 			input.style.outline = "none"
-		// input.style.boxShadow = "inset 1px 1px 1px #aaa"
-		})
-		// input.addClass('fdsa')
-		// $('.asdf').css('background-color', 'red')
+		});
 		input.setAttribute('placeholder', 'Search This Table')
 		filter.removeChild(filter.firstElementChild)
 		filter.appendChild(input)
-	}
+	});
 
   var url = window.location.pathname;
   $('a[href="'+ url +'"]').addClass('currentPage');
@@ -36,8 +30,10 @@ $(document).ready( () => {
 const showTableCount = table => {
   const countSpanId = table.parentNode.id + "Count";
   const countSpan = document.getElementById(countSpanId);
-  const count =table.children.length;
-  countSpan.innerHTML = count;
+  const count = table.children.length;
+  if(countSpan) {
+  	countSpan.innerHTML = count;
+  }
 };
 
 const tables = document.getElementsByTagName('tbody')
@@ -55,7 +51,7 @@ const showTotalActivityCount = () => {
 	  total += parseInt(countSpans[i].textContent);
 	};
 	if (totalActivityCountSpan) {
-		totalActivityCountSpan.innerHTML = total;
+		totalActivityCountSpan.innerHTML = `(${total})`;
 	}
 };
 if (totalActivityCountSpan) {
@@ -91,7 +87,7 @@ $('.btn-track').click(function(){
 $('.btn-ignore').click(function(){
   button = this;
   // console.log(button);
-  if (confirm("Are you sure you want stop tracking this resident?")) {
+  if (confirm("Are you sure you want stop tracking this resident? (They'll still be available in 'Not Tracking' if you change your mind.)")) {
     const row = this.parentNode.parentNode;
     trackOrIgnore(row, false);
    };

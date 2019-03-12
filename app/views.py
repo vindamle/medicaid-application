@@ -7,6 +7,8 @@ import pandas as pd
 from datetime import datetime
 import os
 from pathlib import Path
+from django.contrib import messages
+from django.http import JsonResponse
 
 
 from django.contrib.auth import authenticate,login
@@ -21,11 +23,11 @@ class LoginView(View):
         login_data = authenticate(username = request.POST.get("username"), password = request.POST.get("password"))
 
         if login_data:
-
-            request.session.set_expiry(300)
+            request.session.set_expiry(0)
             login(request, login_data)
             return redirect('home')
 
+        messages.error(request, 'Oops! Wrong username or password. Please try again.')
         return redirect('login')
 
 
@@ -43,6 +45,8 @@ class PendingView(View):
 
                 apps = Application.objects.filter(tracking_status = True, resident__tracking_status = True,resident__facility_name =permission.codename)
                 for app in apps:
+                    print("*" * 50)
+                    print(app.resident.first_name)
                     applications.append(app)
 
             return render(request,self.template_name, {'applications':applications})
@@ -56,7 +60,7 @@ class ActivityView(View):
 
     template_name = "activity.html"
 
-    #Returns Residents with new activitys that have not been tracked/not tracked
+    #Returns Residents with new activities that have not been tracked/not tracked
     def get(self, request, *args, **kwargs):
 
         new_admission = []
@@ -79,7 +83,7 @@ class ActivityView(View):
                 new_discharges= Resident.objects.filter(facility_name =permission.codename,tracking_status = None, activity_type = 'D')
                 for new_discharge in new_discharges:
                     discharge.append(new_discharge)
-                
+
             return render(request,self.template_name, {'discharge':discharge,'admission':new_admission,'payor_change':payor_change})
         else:
             return redirect('login')
@@ -135,6 +139,7 @@ class ShowView(View):
 
         # documents = Document.objects.filter(resident_id = resident_id)
         rfis = RFI.objects.filter(response__application__resident__resident_id = resident_id).order_by('response__application__application_id','rfi_id')
+        misc_docs = Document.objects.filter(resident_id = resident_id, description = 'misc_doc').order_by('application_id')
         denials = Denial.objects.filter(response__application__resident__resident_id = resident_id).order_by('response__application__application_id','denial_id')
         approvals = Approval.objects.filter(response__application__resident__resident_id = resident_id).order_by('response__application__application_id','approval_id')
         namis = NAMI.objects.filter(approval__response__application__resident__resident_id = resident_id).order_by('approval__approval_id', 'nami_id')
@@ -142,39 +147,26 @@ class ShowView(View):
         # medicaid_application_documents = Document.objects.filter(resident_id = resident_id, description = "medicaid_application")
         # rfi_documents = Document.objects.filter(resident_id = resident_id, description = "rfi").order_by('rfi_id')
         # applications = results
-        # print(application)
+        # print('*'*50)
+        # print(denials)
+        # print('*'*50)
         # return render(request,self.template_name, {'rfis':rfis,'documents':documents,'resident':resident,'applications':applications,"resident_alerts":resident_alerts, 'medicaid_application_documents': medicaid_application_documents, "rfi_documents":rfi_documents, "form":self.form_class})
-        return render(request, self.template_name, {'resident': resident, 'applications':applications, 'rfis':rfis, 'denials': denials, 'approvals': approvals, 'namis': namis, 'fair_hearings': fair_hearings, 'resident_alerts': resident_alerts})
+        return render(request, self.template_name, {'resident': resident, 'applications':applications, 'rfis':rfis, 'denials': denials, 'approvals': approvals, 'namis': namis, 'fair_hearings': fair_hearings, 'resident_alerts': resident_alerts, 'misc_docs': misc_docs})
     def post(self, request, *args, **kwargs):
 
-
-        file = request.FILES.getlist('document')
+        file = request.FILES.getlist('file')
         type = request.POST.get('file_type')
-
         resident_id = request.POST.get('resident_id')
-        print(type)
-        if type == "fair_hearing_outcome_document" or type == "fair_hearing_confirmation":
-
-            resident_id = request.POST.get('resident_id')
-            fair_hearing_id = request.POST.get('fair_hearing_id')
-            application_id = FairHearing.objects.get(fair_hearing_id = fair_hearing_id).response.application.application_id
-        else:
-
-            print("*"*20)
-            print("wrong")
-            print("*"*20)
-            application_id = request.POST.get('application_id')
-
-
+        application_id = request.POST.get('application_id')
+        row_id = request.POST.get('row_id')
         ROOT = Path.cwd()
         path = Path(str(ROOT) + "/static/applications/"+resident_id+"/"+str(application_id))
         if not path.exists():
-            print("Create Path")
             path.mkdir(parents=True, exist_ok = True)
 
         try:
             new_document = Document.objects.create(
-                resident = Resident.objects.get(resident_id = request.POST.get('resident_id')),
+                resident = Resident.objects.get(resident_id = resident_id),
                 application_id = application_id,
                 file = file[0],
                 file_name = (file[0].name).split(".")[0],
@@ -190,17 +182,17 @@ class ShowView(View):
             application.application_document = new_document
             application.save()
         elif type == 'rfi':
-            rfi = RFI.objects.get(rfi_id = int(request.POST.get('rfi_id')))
+            rfi = RFI.objects.get(rfi_id = int(request.POST.get('row_id')))
             snowden_update(request,rfi, rfi.rfi_id,"document_id",new_document.document_id)
             rfi.document_id = new_document.document_id
             rfi.save()
         elif type == 'approval':
-            approval = Approval.objects.get(approval_id = int(request.POST.get('approval_id')))
+            approval = Approval.objects.get(approval_id = int(request.POST.get('row_id')))
             snowden_update(request,approval, approval.approval_id,"document_id",new_document.document_id)
             approval.document_id = new_document.document_id
             approval.save()
         elif type == 'denial':
-            denial = Denial.objects.get(denial_id = int(request.POST.get('denial_id')))
+            denial = Denial.objects.get(denial_id = int(request.POST.get('row_id')))
             snowden_update(request,denial, denial.denial_id,"document_id",new_document.document_id)
             denial.document_id = new_document.document_id
             denial.save()
@@ -215,19 +207,21 @@ class ShowView(View):
         elif type == "fair_hearing_confirmation":
             confirmation = Confirmation.objects.create(confirmation_document = new_document, description = type)
             snowden_update(request,confirmation, confirmation.confirmation_id,"confirmation_document_id",confirmation.confirmation_document_id)
-            fair_hearing = FairHearing.objects.get(fair_hearing_id = int(fair_hearing_id))
+            fair_hearing = FairHearing.objects.get(fair_hearing_id = int(row_id))
             snowden_update(request,fair_hearing, fair_hearing.fair_hearing_id,"fair_hearing_confirmation_id",confirmation.confirmation_id)
             fair_hearing.fair_hearing_confirmation = confirmation
             fair_hearing.save()
 
         elif type == "fair_hearing_outcome_document":
-            fair_hearing = FairHearing.objects.get(fair_hearing_id = int(fair_hearing_id))
+            fair_hearing = FairHearing.objects.get(fair_hearing_id = int(row_id))
             snowden_update(request,fair_hearing, fair_hearing.fair_hearing_id,"fair_hearing_outcome_document_id",new_document.document_id)
             fair_hearing.fair_hearing_outcome_document_id = new_document.document_id
             fair_hearing.save()
 
 
-        return redirect('/show/?resident_id={}'.format(str(resident_id)))
+        # return redirect('/show/?resident_id={}'.format(str(resident_id)))
+        # return HttpResponse(new_document.file_name)
+        return JsonResponse([str(new_document.file), new_document.file_name, new_document.document_id, new_document.date_uploaded], safe=False)
 
 def snowden_update(request,table_name, row_id, column, new_value):
     # Audit Log
@@ -249,16 +243,17 @@ class ApprovalsView(View):
     tracklist = []
 
     def get(self, request, *args, **kwargs):
-        '''if GET  '''
+        self.list = []
         if request.user.is_authenticated:
             permissions = Permission.objects.filter(user = request.user)
             for permission in permissions:
-                results = Resident.objects.filter(tracking_status = True,facility_name =permission.codename)
-                self.list = list()
+                results = Application.objects.filter(tracking_status = True,resident__facility_name =permission.codename)
+
 
                 for result in results:
                     self.list.append(result)
-            return render(request,self.template_name, {'list':self.list,"form":self.form_class})
+
+            return render(request,self.template_name, {'applications':self.list,"form":self.form_class})
         else:
             return redirect('login')
 
