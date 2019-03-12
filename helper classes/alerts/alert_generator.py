@@ -17,23 +17,23 @@ class Generate_Alert:
             "resident_id":"resident_id",
             "alert_id":"alert_id"
         }
-        print('*' * 50)
         numdays = 90+ (data['medicaid_pickup_date'] + pd.DateOffset(days = 90)).dt.daysinmonth
         days_used = (data['medicaid_pickup_date']+ pd.DateOffset(days = 90)).dt.day
-
         dates = numdays-days_used
+
 
 
         data["medicaid_pickup_deadline"]=pd.to_datetime(data['medicaid_pickup_date'],utc = True)+ pd.TimedeltaIndex(data = dates, unit = "D")
         day_alerts = [90, 60, 45, 30, 15, 0, -1]
-        print(data["medicaid_pickup_deadline"])
+
         # Remove Loop For CRON JOB
         # Remove timedelta(days = i) For CRON JOB
 
         # for i in range(30,60):
         data["daysLeft"] = (data["medicaid_pickup_deadline"]-pd.to_datetime(pytz.utc.localize(datetime.now()+ timedelta(days=0)))).dt.days
-        alerts = pd.merge(data,alert_data, how = 'left', on = 'resident_id',suffixes = ('','_y'))
 
+        alerts = pd.merge(data,alert_data, how = 'left', on = 'resident_id',suffixes = ('','_y'))
+        print(alerts.loc[:,("phase_id", 'alert_status_y', 'alert_id')])
         alerts.loc[(alerts.phase_id == 3)&(alerts.daysLeft == 90)&((alerts.alert_status_y == False)|alerts.alert_id.isna()) ,"alert_type_id"] = 1
         alerts.loc[(alerts.phase_id == 3)&(alerts.daysLeft == 60)&((alerts.alert_status_y == False)|alerts.alert_id.isna()) ,"alert_type_id"] = 2
         alerts.loc[(alerts.phase_id == 3)&(alerts.daysLeft == 45)&((alerts.alert_status_y == False)|alerts.alert_id.isna()) ,"alert_type_id"] = 3
@@ -43,6 +43,8 @@ class Generate_Alert:
         alerts.loc[(alerts.phase_id == 3)&(alerts.daysLeft == -1)&((alerts.alert_status_y == False)|alerts.alert_id.isna()) ,"alert_type_id"] = 7
 
         self.alerts += alerts.loc[(alerts.phase_id == 3)&(alerts.daysLeft.isin(day_alerts))&((alerts.alert_status_y == False)|alerts.alert_id.isna()) ,alert_columns.values()].to_dict('records')
+        print('*' * 50)
+        print(self.alerts)
 
         return self.alerts
 
@@ -87,13 +89,17 @@ class Generate_Alert:
         }
         day_alerts  = [30,]
         # for i in range(1000):
-
         data["alert_date"] = (pytz.utc.localize(datetime.now()+timedelta(days = 0 ))-data['date_of_application_submission']).dt.days
         alerts = pd.merge(data,alert_data, how = 'left', on = 'application_id',suffixes = ('','_y'))
+        print(data["alert_date"])
 
         alerts.loc[(alerts.phase_id == 4)&(alerts.alert_date == 30)&((alerts.alert_status_y == False)|alerts.alert_id.isna()),["alert_type_id"]] = 8
 
+        print(alerts.alert_date, alerts.phase_id)
+        print(alerts.loc[(alerts.phase_id == 4)&(alerts.alert_date == 30.0)&((alerts.alert_status_y == False)|alerts.alert_id.isna()),["alert_type_id"]])
+
         self.alerts += alerts.loc[(alerts.phase_id == 4)&(alerts.alert_date.isin(day_alerts))&((alerts.alert_status_y == False)|alerts.alert_id.isna()),(alert_columns.values())].to_dict('records')
+        # self.alerts += alerts.loc[(alerts.phase_id == 4)&(alerts.alert_date.isin(day_alerts))&((alerts.alert_status_y == False)|alerts.alert_id.isna()),(alert_columns.values())].to_dict('records')
         return self.alerts
 
     def meeting_deadline_alert(self, data, alert_data):
