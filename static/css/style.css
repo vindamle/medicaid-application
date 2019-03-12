@@ -956,8 +956,11 @@ input#secondary_pays_copay {
 	text-align: left;
 }
 
-#fairHearingsModalBtn {
-	margin-left: 40px;
+@media(min-width: 998px) {
+	#fairHearingsModalBtn {
+		margin-left: -10px;
+		margin-bottom: 10px;
+	}
 }
 
 .addNamiBtnLi {

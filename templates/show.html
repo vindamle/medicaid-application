@@ -429,7 +429,7 @@
 					<div class="col-lg-3">
 						<li class="editableLi step4">
 							<label>Response:</label>
-							<select name="initial_response" id="initial_response" data-table="application" data-application_id="{{application.application_id}}" onchange="sendInputInfoToDB(this);createResponseRow({{application.application_id}}, this)">
+							<select name="initial_response" id="initial_response" data-table="application" data-application_id="{{application.application_id}}" onchange="sendInputInfoToDB(this);createResponseRow({{application.application_id}}, this); updateAlert({{application.application_id}}, this, 'no response')">
 								<option value="not_received">Not Received</option>
 								<option value="rfi">RFI</option>
 								<option value="approved">Approved</option>
@@ -600,7 +600,7 @@
 							{% endif %}
 							</li>
 						</div>
-						<div class="col-lg-4 applicationColumn">
+						<div class="col-lg-3 applicationColumn">
 							<li>
 								<label><input type="checkbox" class="documentationSubmittedCheckbox " id="denial_documentation_submitted" data-table="denial" data-application_id="{{denial.response.application_id}}" data-denial_id="{{denial.denial_id}}">Documentation Submitted</label>
 							</li>
@@ -608,6 +608,12 @@
 								<label>Submission Date:</label>
 								<input class="editable date " id="denial_documentation_submitted_date" data-table="denial"  data-application_id="{{denial.response.application_id}}" data-denial_id="{{denial.denial_id}}" type="date" onkeyup="checkIfEnterKey(this, event)">
 							</li>
+
+						</div>
+						<div class="col-lg-3">
+							<!-- Button trigger modal -->
+								<button type="button" class="btn btn-primary  " data-toggle="modal" data-target="#fairHearingsModal{{denial.denial_id}}" id="fairHearingsModalBtn">View/Add Fair Hearing Info</button>
+								<button type="button" class="btn btn-primary" id="createNewApp" onclick="createNewApp()">Create New Application</button>
 						</div>
 					</div>
 
@@ -634,10 +640,7 @@
 								<span class="invisible DBinfo" id="DBdenial_resolved_through_dss">{{denial.denial_resolved_through_dss}}</span>
 							</li>
 						</div>
-						<div class="col-lg-3">
-							<!-- Button trigger modal -->
-								<button type="button" class="btn btn-primary  " data-toggle="modal" data-target="#fairHearingsModal{{denial.denial_id}}" id="fairHearingsModalBtn">View/Add Fair Hearing Info</button>
-						</div>
+						
 
 							<div class="modal fade bd-example-modal-lg fairHearingsModal" id="fairHearingsModal{{denial.denial_id}}" tabindex="-1" role="dialog" aria-labelledby="fairHearingsModalTitle" aria-hidden="true">
 							  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -787,11 +790,9 @@
    								</div>
 							  </div>
 							</div>
-							<div class="col-lg-3">
-							<li>
-								<button type="button" class="btn btn-primary" id="createNewApp" onclick="createNewApp()">Create New Application</button>
-							</li>
-						</div>
+							<!-- <div class="col-lg-3">
+							
+						</div> -->
 							
 					</div>
 
@@ -1145,7 +1146,7 @@
 const residentId = document.querySelector('#residentId').innerHTML;
 
 const updateAlert = (appId, input, alertClass) => {
-	if(input.value && parseInt(input.value) > 2010 && parseInt(input.value) < 2100) {
+	if(input.id == "initial_response" || input.value && parseInt(input.value) > 2010 && parseInt(input.value) < 2100) {
 		const data = {
 			application_id: appId,
 			alert_class: alertClass
