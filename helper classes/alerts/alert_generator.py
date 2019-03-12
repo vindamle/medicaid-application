@@ -109,12 +109,13 @@ class Generate_Alert:
 
         # for i in range(5):
 
-        data["daysLeft"] = (data["application_creation_date"]-date.today()).dt.days
+        data["daysLeft"] = (date.today()-data["application_creation_date"]).dt.days
+        print(data["daysLeft"])
         alerts = pd.merge(data,alert_data, how = 'left', on = 'application_id',suffixes = ('','_y'))
 
-        alerts.loc[(alerts.phase_id == 1)&(alerts.daysLeft == 3)&((alerts.alert_status_y == False)|alerts.alert_id.isna()) ,"alert_type_id"] = 12
-        alerts.loc[(alerts.phase_id == 1)&(alerts.daysLeft ==  0)&((alerts.alert_status_y == False)|alerts.alert_id.isna()) ,"alert_type_id"] = 13
-        alerts.loc[(alerts.phase_id == 1)&(alerts.daysLeft == -1)&((alerts.alert_status_y == False)|alerts.alert_id.isna()) ,"alert_type_id"] = 14
+        alerts.loc[(alerts.phase_id == 1)&(alerts.daysLeft == 0)&((alerts.alert_status_y == False)|alerts.alert_id.isna()) ,"alert_type_id"] = 12
+        alerts.loc[(alerts.phase_id == 1)&(alerts.daysLeft ==  -3)&((alerts.alert_status_y == False)|alerts.alert_id.isna()) ,"alert_type_id"] = 13
+        alerts.loc[(alerts.phase_id == 1)&(alerts.daysLeft == -4)&((alerts.alert_status_y == False)|alerts.alert_id.isna()) ,"alert_type_id"] = 14
 
         self.alerts += alerts.loc[(alerts.phase_id == 1)&(alerts.daysLeft.isin(day_alerts))&((alerts.alert_status_y== False)|alerts.alert_id.isna()) ,alert_columns.values()].to_dict('records')
 

@@ -63,7 +63,7 @@ def track_untrack_resident(request):
         resident.save()
     return HttpResponse("200")
 
-'''REASON FOR ANNOYING ERROR'''
+
 
 def approval_verified(request):
     if request.method == 'GET':
