@@ -64,6 +64,7 @@ def track_untrack_resident(request):
     return HttpResponse("200")
 
 '''REASON FOR ANNOYING ERROR'''
+
 def approval_verified(request):
     if request.method == 'GET':
         application_id =int(request.GET['application_id'])
