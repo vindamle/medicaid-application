@@ -13,7 +13,7 @@ try:
             ImportAlerts().import_alerts(alerts)
         except:
             print("Error: Importing Error")
-    except:
-        print("Error: Generating Alerts Cannot be Completed")
+    except Exception as alert_error:
+        print("Error: Generating Alerts Cannot be Completed\n" + str(alert_error))
 except:
     print("Cannot Access Connection")

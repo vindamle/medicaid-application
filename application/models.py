@@ -138,7 +138,7 @@ class Application(models.Model):
     # Application Info
     date_of_application_submission  = models.DateTimeField(null = True, blank = True)
     date_of_application_submission_deadline  = models.DateTimeField(null = True, blank = True)
-    medicaid_pickup_date = models.DateTimeField(null = True, blank = True)
+    medicaid_pickup_date = models.DateField(null = True, blank = True)
     estimated_nami = models.DecimalField(max_digits=10,decimal_places=2,null = True, blank = True)
     copay  = models.DecimalField(max_digits=10,decimal_places=2,null = True, blank = True)
     copay_start_date =  models.DateTimeField(null = True, blank = True)
@@ -168,7 +168,7 @@ class Application(models.Model):
         null = True,
     )
 
-    application_creation_date = models.DateTimeField(auto_now_add = True)
+    application_creation_date = models.DateField(auto_now_add = True)
     # date_of_medicaid_approval  = models.DateTimeField(null = True, blank = True)
     # date_of_medicaid_recertification  = models.DateTimeField(null = True, blank = True)
 
@@ -350,7 +350,7 @@ class Alert(models.Model):
         on_delete = models.CASCADE,
     )
     alert_status =models.BooleanField(default = False)
-    
+
     trigger_date = models.DateTimeField(auto_now_add = True)
     class Meta:
         verbose_name = 'Alerts'
