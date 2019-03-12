@@ -245,7 +245,7 @@
 					<div class="col-lg-4 applicationColumn firstColumn">
 						<li class="editableLi step1">
 							<label>Applicant Meeting Date:</label>
-							<input class="editable date" id="appointment_date" data-table="application" data-application_id="{{application.application_id}}"  type="date" value="{{application.appointment_date|date:'Y-m-d'|default_if_none:''}}">
+							<input class="editable date" id="appointment_date" data-table="application" data-application_id="{{application.application_id}}"  type="date" value="{{application.appointment_date|date:'Y-m-d'|default_if_none:''}}" onblur="updateAlert({{application.application_id}},this, 'appointment')" onkeyup="checkIfEnterKey(this, event)">
 						</li>
 						<li class="step1">
 							<label><input type="checkbox" class="meetingCheckbox" data-application_id="{{application.application_id}}" {% if application.phase.phase_id > 1 %} checked="checked"{% endif %}>Met with Applicant</label>
@@ -523,7 +523,7 @@
 							</li>
 							<li class="editableLi step5 ">
 								<label>Submission Date:</label>
-								<input class="editable date " id="rfi_documentation_submitted_date" data-table="rfi"  data-application_id="{{rfi.response.application.application_id}}" data-rfi_id="{{rfi.rfi_id}}" type="date" value="{{rfi.rfi_documentation_submitted_date|date:'Y-m-d'|default_if_none:''}}" onkeyup="checkIfEnterKey(this, event)">
+								<input class="editable date " id="rfi_documentation_submitted_date" data-table="rfi"  data-application_id="{{rfi.response.application.application_id}}" data-rfi_id="{{rfi.rfi_id}}" type="date" value="{{rfi.rfi_documentation_submitted_date|date:'Y-m-d'|default_if_none:''}}" onkeyup="checkIfEnterKey(this, event); updateAlert({{rfi.response.application.application_id}},this,'rfi')">
 							</li>
 						</div>
 						<div class="col-lg-3 applicationColumn">
@@ -1143,6 +1143,17 @@
 <script src="{% static 'js/show.js' %}"></script>
 <script type="text/javascript">
 const residentId = document.querySelector('#residentId').innerHTML;
+
+const updateAlert = (appId, input, alertClass) => {
+	if(input.value && parseInt(input.value) > 2010 && parseInt(input.value) < 2100) {
+		const data = {
+			application_id: appId,
+			alert_class: alertClass
+		}
+		updateDB("alert", data, "changed alert status to true")
+	} 
+}
+
 $(document).ready(()=>{
 	// let numberOfNAMIs;
 	let html = "";
@@ -1152,22 +1163,10 @@ $(document).ready(()=>{
 
 		var applicationDiv = document.querySelector('#application{{application.application_id}}');
 		var initial_response = applicationDiv.querySelector('#initial_response');
-		var appointment_date = applicationDiv.querySelector('#appointment_date');
 		var date_of_application_submission = applicationDiv.querySelector('#date_of_application_submission');
-		var rfi_documentation_submitted_date = applicationDiv.querySelector('#rfi_documentation_submitted_date');
 		if(date_of_application_submission.value) {
 			$(`#${applicationDiv.id} .step4`).css('display', 'block');
 		}
-
-		appointment_date.addEventListener('blur', (e) => {
-			if(appointment_date.value && parseInt(appointment_date.value) > 2010 && parseInt(appointment_date.value) < 2100) {
-				const data = {
-					application_id: {{application.application_id}},
-					alert_class: "appointment"
-				}
-				updateDB("alert", data, "changed appointment alert status to true")
-			} 
-		})
 
 		date_of_application_submission.addEventListener('blur', (e) => {
 			if(date_of_application_submission.value && parseInt(date_of_application_submission.value) > 2010 && parseInt(date_of_application_submission.value) < 2100) {
@@ -1184,15 +1183,10 @@ $(document).ready(()=>{
 			}
 		})
 
-		rfi_documentation_submitted_date.addEventListener('blur', (e) => {
-			if(rfi_documentation_submitted_date.value && parseInt(rfi_documentation_submitted_date.value) > 2010 && parseInt(rfi_documentation_submitted_date.value) < 2100) {
-				const data = {
-					application_id: {{application.application_id}},
-					alert_class: "rfi"
-				}
-				updateDB("alert", data, "changed rfi alert status to true")
-			} 
-		})
+		
+		
+			
+
 
 		var approval_satisfied = applicationDiv.querySelector('#approval_satisfied');
 		if (approval_satisfied && approval_satisfied.value != "no") {
@@ -1315,7 +1309,7 @@ class ResponseRowHTML {
 							</li>
 							<li class="editableLi step5 ">
 								<label>Submission Date:</label>
-								<input class="editable date " id="rfi_documentation_submitted_date" data-table="rfi"  data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+								<input class="editable date " id="rfi_documentation_submitted_date" data-table="rfi"  data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}" type="date" onblur="sendInputInfoToDB(this); updateAlert({{application.application_id}},this,'rfi')" onkeyup="checkIfEnterKey(this, event)">
 							</li>
 						</div>
 						<div class="col-lg-3 applicationColumn">
