@@ -59,19 +59,19 @@ class Generate_Alert:
             "alert_id":"alert_id"
         }
 
-        day_alerts = [-10,-20, -21]
+        day_alerts = [10,0, -1]
 
         # Remove Loop For CRON JOB
         # Remove timedelta(days = i) For CRON JOB
 
         # for i in range(30):
-        data["daysLeft"] = (data["rfi_due_date"]-pd.to_datetime(pytz.utc.localize(datetime.now()+ timedelta(days=0)))).dt.days
+        data["daysLeft"] = (data["rfi_due_date"]-date.today()).dt.days
         print(data['daysLeft'])
         alerts = pd.merge(data,alert_data, how = 'left', on = 'application_id',suffixes = ('','_y'))
 
-        alerts.loc[(alerts.phase_id == 5)&(alerts.daysLeft == -10)&((alerts.alert_status_y == False)|alerts.alert_id.isna()) ,"alert_type_id"] = 9
-        alerts.loc[(alerts.phase_id == 5)&(alerts.daysLeft == -20)&((alerts.alert_status_y == False)|alerts.alert_id.isna()) ,"alert_type_id"] = 10
-        alerts.loc[(alerts.phase_id == 5)&(alerts.daysLeft == -21)&((alerts.alert_status_y == False)|alerts.alert_id.isna()) ,"alert_type_id"] = 11
+        alerts.loc[(alerts.phase_id == 5)&(alerts.daysLeft == 10)&((alerts.alert_status_y == False)|alerts.alert_id.isna()) ,"alert_type_id"] = 9
+        alerts.loc[(alerts.phase_id == 5)&(alerts.daysLeft == 0)&((alerts.alert_status_y == False)|alerts.alert_id.isna()) ,"alert_type_id"] = 10
+        alerts.loc[(alerts.phase_id == 5)&(alerts.daysLeft == -1)&((alerts.alert_status_y == False)|alerts.alert_id.isna()) ,"alert_type_id"] = 11
 
         self.alerts += alerts.loc[(alerts.phase_id == 5)&(alerts.daysLeft.isin(day_alerts))&((alerts.alert_status_y== False)|alerts.alert_id.isna()) ,alert_columns.values()].to_dict('records')
 
