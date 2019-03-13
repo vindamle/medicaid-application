@@ -1153,9 +1153,10 @@ input#secondary_pays_copay {
 /*_________________approvals.html_________________*/
 
 .verifyBtn {
-	background-color: #ee7700;
-	width: 110px;
-	margin-left: 10%;
+	background-color: gray;
+	/*width: 110px;*/
+	/*margin-left: 10%;*/
+	border-radius: 5px;
 	color: white;
 	padding: 5px 10px;
 }

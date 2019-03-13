@@ -934,6 +934,11 @@
 									<option value="no">No</option>
 								</select>
 								<span class="invisible DBinfo" id="DBapproval_satisfied">{{approval.approval_satisfied}}</span>
+								{% if application.approval_verified %}
+			            <button class="verifyBtn verified" onclick="verifyOrUnverify(this, {{approval.response.application.application_id}})">Approval Verified &check;</button>
+			          {% else %}
+			            <button class="verifyBtn" onclick="verifyOrUnverify(this, {{approval.response.application.application_id}})">Approval Not Verified</button>
+			          {% endif %}
 							</li>
 						</div>
 					</div>
