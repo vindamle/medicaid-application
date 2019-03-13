@@ -1,3 +1,4 @@
+
 ''' mssqlserver.py '''
 
 import os
@@ -26,11 +27,13 @@ class ConnectSqlServer:
     '''
     def connect_sql_server(self):
         try:
+            print(self.driver,self.server,self.database, self.password, self.username)
             conn = pyodbc.connect(r'''DRIVER=''' + self.driver + r''';
                 Server=''' + self.server + r''';
                 UID=''' + self.username + r''';
                 PWD=''' + self.password + r''';
-                DATABASE=''' + self.database + r''';''')
+                DATABASE=''' + self.database + r''';
+                MARS_Connection=Yes''')
 
             return conn
 
@@ -38,7 +41,6 @@ class ConnectSqlServer:
             sqlstate = ex.args[0]
             print("Connection Failed Error Code:" + sqlstate)
             return 0
-
     '''
         returns all the tables and views in the database
     '''
