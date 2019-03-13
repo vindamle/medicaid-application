@@ -19,13 +19,12 @@ class Alerts:
         ''' Get MSSQl Connection'''
         sqlServer = ConnectSqlServer()
         self.conn = sqlServer.connect_sql_server()
-     
+        print(self.conn)     
         ''' Get PSQL Connection'''
         db = Db()
         connection = db.connect_postgres()
         self.con = connection[0]
         self.meta = connection[1]
-
     def get_alerts(self, dayRange, facility):
 
         cursor = self.conn.cursor()
