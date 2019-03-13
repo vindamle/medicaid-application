@@ -242,7 +242,7 @@ class RFI(models.Model):
         null = True,
     )
 
-    rfi_due_date  = models.DateTimeField(null = True, blank = True)
+    rfi_due_date  = models.DateField(null = True, blank = True)
 
     rfi_extension_request = models.CharField(max_length = 50,  null = True, blank=True)
     rfi_extension_response= models.CharField(max_length = 50,  null = True, blank=True)
