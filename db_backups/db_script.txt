@@ -1,0 +1,11 @@
+\COPY application_phase(phase_id, phase_name) FROM '/home/cboadmin/www/medicaid-application/db_backups/phase_changes' DELIMITER ',' csv header;
+
+\COPY application_responsetype(response_type_id, response_type) FROM '/home/cboadmin/www/medicaid-application/db_backups/responsetype' DELIMITER ',' csv header;
+
+\COPY application_alerttype(alert_type_id, alert_name, alert_priority, alert_class) FROM '/home/cboadmin/www/medicaid-application/db_backups/alerttype.csv' DELIMITER ',' csv header;
+
+
+
+
+
+
