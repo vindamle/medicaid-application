@@ -12,14 +12,9 @@
         <h4>All</h4>
       </a>
     </li>
-    <li>
-      <a data-toggle="tab" href="#menu1">
-        <h4>RFI Due Soon(<span class="countSpan" id="rfiDueTableCount"></span>)</h4>
-      </a>
-    </li>
-    <li>
-      <a data-toggle="tab" href="#menu2">
-        <h4>No Medicaid Response In 30 Days (<span class="countSpan" id="noResponseTableCount"></span>)</h4>
+       <li>
+      <a data-toggle="tab" href="#menu4">
+        <h4>Schedule Appointment (<span class="countSpan" id="meetingTableCount"></span>)</h4>
       </a>
     </li>
     <li>
@@ -28,8 +23,18 @@
       </a>
     </li>
     <li>
-      <a data-toggle="tab" href="#menu4">
-        <h4>Pickup Date (<span class="countSpan" id="meetingTableCount"></span>)</h4>
+      <a data-toggle="tab" href="#menu2">
+        <h4>No Medicaid Response In 30 Days (<span class="countSpan" id="noResponseTableCount"></span>)</h4>
+      </a>
+    </li>
+    <li>
+      <a data-toggle="tab" href="#menu1">
+        <h4>RFI Due Soon(<span class="countSpan" id="rfiDueTableCount"></span>)</h4>
+      </a>
+    </li>
+    <li>
+      <a data-toggle="tab" href="#menu5">
+        <h4>Recert Due (<span class="countSpan" id="recertTableCount"></span>)</h4>
       </a>
     </li>
     </ul>
@@ -141,7 +146,7 @@
         </tbody>
       </table>
     </div>
-<div id="menu4" class="tab-pane fade">
+    <div id="menu4" class="tab-pane fade">
       <table id="meetingTable">
         <thead>
           <tr>
@@ -155,6 +160,33 @@
         <tbody>
           {% for alert in alerts%}
             {% if alert.alert_type.alert_class == "appointment" %}
+              <tr>
+                <td>{{alert.resident.first_name}}</td>
+                <td>{{alert.resident.last_name}}</td>
+                <td>{{alert.alert_type.alert_name}}</td>
+                <td>{{alert.alert_priority}}</td>
+                <td><a href="/show?resident_id={{alert.resident_id}}" class=""><button class="btn-alert">Show</button></a></td>
+              </tr>
+            {%endif%}
+          {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+    <div id="menu5" class="tab-pane fade">
+      <table id="recertTable">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Alert Type</th>
+            <th>Alert Priority</th>
+            <th class="invisible">Show</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for alert in alerts%}
+            {% if alert.alert_type.alert_class == "recertification" %}
               <tr>
                 <td>{{alert.resident.first_name}}</td>
                 <td>{{alert.resident.last_name}}</td>

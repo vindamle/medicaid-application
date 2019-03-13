@@ -89,3 +89,32 @@ editableInputs.forEach( input => {
   	sendInputInfoToDB(input);
 	});
 });
+
+const verifyOrUnverify = (btn, appId) => {
+	let trueOrFalse;
+	$(btn).toggleClass('verified');
+	if (btn.innerHTML == "Approval Not Verified") {
+		btn.innerHTML = "Approval Verified &check;";
+		trueOrFalse = "true"
+	} else {
+		btn.innerHTML = "Approval Not Verified";
+		trueOrFalse = "false"
+	}
+	const ajaxCall = $.ajax(
+	{
+		type:"GET",
+		url: "/application/ajax/approval_verified",
+		data:{
+			application_id: appId,
+			approval_verified: trueOrFalse
+		},
+		success: function() 
+		{
+			console.log("approval set to " + trueOrFalse)
+		}
+	});
+	return(ajaxCall);
+}
+
+
+	
