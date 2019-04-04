@@ -28,8 +28,18 @@ const updateDB = (table, dataObject, successMessage) => {
 		type:"GET",
 		url: `/application/ajax/update_${table}`,
 		data: dataObject,
-		success: function() 
+		success: function(response) 
 		{
+			if(dataObject.column == "medicaid_pickup_date") {
+				formattedDeadline = response
+				console.log("Here is response: ", formattedDeadline)
+				const appId = dataObject.application_id;
+				const deadlineField = document.querySelector(`#application${appId} #date_of_application_submission_deadline`)
+				// deadlineField.value = ""
+				console.log(deadlineField.value)
+				deadlineField.value = formattedDeadline
+				console.log(deadlineField.value)
+			}
 			console.log(successMessage)
 		}
 	});
@@ -47,8 +57,13 @@ const sendInputInfoToDB = input => {
 		}
 		const table = input.getAttribute('data-table');
 		const rowId = input.getAttribute(`data-${table}_id`)
+		let appId = "";
+		if (table == "application") {
+			appId = rowId;
+		}
 		let dataObject = {
 			resident_id: document.querySelector("#residentId").innerHTML,
+			application_id: appId,
 			column: input.id,
 			new_value: value,
 			row_id: rowId

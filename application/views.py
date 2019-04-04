@@ -501,3 +501,6 @@ def update_document(request):
 
 def get_app_deadline(request):
     app_id = int(request.GET['app_id'])
+    app = Application.objects.get(application_id = app_id)
+    deadline = app.date_of_application_submission_deadline
+    return HttpResponse(deadline)

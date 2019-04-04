@@ -261,7 +261,7 @@
 						</li>
 						<li class="editableLi step2">
 							<label>Medicaid Pickup Date:</label>
-							<input class="editable date" id="medicaid_pickup_date" data-table="application" data-application_id="{{application.application_id}}" data-alert_id=5 type="date" value="{{application.medicaid_pickup_date|date:'Y-m-d'|default_if_none:''}}" onkeyup="checkIfEnterKey(this, event)" onblur="updateDeadline({{application.application_id}})">
+							<input class="editable date" id="medicaid_pickup_date" data-table="application" data-application_id="{{application.application_id}}" data-alert_id=5 type="date" value="{{application.medicaid_pickup_date|date:'Y-m-d'|default_if_none:''}}">
 						</li>
 						<li class="step3">
 							<label>Application Type:</label>
@@ -2020,20 +2020,6 @@ const deleteResponse = (responseType,responseId) => {
 			}
 		});
 	}
-}
-
-const updateDeadline = appId => {
-	const ajaxCall = $.ajax(
-		{
-			type:"GET",
-			url: `/application/ajax/get_app_deadline`,
-			data: {
-				app_id: appId
-			},
-			success: (deadline) => {
-				console.log(deadline)
-			}
-		});
 }
 
 </script>
