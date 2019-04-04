@@ -39,12 +39,18 @@ const sendInputInfoToDB = input => {
 	if(input.type == 'date' && (parseInt(input.value) < 2010 || parseInt(input.value) > 2100)) {
 		alert("Sorry - that year is out of range. Please enter a year after 2010 and before, ya know, doomsday.")
 	} else if (input.value) {
+		let value;
+		if(input.type == 'checkbox') {
+			value = input.checked
+		} else {
+			value = input.value
+		}
 		const table = input.getAttribute('data-table');
 		const rowId = input.getAttribute(`data-${table}_id`)
 		let dataObject = {
 			resident_id: document.querySelector("#residentId").innerHTML,
 			column: input.id,
-			new_value: input.value,
+			new_value: value,
 			row_id: rowId
 		};
 		let successMessage = `Value of ${dataObject.column} in the ${table} table set to ${dataObject.new_value}`;

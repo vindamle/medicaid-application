@@ -15,6 +15,7 @@
         <th class="desktopShow">Last Name</th>
         <!-- <th>Facility</th> -->
         <th>Pickup Date</th>
+        <th>Application Deadline</th>
         <th>Status</th>
         <th class="invisible">Show</th>
         <th class="invisible">Stop Tracking</th>
@@ -28,6 +29,7 @@
           <td class="desktopShow">{{application.resident.last_name}}</td>
           <!-- <td>{{application.facility}}</td> -->
           <td>{{application.medicaid_pickup_date|date:'F d, Y'}}</td>
+          <td>{{application.date_of_application_submission_deadline|date:'F d, Y'}}</td>
           <td>{{application.phase.phase_name}}</td>
           <td><a href="/show?resident_id={{application.resident_id}}" class="alertByButton"><button class="btn-tracked">Show</button></a></td>
           <td><button class="btn-ignore">&times;</button></td>

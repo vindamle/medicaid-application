@@ -132,7 +132,7 @@ class ShowView(View):
 
         resident_id= int(request.GET["resident_id"])
         resident = Resident.objects.get(resident_id = resident_id)
-        applications = Application.objects.filter(resident = Resident.objects.get(resident_id = resident_id))
+        applications = Application.objects.filter(resident = Resident.objects.get(resident_id = resident_id)).order_by('application_creation_date')
 
 
         resident_alerts = Alert.objects.filter(resident = Resident.objects.get(resident_id = resident_id), alert_status = False)

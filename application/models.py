@@ -168,7 +168,7 @@ class Application(models.Model):
         null = True,
     )
 
-    application_creation_date = models.DateField(auto_now_add = True)
+    application_creation_date = models.DateTimeField(auto_now_add = True)
     # date_of_medicaid_approval  = models.DateTimeField(null = True, blank = True)
     # date_of_medicaid_recertification  = models.DateTimeField(null = True, blank = True)
 
@@ -304,6 +304,7 @@ class Denial(models.Model):
     denial_documentation_submitted = models.CharField(max_length = 50, null = True, blank = True)
     denial_contacted_dss =  models.CharField(max_length = 50,  null = True, blank=True)
     denial_resolved_through_dss =  models.CharField(max_length = 50,  null = True, blank=True)
+    no_denial_letter_received =  models.CharField(max_length = 50,  null = True, blank=True)
 
     class Meta:
         verbose_name = 'Denials'
