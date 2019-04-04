@@ -193,7 +193,7 @@ def phase_change(request):
     print(phase_id, application_id)
     application = Application.objects.get(application_id = application_id)
     phase = Phase.objects.get(phase_id = phase_id)
-
+    print(phase)
 
     # Audit Log
     Snowden.objects.create(
@@ -207,7 +207,7 @@ def phase_change(request):
         date = datetime.now()
     )
     print(application.phase)
-    application.phase = phase
+    application.phase_id = phase.phase_id
     print(application.phase.phase_id)
     application.save()
     print(application.resident)
