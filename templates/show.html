@@ -8,6 +8,15 @@
 <div class="overlay" onclick="this.style.display = 'none'">
 	<img src='{% static "img/confetti.gif" %}'>
 </div>
+
+<div id="datePromptDiv">
+	<p>Enter <span id="responseType"></span> Date:</p>
+	<input type="date" name="date" onkeyup="checkIfEnterKey(this, event)">
+	<button onclick="this.parentNode.style.display = 'none'">Cancel</button>
+</div>
+
+
+
 <div class="alertDiv">
 	{% for alert in resident_alerts %}
 			<div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -27,7 +36,7 @@
 	{% for application in applications %}
     <li {% if application == applications.last %} class="active"{% endif %}>
       <a data-toggle="tab" href="#application{{application.application_id}}" {% if application == applications.last %} class="active show"{% endif %}>
-        App #{{ forloop.counter }}: <span id="app{{application.application_id}}TabPhaseName">{{application.phase.phase_name}} - <span id="app{{application.application_id}}TabPhaseName">{{application.application_creation_date|date:'m/d/y'}}</span>
+        App #{{ forloop.counter }}: <span id="app{{application.application_id}}TabPhaseName">{{application.phase.phase_name}}</span>
       </a>
     </li>
 	{% endfor %}
@@ -337,8 +346,12 @@
 				<div class="row">
 					<div class="col-lg-3">
 						<li class="step3">
-
-							<input type="checkbox" class="submittedCheckbox" id="submittedCheckbox1" {% if application.phase.phase_id > 2 %} checked="checked"{% endif %}><label for="submittedCheckbox1">Medicaid Application Submitted</label>
+							{% if application.phase.phase_id > 3 %}
+								<input type="checkbox" class="submittedCheckbox" data-application_id="{{application.application_id}}" id="submittedCheckbox1" checked="checked" onchange="phaseChange(this, 3)">
+							{% else %}
+								<input type="checkbox" data-application_id="{{application.application_id}}" class="submittedCheckbox" id="submittedCheckbox1" onchange="phaseChange(this, 4)">
+							{% endif %}
+							<label for="submittedCheckbox1">Medicaid Application Submitted</label>
 						</li>
 						<li class="editableLi step3">
 							<label>Submission Date:</label>
@@ -598,6 +611,9 @@
 								>
 
 							{% endif %}
+							</li>
+							<li>
+								<label><input type="checkbox" class="noDenialLetterReceivedCheckbox " id="no_denial_letter_received" data-table="denial" data-application_id="{{denial.response.application_id}}" data-denial_id="{{denial.denial_id}}" onchange="sendInputInfoToDB(this)" {% if denial.no_denial_letter_received == "true" %} checked="checked" {% endif %}>No Denial Letter Received</label>
 							</li>
 						</div>
 						<div class="col-lg-3 applicationColumn">
@@ -1177,6 +1193,7 @@ $(document).ready(()=>{
 		date_of_application_submission.addEventListener('blur', (e) => {
 			if(date_of_application_submission.value && parseInt(date_of_application_submission.value) > 2010 && parseInt(date_of_application_submission.value) < 2100) {
 				$(`#${applicationDiv.id} .step4`).fadeIn();
+				console.log(date_of_application_submission)
 				phaseChange(date_of_application_submission, 4);
 				const data = {
 					application_id: {{application.application_id}},
@@ -1210,10 +1227,10 @@ $(document).ready(()=>{
 				if (!$(`#${applicationDiv.id} #appointment_date`).val()){
 					alert("Please enter a meeting date")
 					meetingCheckbox.checked = false;
-					return;
-				}
+				} else {
 				$(`#${applicationDiv.id} .step2`).fadeIn();
 				 phaseChange(meetingCheckbox, 2);
+				}
 			} else {
 				$(`#${applicationDiv.id} .step2`).css('display', 'none');
 				$(`#${applicationDiv.id} .step3`).css('display', 'none');
@@ -1268,7 +1285,7 @@ const collapseSection = (h4) => {
 }
 
 class ResponseRowHTML {
-	constructor (applicationId, responseId, rfiOrDenialOrApprovalId) {
+	constructor (applicationId, responseId, rfiOrDenialOrApprovalId, date) {
 		this.rfiRowHtml = `
 			<section id="rfi${rfiOrDenialOrApprovalId}">
 				<h4 class="numberOfRFIs collapsibleSection responseH4" onclick="collapseSection(this)">RFI #${numberOfRFIs}</h4>
@@ -1299,7 +1316,7 @@ class ResponseRowHTML {
 						<div class="col-lg-3 applicationColumn">
 							<li class="editableLi ">
 								<label>RFI Due Date:</label>
-								<input class="editable date  due_date" id="rfi_due_date" data-table="rfi"  data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+								<input class="editable date  due_date" id="rfi_due_date" data-table="rfi"  data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)" value="${date}">
 							</li>
 							<li class="editableLi">
 								<label>Extension Requested?</label>
@@ -1345,7 +1362,7 @@ class ResponseRowHTML {
 					<div class="col-lg-2 applicationColumn firstColumn">
 					<li class="editableLi">
 							<label>Approval Notice Date:</label>
-							 <input class="editable date" id="approval_notice_date" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}"  type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+							 <input class="editable date" id="approval_notice_date" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}"  type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)" value="${date}">
 						</li>
 					</div>
 					<div class="col-lg-3 applicationColumn">
@@ -1506,7 +1523,7 @@ class ResponseRowHTML {
 						<div class="col-lg-3 firstColumn applicationColumn">
 							<li class="editableLi ">
 								<label>Denial Notice Date:</label>
-								<input class="editable date  due_date" id="denial_notice_date" data-table="denial"  data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}" type="date" onkeyup="checkIfEnterKey(this, event)" value="{{denial.denial_notice_date|date:'Y-m-d'}}">
+								<input class="editable date  due_date" id="denial_notice_date" data-table="denial"  data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}" type="date" onkeyup="checkIfEnterKey(this, event)"  value="${date}">
 							</li>
 							
 						</div>
@@ -1527,6 +1544,9 @@ class ResponseRowHTML {
 										)
 									"
 								>
+							</li>
+							<li>
+								<label><input type="checkbox" class="noDenialLetterReceivedCheckbox " id="no_denial_letter_received" data-table="denial" data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this)">No Denial Letter Received</label>
 							</li>
 						</div>
 						<div class="col-lg-4 applicationColumn">
@@ -1787,33 +1807,59 @@ const newRfiDueDatePrompt = selectField => {
 
 let numberOfRFIs = 0;
 const createResponseRow = (applicationId, responseField) => {
-	const ajaxCall = $.ajax(
-		{
-			type:"GET",
-			url: `/application/ajax/create_response`,
-			data: {
-				application_id: applicationId,
-				response_type: responseField.value
-			},
-			success: function(idArray) {
-				if (idArray != 'no response created for not_received') {
-					const responseId = idArray[0]
-					rfiOrDenialOrApprovalId = idArray[1]
-					newResponseRowHTML = new ResponseRowHTML(applicationId, responseId, rfiOrDenialOrApprovalId)
-					const applicationDiv = document.querySelector(`#application${applicationId}`)
-					applicationDiv.insertAdjacentHTML("beforeend", newResponseRowHTML[`${responseField.value}RowHtml`]);
-				}
-			}
-		});
-	if (responseField.value == "rfi") {
-		phaseChange(responseField, 5);
-		numberOfRFIs += 1;
-	} else if (responseField.value == 'approved'){
-		phaseChange(responseField, 6);
-	} else if (responseField.value == 'denied'){
-		phaseChange(responseField, 12);
-	};
+	const datePromptDiv = document.querySelector('#datePromptDiv');
+	const responseTypeSpan = datePromptDiv.querySelector('#responseType')
+	const responseType = responseField.value
+	const input = datePromptDiv.querySelector('INPUT')
+	if (responseType != 'not_received') {
+		if (responseType == 'rfi') {
+			responseTypeSpan.insertAdjacentHTML('beforeend', 'RFI Due')
+		} else if (responseType == 'denied') {
+			responseTypeSpan.insertAdjacentHTML('beforeend', 'Denial Notice')
+		} else if (responseType == 'approved') {
+			responseTypeSpan.insertAdjacentHTML('beforeend', 'Approval Notice')
+		}
+		datePromptDiv.style.display = 'initial'
+	}
+	input.focus()
+	input.addEventListener('blur', () => {
+		let date = input.value
+
+		if(date) {
+			datePromptDiv.style.display = 'none'
+			const ajaxCall = $.ajax(
+				{
+					type:"GET",
+					url: `/application/ajax/create_response`,
+					data: {
+						application_id: applicationId,
+						response_type: responseType,
+						date: date
+					},
+					success: function(idArray) {
+						if (idArray != 'no response created for not_received') {
+							const responseId = idArray[0]
+							rfiOrDenialOrApprovalId = idArray[1]
+							newResponseRowHTML = new ResponseRowHTML(applicationId, responseId, rfiOrDenialOrApprovalId, date)
+							const applicationDiv = document.querySelector(`#application${applicationId}`)
+							applicationDiv.insertAdjacentHTML("beforeend", newResponseRowHTML[`${responseField.value}RowHtml`]);
+						}
+					}
+				});
+			if (responseField.value == "rfi") {
+				phaseChange(responseField, 5);
+				numberOfRFIs += 1;
+			} else if (responseField.value == 'approved'){
+				phaseChange(responseField, 6);
+			} else if (responseField.value == 'denied'){
+				phaseChange(responseField, 12);
+			};
+		}
+	})	
 }
+
+
+
 const checkIfEnterKey = (input,event) => {
 	if (event.keyCode == 13) {
 		input.blur();
