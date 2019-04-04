@@ -495,3 +495,6 @@ def update_document(request):
     field = setattr(document, column,new_value)
     document.save()
     return HttpResponse("200")
+
+def get_app_deadline(request):
+    app_id = int(request.GET['app_id'])
