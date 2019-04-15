@@ -1,6 +1,13 @@
 const phaseChange = (element, phaseId) => {
+	let appId;
+	// to check if this function is being called from the generateApproval() function, where there is no element:
+	if (typeof(element.getAttribute) == 'function') {
+		appId = element.getAttribute('data-application_id')
+	} else {
+		appId = element.appId
+	}
 	const dataObject = {
-		application_id: element.getAttribute('data-application_id'),
+		application_id: appId,
 		phase_id: phaseId
 	};
 		const successMessage = `phase changed to ${dataObject.phase_id}`;
@@ -32,13 +39,9 @@ const updateDB = (table, dataObject, successMessage) => {
 		{
 			if(dataObject.column == "medicaid_pickup_date") {
 				formattedDeadline = response
-				console.log("Here is response: ", formattedDeadline)
 				const appId = dataObject.application_id;
 				const deadlineField = document.querySelector(`#application${appId} #date_of_application_submission_deadline`)
-				// deadlineField.value = ""
-				console.log(deadlineField.value)
 				deadlineField.value = formattedDeadline
-				console.log(deadlineField.value)
 			}
 			console.log(successMessage)
 		}

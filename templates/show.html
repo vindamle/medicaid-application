@@ -11,7 +11,9 @@
 
 <div id="datePromptDiv">
 	<p>Enter <span id="responseType"></span> Date:</p>
-	<input type="date" name="date" onkeyup="checkIfEnterKey(this, event)">
+	<input type="date" name="date" onblur="createResponseRow(this)" onkeyup="checkIfEnterKey(this, event)">
+	 <input type="hidden" class="appId" name="appId">
+	 <input type="hidden" class="responseType" name="responseType">
 	<button onclick="this.parentNode.style.display = 'none'">Cancel</button>
 </div>
 
@@ -339,6 +341,11 @@
 							<label>DSS Contact Fax:</label>
 							<input class="editable" id="dss_contact_fax" data-table="application" data-application_id="{{application.application_id}}"  type="text" value="{{application.dss_contact_fax|default_if_none:''}}">
 						</li>
+						<br>
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#dssContactLogModal{{application.application_id}}" id="dssContactLogModalBtn">DSS Contact Log</button>
+						
+						<!-- insert DSS Contact Log Modal here -->
+
 					</div>
 				</div>
 			<hr class= step3">
@@ -442,7 +449,7 @@
 					<div class="col-lg-3">
 						<li class="editableLi step4">
 							<label>Response:</label>
-							<select name="initial_response" id="initial_response" data-table="application" data-application_id="{{application.application_id}}" onchange="sendInputInfoToDB(this);createResponseRow({{application.application_id}}, this); updateAlert({{application.application_id}}, this, 'no response')">
+							<select name="initial_response" id="initial_response" data-table="application" data-application_id="{{application.application_id}}" onchange="sendInputInfoToDB(this);showDatePromptDiv({{application.application_id}}, this); updateAlert({{application.application_id}}, this, 'no response')">
 								<option value="not_received">Not Received</option>
 								<option value="rfi">RFI</option>
 								<option value="approved">Approved</option>
@@ -542,7 +549,7 @@
 						<div class="col-lg-3 applicationColumn">
 							<li class="editableLi step5 ">
 								<label>Response:</label>
-								<select name="response_select" class=" responseSelect" id="rfi_response" data-table="rfi" data-application_id="{{rfi.response.application.application_id}}" data-rfi_id="{{rfi.rfi_id}}" onchange="sendInputInfoToDB(this); createResponseRow({{rfi.response.application.application_id}}, this)">
+								<select name="response_select" class=" responseSelect" id="rfi_response" data-table="rfi" data-application_id="{{rfi.response.application.application_id}}" data-rfi_id="{{rfi.rfi_id}}" onchange="sendInputInfoToDB(this); showDatePromptDiv({{rfi.response.application.application_id}}, this)">
 									<option value="not_received">Not Received</option>
 									<option value="rfi">RFI</option>
 									<option value="approved">Approved</option>
@@ -648,7 +655,7 @@
 						<div class="col-lg-3">
 							<li class="editableLi  ">
 								<label>Resolved through DSS?</label>
-								<select name="denial_resolved_through_dss" id="denial_resolved_through_dss" data-table="denial" data-denial_id="{{denial.denial_id}}"  onchange="sendInputInfoToDB(this)">
+								<select name="denial_resolved_through_dss" id="denial_resolved_through_dss" data-table="denial" data-denial_id="{{denial.denial_id}}"  onchange="sendInputInfoToDB(this); generateApproval(this, {{denial.response.application.application_id}})">
 									<option value="">Select one:</option>
 									<option value="yes">Yes</option>
 									<option value="no">No</option>
@@ -1193,7 +1200,6 @@ $(document).ready(()=>{
 		date_of_application_submission.addEventListener('blur', (e) => {
 			if(date_of_application_submission.value && parseInt(date_of_application_submission.value) > 2010 && parseInt(date_of_application_submission.value) < 2100) {
 				$(`#${applicationDiv.id} .step4`).fadeIn();
-				console.log(date_of_application_submission)
 				phaseChange(date_of_application_submission, 4);
 				const data = {
 					application_id: {{application.application_id}},
@@ -1338,7 +1344,7 @@ class ResponseRowHTML {
 						<div class="col-lg-3 applicationColumn">
 							<li class="editableLi step5 ">
 								<label>Response:</label>
-								<select name="response_select" class=" responseSelect" id="rfi_response" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}" onchange="createResponseRow(${applicationId}, this); sendInputInfoToDB(this)">
+								<select name="response_select" class=" responseSelect" id="rfi_response" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this); showDatePromptDiv(${applicationId}, this); console.log('HERE IS THIS: ', this)">
 									<option value="not_received">Not Received</option>
 									<option value="rfi">RFI</option>
 									<option value="approved">Approved</option>
@@ -1577,7 +1583,7 @@ class ResponseRowHTML {
 						<div class="col-lg-3">
 							<li class="editableLi  ">
 								<label>Resolved through DSS?</label>
-								<select name="denial_resolved_through_dss" id="denial_resolved_through_dss" data-table="denial" data-denial_id="${rfiOrDenialOrApprovalId}"  onchange="sendInputInfoToDB(this)">
+								<select name="denial_resolved_through_dss" id="denial_resolved_through_dss" data-table="denial" data-denial_id="${rfiOrDenialOrApprovalId}"  onchange="sendInputInfoToDB(this); generateApproval(this, ${applicationId})">
 									<option value="">Select one:</option>
 									<option value="yes">Yes</option>
 									<option value="no">No</option>
@@ -1618,8 +1624,6 @@ class ResponseRowHTML {
 						</div>
 							
 					</div>
-
-
 
 				</ul>
 			</section>
@@ -1805,57 +1809,68 @@ const newRfiDueDatePrompt = selectField => {
 	}
 }
 
-let numberOfRFIs = 0;
-const createResponseRow = (applicationId, responseField) => {
+const showDatePromptDiv = (appId, responseField) => {
 	const datePromptDiv = document.querySelector('#datePromptDiv');
-	const responseTypeSpan = datePromptDiv.querySelector('#responseType')
 	const responseType = responseField.value
+	datePromptDiv.querySelector('.appId').value = appId
+	datePromptDiv.querySelector('.responseType').value = responseType
+	const responseTypeSpan = datePromptDiv.querySelector('#responseType')
 	const input = datePromptDiv.querySelector('INPUT')
 	if (responseType != 'not_received') {
 		if (responseType == 'rfi') {
-			responseTypeSpan.insertAdjacentHTML('beforeend', 'RFI Due')
+			responseTypeSpan.innerHTML = 'RFI Due'
 		} else if (responseType == 'denied') {
-			responseTypeSpan.insertAdjacentHTML('beforeend', 'Denial Notice')
+			responseTypeSpan.innerHTML = 'Denial Notice'
 		} else if (responseType == 'approved') {
-			responseTypeSpan.insertAdjacentHTML('beforeend', 'Approval Notice')
+			responseTypeSpan.innerHTML = 'Approval Notice'
 		}
 		datePromptDiv.style.display = 'initial'
 	}
 	input.focus()
-	input.addEventListener('blur', () => {
-		let date = input.value
+}
 
-		if(date) {
-			datePromptDiv.style.display = 'none'
-			const ajaxCall = $.ajax(
-				{
-					type:"GET",
-					url: `/application/ajax/create_response`,
-					data: {
-						application_id: applicationId,
-						response_type: responseType,
-						date: date
-					},
-					success: function(idArray) {
-						if (idArray != 'no response created for not_received') {
-							const responseId = idArray[0]
-							rfiOrDenialOrApprovalId = idArray[1]
-							newResponseRowHTML = new ResponseRowHTML(applicationId, responseId, rfiOrDenialOrApprovalId, date)
-							const applicationDiv = document.querySelector(`#application${applicationId}`)
-							applicationDiv.insertAdjacentHTML("beforeend", newResponseRowHTML[`${responseField.value}RowHtml`]);
-						}
+
+let numberOfRFIs = 0;
+
+const createResponseRow = (dateInput) => {
+	const date = dateInput.value
+	const applicationId = dateInput.parentNode.querySelector('.appId').value
+	const responseType = dateInput.parentNode.querySelector('.responseType').value
+	console.log(date, applicationId, responseType)
+	dateInput.value = ''
+	datePromptDiv.style.display = 'none'
+	if(date) {
+		const ajaxCall = $.ajax(
+			{
+				type:"GET",
+				url: `/application/ajax/create_response`,
+				data: {
+					application_id: applicationId,
+					response_type: responseType,
+					date: date
+				},
+				success: function(idArray) {
+					if (idArray != 'no response created for not_received') {
+						const responseId = idArray[0]
+						rfiOrDenialOrApprovalId = idArray[1]
+						newResponseRowHTML = new ResponseRowHTML(applicationId, responseId, rfiOrDenialOrApprovalId, date)
+						const applicationDiv = document.querySelector(`#application${applicationId}`)
+						applicationDiv.insertAdjacentHTML("beforeend", newResponseRowHTML[`${responseType}RowHtml`]);
 					}
-				});
-			if (responseField.value == "rfi") {
-				phaseChange(responseField, 5);
-				numberOfRFIs += 1;
-			} else if (responseField.value == 'approved'){
-				phaseChange(responseField, 6);
-			} else if (responseField.value == 'denied'){
-				phaseChange(responseField, 12);
-			};
+				}
+			});
+		const responseField = {
+			appId: applicationId
 		}
-	})	
+		if (responseType == "rfi") {
+			phaseChange(responseField, 5);
+			numberOfRFIs += 1;
+		} else if (responseType == 'approved'){
+			phaseChange(responseField, 6);
+		} else if (responseType == 'denied'){
+			phaseChange(responseField, 12);
+		};
+	}
 }
 
 
@@ -2019,6 +2034,16 @@ const deleteResponse = (responseType,responseId) => {
 				console.log("Response deleted")
 			}
 		});
+	}
+}
+
+const generateApproval = (select, appId) => {
+	if(select.value == "yes") {
+		const responseField = {
+			value: "approved",
+			appId: appId
+		}
+		showDatePromptDiv(appId, responseField)
 	}
 }
 
