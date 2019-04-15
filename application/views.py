@@ -190,7 +190,9 @@ def phase_change(request):
     # Sending an success response
     application_id =int(request.GET['application_id'])
     phase_id =int(request.GET['phase_id'])
-
+    print("*" * 50)
+    print('here is what you are getting: ')
+    print(phase_id, application_id)
     application = Application.objects.get(application_id = application_id)
     phase = Phase.objects.get(phase_id = phase_id)
 
@@ -206,13 +208,22 @@ def phase_change(request):
         log_ip = request.META.get('REMOTE_ADDR'),
         date = datetime.now()
     )
+    print("*" * 50)
+    print('here is application.phase: ')
     application.phase = phase
+    print(application.phase)
+    print("*" * 50)
+    print('here is application.phase.phase_id: ')
+    print(application.phase.phase_id)
     application.save()
-    return HttpResponse(str(phase.phase_name))
+    print(application.resident)
+    return HttpResponse(str(application.phase.phase_name))
 
 def create_response(request):
     application_id = int(request.GET['application_id'])
     response_type = request.GET['response_type']
+    # get notice date to prepopulate:
+    date = request.GET['date']
     if response_type != "not_received":
         response = Response.objects.create(application_id = application_id, response_type = ResponseType.objects.get(response_type = response_type))
 
@@ -220,13 +231,13 @@ def create_response(request):
         Snowden.objects.create(user = request.user,table_name = response._meta.verbose_name,row_id = response.response_id,column_name = "Object Created",old_value = "None",new_value = application_id,log_ip = request.META.get('REMOTE_ADDR'),date = datetime.now())
 
         if response_type == 'rfi':
-            action = RFI.objects.create(response = response)
+            action = RFI.objects.create(response = response, rfi_due_date = date)
             return_info = action.rfi_id
         elif response_type == 'approved':
-            action = Approval.objects.create(response = response)
+            action = Approval.objects.create(response = response, approval_notice_date = date)
             return_info = action.approval_id
         elif response_type == 'denied':
-            action = Denial.objects.create(response = response)
+            action = Denial.objects.create(response = response, denial_notice_date = date)
             return_info = action.denial_id
 
         # Audit Log
@@ -487,3 +498,9 @@ def update_document(request):
     field = setattr(document, column,new_value)
     document.save()
     return HttpResponse("200")
+
+def get_app_deadline(request):
+    app_id = int(request.GET['app_id'])
+    app = Application.objects.get(application_id = app_id)
+    deadline = app.date_of_application_submission_deadline
+    return HttpResponse(deadline)

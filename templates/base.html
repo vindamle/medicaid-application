@@ -40,12 +40,12 @@
             </li>
             <li class="grayText">|</li>
             <li class="nav-item">
-              <a class="nav-link trackedAlerts" href="{% url 'pending_alerts' %}">Pending Alerts</a>
+              <a class="nav-link trackedAlerts" href="{% url 'pending_alerts' %}">Alerts</a>
             </li>
-            <li class="grayText">|</li>
+            <!-- <li class="grayText">|</li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'approvals' %}">Approvals</a>
-            </li>
+            </li> -->
             <li class="grayText">|</li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -77,6 +77,20 @@
     {% load static %}
     <script src="{% static 'js/datatables.min.js' %}"></script>
     <script src="{% static 'js/base.js' %}"></script>
+    <script>
+        Userback = window.Userback || {};
+        Userback.access_token = '6570|9644|X2snnRUELHiPamXenjvdJ9NsVPfNlz6qEjc8Lfe2cJbN8Seo3a';
+
+        (function(id) {
+            if (document.getElementById(id)) {return;}
+            var s = document.createElement('script');
+            s.id = id;
+            s.async = 1;
+            s.src = 'https://static.userback.io/widget/v1.js';
+            var parent_node = document.head || document.body;
+            parent_node.appendChild(s);
+        })('userback-sdk');
+    </script>
 
     {% block scripts %}
 
