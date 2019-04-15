@@ -2,14 +2,17 @@ from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
-from .forms import NameForm
+from django.http import JsonResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+
+from datetime import datetime, timedelta
+from calendar import monthrange
+
+from .refresh import Refresh
+from .forms import NameForm
 from .models import *
 from .additionalInfo import AdditionalInfo
-from datetime import datetime, timedelta
-from django.http import JsonResponse
-from calendar import monthrange
 
 
 def application_tracking(request):
@@ -504,3 +507,11 @@ def get_app_deadline(request):
     app = Application.objects.get(application_id = app_id)
     deadline = app.date_of_application_submission_deadline
     return HttpResponse(deadline)
+
+
+def get_demographic_ncs_refresh(request):
+    # resident_id = int(request.GET['resident_id'])
+    # resident = Resident.objects.get(resident_id = response_id)
+    # refresh = Refresh().demographics(resident.resident_id,resident.facility_id)
+    # print(refesh)
+    return HttpResponse("Updated demographics")
