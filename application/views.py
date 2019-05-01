@@ -477,6 +477,66 @@ def delete_fair_hearing(request):
     fair_hearing.delete()
     return HttpResponse("200")
 
+def create_dss_contact_log_entry(request):
+    application_id = int(request.GET['application_id'])
+    dss_contact_log_entry = DSSLogEntry.objects.create(application = Application.objects.get(application_id = application_id))
+
+
+    # Audit Log
+    Snowden.objects.create(
+        user = request.user,
+        table_name = dss_contact_log_entry._meta.verbose_name,
+        row_id = dss_contact_log_entry.entry_id,
+        column_name = "Object Created",
+        old_value = "None",
+        new_value = application_id,
+        log_ip = request.META.get('REMOTE_ADDR'),
+        date = datetime.now()
+    )
+
+    return HttpResponse(int(dss_contact_log_entry.entry_id))
+
+def update_dss_contact_log_entry(request):
+    entry_id = int(request.GET['row_id'])
+    column =request.GET['column']
+    new_value =request.GET['new_value']
+    if new_value == '':
+        new_value = None
+    dss_contact_log_entry = DSSLogEntry.objects.get(entry_id = entry_id)
+
+    # Audit Log
+    Snowden.objects.create(
+        user = request.user,
+        table_name = dss_contact_log_entry._meta.verbose_name,
+        row_id = entry_id,
+        column_name = column,
+        old_value = getattr(dss_contact_log_entry,column) if getattr(dss_contact_log_entry,column) is not None else "None",
+        new_value = new_value if new_value is not None else "None",
+        log_ip = request.META.get('REMOTE_ADDR'),
+        date = datetime.now()
+    )
+
+    field = setattr(dss_contact_log_entry, column,new_value)
+    dss_contact_log_entry.save()
+    return HttpResponse("200")
+
+def delete_dss_contact_log_entry(request):
+    entry_id = int(request.GET['row_id'])
+    dss_contact_log_entry = DSSLogEntry.objects.get(entry_id = entry_id)
+    # Audit Log
+    Snowden.objects.create(
+        user = request.user,
+        table_name = dss_contact_log_entry._meta.verbose_name,
+        row_id = entry_id,
+        column_name = "Object Deleted",
+        old_value = "DELETED",
+        new_value = "DELETED",
+        log_ip = request.META.get('REMOTE_ADDR'),
+        date = datetime.now()
+    )
+    dss_contact_log_entry.delete()
+    return HttpResponse("200")
+
 def update_document(request):
     document_id = int(request.GET['row_id'])
     column =request.GET['column']

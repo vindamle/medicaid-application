@@ -346,6 +346,83 @@
 						
 						<!-- insert DSS Contact Log Modal here -->
 
+
+
+						<div class="modal fade bd-example-modal dssContactLogModal" id="dssContactLogModal{{application.application_id}}" tabindex="-1" role="dialog" aria-labelledby="dssContactLogModalTitle" aria-hidden="true">
+							  <div class="modal-dialog modal-dialog-centered" role="document">
+							    <div class="modal-content">
+							      <div>
+							        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							          <span aria-hidden="true">&times;</span>
+							        </button>
+							        <h5 class="modal-title" id="exampleModalLongTitle">DSS Contact Log</h5>
+							      </div>
+							      <div class="modal-body">
+										{% for entry in dss_contact_log_entries %}
+											{% if entry.application.application_id == application.application_id %}
+												<div class="modalRowDiv">
+													<button type="button" class="close" onclick="removeModalRow(this, {{entry.entry_id}}, 'dss_contact_log_entry')">
+									          <span >&times;</span>
+									        </button>
+													<h6 class="fairHearingH6">Log Entry</h6>
+													<div class="row modalRow">
+														<div class="col-lg-6 col-md-6 col-sm-12 modalRowColumn">
+															<li>
+																<label>Contact Person:</label>
+																<input type="text" class="editable" id="entry_contact_person" data-table="dss_contact_log_entry" data-dss_contact_log_entry_id="{{entry.entry_id}}" value="{{entry.entry_contact_person|default_if_none:''}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+															<li>
+																<label>Date:</label>
+																<input class="editable date" id="entry_date" data-table="dss_contact_log_entry" data-dss_contact_log_entry_id="{{entry.entry_id}}" type="date" value="{{entry.entry_date|date:'Y-m-d'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+															<li>
+																<label>Time:</label>
+																<input class="editable time" id="entry_time" data-table="dss_contact_log_entry" data-dss_contact_log_entry_id="{{entry.entry_id}}" type="time" value="{{entry.entry_time|time:'H:i'}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+															</li>
+													
+														</div>
+														<!-- <div class="col-lg-4 col-md-6 col-sm-12 modalRowColumn">
+															
+														</div> -->
+														<div class="col-lg-6 col-md-6 col-sm-12 modalRowColumn">		
+															<li>
+																<label style="display: block;">Notes:</label>
+																<textarea type="text" class="editable notes" id="entry_notes" data-table="dss_contact_log_entry" data-dss_contact_log_entry_id="{{entry.entry_id}}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">{{entry.entry_notes|default_if_none:''}}</textarea>
+															</li>
+														</div>
+													</div>
+												</div>
+											{%endif%}
+										{% endfor %}
+     								</div>
+      							<div class="modal-footer">
+								      <div class="editableLi addNamiBtnLi">
+												<button class="addModalRowBtn" onclick="addDSSLogEntryRowHTML(this, {{application.application_id}})">Add Log Entry &#x271A; </button>
+											</div>
+       								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+     								</div>
+   								</div>
+							  </div>
+							</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 					</div>
 				</div>
 			<hr class= step3">
@@ -1670,6 +1747,51 @@ const addNAMIRowHTML = (addNamiBtn, approvalId) => {
 		});
 }
 
+const addDSSLogEntryRowHTML = (addDSSLogEntryBtn, applicationId) => {
+	const ajaxCall = $.ajax(
+		{
+			type:"GET",
+			url: `/application/ajax/create_dss_contact_log_entry`,
+			data: {
+				application_id: applicationId
+			},
+			success: function(entryId) {
+				const html = `
+					<div class="modalRowDiv">
+						<button type="button" class="close" onclick="removeModalRow(this, ${entryId}, 'dss_contact_log_entry')">
+		          <span >&times;</span>
+		        </button>
+						<h6 class="fairHearingH6">Log Entry</h6>
+						<div class="row modalRow">
+							<div class="col-lg-6 col-md-6 col-sm-12 modalRowColumn">
+								<li>
+									<label>Contact Person:</label>
+									<input type="text" class="editable" id="entry_contact_person" data-table="dss_contact_log_entry" data-dss_contact_log_entry_id="${entryId}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+								</li>
+								<li>
+									<label>Date:</label>
+									<input class="editable date" id="entry_date" data-table="dss_contact_log_entry" data-dss_contact_log_entry_id="${entryId}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+								</li>
+								<li>
+									<label>Time:</label>
+									<input class="editable time" id="entry_time" data-table="dss_contact_log_entry" data-dss_contact_log_entry_id="${entryId}" type="time" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+								</li>					
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-12 modalRowColumn">		
+								<li>
+									<label style="display: block;">Notes:</label>
+									<textarea type="text" class="editable notes" id="entry_notes" data-table="dss_contact_log_entry" data-dss_contact_log_entry_id="${entryId}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)"></textarea>
+								</li>
+							</div>
+						</div>
+					</div>
+				`
+				const modalBody = addDSSLogEntryBtn.parentNode.parentNode.parentNode.querySelector('.modal-body');
+				modalBody.insertAdjacentHTML('beforeend', html)
+			}
+		});
+}
+
 const addFairHearingRowHTML = (addFairHearingBtn, responseId) => {
 	const ajaxCall = $.ajax(
 		{
@@ -1836,7 +1958,6 @@ const createResponseRow = (dateInput) => {
 	const date = dateInput.value
 	const applicationId = dateInput.parentNode.querySelector('.appId').value
 	const responseType = dateInput.parentNode.querySelector('.responseType').value
-	console.log(date, applicationId, responseType)
 	dateInput.value = ''
 	datePromptDiv.style.display = 'none'
 	if(date) {

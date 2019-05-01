@@ -393,6 +393,23 @@ class FairHearing(models.Model):
         verbose_name = 'Fair Hearings'
         verbose_name_plural = 'Fair Hearings'
 
+class DSSLogEntry(models.Model):
+    entry_id = models.AutoField(primary_key = True)
+
+    application = models.ForeignKey(
+        Application,
+        on_delete = models.CASCADE,
+        null = True,
+    )
+
+    entry_date = models.DateField(null = True, blank = True)
+    entry_time =  models.TimeField(null = True, blank = True)
+    entry_contact_person = models.CharField(max_length = 50,  null = True, blank=True)
+    entry_notes = models.CharField(max_length = 5000, null = True, blank=True)
+    class Meta:
+        verbose_name = 'DSS Log Entry'
+        verbose_name_plural = 'DSS Log Entries'
+
 class Employee(models.Model):
     user = models.OneToOneField(
         User,
