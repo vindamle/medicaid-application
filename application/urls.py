@@ -29,4 +29,8 @@ urlpatterns = [
     path('ajax/create_dss_contact_log_entry/', views.create_dss_contact_log_entry, name = 'create_dss_contact_log_entry'),
     path('ajax/update_dss_contact_log_entry/', views.update_dss_contact_log_entry, name = 'update_dss_contact_log_entry'),
     path('ajax/delete_dss_contact_log_entry/', views.delete_dss_contact_log_entry, name = 'delete_dss_contact_log_entry'),
+
+    path('ajax/refresh/demographics/', views.get_demographic_ncs_refresh, name = 'get_demographic_ncs_refresh'),
+    # path('ajax/refresh/insurance/', views.get_app_deadline, name = 'get_app_deadline'),
+
 ]

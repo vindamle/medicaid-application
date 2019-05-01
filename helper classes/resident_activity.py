@@ -19,7 +19,7 @@ class Alerts:
         ''' Get MSSQl Connection'''
         sqlServer = ConnectSqlServer()
         self.conn = sqlServer.connect_sql_server()
-        print(self.conn)     
+        print(self.conn)
         ''' Get PSQL Connection'''
         db = Db()
         connection = db.connect_postgres()
@@ -29,7 +29,6 @@ class Alerts:
 
         cursor = self.conn.cursor()
         try:
-            # ('2018-10-31')
             results = cursor.execute("{CALL p_MEnrollmentTrackingResidentByActivitydateFacility(?,?,?)}",(datetime.now()).strftime("%Y-%m-%d"), 2, None)
         except:
             print("Error :: Cannot Connect to Server")
@@ -86,4 +85,3 @@ class Alerts:
 alert = Alerts()
 results = alert.get_alerts(1,None)
 alert.import_fields(results)
-
