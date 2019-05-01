@@ -21,6 +21,7 @@ class Resident(models.Model):
     resident_id  = models.BigAutoField(primary_key=True)
     resident_number = models.IntegerField(null = True, blank = True)
 
+
     #Patient Info
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)

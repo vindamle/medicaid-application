@@ -508,10 +508,14 @@ def get_app_deadline(request):
     deadline = app.date_of_application_submission_deadline
     return HttpResponse(deadline)
 
-
+# http://127.0.0.1:8000/application/ajax/refresh/demographics/?resident_id=10014003&application_id=88
 def get_demographic_ncs_refresh(request):
-    # resident_id = int(request.GET['resident_id'])
-    # resident = Resident.objects.get(resident_id = response_id)
-    # refresh = Refresh().demographics(resident.resident_id,resident.facility_id)
-    # print(refesh)
-    return HttpResponse("Updated demographics")
+
+    resident_id = request.GET['resident_id']
+    application_id = request.GET['application_id']
+
+    resident = Resident.objects.get(resident_id = resident_id)
+    refresh = Refresh()
+    refresh.demographics(str(resident.resident_number),str(resident.facility_name))
+
+    return HttpResponse(application_id)
