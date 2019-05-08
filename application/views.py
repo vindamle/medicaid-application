@@ -92,6 +92,9 @@ def update_resident(request):
     new_value =request.GET['new_value']
     resident = Resident.objects.get(resident_id = resident_id)
 
+    if new_value == '':
+        new_value = None
+
     # Audit Log
     Snowden.objects.create(
         user = request.user,
@@ -570,7 +573,6 @@ def get_app_deadline(request):
 
 # http://127.0.0.1:8000/application/ajax/refresh/demographics/?resident_id=10014003&application_id=88
 def get_demographic_ncs_refresh(request):
-
     resident_id = request.GET['resident_id']
     application_id = request.GET['application_id']
 

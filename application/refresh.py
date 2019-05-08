@@ -44,7 +44,6 @@ class Refresh():
             resident.save()
 
             break;
-        import gmaps
 
     # def payor_info(resident, facilty):
     #

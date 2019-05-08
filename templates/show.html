@@ -5,6 +5,14 @@
 {% block content %}
 {% load static %}
 {% if user.is_authenticated%}
+
+<!-- <div class="processingOverlay" id="processingOverlay">
+  <div class="perspecDiv">
+    <img src='{% static "img/jumping_jack_3d.gif" %}' class="">
+    <h1>Refreshing...</h1>
+  </div>
+</div> -->
+
 <div class="overlay" onclick="this.style.display = 'none'">
 	<img src='{% static "img/confetti.gif" %}'>
 </div>
@@ -22,7 +30,8 @@
 <div class="alertDiv">
 	{% for alert in resident_alerts %}
 			<div class="alert alert-danger alert-dismissible fade show" role="alert">
-				<strong>Alert - {{alert.trigger_date|date:'M dS, Y'}}: </strong> {{alert.alert_type.alert_name}} <!-- <button class="btn dismissBtn">Dismiss</button> -->
+				<strong>Alert - {{alert.trigger_date|date:'M dS, Y'}}: </strong> {{alert.alert_type.alert_name}}
+				<!-- <button class="btn dismissBtn">Dismiss</button> -->
 				<span class="invisible alertId">{{alert.alert_id}}</span>
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -31,10 +40,82 @@
 	{% endfor %}
 </div>
 
+<div id="sectionTabs">
+	<h5 class="sectionTabHeader">Most Recent Application:</h5>
+	<div class="applicationTabDiv" id="mostRecentAppTab">
+		<h6>Pickup Date: {{applications.last.medicaid_pickup_date}}</h6>
+		<h6 class="tabStatus">Status: {{applications.last.phase.phase_name}}</h6>
+		<button type="button" class="btn" data-toggle="modal" data-target="#notesModal{{applications.last.application_id}}" id="notesModalBtn"><!-- &#128221; --> Notes</button>
+		<button type="button" class="btn" data-toggle="modal" data-target="#miscDocsModal{{applications.last.application_id}}" id="miscDocsModalBtn">Misc. Documents</button>
+		<ul>
+			<li class="sectionLink" data-section_type="applicationInfoSection" data-section_id_number={{applications.last.application_id}} onclick="showSection(this)">Application Info</li>
+			<li class="sectionLink" data-section_type="residentInfoSection" data-section_id_number={{applications.last.application_id}} onclick="showSection(this)">Resident Info</li>
+			<li class="sectionLink" data-section_type="insuranceInfoSection" data-section_id_number={{applications.last.application_id}} onclick="showSection(this)">Insurance Info</li>
+			<p>Responses (in order received):</p>
+			{% for rfi in rfis %}
+				{% if rfi.response.application_id == applications.last.application_id %}
+					<li class="sectionLink" data-section_type="rfi" data-section_id_number={{rfi.rfi_id}} onclick="showSection(this)">RFI</li>
+				{% endif %}
+			{% endfor %}
+			{% for denial in denials %}
+				{% if denial.response.application_id == applications.last.application_id %}
+					<li class="sectionLink" data-section_type="denial" data-section_id_number={{denial.denial_id}} onclick="showSection(this)">Denial</li>
+				{% endif %}
+			{% endfor %}
+			{% for approval in approvals %}
+				{% if approval.response.application_id == applications.last.application_id %}
+					<li class="sectionLink" data-section_type="approval" data-section_id_number={{approval.approval_id}} onclick="showSection(this)">Approval</li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+	</div>
+	<h6 class="sectionTabHeader" onclick="toggleOlderApps(this)">View Older Applications</h6>
+	{% for application in applications %}
+		<div class="applicationTabDiv" id="olderAppsTabsDiv">
+			<h6>App #{{forloop.counter}} - Pickup Date: {{application.medicaid_pickup_date}}</h6>
+			<h6 class="tabStatus">Status: {{application.phase.phase_name}}</h6>
+			
+
+			<!-- Trigger for Notes Modal -->
+			<button type="button" class="btn" data-toggle="modal" data-target="#notesModal{{application.application_id}}" id="notesModalBtn"><!-- &#128221; --> Notes</button>
+
+			<!-- Trigger for Misc Documents Modal -->				
+			<button type="button" class="btn" data-toggle="modal" data-target="#miscDocsModal{{application.application_id}}" id="miscDocsModalBtn">Misc. Documents</button>
+			<ul>
+				<li class="sectionLink" data-section_type="applicationInfoSection" data-section_id_number={{application.application_id}} onclick="showSection(this)">Application Info</li>
+				<li class="sectionLink" data-section_type="residentInfoSection" data-section_id_number={{application.application_id}} onclick="showSection(this)">Resident Info</li>
+				<li class="sectionLink" data-section_type="insuranceInfoSection" data-section_id_number={{application.application_id}} onclick="showSection(this)">Insurance Info</li>
+
+				<p>Responses (in order received):</p>
+				{% for rfi in rfis %}
+					{% if rfi.response.application_id == application.application_id %}
+						<li class="sectionLink" data-section_type="rfi" data-section_id_number={{rfi.rfi_id}} onclick="showSection(this)">RFI</li>
+					{% endif %}
+				{% endfor %}
+				{% for denial in denials %}
+					{% if denial.response.application_id == application.application_id %}
+						<li class="sectionLink" data-section_type="denial" data-section_id_number={{denial.denial_id}} onclick="showSection(this)">Denial</li>
+					{% endif %}
+				{% endfor %}
+				{% for approval in approvals %}
+					{% if approval.response.application_id == application.application_id %}
+						<li class="sectionLink" data-section_type="approval" data-section_id_number={{approval.approval_id}} onclick="showSection(this)">Approval</li>
+					{% endif %}
+				{% endfor %}
+			</ul>
+		</div>
+	{% endfor %}
+</div>
+
+
+
+
+
+
 <div class="container-fluid residentInfoDiv applicationPage" data-application_id="{{application.application_id}}">
 	<h1>{{resident.first_name}} {{resident.last_name}}</h1>
 	<span class="invisible absolute" id="residentId" type="text">{{resident.resident_id}}</span>
-	<ul class="nav nav-tabs">
+	<!-- <ul class="nav nav-tabs">
 	{% for application in applications %}
     <li {% if application == applications.last %} class="active"{% endif %}>
       <a data-toggle="tab" href="#application{{application.application_id}}" {% if application == applications.last %} class="active show"{% endif %}>
@@ -42,16 +123,13 @@
       </a>
     </li>
 	{% endfor %}
-  </ul>
+  </ul> -->
 <div class="tab-content">
+	<!-- <h5 id="app{{application.application_id}}showStatus">Status: {{applications.last.phase.phase_name}}</h5> -->
 {% for application in applications %}
-<div id="application{{application.application_id}}" class="tab-pane {% if application == applications.last %} in active {% else %} fade {% endif %}">
-	<h5 id="app{{application.application_id}}showStatus">Status: {{application.phase.phase_name}}</h5>
+<div id="application{{application.application_id}}" class=" {% if application == applications.last %} in active {% else %}  {% endif %}">
 
-	<!-- Trigger for Notes Modal -->
-	<div class="notesModalBtnDiv">
-		<button type="button" class="btn" data-toggle="modal" data-target="#notesModal{{application.application_id}}" id="notesModalBtn">&#128221; Notes</button>
-	</div>
+	
 	<!-- Notes Modal -->
 	<div class="modal fade bd-example-modal" id="notesModal{{application.application_id}}" tabindex="-1" role="dialog" aria-labelledby="notesModal{{application.application_id}}Title" aria-hidden="true">
 	  <div class="modal-dialog modal-dialog-centered " role="document">
@@ -73,10 +151,7 @@
 	  </div>
 	</div>
 
-	<!-- Trigger for Misc Documents Modal -->
-	<div class="notesModalBtnDiv">
-		<button type="button" class="btn" data-toggle="modal" data-target="#miscDocsModal{{application.application_id}}" id="miscDocsModalBtn">Misc. Documents</button>
-	</div>
+	
 	<!-- Misc Documents Modal -->
 	<div class="modal fade bd-example-modal" id="miscDocsModal{{application.application_id}}" tabindex="-1" role="dialog" aria-labelledby="miscDocsModal{{application.application_id}}Title" aria-hidden="true">
 	  <div class="modal-dialog modal-dialog-centered " role="document">
@@ -150,107 +225,11 @@
 	  </div>
 	</div>
 
-	<section>
-		<h4 class="collapsibleSection" onclick="collapseSection(this)">Personal Info:</h4>
-		<ul class="collapsibleContent">
-			<div class="row">
-				<div class="col-lg-4 applicationColumn firstColumn">
-					<li>
-						<label>Resident Name:</label>
-						<span>{{application.resident.first_name}} {{application.resident.last_name}}</span>
-					</li>
-					<li>
-						<label>Date of Birth:</label>
-						<span>{{application.resident.dob|date:"M d, Y"}}</span>
-					</li>
-					<li>
-						<label>Facility:</label>
-						<span>{{application.resident.facility_name}}</span>
-					</li>
-				</div>
-				<div class="col-lg-4 applicationColumn">
-					<li class="editableLi">
-						<label>Address:</label>
-						<input class="editable" id="address" data-table="resident"  type="text" value="{{application.resident.address|default_if_none:''}}">
-					</li>
-					<li class="editableLi">
-						<label>City:</label>
-						<input class="editable" id="city" data-table="resident"  type="text" value="{{application.resident.city|default_if_none:''}}">
-					</li>
-					<li class="editableLi">
-						<label>State:</label>
-						<input class="editable" id="state" data-table="resident"  type="text" value="{{application.resident.state|default_if_none:''}}">
-					</li>
-					<li class="editableLi">
-						<label>Zip:</label>
-						<input class="editable" id="zip" data-table="resident"  type="number" value="{{application.resident.zip|default_if_none:''}}">
-					</li>
-				</div>
-				<div class="col-lg-4 applicationColumn">
-					<li class="editableLi">
-						<label>County:</label>
-						<input class="editable" id="county" data-table="resident"  type="text" value="{{application.resident.county|default_if_none:''}}">
-					</li>
-					<li class="editableLi">
-						<label>Phone:</label>
-						<input class="editable" id="phone" data-table="resident"  type="tel" value="{{application.resident.phone|default_if_none:''}}">
-					</li>
-					<li class="editableLi">
-						<label>Marital Status:</label>
-						<input class="editable" id="marital_status" data-table="resident"  type="text" value="{{application.resident.marital_status|default_if_none:''}}">
-					</li>
-					<li class="invisible absolute applicationId" id="applicationId" type="text">{{application.application_id}}</li>
-					<li class="invisible absolute" id="phase">{{application.phase.phase_id}}</li>
-				</div>
-			</div>
-		</ul>
-	</section>
-	<section>
-		<h4 class="collapsibleSection"  onclick="collapseSection(this)">Insurance Info:</h4>
-		<ul class="collapsibleContent">
-			<div class="row">
-				<div class="col-lg-4 applicationColumn firstColumn">
-					<li class="editableLi">
-						<label>Primary Payor:</label>
-						<input class="editable" id="primary_payor" data-table="resident"  type="text" value="{{application.resident.primary_payor|default_if_none:''}}">
-					</li>
-					<li class="editableLi">
-						<label>Secondary Payor:</label>
-						<input class="editable" id="secondary_payor" data-table="resident"  type="text" value="{{application.resident.secondary_payor|default_if_none:''}}">
-					</li>
-				</div>
 
-				<div class="col-lg-4 applicationColumn">
-					<li class="editableLi">
-						<label>Copay:</label>
-						$<input class="editable" id="copay" data-table="application" data-application_id="{{application.application_id}}"  type="text" value="{{application.copay|default_if_none:''}}">
-					</li>
-					<li class="editableLi">
-						<label>Copay Start Date:</label>
-						<input class="editable date" id="copay_start_date" data-table="application" data-application_id="{{application.application_id}}"  type="date" value="{{application.copay_start_date|date:'Y-m-d'|default_if_none:''}}">
-					</li>
-					<li class="editableLi">
-						<label>Secondary Insurance Copay Percentage:</label>
-						<input class="editable" id="secondary_pays_copay" data-table="application" data-application_id="{{application.application_id}}"  type="number" value="{{application.secondary_pays_copay|default_if_none:''}}" min="0" max="100"> %
-					</li>
-				</div>
-				<div class="col-lg-4 applicationColumn">
-					<li class="editableLi">
-						<label>Last Medicare Date:</label>
-						<input class="editable date" type="date" value="{{application.last_medicare_date|date:'Y-m-d'|default_if_none:''}}">
-					</li>
-					<li class="editableLi">
-						<label>Cut From Medicare/Insurance Date:</label>
-						<input class="editable date" type="date" value="{{application.cut_from_medicare_date|date:'Y-m-d'|default_if_none:''}}">
-					</li>
-				</div>
-			</div>
-		</ul>
-	</section>
 		<div id="applicationDiv">
-	<section id="applicationInfoSection">
+	<section id="applicationInfoSection{{application.application_id}}">
 		<span class="invisible applicationId">{{application.application_id}}</span>
-		<h4 class="collapsibleSection" onclick="collapseSection(this)">Application Info:</h4>
+		<h4 class="collapsibleSection" title="Click to minimize" onclick="collapseSection(this)">Application Info:</h4>
 			<ul class="collapsibleContent">
 				<div class="row">
 					<div class="col-lg-4 applicationColumn firstColumn">
@@ -346,8 +325,6 @@
 						
 						<!-- insert DSS Contact Log Modal here -->
 
-
-
 						<div class="modal fade bd-example-modal dssContactLogModal" id="dssContactLogModal{{application.application_id}}" tabindex="-1" role="dialog" aria-labelledby="dssContactLogModalTitle" aria-hidden="true">
 							  <div class="modal-dialog modal-dialog-centered" role="document">
 							    <div class="modal-content">
@@ -404,24 +381,6 @@
    								</div>
 							  </div>
 							</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 					</div>
 				</div>
@@ -543,11 +502,11 @@
 	{% for rfi in rfis %}
 		{% if rfi.response.application_id == application.application_id %}
 			<section id="rfi{{rfi.rfi_id}}" data-application_id="{{rfi.response.application_id}}">
-				<h4 class="numberOfRFIs collapsibleSection responseH4" onclick="collapseSection(this)">RFI</h4>
+				<button type="button" class="deleteResponseBtn" title="Delete this response" aria-label="Close" onclick="deleteResponse('rfi',{{rfi.rfi_id}})">
+	        Delete This Response
+	      </button>
+				<h4 class="numberOfRFIs collapsibleSection responseH4" title="Click to minimize" onclick="collapseSection(this)">RFI</h4>
 				<ul class="collapsibleContent" id="">
-					<button type="button" class="deleteResponseBtn" aria-label="Close" onclick="deleteResponse('rfi',{{rfi.rfi_id}})">
-		        <span aria-hidden="true">&times;</span>
-		      </button>
 					<div class="row">
 						<div class="col-lg-3 firstColumn applicationColumn">
 							<li class="invisible applicationId">
@@ -643,11 +602,11 @@
 	{% for denial in denials %}
 		{% if denial.response.application_id == application.application_id %}
 			<section id="denial{{denial.denial_id}}">
-				<h4 class="numberOfRFIs collapsibleSection responseH4" onclick="collapseSection(this)">Denial</h4>
+				<button type="button" class="deleteResponseBtn" title="Delete this response" aria-label="Close" onclick="deleteResponse('denial',{{denial.denial_id}})">
+	        Delete This Response
+	      </button>
+				<h4 class="numberOfRFIs collapsibleSection responseH4" title="Click to minimize" onclick="collapseSection(this)">Denial</h4>
 				<ul class="collapsibleContent" id="">
-					<button type="button" class="deleteResponseBtn" aria-label="Close" onclick="deleteResponse('denial',{{denial.denial_id}})">
-		        <span aria-hidden="true">&times;</span>
-		      </button>
 					<div class="row">
 						<div class="col-lg-3 firstColumn applicationColumn">
 							<li class="editableLi ">
@@ -904,12 +863,12 @@
 	{% endfor %}<!-- end of denials loop -->
 	{% for approval in approvals %}
 		{% if approval.response.application_id == application.application_id %}
-			<section id="approval{{approval.approval_id}}">
-			<h4 class="collapsibleSection responseH4"  onclick="collapseSection(this)">Approval</h4>
+		<section id="approval{{approval.approval_id}}">
+			<button type="button" class="deleteResponseBtn" title="Delete this response" aria-label="Close" onclick="deleteResponse('approval',{{approval.approval_id}})">
+        Delete This Response
+      </button>
+			<h4 class="collapsibleSection responseH4" title="Click to minimize" onclick="collapseSection(this)">Approval</h4>
 			<ul class="collapsibleContent">
-				<button type="button" class="deleteResponseBtn" aria-label="Close" onclick="deleteResponse('approval',{{approval.approval_id}})">
-	        <span aria-hidden="true">&times;</span>
-	      </button>
 				<div class="row">
 					<div class=" col-lg-2 col-sm-12 applicationColumn firstColumn">
 						<li class="editableLi">
@@ -1020,13 +979,7 @@
    								</div>
 							  </div>
 							</div>
-						</div>
-						<div class="col-lg-3 col-sm-12 applicationColumn">
-							<li>
-						<!-- Button trigger modal -->
-								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#namiModal{{approval.approval_id}}" id="namiModalBtn">View/Add NAMIs</button>
-							</li>
-							<li class="editableLi step6">
+														<li class="editableLi step6">
 								<label>Satisfied with approval?</label>
 								<select name="approval_satisfied" id="approval_satisfied" data-table="approval" data-approval_id="{{approval.approval_id}}"  onchange="sendInputInfoToDB(this); revealNextNotSatisfiedStep(this, 1)">
 									<option value="">Select one:</option>
@@ -1034,12 +987,19 @@
 									<option value="no">No</option>
 								</select>
 								<span class="invisible DBinfo" id="DBapproval_satisfied">{{approval.approval_satisfied}}</span>
+							</li>
+						</div>
+						<div class="col-lg-3 col-sm-12 applicationColumn">
+							<li>
+						<!-- Button trigger modal -->
+								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#namiModal{{approval.approval_id}}" id="namiModalBtn">View/Add NAMIs</button>
+							</li>
+
 								{% if application.approval_verified %}
 			            <button class="verifyBtn verified" onclick="verifyOrUnverify(this, {{approval.response.application.application_id}})">Approval Verified &check;</button>
 			          {% else %}
 			            <button class="verifyBtn" onclick="verifyOrUnverify(this, {{approval.response.application.application_id}})">Approval Not Verified</button>
 			          {% endif %}
-							</li>
 						</div>
 					</div>
 					<hr class="notSatisfied">
@@ -1224,10 +1184,120 @@
 					</div>
 				</ul>
 			</section>
+
+
+
+
+
+
+
 		{% endif %}
 	{% endfor %} <!-- end of approvals for loop -->
+	<section id="residentInfoSection{{application.application_id}}">
+		<h4 class="collapsibleSection" title="Click to minimize" onclick="collapseSection(this)">Resident Info:</h4>
+		<ul class="collapsibleContent">
+			<div class="row">
+				<div class="col-lg-4 applicationColumn firstColumn">
+					<li>
+						<label>Resident Name:</label>
+						<span>{{application.resident.first_name}} {{application.resident.last_name}}</span>
+					</li>
+					<li>
+						<label>Date of Birth:</label>
+						<span>{{application.resident.dob|date:"M d, Y"}}</span>
+					</li>
+					<li>
+						<label>Facility:</label>
+						<span>{{application.resident.facility_name}}</span>
+					</li>
+				</div>
+				<div class="col-lg-4 applicationColumn">
+					<li class="editableLi">
+						<label>Address:</label>
+						<span>{{application.resident.address|default_if_none:''}}</span>
+					</li>
+					<li class="editableLi">
+						<label>City:</label>
+						<span>{{application.resident.city|default_if_none:''}}</span>
+					</li>
+					<li class="editableLi">
+						<label>State:</label>
+						<span>{{application.resident.state|default_if_none:''}}</span>
+					</li>
+					<li class="editableLi">
+						<label>Zip:</label>
+						<span>{{application.resident.zip|default_if_none:''}}</span>
+					</li>
+				</div>
+				<div class="col-lg-4 applicationColumn">
+
+					<!-- Refresh from NCS button! -->
+					<button title="Refresh from NCS" class="btn btn-info refreshBtn" onclick="rotateArrow(this);refreshResidentInfo({{application.resident.resident_id}}, {{application.application_id}})">&circlearrowleft;</button>
+					
+					<li class="editableLi">
+						<label>County:</label>
+						<input class="editable" id="county" data-table="resident"  type="text" value="{{application.resident.county|default_if_none:''}}">
+					</li>
+					<li class="editableLi">
+						<label>Phone:</label>
+						<span>{{application.resident.phone|default_if_none:''}}</span>
+					</li>
+					<li class="editableLi">
+						<label>Marital Status:</label>
+						<span>{{application.resident.marital_status|default_if_none:''}}</span>
+					</li>
+					<li class="invisible absolute applicationId" id="applicationId" type="text">{{application.application_id}}</li>
+					<li class="invisible absolute" id="phase">{{application.phase.phase_id}}</li>
+				</div>
+			</div>
+		</ul>
+	</section>
+	
+	<section id="insuranceInfoSection{{application.application_id}}">
+		<h4 class="collapsibleSection" title="Click to minimize"  onclick="collapseSection(this)">Insurance Info:</h4>
+		<ul class="collapsibleContent">
+			<div class="row">
+				<div class="col-lg-4 applicationColumn firstColumn">
+					<li class="editableLi">
+						<label>Primary Payor:</label>
+						<input class="editable" id="primary_payor" data-table="resident"  type="text" value="{{application.resident.primary_payor|default_if_none:''}}">
+					</li>
+					<li class="editableLi">
+						<label>Secondary Payor:</label>
+						<input class="editable" id="secondary_payor" data-table="resident"  type="text" value="{{application.resident.secondary_payor|default_if_none:''}}">
+					</li>
+				</div>
+
+				<div class="col-lg-4 applicationColumn">
+					<li class="editableLi">
+						<label>Copay:</label>
+						$<input class="editable" id="copay" data-table="application" data-application_id="{{application.application_id}}"  type="text" value="{{application.copay|default_if_none:''}}">
+					</li>
+					<li class="editableLi">
+						<label>Copay Start Date:</label>
+						<input class="editable date" id="copay_start_date" data-table="application" data-application_id="{{application.application_id}}"  type="date" value="{{application.copay_start_date|date:'Y-m-d'|default_if_none:''}}">
+					</li>
+					<li class="editableLi">
+						<label>Secondary Insurance Copay Percentage:</label>
+						<input class="editable" id="secondary_pays_copay" data-table="application" data-application_id="{{application.application_id}}"  type="number" value="{{application.secondary_pays_copay|default_if_none:''}}" min="0" max="100"> %
+					</li>
+				</div>
+				<div class="col-lg-4 applicationColumn">
+					<li class="editableLi">
+						<label>Last Medicare Date:</label>
+						<input class="editable date" type="date" value="{{application.last_medicare_date|date:'Y-m-d'|default_if_none:''}}">
+					</li>
+					<li class="editableLi">
+						<label>Cut From Medicare/Insurance Date:</label>
+						<input class="editable date" type="date" value="{{application.cut_from_medicare_date|date:'Y-m-d'|default_if_none:''}}">
+					</li>
+				</div>
+			</div>
+		</ul>
+	</section>
 </div><!-- end of applicationDiv-->
 {% endfor %} <!-- end of for application in applications loop -->
+
 </div>
 </div>
 {% else %}
@@ -1259,6 +1329,30 @@ const updateAlert = (appId, input, alertClass) => {
 		updateDB("alert", data, "changed alert status to true")
 	} 
 }
+
+const collapseSection = (h4) => {
+	h4.classList.toggle("activeSection");
+  let section = h4.parentNode;
+  section.classList.toggle('minimized');
+  // if (section.style.height != "65px"){
+  //   // content.style.display = "none";
+  //   section.style.height = "65px";
+  //   // section.style.maxWidth = "200px";
+  //   // section.style.marginBottom = "50px";
+  // 	// h4.style.width = "80vw";
+  // 	// h4.style.marginLeft = "calc(40vw - 220px)";
+
+  // } else {
+  // 	// h4.style.marginLeft = "-30px";
+  // 	// h4.style.width = "250px";
+  //   // content.style.display = 'block';
+  //   section.style.height = "initial";
+  //   // section.style.maxWidth = "100%";
+  //   // section.style.marginBottom = "20px";
+  //   // section.style.paddingBottom = "10px";
+  // }
+}
+
 
 $(document).ready(()=>{
 	// let numberOfNAMIs;
@@ -1351,31 +1445,16 @@ $(document).ready(()=>{
 
 }) // end document.ready
 
-const collapseSection = (h4) => {
-	h4.classList.toggle("activeSection");
-  let content = h4.nextElementSibling;
-  if (content.style.display != "none"){
-    content.style.display = "none";
-    content.parentNode.style.maxHeight = "50px";
-    content.parentNode.style.maxWidth = "200px";
-    content.parentNode.style.marginBottom = "30px";
-  } else {
-    content.style.display = 'initial';
-    content.parentNode.style.maxHeight = "initial";
-    content.parentNode.style.maxWidth = "100%";
-    content.parentNode.style.marginBottom = "20px";
-  }
-}
 
 class ResponseRowHTML {
 	constructor (applicationId, responseId, rfiOrDenialOrApprovalId, date) {
 		this.rfiRowHtml = `
 			<section id="rfi${rfiOrDenialOrApprovalId}">
-				<h4 class="numberOfRFIs collapsibleSection responseH4" onclick="collapseSection(this)">RFI #${numberOfRFIs}</h4>
+				<button type="button" class="deleteResponseBtn" title="Delete this response" aria-label="Close" onclick="deleteResponse('rfi',${rfiOrDenialOrApprovalId})">
+	        Delete This Response
+	      </button>
+				<h4 class="numberOfRFIs collapsibleSection responseH4" title="Click to minimize" onclick="collapseSection(this)">RFI #${numberOfRFIs}</h4>
 				<ul class="collapsibleContent" id="">
-					<button type="button" class="deleteResponseBtn" aria-label="Close" onclick="deleteResponse('rfi',${rfiOrDenialOrApprovalId})">
-		        <span aria-hidden="true">&times;</span>
-		      </button>
 					<div class="row">
 						<div class="col-lg-3 firstColumn applicationColumn">
 							<li>
@@ -1436,11 +1515,11 @@ class ResponseRowHTML {
 
 		this.approvedRowHtml = `
 			<section id="approval${rfiOrDenialOrApprovalId}">
-				<h4 class="numberOfApprovals collapsibleSection responseH4" onclick="collapseSection(this)">Approval</h4>
+				<button type="button" class="deleteResponseBtn" title="Delete this response" aria-label="Close" onclick="deleteResponse('approval',${rfiOrDenialOrApprovalId})">
+	        Delete This Response
+	      </button>
+				<h4 class="numberOfApprovals collapsibleSection responseH4" title="Click to minimize" onclick="collapseSection(this)">Approval</h4>
 				<ul class="collapsibleContent" id="">
-					<button type="button" class="deleteResponseBtn" aria-label="Close" onclick="deleteResponse('approval',${rfiOrDenialOrApprovalId})">
-		        <span aria-hidden="true">&times;</span>
-		      </button>
 					<div class="row">
 					<div class="col-lg-2 applicationColumn firstColumn">
 					<li class="editableLi">
@@ -1597,11 +1676,11 @@ class ResponseRowHTML {
 `
 		this.deniedRowHtml = `
 			<section id="denial${rfiOrDenialOrApprovalId}">
-				<h4 class="numberOfRFIs collapsibleSection responseH4" onclick="collapseSection(this)">Denial</h4>
+				<button type="button" class="deleteResponseBtn" title="Delete this response" aria-label="Close" onclick="deleteResponse('denial',${rfiOrDenialOrApprovalId})">
+	        Delete This Response
+	      </button>
+				<h4 class="numberOfRFIs collapsibleSection responseH4" title="Click to minimize" onclick="collapseSection(this)">Denial</h4>
 				<ul class="collapsibleContent" id="">
-					<button type="button" class="deleteResponseBtn" aria-label="Close" onclick="deleteResponse('denial',${rfiOrDenialOrApprovalId})">
-		        <span aria-hidden="true">&times;</span>
-		      </button>
 					<div class="row">
 						<div class="col-lg-3 firstColumn applicationColumn">
 							<li class="editableLi ">
@@ -2168,5 +2247,56 @@ const generateApproval = (select, appId) => {
 	}
 }
 
+const refreshResidentInfo = (residentId, appId) => {
+	const ajaxCall = $.ajax(
+		{
+			type:"GET",
+			// url: `/application/ajax/refresh/demographics/?resident_id=10014003&application_id=88`,
+			url: `/application/ajax/refresh/demographics/`,
+			data: {
+				resident_id: residentId,
+				application_id: appId
+			},
+			success: function() {
+				location.reload();
+			}
+		});
+}
+
+const showSection = sectionLink => {
+	const sectionType = sectionLink.getAttribute('data-section_type')
+	const sectionIdNumber = sectionLink.getAttribute('data-section_id_number')
+	const sectionId = sectionType + sectionIdNumber
+	const activeSection = document.querySelector(`#${sectionId}`)
+	const sections = document.querySelectorAll('SECTION');
+	const sectionLinks = document.querySelectorAll('.sectionLink');
+	for (var section of sections) {
+		section.style.display = 'none'
+	}
+	for (var link of sectionLinks) {
+		link.style.backgroundColor = 'none'
+	}
+	activeSection.style.display = 'block';
+	for (var link of sectionLinks) {
+		link.style.backgroundColor = 'initial';
+		link.style.color = "initial";
+	}
+	sectionLink.style.backgroundColor = "#5272c8";
+	sectionLink.style.color = "white";
+	// sectionLink.style.paddingLeft = "20px";
+
+}
+document.getElementById("mostRecentAppTab").lastElementChild.lastElementChild.click();
+document.getElementById("sectionTabs").lastElementChild.style.display = "none";
+
+const toggleOlderApps = link => {
+	// link.classList.toggle('minusSignAfter');
+	const div = document.getElementById('olderAppsTabsDiv')
+	if (div.style.display != "block") {
+		div.style.display = "block"
+	} else {
+		div.style.display = "none"
+	}
+}
 </script>
 {% endblock %}

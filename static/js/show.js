@@ -51,7 +51,7 @@ const updateDB = (table, dataObject, successMessage) => {
 const sendInputInfoToDB = input => {
 	if(input.type == 'date' && (parseInt(input.value) < 2010 || parseInt(input.value) > 2100)) {
 		alert("Sorry - that year is out of range. Please enter a year after 2010 and before, ya know, doomsday.")
-	} else if (input.value) {
+	} else {
 		let value;
 		if(input.type == 'checkbox') {
 			value = input.checked
@@ -140,5 +140,13 @@ const verifyOrUnverify = (btn, appId) => {
 	return(ajaxCall);
 }
 
+// show proccessing overlay on refresh button click:
 
+// $('.refreshBtn').click(()=>{
+// 	$('#processingOverlay').css('display', 'block');
+// })
+
+const rotateArrow = refreshBtn => {
+	$(refreshBtn).addClass('rotateZ')
+}
 	
