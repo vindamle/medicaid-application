@@ -524,6 +524,21 @@ table button {
 	transition: .5s;
 }
 
+.activeTab {
+	background: #5272c8;
+	color: white;
+	/*color: darkblue;
+	font-weight: bold;*/
+	/*font-size: 16px;*/
+}
+
+/*.activeTab:after {
+	font-size: 24px;
+	position: relative;
+	bottom: -3px;
+	content: '\25C2';
+}
+*/
 #olderAppsTabsDiv {
 	display: none;
 }
@@ -582,6 +597,7 @@ table button {
 	text-align: center;
 	background-color: rgba(180,0,0,.8);
 	margin: 10px auto;
+	font-size: 18px;
 	padding: 5px;
 	border-radius: 25px;
 }
@@ -682,12 +698,8 @@ table button {
 }
 
 .collapsibleSection {
-  cursor: pointer;
-  padding: 18px;
-  /*width: 100%;*/
-  border: none;
-  text-align: left;
-  outline: none;
+  /*cursor: pointer;*/
+
 }
 
 h4.activeSection, .collapsibleSection:hover {
@@ -721,7 +733,7 @@ h4.activeSection, .collapsibleSection:hover {
 .collapsibleSection:after {
 	/*position: relative;*/
   /*content: "\2796";  Unicode character for "minus" sign (-) */
-  content: '-';
+  /*content: '-';*/
   /*font-size: 28px;*/
   /*line-height: 1;*/
   /*color: white;*/
@@ -1104,8 +1116,8 @@ input#secondary_pays_copay {
 }
 
 @media(min-width: 480px) {
-	#namiModalBtn {
-		margin: 15px 25px;
+	#namiModalBtn, .verifyBtn {
+		/*margin: 15px 25px;*/
 	}
 }
 

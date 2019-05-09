@@ -580,4 +580,5 @@ def get_demographic_ncs_refresh(request):
     refresh = Refresh()
     refresh.demographics(str(resident.resident_number),str(resident.facility_name))
 
-    return HttpResponse(application_id)
+    # return HttpResponse(application_id)
+    return JsonResponse([resident.first_name,resident.last_name,resident.dob,resident.address,resident.city,resident.state,resident.zip,resident.phone,resident.marital_status],safe=False)
