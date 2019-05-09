@@ -71,17 +71,18 @@
 		</ul>
 	</div>
 	<h6 class="sectionTabHeader" onclick="toggleOlderApps(this)">View Older Applications</h6>
+	<div id="olderAppsTabsDiv">
 	{% for application in applications %}
-		<div class="applicationTabDiv" id="olderAppsTabsDiv">
+		<div class="applicationTabDiv">
 			<h6>App #{{forloop.counter}} - Pickup Date: {{application.medicaid_pickup_date}}</h6>
 			<h6 class="tabStatus">Status: {{application.phase.phase_name}}</h6>
 			
-
 			<!-- Trigger for Notes Modal -->
 			<button type="button" class="btn" data-toggle="modal" data-target="#notesModal{{application.application_id}}" id="notesModalBtn"><!-- &#128221; --> Notes</button>
 
 			<!-- Trigger for Misc Documents Modal -->				
 			<button type="button" class="btn" data-toggle="modal" data-target="#miscDocsModal{{application.application_id}}" id="miscDocsModalBtn">Misc. Documents</button>
+
 			<ul>				
 				<li class="sectionLink" data-section_type="residentInfoSection" data-section_id_number={{application.application_id}} onclick="showSection(this)">Resident Info</li>
 				<li class="sectionLink" data-section_type="insuranceInfoSection" data-section_id_number={{application.application_id}} onclick="showSection(this)">Insurance Info</li>
@@ -103,8 +104,10 @@
 					{% endif %}
 				{% endfor %}
 			</ul>
+			
 		</div>
 	{% endfor %}
+	</div>
 </div>
 
 

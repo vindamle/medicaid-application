@@ -933,7 +933,7 @@ const refreshResidentInfo = (refreshBtn, residentId, appId) => {
 }
 
 $("#mostRecentAppTab li:last-of-type").click();
-document.getElementById("sectionTabs").lastElementChild.style.display = "none";
+document.getElementById("olderAppsTabsDiv").lastElementChild.style.display = "none";
 
 const toggleOlderApps = link => {
 	// link.classList.toggle('minusSignAfter');
