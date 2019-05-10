@@ -29,7 +29,7 @@ class ConnectSqlServer:
                 UID=''' + self.username + r''';
                 PWD=''' + self.password + r''';
                 DATABASE=''' + self.database + r''';''')
-               
+            
             return conn
 
         except pyodbc.Error as ex:

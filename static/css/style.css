@@ -156,8 +156,8 @@ sup {
 
 .content {
 	display: none;
-	width: 80vw;
-	margin: 20px 10vw 120px 10vw;
+	/*width: 80vw;*/
+	/*margin: 20px 10vw 120px 10vw;*/
 }
 
 @media(max-width: 1824px) {
@@ -187,13 +187,12 @@ h4 {
 }
 
 table {
-	border-bottom: none !important;
 	margin: auto;
-	/*margin-right: 0;*/
+	box-shadow: -3px -3px 10px #eee,3px 3px 10px #eee;
 }
  th {
 	/*display: inline-block;*/
-	margin: 0 auto !important;
+	/*margin: 0 auto !important;*/
 	
 }
 
@@ -468,15 +467,125 @@ table button {
 	left: 0;
 }
 
+#sectionTabs {
+	position: absolute;
+	text-align: center;
+	margin-left: 20px;
+	top: 150px;
+	/*float: left;*/
+	width: 300px;
+}
+
+#sectionTabs ul {
+	padding: 0;
+}
+
+#sectionTabs li {
+	width: 130px;
+	text-align: center;
+	/*display: inline-block;*/
+	margin: auto;
+	margin-bottom: 5px;
+	padding: 5px;
+	transition: .5s;
+	/*padding-left: 15px;*/
+	border-radius: 25px;
+}
+
+#sectionTabs .sectionTabHeader {
+	width: 100%;
+	margin: 20px auto 15px auto;
+}
+
+
+#sectionTabs h6.sectionTabHeader {
+	color: darkblue;
+	cursor: pointer;
+}
+
+#sectionTabs h6.sectionTabHeader:hover {
+	color: steelblue;
+}
+/*
+#sectionTabs h6.sectionTabHeader:after {
+	content: ' +';
+}*/
+
+.minusSignAfter:after {
+	content: " -";
+}
+
+#sectionTabs li:hover {
+	cursor: pointer;
+	padding-left: 10px;
+	background-color: #cdf !important;
+	color: blue !important;
+	/*font-size: 17px;*/
+	transition: .5s;
+}
+
+.activeTab {
+	background: #5272c8;
+	color: white;
+	/*color: darkblue;
+	font-weight: bold;*/
+	/*font-size: 16px;*/
+}
+
+/*.activeTab:after {
+	font-size: 24px;
+	position: relative;
+	bottom: -3px;
+	content: '\25C2';
+}
+*/
+#olderAppsTabsDiv {
+	display: none;
+}
+
+.tabStatus {
+	text-align: center;
+	color: maroon;
+	margin-bottom: 15px;
+}
+
+#sectionTabs li h6 {
+	padding: 5px;
+	margin: 0;
+	text-decoration: underline;
+	text-align: center;
+}
+
+#sectionTabs p {
+	margin: 5px 15px;
+	text-decoration: underline;
+	text-align: center;
+}
+
+.applicationTabDiv {
+	border: 1px solid #eee;
+	border-radius: 5px;
+	margin-bottom: 10px;
+	padding-top: 10px;
+}
+/*
+#sectionTabs li:hover:after {
+	content: '\25c0';
+	margin-left: 5px;
+	color: darkblue;
+	/*font-size: 20px;*/
+}
+*/
 @media (min-width: 768px) {
 	.residentInfoDiv {
-		margin: 20px auto;
-		/*width: 80vw;*/
-		/*margin-left: 10vw;*/
+		/*margin: 20px auto;*/
+		
 	}
 }
 
 .residentInfoDiv h1 {
+
+
 	text-align: center;
 	color: steelblue;
 }
@@ -488,6 +597,7 @@ table button {
 	text-align: center;
 	background-color: rgba(180,0,0,.8);
 	margin: 10px auto;
+	font-size: 18px;
 	padding: 5px;
 	border-radius: 25px;
 }
@@ -499,35 +609,40 @@ table button {
 }
 
 .residentInfoDiv h4 {
-	margin: -20px 0 20px -30px;
-	width: 220px;
-	
+	transition: all .5s;
+	/*margin: 0 0 20px -30px;*/
+	/*width: 220px;*/
+	margin: 0 auto;
 	/*display: inline-block;*/
 	padding: 10px;
 	text-align: center;
 	/*color: #ee7700;*/
-	color: white;
-	background-color: #237;
+	/*color: white;*/
+	color: #237;
+	/*background-color: #237;*/
 	/*background-color: darkblue;*/
 	/*text-decoration: underline;*/
 	/*border-radius: 25px 10px 25px 10px;*/
-	border-radius: 10px;
+	border-radius: 25px;
 	font-size: 20px;
-	-moz-box-shadow: 1px 5px 10px #224, inset 0 0 10px #000000;
-   -webkit-box-shadow: 1px 5px 10px #224, inset 0 0 10px #000000;
-   box-shadow:  1px 5px 10px #224, inset 0 0 10px #000000;
+	/*-moz-box-shadow: 1px 5px 5px #224, inset 0 0 10px #000000;
+   -webkit-box-shadow: 1px 5px 5px #224, inset 0 0 10px #000000;
+   box-shadow:  1px 5px 5px #224, inset 0 0 10px #000000;*/
 }
 
+#applicationDiv {
+	/*margin-top: 60px;*/
+}
 
 @media(min-width: 998px) {
 	.residentInfoDiv h4 {
-		position: absolute;
+		/*position: absolute;*/
 	}
 }
 
 
 .residentInfoDiv h4.responseH4 {
-	width: 220px;
+	/*width: 220px;*/
 }
 
 .notesModalBtnDiv {
@@ -542,12 +657,16 @@ table button {
 
 @media(min-width: 1600px) {
 	#notesModalBtn,	#miscDocsModalBtn {
-		position: absolute;
-		right: 200px;
+		/*position: absolute;*/
+		/*right: 200px;*/
+		font-size: 14px ;
+		/*display: inline-block;*/
+		margin-top: 0;
 	}
 
 	#notesModalBtn {
 		top: 130px;
+		margin-left: 30px;
 	}
 	#miscDocsModalBtn {
 		top: 200px;
@@ -579,16 +698,13 @@ table button {
 }
 
 .collapsibleSection {
-  cursor: pointer;
-  padding: 18px;
-  /*width: 100%;*/
-  border: none;
-  text-align: left;
-  outline: none;
+  /*cursor: pointer;*/
+
 }
 
-.activeSection, .collapsibleSection:hover {
-  background-color: #3040A6;
+h4.activeSection, .collapsibleSection:hover {
+  /*background-color: steelblue;*/
+  /*color: white;*/
 }
 
 .addModalRowBtn {
@@ -609,17 +725,15 @@ table button {
  	width: 100%;
   max-height: 1000px;
   overflow: hidden;
-  /*transition: max-height 0.2s ease-out;*/
-}
-
- .collapsibleContent {
 	max-height: initial;
+	padding-top: 5px;
+  /*transition: max-height 0.2s ease-out;*/
 }
 
 .collapsibleSection:after {
 	/*position: relative;*/
   /*content: "\2796";  Unicode character for "minus" sign (-) */
-  content: '-';
+  /*content: '-';*/
   /*font-size: 28px;*/
   /*line-height: 1;*/
   /*color: white;*/
@@ -629,8 +743,8 @@ table button {
   /*height: 18px;*/
   /*border: 2px solid steelblue;*/
   /*border-radius: 5px;*/
-  float: right;
-  /*margin-left: 20px;*/
+  /*float: right;*/
+  margin-left: 10px;
   /*right: 15px;*/
 }
 
@@ -660,20 +774,29 @@ table button {
 
 .residentInfoDiv section {
 	overflow: hidden;
+	transition: all .5s;
+	width: calc(90vw - 320px);
+	margin-left: 320px;
+	/*height: initial;*/
 	/*border-radius: 25px 0 25px 0;*/
 	border-radius: 5px;
 	/*height: 250px;*/
 	/*background: white;*/
-	border: 2px solid #eee;
-	box-shadow: 0 5px 5px #ccc;
+	/*border: 2px solid #eee;*/
+	/*box-shadow: 0 5px 5px #ccc;*/
 	/*font-size: 16px;*/
-	margin-bottom: 20px;
+	margin-top: 30px;
+}
+
+.minimized {
+	height: 65px;
+	/*transition: all .5s;*/
 }
 
 @media(min-width: 998px) {
 	.residentInfoDiv section {
-		margin-top: 30px;
-		padding: 15px 25px 0 25px;
+		/*margin-top: 60px;*/
+		padding: 10px 25px 0 25px;
 	}
 }
 @media(max-width: 998px) {
@@ -703,13 +826,13 @@ table button {
 
 .residentInfoDiv ul {
 	/*padding-left: 10px;*/
-	padding: 0;
+	/*padding: 0;*/
 	
 }
 
 @media(min-width: 998px) {
 	.residentInfoDiv .firstColumn {
-		margin-top: 45px;
+		/*margin-top: 45px;*/
 	}
 	.residentInfoDiv .applicationColumn {
 		padding-top: 10px;
@@ -718,7 +841,7 @@ table button {
 
 
 .residentInfoDiv li {
-	/*margin: 10px 0 10px 20px;*/
+	margin: 10px 0 10px 20px;
 	/*margin: 5px 0 5px 20px;*/
 }
 
@@ -904,13 +1027,19 @@ input#secondary_pays_copay {
 
 .deleteResponseBtn {
 	float: right;
-	margin-right: 5px;
-	background: #ddd;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	line-height: .85;
-
-	padding: 2px;
+	margin: 0 5px;
+	/*font-size: 24px;*/
+	color: #777;
+	/*color: #eee;*/
+	/*background: #ddd;
+	border: 1px solid #ccc;*/
+	/*border-radius: 5px;*/
+	/*line-height: .85;*/
+	/*padding: 2px;*/
+	text-decoration: underline;
+	cursor: pointer;
+	background: none;
+	border: none;
 }
 
 .approveBtnDiv {
@@ -976,8 +1105,7 @@ input#secondary_pays_copay {
 
 @media(min-width: 998px) {
 	#fairHearingsModalBtn {
-		margin-left: -10px;
-		margin-bottom: 10px;
+		margin: 10px 0px 10px -10px;
 	}
 }
 
@@ -988,8 +1116,8 @@ input#secondary_pays_copay {
 }
 
 @media(min-width: 480px) {
-	#namiModalBtn {
-		margin: 15px 25px;
+	#namiModalBtn, .verifyBtn {
+		/*margin: 15px 25px;*/
 	}
 }
 
@@ -1040,6 +1168,23 @@ input#secondary_pays_copay {
 
 .miscDocsTable td,th {
 	padding: 10px 5px;
+}
+
+.notes {
+	min-height: 100px;
+}
+
+.refreshBtn {
+	float: right;
+	font-weight: bold;
+	font-size: 24px;
+	/*color: darkblue;*/
+	background: #004F92;
+	border-radius: 50%;
+	padding: 0 9px 4px 9px;
+	border: none;
+	margin-right: 5px;
+
 }
 
 /*___________index.html___________*/
@@ -1192,4 +1337,68 @@ input#secondary_pays_copay {
 .emailSentPic {
 	width: 70px;
 	margin: 0 10px 5px 0;
+}
+
+/*________________Processing Overlay________________*/
+
+
+.processingOverlay {
+  display: none;
+  position: fixed;
+  background-color: rgba(255,255,255,.4);
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100vw;
+  height: 100vh;
+}
+
+/*.perspecDiv {
+  perspective: 800px;
+  transform-style: preserve-3d;
+}
+*/
+@keyframes rotate {
+    from {transform: rotateY(0deg);}
+    to {transform: rotateY(360deg);}
+}
+
+@keyframes rotateZ {
+    from {transform: rotateZ(0deg);}
+    to {transform: rotateZ(-360deg);}
+}
+
+/* The element to apply the animation to */
+
+.rotateZ {
+	background: #F26100;
+	animation-name: rotateZ;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.rotateZ:hover {
+	background: #F26100;
+}
+
+
+.processingOverlay img {
+  display: block;
+  height: 25vh;
+  margin: 0 auto;
+  position: relative;
+  left: -5px;
+  margin-top: 25vh;
+  animation-name: rotate;
+  animation-duration: 3.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.processingOverlay h1 {
+  color: darkblue;
+  text-shadow: 2px 2px 2px white;
+  margin-top: 30px;
+  text-align: center;
 }

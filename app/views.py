@@ -144,6 +144,7 @@ class ShowView(View):
         approvals = Approval.objects.filter(response__application__resident__resident_id = resident_id).order_by('response__application__application_id','approval_id')
         namis = NAMI.objects.filter(approval__response__application__resident__resident_id = resident_id).order_by('approval__approval_id', 'nami_id')
         fair_hearings = FairHearing.objects.filter(response__application__resident__resident_id = resident_id).order_by('response__response_id', 'fair_hearing_id')
+        dss_contact_log_entries = DSSLogEntry.objects.filter(application__resident__resident_id = resident_id).order_by('entry_id')
         # medicaid_application_documents = Document.objects.filter(resident_id = resident_id, description = "medicaid_application")
         # rfi_documents = Document.objects.filter(resident_id = resident_id, description = "rfi").order_by('rfi_id')
         # applications = results
@@ -151,7 +152,7 @@ class ShowView(View):
         # print(denials)
         # print('*'*50)
         # return render(request,self.template_name, {'rfis':rfis,'documents':documents,'resident':resident,'applications':applications,"resident_alerts":resident_alerts, 'medicaid_application_documents': medicaid_application_documents, "rfi_documents":rfi_documents, "form":self.form_class})
-        return render(request, self.template_name, {'resident': resident, 'applications':applications, 'rfis':rfis, 'denials': denials, 'approvals': approvals, 'namis': namis, 'fair_hearings': fair_hearings, 'resident_alerts': resident_alerts, 'misc_docs': misc_docs})
+        return render(request, self.template_name, {'resident': resident, 'applications':applications, 'rfis':rfis, 'denials': denials, 'approvals': approvals, 'namis': namis, 'fair_hearings': fair_hearings, 'dss_contact_log_entries': dss_contact_log_entries, 'resident_alerts': resident_alerts, 'misc_docs': misc_docs})
     def post(self, request, *args, **kwargs):
 
         file = request.FILES.getlist('file')
