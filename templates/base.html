@@ -77,18 +77,14 @@
     <script src="{% static 'js/base.js' %}"></script>
     <script>
         Userback = window.Userback || {};
-        Userback.access_token = '6570|9644|X2snnRUELHiPamXenjvdJ9NsVPfNlz6qEjc8Lfe2cJbN8Seo3a';
-
+        Userback.access_token = '7095|10748|VZYyu6AbkqfsfVVGVe6WFxhREt1Jm9Mc08GV7g7rsdxQ0BGlsU';
         (function(id) {
-            if (document.getElementById(id)) {return;}
             var s = document.createElement('script');
-            s.id = id;
-            s.async = 1;
-            s.src = 'https://static.userback.io/widget/v1.js';
-            var parent_node = document.head || document.body;
-            parent_node.appendChild(s);
+            s.async = 1;s.src = 'https://static.userback.io/widget/v1.js';
+            var parent_node = document.head || document.body;parent_node.appendChild(s);
         })('userback-sdk');
     </script>
+
 
     {% block scripts %}
 

@@ -10,6 +10,9 @@
   <table id="medicaidPendingTable">
     <thead>
       <tr>
+        {% if is_admin %}
+        <th>Facility</th>
+        {% endif %}
         <th class="mobileShow">Name</th>
         <th class="desktopShow">First Name</th>
         <th class="desktopShow">Last Name</th>
@@ -24,6 +27,9 @@
       <tbody>
         {% for application in applications%}
         <tr id="{{application.resident.resident_id}}">
+          {% if is_admin %}
+          <td>{{application.resident.facility_name}}</td>
+          {% endif %}
           <td class="mobileShow">{{application.resident.last_name}}, {{application.resident.first_name}}</td>
           <td class="desktopShow">{{application.resident.first_name}}</td>
           <td class="desktopShow">{{application.resident.last_name}}</td>

@@ -44,6 +44,9 @@
       <table id="allPendingAlertsTable">
         <thead>
           <tr>
+            {% if is_admin %}
+            <th>Facility</th>
+            {% endif %}
             <th>First Name</th>
             <th>Last Name</th>
             <th>Alert Type</th>
@@ -55,6 +58,9 @@
           {% for alert in alerts%}
           <tr>
             <td>{{alert.resident.first_name}}</td>
+            {% if is_admin %}
+            <td>{{alert.resident.facility_name}}</td>
+            {% endif %}
             <td>{{alert.resident.last_name}}</td>
             <td>{{alert.alert_type.alert_name}}</td>
             <td>{{alert.alert_type.alert_priority}}</td>
@@ -69,6 +75,9 @@
       <table id="rfiDueTable">
         <thead>
           <tr>
+            {% if is_admin %}
+            <th>Facility</th>
+            {% endif %}
             <th>First Name</th>
             <th>Last Name</th>
             <th>Alert Type</th>
@@ -80,6 +89,9 @@
           {% for alert in alerts%}
             {% if alert.alert_type.alert_class == "rfi" %}
               <tr>
+                {% if is_admin %}
+                <td>{{alert.resident.facility_name}}</td>
+                {% endif %}
                 <td>{{alert.resident.first_name}}</td>
                 <td>{{alert.resident.last_name}}</td>
                 <td>{{alert.alert_type.alert_name}}</td>
@@ -96,6 +108,9 @@
       <table id="noResponseTable">
         <thead>
           <tr>
+            {% if is_admin %}
+            <th>Facility</th>
+            {% endif %}
             <th>First Name</th>
             <th>Last Name</th>
             <th>Alert Type</th>
@@ -107,6 +122,9 @@
           {% for alert in alerts%}
             {% if alert.alert_type.alert_class == "no response" %}
               <tr>
+                {% if is_admin %}
+                <td>{{alert.resident.facility_name}}</td>
+                {% endif %}
                 <td>{{alert.resident.first_name}}</td>
                 <td>{{alert.resident.last_name}}</td>
                 <td>{{alert.alert_type.alert_name}}</td>
@@ -123,6 +141,9 @@
       <table id="pickupDateTable">
         <thead>
           <tr>
+            {% if is_admin %}
+            <th>Facility</th>
+            {% endif %}
             <th>First Name</th>
             <th>Last Name</th>
             <th>Alert Type</th>
@@ -134,6 +155,9 @@
           {% for alert in alerts%}
             {% if alert.alert_type.alert_class == "pickup date" %}
               <tr>
+                {% if is_admin %}
+                <td>{{alert.resident.facility_name}}</td>
+                {% endif %}
                 <td>{{alert.resident.first_name}}</td>
                 <td>{{alert.resident.last_name}}</td>
                 <td>{{alert.alert_type.alert_name}}</td>
@@ -150,6 +174,9 @@
       <table id="meetingTable">
         <thead>
           <tr>
+            {% if is_admin %}
+            <th>Facility</th>
+            {% endif %}
             <th>First Name</th>
             <th>Last Name</th>
             <th>Alert Type</th>
@@ -161,6 +188,9 @@
           {% for alert in alerts%}
             {% if alert.alert_type.alert_class == "appointment" %}
               <tr>
+                {% if is_admin %}
+                <td>{{alert.resident.facility_name}}</td>
+                {% endif %}
                 <td>{{alert.resident.first_name}}</td>
                 <td>{{alert.resident.last_name}}</td>
                 <td>{{alert.alert_type.alert_name}}</td>
@@ -177,6 +207,9 @@
       <table id="recertTable">
         <thead>
           <tr>
+            {% if is_admin %}
+            <th>Facility</th>
+            {% endif %}
             <th>First Name</th>
             <th>Last Name</th>
             <th>Alert Type</th>
@@ -188,6 +221,9 @@
           {% for alert in alerts%}
             {% if alert.alert_type.alert_class == "recertification" %}
               <tr>
+                {% if is_admin %}
+                <td>{{alert.resident.facility_name}}</td>
+                {% endif %}
                 <td>{{alert.resident.first_name}}</td>
                 <td>{{alert.resident.last_name}}</td>
                 <td>{{alert.alert_type.alert_name}}</td>
@@ -204,6 +240,9 @@
 <table id="dischargesTable">
 <thead>
 <tr>
+  {% if is_admin %}
+  <th>Facility</th>
+  {% endif %}
 <th>First Name</th>
 <th>Last Name</th>
 <th>Facility</th>

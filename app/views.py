@@ -36,11 +36,16 @@ class LoginView(View):
 # Shows List of All Currently Tracked Applications
 class PendingView(View):
     template_name = "pending.html"
+    is_admin = False
+
     #Returns Applcations with status of track set to True
     def get(self, request, *args, **kwargs):
         applications  = list()
         if request.user.is_authenticated:
             permissions = Permission.objects.filter(user = request.user)
+            if len(permissions) > 1:
+                is_admin = True
+
             for permission in permissions:
 
                 apps = Application.objects.filter(tracking_status = True, resident__tracking_status = True,resident__facility_name =permission.codename)
@@ -49,7 +54,7 @@ class PendingView(View):
                     print(app.resident.first_name)
                     applications.append(app)
 
-            return render(request,self.template_name, {'applications':applications})
+            return render(request,self.template_name, {'applications':applications, 'is_admin': is_admin})
         else:
             return redirect('login')
 
@@ -66,10 +71,11 @@ class ActivityView(View):
         new_admission = []
         payor_change = []
         discharge = []
-
+        is_admin = False
         if request.user.is_authenticated:
             permissions = Permission.objects.filter(user = request.user)
-
+            if len(permissions) > 1:
+                is_admin = True
             for permission in permissions:
 
                 new_admits = Resident.objects.filter(facility_name =permission.codename, tracking_status = None, activity_type = 'A')
@@ -84,7 +90,7 @@ class ActivityView(View):
                 for new_discharge in new_discharges:
                     discharge.append(new_discharge)
 
-            return render(request,self.template_name, {'discharge':discharge,'admission':new_admission,'payor_change':payor_change})
+            return render(request,self.template_name, {'discharge':discharge,'admission':new_admission,'payor_change':payor_change, 'is_admin': is_admin})
         else:
             return redirect('login')
 
@@ -95,6 +101,7 @@ class PendingAlertsView(View):
     template_name = "pending_alerts.html"
     list = []
     tracklist = []
+    is_admin = False
 
 
     def get(self, request, *args, **kwargs):
@@ -103,6 +110,8 @@ class PendingAlertsView(View):
         if request.user.is_authenticated:
 
             permissions = Permission.objects.filter(user = request.user)
+            if len(permissions) > 1:
+                is_admin = True
 
             self.list = list()
             for permission in permissions:
@@ -117,7 +126,7 @@ class PendingAlertsView(View):
                     for alert in alerts:
                         self.list.append(alert)
 
-            return render(request,self.template_name, {'alerts':self.list,"form":self.form_class})
+            return render(request,self.template_name, {'alerts':self.list,"form":self.form_class, 'is_admin': is_admin})
         else:
             return redirect('login')
 
@@ -242,11 +251,15 @@ class ApprovalsView(View):
     template_name = "approvals.html"
     list = []
     tracklist = []
+    is_admin = False
 
     def get(self, request, *args, **kwargs):
         self.list = []
         if request.user.is_authenticated:
             permissions = Permission.objects.filter(user = request.user)
+            if len(permissions) > 1:
+                is_admin = True
+
             for permission in permissions:
                 results = Application.objects.filter(tracking_status = True,resident__facility_name =permission.codename)
 
@@ -254,7 +267,7 @@ class ApprovalsView(View):
                 for result in results:
                     self.list.append(result)
 
-            return render(request,self.template_name, {'applications':self.list,"form":self.form_class})
+            return render(request,self.template_name, {'applications':self.list,"form":self.form_class, 'is_admin': is_admin})
         else:
             return redirect('login')
 
@@ -267,6 +280,7 @@ class NotTrackingView(View):
     template_name = "not_tracking.html"
     list = []
     tracklist = []
+    is_admin = False
 
     def get(self, request, *args, **kwargs):
         '''if GET  '''

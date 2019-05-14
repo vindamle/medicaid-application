@@ -29,6 +29,9 @@
       <table id="newAdmissionsTable">
         <thead>
           <tr>
+            {% if is_admin %}
+            <th>Facility</th>
+            {% endif %}
             <th class="mobileShow">Name</th>
             <th class="desktopShow">First Name</th>
             <th class="desktopShow">Last Name</th>
@@ -43,10 +46,13 @@
         <tbody>
           {% for obj in admission %}
           <tr id="{{obj.resident_id}}">
+            {% if is_admin %}
+            <td>{{obj.facility_name}}</td>
+            {% endif %}
             <td class="mobileShow">{{obj.last_name}}, {{obj.first_name}}</td>
             <td class="desktopShow">{{obj.first_name}}</td>
             <td class="desktopShow">{{obj.last_name}}</td>
-            <!-- <td>{{obj.facility}}</td> -->
+            <!-- <td>{{obj.facility_name}}</td> -->
             <td>{{obj.primary_payor}}</td>
             <td>{{obj.secondary_payor}}</td>
             <td>{{obj.activity_date|date:"F d, Y"}}</td>
@@ -61,6 +67,9 @@
       <table id="payorChangesTable">
         <thead>
           <tr>
+            {% if is_admin %}
+            <th>Facility</th>
+            {% endif %}
             <th class="mobileShow">Name</th>
             <th class="desktopShow">First Name</th>
             <th class="desktopShow">Last Name</th>
@@ -75,10 +84,13 @@
         <tbody>
           {% for obj in payor_change %}
           <tr id="{{obj.resident_id}}">
+            {% if is_admin %}
+            <td>{{obj.facility_name}}</td>
+            {% endif %}
             <td class="mobileShow">{{obj.last_name}}, {{obj.first_name}}</td>
             <td class="desktopShow">{{obj.first_name}}</td>
             <td class="desktopShow">{{obj.last_name}}</td>
-            <!-- <td>{{obj.facility}}</td> -->
+            <!-- <td>{{obj.facility_name}}</td> -->
             <td>{{obj.primary_payor}}</td>
             <td>{{obj.secondary_payor}}</td>
             <td>{{obj.activity_date|date:"F d, Y"}}</td>
@@ -93,6 +105,9 @@
       <table id="dischargesTable">
         <thead>
           <tr>
+            {% if is_admin %}
+            <th>Facility</th>
+            {% endif %}
             <th class="mobileShow">Name</th>
             <th class="desktopShow">First Name</th>
             <th class="desktopShow">Last Name</th>
@@ -107,10 +122,13 @@
         <tbody>
           {% for obj in discharge %}
           <tr id="{{obj.resident_id}}">
+            {% if is_admin %}
+            <td>{{obj.facility_name}}</td>
+            {% endif %}
             <td class="mobileShow">{{obj.last_name}}, {{obj.first_name}}</td>
             <td class="desktopShow">{{obj.first_name}}</td>
             <td class="desktopShow">{{obj.last_name}}</td>
-            <!-- <td>{{obj.facility}}</td> -->
+            <!-- <td>{{obj.facility_name}}</td> -->
             <td>{{obj.primary_payor}}</td>
             <td>{{obj.secondary_payor}}</td>
             <td>{{obj.activity_date|date:"F d, Y"}}</td>

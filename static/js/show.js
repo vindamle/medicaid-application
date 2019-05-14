@@ -21,7 +21,7 @@ const phaseChange = (element, phaseId) => {
 		{
 			console.log(successMessage);
 			const status = document.querySelector(`#app${dataObject.application_id}showStatus`);
-			status.innerHTML = `Status: ${response}`;
+			status.innerHTML = `Current Status: ${response}`;
 			const tab = document.querySelector(`#app${dataObject.application_id}TabPhaseName`);
 			tab.innerHTML = response;
 		}
@@ -159,344 +159,344 @@ const verifyOrUnverify = (btn, appId) => {
 		});
 	});
 
-class ResponseRowHTML {
-	constructor (applicationId, responseId, rfiOrDenialOrApprovalId, date) {
-		this.rfiRowHtml = `
-			<section id="rfi${rfiOrDenialOrApprovalId}">
-				<button type="button" class="deleteResponseBtn" title="Delete this response" aria-label="Close" onclick="deleteResponse('rfi',${rfiOrDenialOrApprovalId})">
-	        Delete This Response
-	      </button>
-				<h4 class="numberOfRFIs collapsibleSection responseH4" title="Click to minimize" onclick="collapseSection(this)">RFI #${numberOfRFIs}</h4>
-				<ul class="collapsibleContent" id="">
-					<div class="row">
-						<div class="col-lg-3 firstColumn applicationColumn">
-							<li>
-								<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> RFI here:</label>
-								<br>
-								<input 
-									type="file" 
-									accept="image/jpeg,image/png,application/pdf" 
-									onchange="
-										uploadDoc(
-											this, 
-											${applicationId},
-											'rfi',
-											${rfiOrDenialOrApprovalId},
-											'rfi'
-										)
-									"
-								>
-							</li>
-						</div>
-						<div class="col-lg-3 applicationColumn">
-							<li class="editableLi ">
-								<label>RFI Due Date:</label>
-								<input class="editable date  due_date" id="rfi_due_date" data-table="rfi"  data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)" value="${date}">
-							</li>
-							<li class="editableLi">
-								<label>Extension Requested?</label>
-								<select name="rfi_extension_request" id="rfi_extension_request" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this); extensionRequested(this, ${applicationId}, ${rfiOrDenialOrApprovalId})">
-									<option value="no">No</option>
-									<option value="yes">Yes</option>
-								</select>
-							</li>
-						</div>
-						<div class="col-lg-3 applicationColumn">
-							<li>
-								<label><input type="checkbox" class="documentationSubmittedCheckbox " id="rfi_documentation_submitted" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}">Documentation Submitted</label>
-							</li>
-							<li class="editableLi step5 ">
-								<label>Submission Date:</label>
-								<input class="editable date " id="rfi_documentation_submitted_date" data-table="rfi"  data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}" type="date" onblur="sendInputInfoToDB(this); updateAlert(${applicationId},this,'rfi')" onkeyup="checkIfEnterKey(this, event)">
-							</li>
-						</div>
-						<div class="col-lg-3 applicationColumn">
-							<li class="editableLi step5 ">
-								<label>Response:</label>
-								<select name="response_select" class=" responseSelect" id="rfi_response" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this); showDatePromptDiv(${applicationId}, this); console.log('HERE IS THIS: ', this)">
-									<option value="not_received">Not Received</option>
-									<option value="rfi">RFI</option>
-									<option value="approved">Approved</option>
-									<option value="denied">Denied</option>
-								</select>
-							</li>
-						</div>
-					</div>
-				</ul>
-			</section>
-		`
+// class ResponseRowHTML {
+// 	constructor (applicationId, responseId, rfiOrDenialOrApprovalId, date) {
+// 		this.rfiRowHtml = `
+// 			<section id="rfi${rfiOrDenialOrApprovalId}">
+// 				<button type="button" class="deleteResponseBtn" title="Delete this response" aria-label="Close" onclick="deleteResponse('rfi',${rfiOrDenialOrApprovalId})">
+// 	        Delete This Response
+// 	      </button>
+// 				<h4 class="numberOfRFIs collapsibleSection responseH4" title="Click to minimize" onclick="collapseSection(this)">RFI #${numberOfRFIs}</h4>
+// 				<ul class="collapsibleContent" id="">
+// 					<div class="row">
+// 						<div class="col-lg-3 firstColumn applicationColumn">
+// 							<li>
+// 								<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> RFI here:</label>
+// 								<br>
+// 								<input 
+// 									type="file" 
+// 									accept="image/jpeg,image/png,application/pdf" 
+// 									onchange="
+// 										uploadDoc(
+// 											this, 
+// 											${applicationId},
+// 											'rfi',
+// 											${rfiOrDenialOrApprovalId},
+// 											'rfi'
+// 										)
+// 									"
+// 								>
+// 							</li>
+// 						</div>
+// 						<div class="col-lg-3 applicationColumn">
+// 							<li class="editableLi ">
+// 								<label>RFI Due Date:</label>
+// 								<input class="editable date  due_date" id="rfi_due_date" data-table="rfi"  data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}" type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)" value="${date}">
+// 							</li>
+// 							<li class="editableLi">
+// 								<label>Extension Requested?</label>
+// 								<select name="rfi_extension_request" id="rfi_extension_request" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this); extensionRequested(this, ${applicationId}, ${rfiOrDenialOrApprovalId})">
+// 									<option value="no">No</option>
+// 									<option value="yes">Yes</option>
+// 								</select>
+// 							</li>
+// 						</div>
+// 						<div class="col-lg-3 applicationColumn">
+// 							<li>
+// 								<label><input type="checkbox" class="documentationSubmittedCheckbox " id="rfi_documentation_submitted" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}">Documentation Submitted</label>
+// 							</li>
+// 							<li class="editableLi step5 ">
+// 								<label>Submission Date:</label>
+// 								<input class="editable date " id="rfi_documentation_submitted_date" data-table="rfi"  data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}" type="date" onblur="sendInputInfoToDB(this); updateAlert(${applicationId},this,'rfi')" onkeyup="checkIfEnterKey(this, event)">
+// 							</li>
+// 						</div>
+// 						<div class="col-lg-3 applicationColumn">
+// 							<li class="editableLi step5 ">
+// 								<label>Response:</label>
+// 								<select name="response_select" class=" responseSelect" id="rfi_response" data-table="rfi" data-application_id="${applicationId}" data-rfi_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this); showDatePromptDiv(${applicationId}, this); console.log('HERE IS THIS: ', this)">
+// 									<option value="not_received">Not Received</option>
+// 									<option value="rfi">RFI</option>
+// 									<option value="approved">Approved</option>
+// 									<option value="denied">Denied</option>
+// 								</select>
+// 							</li>
+// 						</div>
+// 					</div>
+// 				</ul>
+// 			</section>
+// 		`
 
-		this.approvedRowHtml = `
-			<section id="approval${rfiOrDenialOrApprovalId}">
-				<button type="button" class="deleteResponseBtn" title="Delete this response" aria-label="Close" onclick="deleteResponse('approval',${rfiOrDenialOrApprovalId})">
-	        Delete This Response
-	      </button>
-				<h4 class="numberOfApprovals collapsibleSection responseH4" title="Click to minimize" onclick="collapseSection(this)">Approval</h4>
-				<ul class="collapsibleContent" id="">
-					<div class="row">
-					<div class="col-lg-2 applicationColumn firstColumn">
-					<li class="editableLi">
-							<label>Approval Notice Date:</label>
-							 <input class="editable date" id="approval_notice_date" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}"  type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)" value="${date}">
-						</li>
-					</div>
-					<div class="col-lg-3 applicationColumn">
-						<li class="editableLi">
-							<label>Approval Start Date:</label>
-							 <input class="editable date" id="approval_start_date" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}"  type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-						</li>
-						<li class="editableLi">
-							<label>Approval End Date:</label>
-							 <input class="editable date" id="approval_end_date" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}"  type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-						</li>
-						<li class="editableLi">
-							<label>Recertification Date:</label>
-							<input class="editable date" type="date" id="approval_recertification_date" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
-						</li>
-					</div>
-					<div class="col-lg-4 applicationColumn">
-						<li>
-							<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Approval here:</label>
-							<br>
-							<input 
-									type="file" 
-									accept="image/jpeg,image/png,application/pdf" 
-									onchange="
-										uploadDoc(
-											this, 
-											${applicationId},
-											'approval',
-											${rfiOrDenialOrApprovalId},
-											'approval'
-										)
-									"
-								>
-						</li>
-					`
-						// numberOfNAMIs = 1;
-	  this.approvedRowHtml += `
-			<div class="modal fade bd-example-modal-lg" id="namiModal${rfiOrDenialOrApprovalId}" tabindex="-1" role="dialog" aria-labelledby="namiModalTitle" aria-hidden="true">
-			  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-			    <div class="modal-content">
-			      <div>
-			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			          <span aria-hidden="true">&times;</span>
-			        </button>
-			        <h5 class="modal-title" id="exampleModalLongTitle">NAMIs</h5>
-			      </div>
-			     <div class="modal-body">
-					</div>
-	      <div class="modal-footer">
-		      <div class="editableLi addNamiBtnLi">
-						<button class="addModalRowBtn" onclick="addNAMIRowHTML(this, ${rfiOrDenialOrApprovalId})">Add NAMI &#x271A; </button>
-					</div>
-		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-	`
+// 		this.approvedRowHtml = `
+// 			<section id="approval${rfiOrDenialOrApprovalId}">
+// 				<button type="button" class="deleteResponseBtn" title="Delete this response" aria-label="Close" onclick="deleteResponse('approval',${rfiOrDenialOrApprovalId})">
+// 	        Delete This Response
+// 	      </button>
+// 				<h4 class="numberOfApprovals collapsibleSection responseH4" title="Click to minimize" onclick="collapseSection(this)">Approval</h4>
+// 				<ul class="collapsibleContent" id="">
+// 					<div class="row">
+// 					<div class="col-lg-2 applicationColumn firstColumn">
+// 					<li class="editableLi">
+// 							<label>Approval Notice Date:</label>
+// 							 <input class="editable date" id="approval_notice_date" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}"  type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)" value="${date}">
+// 						</li>
+// 					</div>
+// 					<div class="col-lg-3 applicationColumn">
+// 						<li class="editableLi">
+// 							<label>Approval Start Date:</label>
+// 							 <input class="editable date" id="approval_start_date" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}"  type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+// 						</li>
+// 						<li class="editableLi">
+// 							<label>Approval End Date:</label>
+// 							 <input class="editable date" id="approval_end_date" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}"  type="date" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+// 						</li>
+// 						<li class="editableLi">
+// 							<label>Recertification Date:</label>
+// 							<input class="editable date" type="date" id="approval_recertification_date" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}" onblur="sendInputInfoToDB(this)" onkeyup="checkIfEnterKey(this, event)">
+// 						</li>
+// 					</div>
+// 					<div class="col-lg-4 applicationColumn">
+// 						<li>
+// 							<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Approval here:</label>
+// 							<br>
+// 							<input 
+// 									type="file" 
+// 									accept="image/jpeg,image/png,application/pdf" 
+// 									onchange="
+// 										uploadDoc(
+// 											this, 
+// 											${applicationId},
+// 											'approval',
+// 											${rfiOrDenialOrApprovalId},
+// 											'approval'
+// 										)
+// 									"
+// 								>
+// 						</li>
+// 					`
+// 						// numberOfNAMIs = 1;
+// 	  this.approvedRowHtml += `
+// 			<div class="modal fade bd-example-modal-lg" id="namiModal${rfiOrDenialOrApprovalId}" tabindex="-1" role="dialog" aria-labelledby="namiModalTitle" aria-hidden="true">
+// 			  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+// 			    <div class="modal-content">
+// 			      <div>
+// 			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+// 			          <span aria-hidden="true">&times;</span>
+// 			        </button>
+// 			        <h5 class="modal-title" id="exampleModalLongTitle">NAMIs</h5>
+// 			      </div>
+// 			     <div class="modal-body">
+// 					</div>
+// 	      <div class="modal-footer">
+// 		      <div class="editableLi addNamiBtnLi">
+// 						<button class="addModalRowBtn" onclick="addNAMIRowHTML(this, ${rfiOrDenialOrApprovalId})">Add NAMI &#x271A; </button>
+// 					</div>
+// 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+// 		      </div>
+// 		    </div>
+// 		  </div>
+// 		</div>
+// 	`
 
-		this.approvedRowHtml += `
-			<div class="modal fade bd-example-modal-lg fairHearingsModal" id="fairHearingsModal${rfiOrDenialOrApprovalId}" tabindex="-1" role="dialog" aria-labelledby="fairHearingsModalTitle" aria-hidden="true">
-							  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-							    <div class="modal-content">
-							      <div>
-							        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							          <span aria-hidden="true">&times;</span>
-							        </button>
-							        <h5 class="modal-title" id="exampleModalLongTitle">Fair Hearings</h5>
-							      </div>
-							      <div class="modal-body">
-										</div>
-      							<div class="modal-footer">
-								      <div class="editableLi addNamiBtnLi">
-												<button class="addModalRowBtn" onclick="addFairHearingRowHTML(this, ${responseId})">Add Fair Hearing &#x271A; </button>
-											</div>
-       								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-     								</div>
-   								</div>
-							  </div>
-							</div>
-		`
+// 		this.approvedRowHtml += `
+// 			<div class="modal fade bd-example-modal-lg fairHearingsModal" id="fairHearingsModal${rfiOrDenialOrApprovalId}" tabindex="-1" role="dialog" aria-labelledby="fairHearingsModalTitle" aria-hidden="true">
+// 							  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+// 							    <div class="modal-content">
+// 							      <div>
+// 							        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+// 							          <span aria-hidden="true">&times;</span>
+// 							        </button>
+// 							        <h5 class="modal-title" id="exampleModalLongTitle">Fair Hearings</h5>
+// 							      </div>
+// 							      <div class="modal-body">
+// 										</div>
+//       							<div class="modal-footer">
+// 								      <div class="editableLi addNamiBtnLi">
+// 												<button class="addModalRowBtn" onclick="addFairHearingRowHTML(this, ${responseId})">Add Fair Hearing &#x271A; </button>
+// 											</div>
+//        								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+//      								</div>
+//    								</div>
+// 							  </div>
+// 							</div>
+// 		`
 
-		this.approvedRowHtml += `
-			</div>
-			<div class="col-lg-3 applicationColumn">
-				<li>
-					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#namiModal${rfiOrDenialOrApprovalId}" id="namiModalBtn">View/Add NAMIs</button>
-				</li>
-				<li class="editableLi step6">
-						<label>Satisfied with approval?</label>
-						<select name="approval_satisfied" id="approval_satisfied" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this); revealNextNotSatisfiedStep(this, 1)">
-							<option value="">Select one:</option>
-							<option value="yes">Yes</option>
-							<option value="no">No</option>
-						</select>
-					</li>
-			</div>
-		</div>
-		<div class="row satisfiedRow">
-				<div class="col-lg-4">
-					<li class="editableLi notSatisfied notSatisfied1">
-						<label>Contacted DSS?</label>
-						<select name="approval_contacted_dss" id="approval_contacted_dss" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this);revealNextNotSatisfiedStep(this, 2)">
-							<option value="">Select one:</option>
-							<option value="yes">Yes</option>
-							<option value="no">No</option>
-						</select>
-					</li>
-				</div>
-				<div class="col-lg-4">
-					<li class="editableLi notSatisfied notSatisfied2">
-						<label>Resolved through DSS?</label>
-						<select name="approval_resolved_through_dss" id="approval_resolved_through_dss" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this);revealNextNotSatisfiedStep(this, 3)">
-							<option value="">Select one:</option>
-							<option value="yes">Yes</option>
-							<option value="no">No</option>
-						</select>
-					</li>
-				</div>
-				<div class="col-lg-4">
-				<!-- Button trigger modal -->
-					<button type="button" class="btn btn-primary notSatisfied notSatisfied3" data-toggle="modal" data-target="#fairHearingsModal${rfiOrDenialOrApprovalId}" id="fairHearingsModalBtn">View/Add Fair Hearing Info</button>
-			</div>
+// 		this.approvedRowHtml += `
+// 			</div>
+// 			<div class="col-lg-3 applicationColumn">
+// 				<li>
+// 					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#namiModal${rfiOrDenialOrApprovalId}" id="namiModalBtn">View/Add NAMIs</button>
+// 				</li>
+// 				<li class="editableLi step6">
+// 						<label>Satisfied with approval?</label>
+// 						<select name="approval_satisfied" id="approval_satisfied" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this); revealNextNotSatisfiedStep(this, 1)">
+// 							<option value="">Select one:</option>
+// 							<option value="yes">Yes</option>
+// 							<option value="no">No</option>
+// 						</select>
+// 					</li>
+// 			</div>
+// 		</div>
+// 		<div class="row satisfiedRow">
+// 				<div class="col-lg-4">
+// 					<li class="editableLi notSatisfied notSatisfied1">
+// 						<label>Contacted DSS?</label>
+// 						<select name="approval_contacted_dss" id="approval_contacted_dss" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this);revealNextNotSatisfiedStep(this, 2)">
+// 							<option value="">Select one:</option>
+// 							<option value="yes">Yes</option>
+// 							<option value="no">No</option>
+// 						</select>
+// 					</li>
+// 				</div>
+// 				<div class="col-lg-4">
+// 					<li class="editableLi notSatisfied notSatisfied2">
+// 						<label>Resolved through DSS?</label>
+// 						<select name="approval_resolved_through_dss" id="approval_resolved_through_dss" data-table="approval" data-approval_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this);revealNextNotSatisfiedStep(this, 3)">
+// 							<option value="">Select one:</option>
+// 							<option value="yes">Yes</option>
+// 							<option value="no">No</option>
+// 						</select>
+// 					</li>
+// 				</div>
+// 				<div class="col-lg-4">
+// 				<!-- Button trigger modal -->
+// 					<button type="button" class="btn btn-primary notSatisfied notSatisfied3" data-toggle="modal" data-target="#fairHearingsModal${rfiOrDenialOrApprovalId}" id="fairHearingsModalBtn">View/Add Fair Hearing Info</button>
+// 			</div>
 
-			<div class="modal fade bd-example-modal-lg fairHearingsModal" id="fairHearingsModal${rfiOrDenialOrApprovalId}" tabindex="-1" role="dialog" aria-labelledby="fairHearingsModalTitle" aria-hidden="true">
-			  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-			    <div class="modal-content">
-			      <div>
-			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			          <span aria-hidden="true">&times;</span>
-			        </button>
-			        <h5 class="modal-title" id="exampleModalLongTitle">Fair Hearings</h5>
-			      </div>
-			      <div class="modal-body">
+// 			<div class="modal fade bd-example-modal-lg fairHearingsModal" id="fairHearingsModal${rfiOrDenialOrApprovalId}" tabindex="-1" role="dialog" aria-labelledby="fairHearingsModalTitle" aria-hidden="true">
+// 			  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+// 			    <div class="modal-content">
+// 			      <div>
+// 			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+// 			          <span aria-hidden="true">&times;</span>
+// 			        </button>
+// 			        <h5 class="modal-title" id="exampleModalLongTitle">Fair Hearings</h5>
+// 			      </div>
+// 			      <div class="modal-body">
 
-							</div>
-						<div class="modal-footer">
-				      <div class="editableLi addNamiBtnLi">
-								<button class="addModalRowBtn" onclick="addFairHearingRowHTML(this, ${responseId})">Add Fair Hearing &#x271A; </button>
-							</div>
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-							</div>
-						</div>
-			  </div>
-			</div>
-		</div>
-	</ul>
-</section>
-`
-		this.deniedRowHtml = `
-			<section id="denial${rfiOrDenialOrApprovalId}">
-				<button type="button" class="deleteResponseBtn" title="Delete this response" aria-label="Close" onclick="deleteResponse('denial',${rfiOrDenialOrApprovalId})">
-	        Delete This Response
-	      </button>
-				<h4 class="numberOfRFIs collapsibleSection responseH4" title="Click to minimize" onclick="collapseSection(this)">Denial</h4>
-				<ul class="collapsibleContent" id="">
-					<div class="row">
-						<div class="col-lg-3 firstColumn applicationColumn">
-							<li class="editableLi ">
-								<label>Denial Notice Date:</label>
-								<input class="editable date  due_date" id="denial_notice_date" data-table="denial"  data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}" type="date" onkeyup="checkIfEnterKey(this, event)"  value="${date}">
-							</li>
+// 							</div>
+// 						<div class="modal-footer">
+// 				      <div class="editableLi addNamiBtnLi">
+// 								<button class="addModalRowBtn" onclick="addFairHearingRowHTML(this, ${responseId})">Add Fair Hearing &#x271A; </button>
+// 							</div>
+// 								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+// 							</div>
+// 						</div>
+// 			  </div>
+// 			</div>
+// 		</div>
+// 	</ul>
+// </section>
+// `
+// 		this.deniedRowHtml = `
+// 			<section id="denial${rfiOrDenialOrApprovalId}">
+// 				<button type="button" class="deleteResponseBtn" title="Delete this response" aria-label="Close" onclick="deleteResponse('denial',${rfiOrDenialOrApprovalId})">
+// 	        Delete This Response
+// 	      </button>
+// 				<h4 class="numberOfRFIs collapsibleSection responseH4" title="Click to minimize" onclick="collapseSection(this)">Denial</h4>
+// 				<ul class="collapsibleContent" id="">
+// 					<div class="row">
+// 						<div class="col-lg-3 firstColumn applicationColumn">
+// 							<li class="editableLi ">
+// 								<label>Denial Notice Date:</label>
+// 								<input class="editable date  due_date" id="denial_notice_date" data-table="denial"  data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}" type="date" onkeyup="checkIfEnterKey(this, event)"  value="${date}">
+// 							</li>
 							
-						</div>
-						<div class="col-lg-5 applicationColumn">
-							<li>
-							<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Denial here:</label>
-							<br>
-								<input 
-									type="file" 
-									accept="image/jpeg,image/png,application/pdf" 
-									onchange="
-										uploadDoc(
-											this, 
-											${applicationId},
-											'denial',
-											${rfiOrDenialOrApprovalId},
-											'denial'
-										)
-									"
-								>
-							</li>
-							<li>
-								<label><input type="checkbox" class="noDenialLetterReceivedCheckbox " id="no_denial_letter_received" data-table="denial" data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this)">No Denial Letter Received</label>
-							</li>
-						</div>
-						<div class="col-lg-4 applicationColumn">
-							<li>
-								<label><input type="checkbox" class="documentationSubmittedCheckbox " id="denial_documentation_submitted" data-table="denial" data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}">Documentation Submitted</label>
-							</li>
-							<li class="editableLi step5 ">
-								<label>Submission Date:</label>
-								<input class="editable date " id="denial_documentation_submitted_date" data-table="denial"  data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}" type="date" onkeyup="checkIfEnterKey(this, event)">
-							</li>
-						</div>
+// 						</div>
+// 						<div class="col-lg-5 applicationColumn">
+// 							<li>
+// 							<label>Choose or <span class="dragNDropText">Drag n' Drop&trade;</span> Denial here:</label>
+// 							<br>
+// 								<input 
+// 									type="file" 
+// 									accept="image/jpeg,image/png,application/pdf" 
+// 									onchange="
+// 										uploadDoc(
+// 											this, 
+// 											${applicationId},
+// 											'denial',
+// 											${rfiOrDenialOrApprovalId},
+// 											'denial'
+// 										)
+// 									"
+// 								>
+// 							</li>
+// 							<li>
+// 								<label><input type="checkbox" class="noDenialLetterReceivedCheckbox " id="no_denial_letter_received" data-table="denial" data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}" onchange="sendInputInfoToDB(this)">No Denial Letter Received</label>
+// 							</li>
+// 						</div>
+// 						<div class="col-lg-4 applicationColumn">
+// 							<li>
+// 								<label><input type="checkbox" class="documentationSubmittedCheckbox " id="denial_documentation_submitted" data-table="denial" data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}">Documentation Submitted</label>
+// 							</li>
+// 							<li class="editableLi step5 ">
+// 								<label>Submission Date:</label>
+// 								<input class="editable date " id="denial_documentation_submitted_date" data-table="denial"  data-application_id="${applicationId}" data-denial_id="${rfiOrDenialOrApprovalId}" type="date" onkeyup="checkIfEnterKey(this, event)">
+// 							</li>
+// 						</div>
 						
-					</div>
+// 					</div>
 
 
-					<div class="row ">
-						<div class="col-lg-3">
-							<li class="editableLi  ">
-								<label>Contacted DSS?</label>
-								<select name="denial_contacted_dss" id="denial_contacted_dss" data-table="denial" data-denial_id="${rfiOrDenialOrApprovalId}"  onchange="sendInputInfoToDB(this)">
-									<option value="">Select one:</option>
-									<option value="yes">Yes</option>
-									<option value="no">No</option>
-								</select>
-							</li>
-						</div>
-						<div class="col-lg-3">
-							<li class="editableLi  ">
-								<label>Resolved through DSS?</label>
-								<select name="denial_resolved_through_dss" id="denial_resolved_through_dss" data-table="denial" data-denial_id="${rfiOrDenialOrApprovalId}"  onchange="sendInputInfoToDB(this); generateApproval(this, ${applicationId})">
-									<option value="">Select one:</option>
-									<option value="yes">Yes</option>
-									<option value="no">No</option>
-								</select>
-							</li>
-						</div>
-						<div class="col-lg-3">
-							<!-- Button trigger modal -->
-								<button type="button" class="btn btn-primary  " data-toggle="modal" data-target="#fairHearingsModal${rfiOrDenialOrApprovalId}" id="fairHearingsModalBtn">View/Add Fair Hearing Info</button>
-						</div>
+// 					<div class="row ">
+// 						<div class="col-lg-3">
+// 							<li class="editableLi  ">
+// 								<label>Contacted DSS?</label>
+// 								<select name="denial_contacted_dss" id="denial_contacted_dss" data-table="denial" data-denial_id="${rfiOrDenialOrApprovalId}"  onchange="sendInputInfoToDB(this)">
+// 									<option value="">Select one:</option>
+// 									<option value="yes">Yes</option>
+// 									<option value="no">No</option>
+// 								</select>
+// 							</li>
+// 						</div>
+// 						<div class="col-lg-3">
+// 							<li class="editableLi  ">
+// 								<label>Resolved through DSS?</label>
+// 								<select name="denial_resolved_through_dss" id="denial_resolved_through_dss" data-table="denial" data-denial_id="${rfiOrDenialOrApprovalId}"  onchange="sendInputInfoToDB(this); generateApproval(this, ${applicationId})">
+// 									<option value="">Select one:</option>
+// 									<option value="yes">Yes</option>
+// 									<option value="no">No</option>
+// 								</select>
+// 							</li>
+// 						</div>
+// 						<div class="col-lg-3">
+// 							<!-- Button trigger modal -->
+// 								<button type="button" class="btn btn-primary  " data-toggle="modal" data-target="#fairHearingsModal${rfiOrDenialOrApprovalId}" id="fairHearingsModalBtn">View/Add Fair Hearing Info</button>
+// 						</div>
 
-							<div class="modal fade bd-example-modal-lg fairHearingsModal" id="fairHearingsModal${rfiOrDenialOrApprovalId}" tabindex="-1" role="dialog" aria-labelledby="fairHearingsModalTitle" aria-hidden="true">
-							  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-							    <div class="modal-content">
-							      <div>
-							        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							          <span aria-hidden="true">&times;</span>
-							        </button>
-							        <h5 class="modal-title" id="exampleModalLongTitle">Fair Hearings</h5>
-							      </div>
-							      <div class="modal-body">
+// 							<div class="modal fade bd-example-modal-lg fairHearingsModal" id="fairHearingsModal${rfiOrDenialOrApprovalId}" tabindex="-1" role="dialog" aria-labelledby="fairHearingsModalTitle" aria-hidden="true">
+// 							  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+// 							    <div class="modal-content">
+// 							      <div>
+// 							        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+// 							          <span aria-hidden="true">&times;</span>
+// 							        </button>
+// 							        <h5 class="modal-title" id="exampleModalLongTitle">Fair Hearings</h5>
+// 							      </div>
+// 							      <div class="modal-body">
 										
-     								</div>
-      							<div class="modal-footer">
-								      <div class="editableLi addNamiBtnLi">
-												<button class="addModalRowBtn" onclick="addFairHearingRowHTML(this, ${responseId})">Add Fair Hearing &#x271A; </button>
-											</div>
-       								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-     								</div>
-   								</div>
-							  </div>
-							</div>
-							<div class="col-lg-3">
-							<li>
-								<button type="button" class="btn btn-primary" id="createNewApp" onclick="createNewApp()">Create New Application</button>
-							</li>
-						</div>
+//      								</div>
+//       							<div class="modal-footer">
+// 								      <div class="editableLi addNamiBtnLi">
+// 												<button class="addModalRowBtn" onclick="addFairHearingRowHTML(this, ${responseId})">Add Fair Hearing &#x271A; </button>
+// 											</div>
+//        								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+//      								</div>
+//    								</div>
+// 							  </div>
+// 							</div>
+// 							<div class="col-lg-3">
+// 							<li>
+// 								<button type="button" class="btn btn-primary" id="createNewApp" onclick="createNewApp()">Create New Application</button>
+// 							</li>
+// 						</div>
 							
-					</div>
+// 					</div>
 
-				</ul>
-			</section>
-		`
-	}
-}
+// 				</ul>
+// 			</section>
+// 		`
+// 	}
+// }
 
 const addNAMIRowHTML = (addNamiBtn, approvalId) => {
 	const ajaxCall = $.ajax(
@@ -762,25 +762,27 @@ const createResponseRow = (dateInput) => {
 				},
 				success: function(idArray) {
 					if (idArray != 'no response created for not_received') {
-						const responseId = idArray[0]
-						rfiOrDenialOrApprovalId = idArray[1]
-						newResponseRowHTML = new ResponseRowHTML(applicationId, responseId, rfiOrDenialOrApprovalId, date)
-						const applicationDiv = document.querySelector(`#application${applicationId}`)
-						applicationDiv.insertAdjacentHTML("beforeend", newResponseRowHTML[`${responseType}RowHtml`]);
+						// const responseId = idArray[0]
+						// rfiOrDenialOrApprovalId = idArray[1]
+						// newResponseRowHTML = new ResponseRowHTML(applicationId, responseId, rfiOrDenialOrApprovalId, date)
+						// const applicationDiv = document.querySelector(`#application${applicationId}`)
+						// applicationDiv.insertAdjacentHTML("beforeend", newResponseRowHTML[`${responseType}RowHtml`]);
+						const responseField = {
+							appId: applicationId
+						}
+						if (responseType == "rfi") {
+							phaseChange(responseField, 5);
+							numberOfRFIs += 1;
+						} else if (responseType == 'approved'){
+							phaseChange(responseField, 6);
+						} else if (responseType == 'denied'){
+							phaseChange(responseField, 12);
+						};
+						location.reload()
 					}
 				}
 			});
-		const responseField = {
-			appId: applicationId
-		}
-		if (responseType == "rfi") {
-			phaseChange(responseField, 5);
-			numberOfRFIs += 1;
-		} else if (responseType == 'approved'){
-			phaseChange(responseField, 6);
-		} else if (responseType == 'denied'){
-			phaseChange(responseField, 12);
-		};
+		
 	}
 }
 
@@ -867,6 +869,7 @@ const deleteResponse = (responseType,responseId) => {
 			success: function() {
 				const section = document.querySelector(`#${responseType}${responseId}`)
 				$(section).fadeOut()
+				location.reload()
 			}
 		});
 	}
@@ -928,15 +931,14 @@ const refreshResidentInfo = (refreshBtn, residentId, appId) => {
 				// location.reload();
 
 			}
-		});
-	
+		});	
 }
 
 $("#mostRecentAppTab li:last-of-type").click();
 document.getElementById("olderAppsTabsDiv").lastElementChild.style.display = "none";
 
 const toggleOlderApps = link => {
-	// link.classList.toggle('minusSignAfter');
+	link.classList.toggle('minusSignAfter');
 	const div = document.getElementById('olderAppsTabsDiv')
 	if (div.style.display != "block") {
 		div.style.display = "block"

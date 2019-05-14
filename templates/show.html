@@ -44,7 +44,7 @@
 	<h5 class="sectionTabHeader">This Application:</h5>
 	<div class="applicationTabDiv" id="mostRecentAppTab">
 		<h6>Pickup Date: {{applications.last.medicaid_pickup_date}}</h6>
-		<h6 class="tabStatus">Status: {{applications.last.phase.phase_name}}</h6>
+		<h6 class="tabStatus" id="app{{applications.last.application_id}}TabPhaseName">Status: {{applications.last.phase.phase_name}}</h6>
 		<button type="button" class="btn" data-toggle="modal" data-target="#notesModal{{applications.last.application_id}}" id="notesModalBtn"><!-- &#128221; --> Notes</button>
 		<button type="button" class="btn" data-toggle="modal" data-target="#miscDocsModal{{applications.last.application_id}}" id="miscDocsModalBtn">Misc. Documents</button>
 		<ul>
@@ -75,7 +75,7 @@
 	{% for application in applications %}
 		<div class="applicationTabDiv">
 			<h6>App #{{forloop.counter}} - Pickup Date: {{application.medicaid_pickup_date}}</h6>
-			<h6 class="tabStatus">Status: {{application.phase.phase_name}}</h6>
+			<h6 class="tabStatus" id="app{{application.application_id}}TabPhaseName">Status: {{application.phase.phase_name}}</h6>
 			
 			<!-- Trigger for Notes Modal -->
 			<button type="button" class="btn" data-toggle="modal" data-target="#notesModal{{application.application_id}}" id="notesModalBtn"><!-- &#128221; --> Notes</button>
@@ -104,18 +104,13 @@
 					{% endif %}
 				{% endfor %}
 			</ul>
-			
+
 		</div>
 	{% endfor %}
 	</div>
 </div>
 
-
-
-
-
-
-<div class="container-fluid residentInfoDiv applicationPage" data-application_id="{{application.application_id}}">
+<div class="container-fluid residentInfoDiv applicationPage" data-application_id="{{application.application_id}}" onkeypress="">
 	<h1>{{resident.first_name}} {{resident.last_name}}</h1>
 	<span class="invisible absolute" id="residentId" type="text">{{resident.resident_id}}</span>
 	<!-- <ul class="nav nav-tabs">
@@ -128,8 +123,10 @@
 	{% endfor %}
   </ul> -->
 <div class="tab-content">
-	<h5 id="app{{application.application_id}}showStatus">Current Status: {{applications.last.phase.phase_name}}</h5>
 {% for application in applications %}
+{% if application == applications.last %}
+	<h5 id="app{{application.application_id}}showStatus">Current Status: {{applications.last.phase.phase_name}}</h5>
+{% endif %}
 <div id="application{{application.application_id}}" class=" {% if application == applications.last %} in active {% else %}  {% endif %}">
 
 	
